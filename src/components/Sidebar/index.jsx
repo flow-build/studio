@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useWorkflowManager } from '@flowbuild/redux-toolkit-workflow-manager/useWorkflowManager'
 
 import { getWorkflows } from '../../services/workflowService'
 
@@ -8,30 +9,29 @@ import ListItem from '../ListItem'
 import * as S from './styles'
 
 const Sidebar = () => {
+    const { startWorkflow } = useWorkflowManager()
     const [workflows, setWorkflows] = useState([])
 
     const handleGetWorkflows = async () => {
-        try {
-            const workflows = await getWorkflows()
+        const workflows = await getWorkflows()
 
-            setWorkflows(workflows)
-        } catch(e) {
-            console.error('Sidebar/handleGetWorkflows: ', e.message)
-        }
+        setWorkflows(workflows)
+    }
+
+    const handleCreateWorkflowByName = async (name, data) => {
+        startWorkflow(name, data)
     }
 
     useEffect(() => {
         handleGetWorkflows()
     }, [])
 
-    console.log('Sidebar/state:workflows: ', workflows)
-
     return (
         <S.Wrapper>
             <Logo />
             <S.List>
                 {workflows?.map((workflow) => (
-                    <ListItem item={workflow} key={workflow?.hash} />
+                    <ListItem item={workflow} key={workflow?.hash} onClick={() => handleCreateWorkflowByName(workflow.name, {})} />
                 ))}
             </S.List>
         </S.Wrapper>

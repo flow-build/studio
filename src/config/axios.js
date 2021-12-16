@@ -1,14 +1,14 @@
 import axios from 'axios'
-import { requestToken } from '../services/loginService'
+import { login } from '../services/loginService'
 
 const api = axios.create({
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.REACT_APP_BASE_URL,
     timeout: 180000
 })
 
 api.interceptors.request.use(
     async (config) => {
-      const token = await requestToken()
+      const token = await login()
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
       }
