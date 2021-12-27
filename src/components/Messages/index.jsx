@@ -7,6 +7,9 @@ import * as S from './styles'
 
 const Messages = () => {
     const { currentActivity } = useWorkflowManager()
+
+    if(!currentActivity) return <React.Fragment />
+
     const { props } = currentActivity
 
     return (
