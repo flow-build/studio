@@ -47,7 +47,11 @@ const Diagram = () => {
                         {
                           "name": "WorkflowInfo",
                           "extends": [
-                            "bpmn:ServiceTask"
+                            "bpmn:ServiceTask",
+                            "bpmn:UserTask",
+                            "bpmn:StartEvent",
+                            "bpmn:EndEvent",
+                            "bpmn:ExclusiveGateway"
                           ],
                           "properties": [
                             {

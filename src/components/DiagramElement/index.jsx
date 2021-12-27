@@ -23,7 +23,7 @@ const DiagramElement = ({ modeler }) => {
                 setElement(e.element)
             }
         })
-    }, [modeler])
+    }, [modeler, element])
 
     return (
         <S.DiagramElement>

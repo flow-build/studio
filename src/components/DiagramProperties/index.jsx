@@ -1,6 +1,5 @@
 import React from 'react'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
-import { hasDefinition } from '../../utils/bpmn'
 
 import * as S from './styles'
 
