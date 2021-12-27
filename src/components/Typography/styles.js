@@ -69,7 +69,7 @@ const wrapperModifiers = {
   `
 }
 
-const tags = ['text', 'support', 'disclaimer']
+const tags = ['text', 'support', 'disclaimer', 'heading']
 
 export const Wrapper = styled('p').attrs(({ tag }) => ({
   as: `${tags.includes(tag) ? 'p' : tag}`

@@ -10,6 +10,7 @@ import themeDefault from './assets/styles/themeDefault'
 import { Content, GridLayout } from './components/GridLayout'
 import Sidebar from './components/Sidebar'
 import Messages from './components/Messages'
+import Diagram from './components/Diagram'
 
 const App = () => {
   const [mqttConfig, setMqttConfig] = useState(null)
@@ -33,6 +34,8 @@ const App = () => {
     handleSetSessionId()
   }, [])
 
+  console.log("Hi There!")
+
   if(!mqttConfig || !sessionId ) return <React.Fragment/>
 
   return (
@@ -44,6 +47,7 @@ const App = () => {
           <Sidebar/>
           <Content>
             <Messages />
+            <Diagram />
           </Content>
         </GridLayout>
       </ThemeProvider>

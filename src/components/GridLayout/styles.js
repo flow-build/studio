@@ -11,8 +11,10 @@ export const GridLayout = styled.div`
 export const Content = styled.div`
     ${({ theme }) => css`
         display: flex;
+        flex-direction: column;
         grid-area: content;
         height: fit-content;
+        min-height: calc(100vh - ${theme.spacings.xsmall});
         padding: ${theme.spacings.xsmall};
     `}
 `
