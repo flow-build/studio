@@ -80,7 +80,7 @@ const DiagramProperties = ({ modeler, element }) => {
     // }
 
     return (
-        <S.DiagramProperties key={ element.id }>
+        <S.DiagramProperties key={ element?.id }>
             <fieldset>
                 <label>id</label>
                 <span>{element?.id}</span>
