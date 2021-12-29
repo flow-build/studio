@@ -1,5 +1,9 @@
 import React from 'react'
+import AceEditor from "react-ace";
 import { is } from 'bpmn-js/lib/util/ModelUtil'
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/theme-github";
 
 import * as S from './styles'
 
@@ -17,11 +21,20 @@ const DiagramProperties = ({ modeler, element }) => {
         modeling.updateLabel(element, name);
     }
 
-    const handleUpdateElement = ({ name, value}) => {
+    const handleUpdateElement = (event) => {
+        const { name, value } = event.target
         const modeling = modeler.get('modeling');
 
         modeling.updateProperties(element, {
             [name]: value
+        })
+    }
+
+    const handleCodeEditorChanges = (value) => {
+        const modeling = modeler.get('modeling');
+
+        modeling.updateProperties(element, {
+            'custom:parameters': value
         })
     }
 
@@ -95,23 +108,41 @@ const DiagramProperties = ({ modeler, element }) => {
                 is(element, 'custom:WorkflowInfo') && (
                     <React.Fragment>
                         <fieldset>
-                            <label>Node Name: </label>
-                            <input value={element?.businessObject.get('custom:node_name')} name="custom:node_name" onChange={(event) => handleUpdateElement(event.target)} />
-                        </fieldset>
-
-                        <fieldset>
                             <label>Lane ID: </label>
-                            <input value={element?.businessObject.get('custom:lane_id')} name="custom:lane_id" onChange={(event) => handleUpdateElement(event.target)} />
+                            <input value={element?.businessObject.get('custom:lane_id')} name="custom:lane_id" onChange={handleUpdateElement} />
                         </fieldset>
 
                         <fieldset>
                             <label>Category: </label>
-                            <input value={element?.businessObject.get('custom:category')} name="custom:category" onChange={(event) => handleUpdateElement(event.target)} />
+                            <input value={element?.businessObject.get('custom:category')} name="custom:category" onChange={handleUpdateElement} />
                         </fieldset>
 
                         <fieldset>
                             <label>Parameters: </label>
-                            <input value={element?.businessObject.get('custom:parameters')} name="custom:parameters" onChange={(event) => handleUpdateElement(event.target)} />
+                            <AceEditor 
+                                value={element?.businessObject.get('custom:parameters')}
+                                mode="javascript"
+                                theme='github'
+                                name="custom:parameters" 
+                                onChange={handleCodeEditorChanges}
+                                editorProps={{ $blockScrolling: true }}
+                                setOptions={{
+                                enableBasicAutocompletion: true,
+                                enableLiveAutocompletion: true,
+                                enableSnippets: true
+                                }}
+                            />
+                        </fieldset>
+                    </React.Fragment>
+                )
+            }
+
+            {
+                is(element, 'custom:WorkflowLane') && (
+                    <React.Fragment>
+                        <fieldset>
+                            <label>Rule: </label>
+                            <input value={element?.businessObject.get('custom:rule')} name="custom:rule" onChange={handleUpdateElement} />
                         </fieldset>
                     </React.Fragment>
                 )

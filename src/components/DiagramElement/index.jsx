@@ -25,6 +25,8 @@ const DiagramElement = ({ modeler }) => {
         })
     }, [modeler, element])
 
+    console.log('Element: ', element)
+    
     return (
         <S.DiagramElement>
             {

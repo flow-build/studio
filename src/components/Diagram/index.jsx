@@ -68,9 +68,17 @@ const Diagram = () => {
                               "name": "parameters",
                               "isAttr": true,
                               "type": "String"
-                            },
+                            }
+                          ]
+                        },
+                        {
+                          "name": "WorkflowLane",
+                          "extends": [
+                            "bpmn:Lane"
+                          ],
+                          "properties": [
                             {
-                              "name": "node_name",
+                              "name": "rule",
                               "isAttr": true,
                               "type": "String"
                             }

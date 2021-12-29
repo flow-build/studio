@@ -9,6 +9,7 @@ export const Diagram = styled.div`
 
 export const Canvas = styled.div`
     height: 85%;
+    min-height: 85%;
     width: 100%;
 `
 

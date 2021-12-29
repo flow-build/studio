@@ -34,8 +34,6 @@ const App = () => {
     handleSetSessionId()
   }, [])
 
-  console.log("Hi There!")
-
   if(!mqttConfig || !sessionId ) return <React.Fragment/>
 
   return (
