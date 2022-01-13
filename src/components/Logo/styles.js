@@ -1,17 +1,14 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-export const Wrapper = styled.div`
-    ${({ theme }) =>  css`
-        align-items: center;
-        display: flex;
-        height: 90px;
-        justify-content: center;
-        padding: ${theme.spacings.xsmall};
-        width: 100%auto;
-    `}
+export const Logo = styled.div`
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 180px;
+    padding: 10px;
 `
 
-export const Image = styled.img`
-    max-width: 100%;
-    width: 80%;
+export const Image = styled.img `
+    width: 100%
 `

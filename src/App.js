@@ -1,55 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect } from 'react'
+import { requestToken } from './services/loginService';
 
-import { WorkflowManager }  from '@flowbuild/redux-toolkit-workflow-manager'
+import GlobalStyle from './assets/styles/globalStyles';
 
-import { ThemeProvider } from 'styled-components'
-import { login, getMQTTConfig, getSessionID } from './services/loginService'
-import GlobalStyles from './assets/styles/globalStyles'
-import themeDefault from './assets/styles/themeDefault'
+import { Box, CircularProgress } from '@mui/material'
+import { Layout } from './components'
 
-import { Content, GridLayout } from './components/GridLayout'
-import Sidebar from './components/Sidebar'
-import Messages from './components/Messages'
-import Diagram from './components/Diagram'
-
-const App = () => {
-  const [mqttConfig, setMqttConfig] = useState(null)
-  const [sessionId, setSessionId] = useState(null)
-
-  const handleSetMqttConfig = async () => {
-    const mqttConfig = await getMQTTConfig();
-
-    setMqttConfig(mqttConfig)
-  }
-
-  const handleSetSessionId = async () => {
-    const sessionId = await getSessionID()
-
-    setSessionId(sessionId)
-  }
+function App() {
 
   useEffect(() => {
-    login()
-    handleSetMqttConfig()
-    handleSetSessionId()
+    requestToken()
   }, [])
 
-  if(!mqttConfig || !sessionId ) return <React.Fragment/>
-
   return (
-    <WorkflowManager mqttConfig={mqttConfig} sessionId={sessionId}>
-      <ThemeProvider theme={themeDefault}>
-        <GlobalStyles/>
-
-        <GridLayout>
-          <Sidebar/>
-          <Content>
-            <Messages />
-            <Diagram />
-          </Content>
-        </GridLayout>
-      </ThemeProvider>
-    </WorkflowManager>
+    <React.Fragment>
+      <GlobalStyle />
+      <Suspense fallback={
+        <Box sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }} >
+            <CircularProgress />
+        </Box>
+      }>
+        <Layout />
+      </Suspense>
+    </React.Fragment>
   );
 }
 
