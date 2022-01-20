@@ -20,12 +20,12 @@ jobs:
       - name: Create .env file
         run: |
           echo REACT_APP_BASE_URL=$REACT_APP_BASE_URL >> .env
-      - name: Yarn Install
+      - name: Npm Install
         run: |
-          yarn install
+          npm install
       - name: Staging Build
         run: |
-          yarn build
+          npm run build
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
