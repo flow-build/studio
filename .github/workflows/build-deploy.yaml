@@ -28,6 +28,9 @@ jobs:
           unset CI
       - name: Staging Build
         run: |
+          node --max_old_space_size=4096
+      - name: Staging Build
+        run: |
           npm run build
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
