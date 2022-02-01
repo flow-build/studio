@@ -28,8 +28,6 @@ const PropertiesDrawer = ({ isOpen, onSelectItem }) => {
         dispatch(toggleDrawer(false))
     }
 
-    console.log('Properties: ', properties)
-
     return (
         <Drawer
             anchor='right'
