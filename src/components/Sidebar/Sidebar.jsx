@@ -7,8 +7,7 @@ import { useGetWorkflowsQuery, workflowService } from 'services/workflowService'
 import listRoutes from 'routes/listRoutes'
 
 import { 
-    Box, 
-    Paper, 
+    Box,  
     List, 
     ListItemButton, 
     ListItemIcon, 
@@ -37,21 +36,16 @@ const Sidebar = () => {
             console.error(`Components/Sidebar/handleCreateWorkflow -> ${e.error}: ${e.message}`)
         }
     }
-
-    console.log('Active: ', active)
     
     return (
-        <Paper
-            elevation={0}
-            square
-        >
+        <Box>
             <List
                 component="nav"
             >
                 {
                     listRoutes.map((route, index) => (
                         <>
-                            <Link to={route.pathname} alt={route.name} key={route.pathname}>
+                            <Link to={route.pathname} alt={route.name} key={route.name}>
                                 <ListItemButton
                                     sx={
                                         index === active && [
@@ -112,7 +106,7 @@ const Sidebar = () => {
                     ))
                 }
             </List>
-        </Paper>
+        </Box>
     )
 }
 

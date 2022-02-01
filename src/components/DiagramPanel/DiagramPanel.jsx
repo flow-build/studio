@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
 
 import AceEditor from "react-ace";
 import { Typography, TextField, Box, Grid, InputLabel, FormControl  } from "@mui/material"
+import { PropertiesDrawer } from 'components'
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 
 const DiagramPanel = ({ modeler }) => {
     const [element, setElement] = useState(null)
+
+    const [isDrawerActive] = useSelector(({ bpmn }) => [
+        bpmn.isDrawerActive
+    ])
 
     const handleUpdateElement = (event) => {
         const { name, value } = event.target
@@ -27,10 +33,24 @@ const DiagramPanel = ({ modeler }) => {
         })
     }
 
+    const handleOnSelectItem = (items) => {
+        if(!items) return
+
+        const modeling = modeler.get('modeling')
+
+        Object.keys(items).forEach((key) => {
+            modeling.updateProperties(element, {
+                [`custom:${key}`]: key === 'parameters' ? JSON.stringify(items[key]) : items[key]
+            })
+        })
+    }
+
     useEffect(() => {
         if(!modeler) return
 
         modeler.on('selection.changed', (e) => {
+            if(!e.newSelection[0]) return
+
             setElement(e.newSelection[0])
         })
 
@@ -39,6 +59,8 @@ const DiagramPanel = ({ modeler }) => {
         })
 
     }, [modeler])
+
+    console.log('Element: ', element)
 
     if(!element) return <></>
 
@@ -78,7 +100,7 @@ const DiagramPanel = ({ modeler }) => {
 
                             <Grid item xs={12} md={6} lg={12}>
                                 <Box sx={{ mb: 2 }}>
-                                    <InputLabel htmlFor='custom:parameters' sx={{ mb: 1 }}>Code Editor</InputLabel >
+                                    <InputLabel htmlFor='custom:parameters' sx={{ mb: 1 }}>Parameters</InputLabel >
                                     <AceEditor 
                                         value={element?.businessObject.get('custom:parameters')}
                                         mode="javascript"
@@ -112,6 +134,8 @@ const DiagramPanel = ({ modeler }) => {
                         </>
                     )
                 }
+
+                <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} />    
             </Grid>
         </Box>
     )

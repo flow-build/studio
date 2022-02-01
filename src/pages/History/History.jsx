@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetProcessHistoryQuery } from 'services/workflowService'
 
@@ -9,23 +9,32 @@ import {
     CardContent, 
     CardActions, 
     Chip, 
-    CircularProgress, 
+    CircularProgress,
     Grid,
+    Paper,
     Stack,
     Table,
     TableContainer,
     TableHead,
     TableRow,
     TableCell,
-    TableBody, 
+    TableBody,
+    ToggleButton,
+    ToggleButtonGroup, 
     Typography
 } from '@mui/material'
 
+import { ViewList, ViewModule, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+
+import { CollapsedTableRow } from 'components'
+
 const History = () => {
+    const [view, setView] = useState('list')
+
     let { id } = useParams()
     const { data: history, isFetching } = useGetProcessHistoryQuery(id)
-    
-    console.log('Process History: ', history)
+
+    const handleSetView = (event, nextView)  => setView(nextView)
 
     if(isFetching) return (
         <Box sx={{
@@ -41,8 +50,25 @@ const History = () => {
 
     return (
         <Grid container spacing={2}>
+            <Grid item xs={12} >
+                <Typography variant="h4" component="h1" >Histórico</Typography>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'end',
+                    alignItems: 'center'
+                }} >
+                    <ToggleButtonGroup value={view} exclusive onChange={handleSetView} >
+                        <ToggleButton value="list" aria-label='list'>
+                            <ViewList />
+                        </ToggleButton>
+                        <ToggleButton value="card" aria-label='card'>
+                            <ViewModule />    
+                        </ToggleButton> 
+                    </ToggleButtonGroup>
+                </Box>
+            </Grid>
             {
-                history?.length > 0 ? history?.map((item) => (
+                view === 'card' && history?.length > 0 && history?.map((item) => (
                     <Grid item xs={12} sm={12} md={6} lg={4} key={item.id}>
                         <Card>
                             <CardContent>
@@ -54,11 +80,11 @@ const History = () => {
                                     <Chip label={`Proximo Nó: ${item.next_node_id}`} variant="outlined" />
                                 </Stack>
                                 {
-                                    item.error && <Alert severity="error">{item.error}</Alert>
+                                    item?.error && <Alert severity="error">{item?.error}</Alert>
                                 }
 
                                 {
-                                    Object.keys(item.result).length > 0 && (
+                                    item?.result && Object.keys(item?.result).length > 0 && (
                                         <TableContainer component={Box}>
                                             <Typography variant="h6" component="p" gutterBottom>Result</Typography>
                                             <Table size="small">
@@ -90,9 +116,33 @@ const History = () => {
                             </CardActions>
                         </Card>
                     </Grid>
-                )).reverse() : (
+                )).reverse()
+            }
+
+            {
+                view === 'list' && (
                     <Grid item xs={12}>
-                        <Typography variant="subtitle1" component="p" gutterBottom>Nenhum histórico encontrado</Typography>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell />
+                                        <TableCell>ID</TableCell>
+                                        <TableCell>Node</TableCell>
+                                        <TableCell>Next Node</TableCell>
+                                        <TableCell>Status</TableCell>
+                                        <TableCell>Create At</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        history?.length > 0 && history.map((item, index) => (
+                                            <CollapsedTableRow item={item} key={index} />
+                                        )).reverse()
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid>
                 )
             }
