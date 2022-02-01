@@ -20,15 +20,15 @@ jobs:
       - name: Create .env file
         run: |
           echo REACT_APP_BASE_URL=$REACT_APP_BASE_URL >> .env
+      - name: clean npm cache
+        run: |
+          npm cache clean --force
       - name: Npm Install
         run: |
           npm install
       - name: Unset CI
         run: |
           unset CI
-      - name: Staging Build
-        run: |
-          node --max_old_space_size=4096
       - name: Staging Build
         run: |
           npm run build
