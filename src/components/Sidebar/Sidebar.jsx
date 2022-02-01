@@ -53,7 +53,7 @@ const Sidebar = () => {
                                         index === active && [
                                             {
                                                 '&': {
-                                                    backgroundImage: 'linear-gradient( to right, #2D77EF, #62b4ff)',
+                                                    backgroundImage: (theme) => `linear-gradient( to right, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                                                     color: '#fff'
                                                 },
                                                 '& svg': {

@@ -22,13 +22,13 @@ export const themeDefault = createTheme({
             main: '#27AE60'
         },
         grey: {
-            100: '#151521',
-            200: '#1E1E2D',
-            300: '#4B4B57',
+            100: '#FFFFFF',
+            200: '#F3F3F4',
+            300: '#BABAC1',
             400: '#83838C',
-            500: '#BABAC1',
-            600: '#F3F3F4',
-            700: '#FFFFFF'
+            500: '#4B4B57',
+            600: '#1E1E2D',
+            700: '#151521'
         },
         background: {
             default: '#151521',
