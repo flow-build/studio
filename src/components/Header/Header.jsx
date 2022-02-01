@@ -37,7 +37,7 @@ const Header = () => {
     }
 
     return (
-        <Box sx={{ gridArea: 'header'}}>
+        <Box sx={{ gridArea: 'header', background: (theme) => theme.palette.background.paper }}>
             <Container maxWidth='x1' disableGutters sx={{ pl: '10px', pr: '10px' }}>
                 <Toolbar disableGutters sx={{ justifyContent: 'space-between'}}>
                     <Box

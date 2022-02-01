@@ -32,7 +32,7 @@ export const themeDefault = createTheme({
         },
         background: {
             default: '#151521',
-            paper: '#151521'
+            paper: '#1E1E2D'
         }
     },
 })

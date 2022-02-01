@@ -38,7 +38,9 @@ const Sidebar = () => {
     }
     
     return (
-        <Box>
+        <Box sx={{
+            background: (theme) => theme.palette.background.paper
+        }}>
             <List
                 component="nav"
             >
