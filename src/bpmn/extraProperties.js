@@ -1,6 +1,7 @@
 import Modeler from "bpmn-js/lib/Modeler"
+import PropertiesControlPad from './PropertiesControlPad'
 
-const extraPropertiesModeler = (container) => {
+const extraPropertiesModeler = (container, options) => {
     return new Modeler({
         container: container,
         moddleExtensions: {
@@ -57,7 +58,14 @@ const extraPropertiesModeler = (container) => {
         },
         keyboard: {
             bindTo: document.body
-        }
+        },
+        additionalModules: [
+            {
+                __init__: ['propertiesControlPad'],
+                propertiesControlPad: ['type', PropertiesControlPad]
+            }
+        ],
+        ...options
     })
 }
 

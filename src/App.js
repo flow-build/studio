@@ -1,35 +1,34 @@
-import React, { Suspense, useEffect } from 'react'
-import { requestToken } from './services/loginService';
+import React, { Suspense } from 'react'
 
 import GlobalStyle from './assets/styles/globalStyles';
 
+import { ThemeProvider } from '@mui/material/styles'
+import { CssBaseline } from '@mui/material';
+
+import Routes from 'routes/Routes'
+
 import { Box, CircularProgress } from '@mui/material'
-import { Layout } from './components'
 
-function App() {
+import { themeDefault } from 'config/themes'
 
-  useEffect(() => {
-    requestToken()
-  }, [])
-
-  return (
-    <React.Fragment>
-      <GlobalStyle />
-      <Suspense fallback={
-        <Box sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }} >
-            <CircularProgress />
-        </Box>
-      }>
-        <Layout />
-      </Suspense>
-    </React.Fragment>
-  );
-}
+const App = () => (
+  <ThemeProvider theme={themeDefault}>
+    <GlobalStyle />
+    <CssBaseline />
+    <Suspense fallback={
+      <Box sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+      }} >
+          <CircularProgress />
+      </Box>
+    }>
+      <Routes />
+    </Suspense>
+  </ThemeProvider>
+)
 
 export default App;
