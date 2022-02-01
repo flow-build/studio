@@ -26,12 +26,11 @@ jobs:
       - name: Npm Install
         run: |
           npm install
-      - name: Unset CI
-        run: |
-          unset CI
       - name: Staging Build
         run: |
           npm run build
+        env:
+          CI: false
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         with:
