@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
 
 import AceEditor from "react-ace";
-import { Typography, TextField, Box, Grid, InputLabel, FormControl  } from "@mui/material"
+import { Typography, TextField, Box, Grid, InputLabel, FormControl, Drawer  } from "@mui/material"
 import { PropertiesDrawer } from 'components'
 
 import "ace-builds/src-noconflict/mode-javascript";
@@ -11,6 +11,7 @@ import "ace-builds/src-noconflict/theme-github";
 
 const DiagramPanel = ({ modeler }) => {
     const [element, setElement] = useState(null)
+    const [isOpen, setIsOpen] = useState(false)
 
     const [isDrawerActive] = useSelector(({ bpmn }) => [
         bpmn.isDrawerActive
@@ -45,13 +46,16 @@ const DiagramPanel = ({ modeler }) => {
         })
     }
 
+    const handleOnClose = () => setIsOpen(false)
+
     useEffect(() => {
         if(!modeler) return
 
         modeler.on('selection.changed', (e) => {
             if(!e.newSelection[0]) return
-
+            
             setElement(e.newSelection[0])
+            setIsOpen(true)
         })
 
         modeler.on('element.changed', (e) => {
@@ -63,25 +67,27 @@ const DiagramPanel = ({ modeler }) => {
     if(!element) return <></>
 
     return (
-        <Box
-            sx={{
-                padding: '10px',
-                width: '100%'
-            }}
-        >
-            <Typography variant="h6" component="h4" gutterBottom >Painel de Propriedades</Typography>
-            <Grid container key={element.id} spacing={2}>
-                {
-                   is(element, 'custom:WorkflowInfo') && (
-                       <>
-                            <Grid item xs={12} md={6} lg={12}>
+        <>
+            <Drawer 
+                anchor='right'
+                open={isOpen}
+                onClose={handleOnClose}
+            >
+                <Box
+                    role='presentation'
+                    sx={{ width: 320, padding: 1}}
+                >
+                    <Typography variant="h6" component="h4" gutterBottom >Painel de Propriedades</Typography>
+                    {
+                        is(element, 'custom:WorkflowInfo') && (
+                            <>
                                 <FormControl fullWidth variant="standard" sx={{ mb: 2 }}>
                                     <TextField 
-                                        label="Lane ID"
+                                        label="Spec"
                                         size="small"
-                                        name="custom:lane_id"
+                                        name="custom:spec"
                                         onChange={handleUpdateElement}
-                                        defaultValue={element.businessObject.get('custom:lane_id')}
+                                        defaultValue={element.businessObject.get('custom:spec')}
                                     />
                                 </FormControl>
                                 
@@ -94,48 +100,49 @@ const DiagramPanel = ({ modeler }) => {
                                         onChange={handleUpdateElement}
                                     />
                                 </FormControl>
-                            </Grid>
 
-                            <Grid item xs={12} md={6} lg={12}>
-                                <Box sx={{ mb: 2 }}>
+                                <Box sx={{ mt: 2, mb: 2}}>
                                     <InputLabel htmlFor='custom:parameters' sx={{ mb: 1 }}>Parameters</InputLabel >
                                     <AceEditor 
                                         value={element?.businessObject.get('custom:parameters')}
                                         mode="javascript"
                                         theme='github'
                                         name="custom:parameters" 
+                                        width="100%"
                                         onChange={handleCodeEditorChanges} 
                                         showPrintMargin={true}
                                         showGutter={true}
                                         highlightActiveLine={true}
+                                        wrapEnabled={true}
+                                        editorProps={{ $blockScrolling: true }}
+                                        setOptions={{
+                                        enableBasicAutocompletion: true,
+                                        enableLiveAutocompletion: true,
+                                        enableSnippets: true
+                                        }}
                                     />
                                 </Box>
-                            </Grid>
-                       </>
-                   ) 
-                }
+                            </>
+                        )
+                    }
 
-                {
-                    is(element, 'custom:WorkflowLane') && (
-                        <>
-                            <Grid item xs={12}>
-                                <FormControl fullWidth variant="standard">
-                                    <TextField 
-                                        label="Rule"
-                                        size="small"
-                                        name="custom:rule"
-                                        defaultValue={element.businessObject.get('custom:rule')}
-                                        onChange={handleUpdateElement}
-                                    />
-                                </FormControl>
-                            </Grid>
-                        </>
-                    )
-                }
-
-                <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} />    
-            </Grid>
-        </Box>
+                    {
+                        is(element, 'custom:WorkflowLane') && (
+                            <FormControl fullWidth variant="standard">
+                                <TextField 
+                                    label="Rule"
+                                    size="small"
+                                    name="custom:rule"
+                                    defaultValue={element.businessObject.get('custom:rule')}
+                                    onChange={handleUpdateElement}
+                                />
+                            </FormControl>
+                        )
+                    }
+                </Box>
+            </Drawer>
+            <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} /> 
+        </>
     )
 }
 
