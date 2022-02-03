@@ -24,7 +24,11 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          directory: './'
+          file_name: '.env'
+      - name: Make envfile prod
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
           file_name: '.env.production'
       - name: clean npm cache
         run: |
