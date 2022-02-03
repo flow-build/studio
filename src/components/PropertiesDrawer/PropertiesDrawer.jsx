@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleDrawer } from 'features/bpmnSlice'
 
 import {
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
     Box,
     Button,
     Card,
@@ -15,6 +18,7 @@ import {
     ListItemText,
     Typography
 } from '@mui/material'
+import { ExpandMore } from '@mui/icons-material'
 
 const PropertiesDrawer = ({ isOpen, onSelectItem }) => {
     const dispatch = useDispatch()
@@ -42,9 +46,14 @@ const PropertiesDrawer = ({ isOpen, onSelectItem }) => {
                 <Divider sx={{ mb: 1 }}/>
                 <Typography component="p" variant="caption" sx={{mb: 2}}>Ao selecionar uma das opções pré definidas os valores serão automaticamente preenchidos.</Typography>
                 {
-                    properties.map((property) => (
-                        <Card sx={{ mb: 2 }}>
-                            <CardContent>
+                    properties.map((property, index) => (
+                        <Accordion key={index}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMore />}
+                            >
+                                <Typography>Properties {index}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
                                 <List dense>
                                     {
                                         Object.keys(property).map((key, index) => (
@@ -54,11 +63,11 @@ const PropertiesDrawer = ({ isOpen, onSelectItem }) => {
                                         ))
                                     }
                                 </List>
-                            </CardContent>
-                            <CardActions sx={{ justifyContent: 'end'}}>
-                                <Button variant='text' onClick={() => handleOnSelectItem(property)}>Selecionar</Button>
-                            </CardActions>
-                        </Card>
+                                <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                                    <Button variant='text' onClick={() => handleOnSelectItem(property)}>Selecionar</Button>
+                                </Box>
+                            </AccordionDetails>
+                        </Accordion>
                     ))
                 }
             </Box>
