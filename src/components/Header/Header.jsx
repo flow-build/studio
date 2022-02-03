@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import LogoDefaultUrl from 'assets/images/horizontal-cor-padrao.png'
-import LogoWhiteUrl from 'assets/images/horizontal-cor-branco.png'
+import LogoUrl from 'assets/images/flowbuildstudio_bg_dark.png'
 import { removeStorageItem } from 'utils/storage'
 
 import {
@@ -53,7 +52,7 @@ const Header = () => {
                         }}
                     >
                         <Link to="/">
-                            <img src={LogoWhiteUrl} alt="Flowbuild" />
+                            <img src={LogoUrl} alt="Flowbuild" />
                         </Link>
                     </Box>
                     <Box>

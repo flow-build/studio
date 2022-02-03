@@ -20,19 +20,19 @@ const extraPropertiesModeler = (container, options) => {
                         ],
                         "properties": [
                             {
-                            "name": "lane_id",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "spec",
+                                "isAttr": true,
+                                "type": "String"
                             },
                             {
-                            "name": "category",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "category",
+                                "isAttr": true,
+                                "type": "String"
                             },
                             {
-                            "name": "parameters",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "parameters",
+                                "isAttr": true,
+                                "type": "String"
                             }
                         ]
                     },
