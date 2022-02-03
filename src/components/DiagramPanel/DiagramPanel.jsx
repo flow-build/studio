@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
 
+import { setPropertiesDrawerItems, toggleDrawer } from 'features/bpmnSlice'
+import { bpmnService } from 'services/bpmnService'
+
 import AceEditor from "react-ace";
-import { Typography, TextField, Box, Grid, InputLabel, FormControl, Drawer  } from "@mui/material"
+import { Typography, TextField, Box, Button, InputLabel, FormControl, Drawer  } from "@mui/material"
 import { PropertiesDrawer } from 'components'
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 
 const DiagramPanel = ({ modeler }) => {
+    const dispatch = useDispatch()
+    
     const [element, setElement] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
 
@@ -44,9 +49,24 @@ const DiagramPanel = ({ modeler }) => {
                 [`custom:${key}`]: key === 'parameters' ? JSON.stringify(items[key]) : items[key]
             })
         })
+
+        setIsOpen(true)
     }
 
     const handleOnClose = () => setIsOpen(false)
+
+    const handleGetProperties = async () => {
+        try {
+            setIsOpen(false)
+            dispatch(toggleDrawer(true))
+            const string = element.type.split(':')[1]
+            const { data } = await dispatch(bpmnService.endpoints.getProperties.initiate(string.toLowerCase()))
+
+            dispatch(setPropertiesDrawerItems(data?.items))
+        } catch(e) {
+            console.error(`PropertiesControlPad/handleGetProperties => ${e.error}: ${e.message}`)
+        }
+    }
 
     useEffect(() => {
         if(!modeler) return
@@ -139,6 +159,7 @@ const DiagramPanel = ({ modeler }) => {
                             </FormControl>
                         )
                     }
+                    <Button variant='contained' fullWidth onClick={handleGetProperties} >Propriedades Customizadas</Button>
                 </Box>
             </Drawer>
             <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} /> 
