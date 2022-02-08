@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
+import _ from 'lodash'
 
 import { setPropertiesDrawerItems, toggleDrawer } from 'features/bpmnSlice'
 import { bpmnService } from 'services/bpmnService'
 
 import AceEditor from "react-ace";
-import { Typography, TextField, Box, Button, InputLabel, FormControl, Drawer  } from "@mui/material"
+import { 
+    Typography, 
+    TextField, 
+    Box, 
+    Button, 
+    InputLabel, 
+    FormControl, 
+    Drawer, 
+    Dialog, 
+    DialogTitle, 
+    List,
+    ListItem, 
+    ListItemText
+} from "@mui/material"
 import { PropertiesDrawer } from 'components'
 
 import "ace-builds/src-noconflict/mode-javascript";
@@ -17,6 +31,8 @@ const DiagramPanel = ({ modeler }) => {
     
     const [element, setElement] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+    const [isParametersModalActive, setIsParametersModalActive] = useState(false)
+    const [selectedProperty, setSelectedProperty] = useState([])
 
     const [isDrawerActive] = useSelector(({ bpmn }) => [
         bpmn.isDrawerActive
@@ -44,11 +60,31 @@ const DiagramPanel = ({ modeler }) => {
 
         const modeling = modeler.get('modeling')
 
-        Object.keys(items).forEach((key) => {
+        if(items['category']) 
             modeling.updateProperties(element, {
-                [`custom:${key}`]: key === 'parameters' ? JSON.stringify(items[key]) : items[key]
+                [`custom:category`]: items['category']
             })
-        })
+
+        if(items['spec'])
+            modeling.updateProperties(element,  {
+                [`custom:spec`]: items['spec']
+            })
+
+        if(items['parameters']) {
+            if(Boolean(element.businessObject.get('custom:parameters'))) {
+                setSelectedProperty(items)
+                setIsParametersModalActive(true)
+            } else {
+                modeling.updateProperties(element, {
+                    [`custom:parameters`]: JSON.stringify(items['parameters'])
+                })
+            }
+                
+        }
+
+        if(!element.businessObject.get('name')) {
+            modeling.updateLabel(element, items['name'])
+        }
 
         setIsOpen(true)
     }
@@ -67,6 +103,19 @@ const DiagramPanel = ({ modeler }) => {
             console.error(`PropertiesControlPad/handleGetProperties => ${e.error}: ${e.message}`)
         }
     }
+
+    const handleMergePropertyValues = (value) => {
+        const modeling = modeler.get('modeling')
+
+        modeling.updateProperties(element, {
+            [`custom:parameters`]: JSON.stringify(_.merge(
+                JSON.parse(element.businessObject.get('custom:parameters')),
+                value
+            ))
+        })
+    }
+
+    console.log('Selected Property: ', selectedProperty)
 
     useEffect(() => {
         if(!modeler) return
@@ -163,6 +212,26 @@ const DiagramPanel = ({ modeler }) => {
                 </Box>
             </Drawer>
             <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} /> 
+            <Dialog onClose={() => setIsParametersModalActive(false)} open={isParametersModalActive}>
+                <DialogTitle>Escolha uma Opção</DialogTitle>
+                <List sx={{ pt: 0 }}>
+                    <ListItem button onClick={() => {
+                        handleCodeEditorChanges(JSON.stringify(selectedProperty?.parameters))
+                        setIsParametersModalActive(false)
+                    }}>
+                        <ListItemText primary='Substituir valores antigos pelos novos.' />
+                    </ListItem>
+                    <ListItem button onClick={() => setIsParametersModalActive(false)}>
+                        <ListItemText primary='Manter os valores atuais.' />
+                    </ListItem>
+                    <ListItem button onClick={() => {
+                        handleMergePropertyValues(selectedProperty.parameters)
+                        setIsParametersModalActive(false)
+                    }}>
+                        <ListItemText primary='Mesclar os valores antigos com os novos.' />
+                    </ListItem>
+                </List>
+            </Dialog>
         </>
     )
 }
