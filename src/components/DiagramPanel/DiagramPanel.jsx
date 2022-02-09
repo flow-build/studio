@@ -115,8 +115,6 @@ const DiagramPanel = ({ modeler }) => {
         })
     }
 
-    console.log('Selected Property: ', selectedProperty)
-
     useEffect(() => {
         if(!modeler) return
 
