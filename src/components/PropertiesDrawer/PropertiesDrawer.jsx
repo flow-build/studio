@@ -69,7 +69,7 @@ const PropertiesDrawer = ({ isOpen, onSelectItem }) => {
                             <AccordionSummary
                                 expandIcon={<ExpandMore />}
                             >
-                                <Typography>Properties {index}</Typography>
+                                <Typography>{property.spec}</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List dense>
