@@ -2,5 +2,6 @@ export { default as CollapsedTableRow } from './CollapsedTableRow/CollapsedTable
 export { default as Header } from './Header/Header'
 export { default as DiagramPanel } from './DiagramPanel/DiagramPanel'
 export { default as Layout } from './Layout/Layout'
+export { default as ProcessDrawer } from './ProcessDrawer/ProcessDrawer'
 export { default as PropertiesDrawer } from './PropertiesDrawer/PropertiesDrawer'
 export { default as Sidebar} from './Sidebar/Sidebar'

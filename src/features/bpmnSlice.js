@@ -4,7 +4,8 @@ export const bpmnSlice = createSlice({
     name: 'bpmnSlice',
     initialState: {
         propertiesDrawer: [],
-        isDrawerActive: false
+        isDrawerActive: false,
+        isProcessDrawerActive: false
     },
     reducers: {
         setPropertiesDrawerItems: (state, action) => {
@@ -12,10 +13,13 @@ export const bpmnSlice = createSlice({
         },
         toggleDrawer: (state, action) => {
             state.isDrawerActive = action.payload
+        },
+        toggleProcessDrawer: (state, action) => {
+            state.isProcessDrawerActive = action.payload
         }
     }
 })
 
-export const { setPropertiesDrawerItems, toggleDrawer } = bpmnSlice.actions
+export const { setPropertiesDrawerItems, toggleDrawer, toggleProcessDrawer } = bpmnSlice.actions
 
 export default bpmnSlice.reducer
