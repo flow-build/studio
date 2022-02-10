@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
+
+import { toggleProcessDrawer } from 'features/bpmnSlice'
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
@@ -19,9 +22,10 @@ import {
     Grid 
 } from '@mui/material'
 import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
-import { DiagramPanel } from 'components'
+import { DiagramPanel, ProcessDrawer } from 'components'
 
 const Diagram = () => {
+    const dispatch = useDispatch()
     const { id } = useParams()
     const theme = useTheme()
     const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
@@ -77,6 +81,8 @@ const Diagram = () => {
         modeler.get('zoomScroll').stepZoom(-1)
     }
 
+    const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true))
+
     useEffect(() => {
         handleGetWorkflowDiagram()
     }, [id, diagram])
@@ -117,6 +123,7 @@ const Diagram = () => {
                             <ZoomOutOutlined />
                         </Button>
                     </Tooltip>
+                    <Button variant='contained' onClick={handleToggleProcessDrawer} >Listar Processos</Button>
                     <Button variant='contained' onClick={handleOnSaveXML}>Download XML</Button>
                 </Stack>
             </Grid>
@@ -134,6 +141,7 @@ const Diagram = () => {
             <Grid item xs={12}>
                 <DiagramPanel modeler={modeler} />
             </Grid>
+            <ProcessDrawer modeler={modeler}/>
         </Grid>
     )
 }
