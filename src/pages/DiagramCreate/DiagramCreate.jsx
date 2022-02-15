@@ -4,6 +4,7 @@ import axios from "axios";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+import "assets/styles/bpmnStyles.css";
 
 import extraPropertiesModeler from "bpmn/extraProperties";
 import { blankDiagram } from 'utils/blankDiagram'
