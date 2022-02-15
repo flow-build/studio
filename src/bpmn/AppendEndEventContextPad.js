@@ -38,7 +38,7 @@ export default class AppendEndEventContextPad {
         return {
             'append.end-event': {
                 group: 'model',
-                className: 'bpmn-icon-end-event',
+                className: 'bpmn-icon-end-event-none',
                 title: translate('Append EndEvent'),
                 action: {
                     click: appendEndEvent,
