@@ -1,4 +1,5 @@
 import { store } from 'config/store'
+import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
 import { setPropertiesDrawerItems, toggleDrawer } from 'features/bpmnSlice'
 import { bpmnService } from 'services/bpmnService'
 
@@ -24,13 +25,24 @@ export default class PropertiesControlPad {
             }
         }
 
-        return {
-            'handle.get-properties': {
-                group: 'model',
-                className: 'bpmn-icon-service-task',
-                title: this.translate('Get Properties'),
-                action: {
-                    click: handleGetProperties
+        if(isAny(element.businessObject, [
+            'bpmn:EndEvent',
+            'bpmn:ExclusiveGateway',
+            'bpmn:CallActivity',
+            'bpmn:ServiceTask',
+            'bpmn:SubProcess',
+            'bpmn:IntermediateThrowEvent',
+            'bpmn:UserTask',
+            ''
+        ])) {
+            return {
+                'handle.get-properties': {
+                    group: 'model',
+                    className: 'bpmn-icon-service-task',
+                    title: this.translate('Get Properties'),
+                    action: {
+                        click: handleGetProperties
+                    }
                 }
             }
         }
