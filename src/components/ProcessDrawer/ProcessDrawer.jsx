@@ -5,6 +5,8 @@ import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowServ
 
 import { toggleProcessDrawer } from 'features/bpmnSlice'
 
+import { statusColors } from 'utils/statusColors'
+
 import {
     Box,
     CircularProgress,
@@ -26,18 +28,6 @@ const ProcessDrawer = ({ modeler }) => {
         bpmn.isProcessDrawerActive
     ])
 
-    const colors = {
-        waiting: '#00A676',
-        delegated: '#00A676',
-        error: '#6E0E0A',
-        interrupted: '#D74E09',
-        expired: '#D74E09',
-        forbidden: '#D74E09',
-        finished: '#124E78',
-        running: '#2691DF',
-        pending: '#2691DF'
-    }
-
     const handleOnClose = () => dispatch(toggleProcessDrawer(false))
 
     const handleOnSelectProcess = async(processId) => {
@@ -54,7 +44,7 @@ const ProcessDrawer = ({ modeler }) => {
                 const element = elementRegistry.get(`Node_${history.node_id}`)
                 
                 modeling.setColor(element, {
-                    fill: colors[`${history.status}`]
+                    fill: statusColors[`${history.status}`]
                 })
             })
             

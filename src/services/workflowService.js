@@ -42,6 +42,11 @@ export const workflowService = createApi({
                 }
             })
         }),
+        getProcessStateById: builder.query({
+            query: (processId) => ({
+                url: `/processes/${processId}/state`
+            })
+        }),
         createWorkflowByName: builder.query({
             query: ({ name, data }) => ({
                 url: `/workflows/name/${name}/start`,
@@ -57,5 +62,6 @@ export const {
     useGetWFProcessByIdQuery,
     useGetWorkflowDiagramQuery,
     useGetProcessHistoryQuery,
-    useCreateWorkflowByNameQuery
+    useCreateWorkflowByNameQuery,
+    useGetProcessStateByIdQuery
 } = workflowService
