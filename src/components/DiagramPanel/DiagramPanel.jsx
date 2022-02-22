@@ -131,8 +131,6 @@ const DiagramPanel = ({ modeler }) => {
 
     }, [modeler])
 
-    console.log('Element: ', element)
-
     if(!element) return <></>
 
     return (
