@@ -3,6 +3,8 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { SnackbarNotification } from "components";
 
+import _isEmpty from "lodash/isEmpty";
+
 import { TextInput } from "pages/CompareJson/components/TextInput";
 import { useCompareJson } from "pages/CompareJson/hooks/useCompareJson";
 
@@ -27,9 +29,16 @@ const CompareJson = () => {
     }
 
     console.log({
-      removedElements: data.removedElements ?? [],
-      addedElements: data.addedElements ?? [],
+      "Propriedades removidas": data.removedElements ?? [],
+      "Propriedades adicionadas": data.addedElements ?? [],
     });
+
+    console.log({ d: data.differentValues });
+    if (_isEmpty(data.differentValues)) {
+      console.log("Nenhum tipo de valor diferente.");
+    } else {
+      console.table(data.differentValues);
+    }
     return;
   };
 

@@ -4,6 +4,8 @@ export function useCompareJson() {
   const removedElements = [];
   const addedElements = [];
 
+  let differentValues = [];
+
   const isJson = (json) => {
     json = typeof json !== "string" ? JSON.stringify(json) : json;
 
@@ -39,20 +41,32 @@ export function useCompareJson() {
       };
     }
 
+    differentValues.length = 0;
     removedElements.length = 0;
     object_equals(JSON.parse(json1), JSON.parse(json2), removedElements);
 
     addedElements.length = 0;
     object_equals(JSON.parse(json2), JSON.parse(json1), addedElements);
 
+    differentValues = differentValues.slice(0, differentValues.length / 2);
+
     return {
       isSuccess: true,
       data: {
         removedElements,
         addedElements,
+        differentValues,
       },
     };
   };
+
+  function verifyObjectDifferentArray(value1, value2) {
+    return (
+      typeof value1 === "object" &&
+      !Array.isArray(value1) &&
+      Array.isArray(value2)
+    );
+  }
 
   function object_equals(x, y, testeArray, field) {
     if (x === y) return true;
@@ -87,10 +101,46 @@ export function useCompareJson() {
       }*/
       // Numbers, Strings, Functions, Booleans must be strictly equal
 
-      if (typeof x[p] === "object" && typeof y[p] !== "object") {
-        testeArray.push(field + "." + p);
+      // console.log({ p });
+      if (
+        typeof x[p] !== typeof y[p] ||
+        verifyObjectDifferentArray(x[p], y[p]) ||
+        verifyObjectDifferentArray(y[p], x[p])
+      ) {
+        // console.log({ x: x[p] });
+        // console.log({ y: y[p] });
+        // console.log("oi");
+        const pre = field ? field + "." : "";
+        differentValues.push({
+          prop: pre + p,
+          json1: x[p],
+          json2: y[p],
+        });
         continue;
       }
+
+      // if (typeof x[p] !== "object" && typeof y[p] !== "object") {
+      //   console.log({ p });
+      //   if (x[p] !== y[p]) {
+      //     const pre = field ? field + "." : "";
+      //     /* console.log({ p });
+      //     console.log({ x: x[p] });
+      //     console.log({ y: y[p] }); */
+      //     differentValues.push({
+      //       prop: pre + p,
+      //       json1: x[p],
+      //       json2: y[p],
+      //     });
+      //     // continue;
+      //     /* testeArray.push(field + "." + p);
+      //     continue; */
+      //   }
+      // }
+
+      /* if (typeof x[p] === "object" && typeof y[p] !== "object") {
+        testeArray.push(field + "." + p);
+        continue;
+      } */
 
       const fieldName = field ? field + "." + p : p;
       if (!object_equals(x[p], y[p], testeArray, fieldName)) {
