@@ -2,12 +2,12 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
-const TextInput = ({ value, setValue }) => {
+const TextInput = ({ value, setValue, label }) => {
   return (
     <Grid item xs={6} flex={1}>
       <TextField
         id="outlined-multiline-flexible"
-        label="Multiline"
+        label={label ?? ""}
         multiline
         maxRows={13}
         fullWidth

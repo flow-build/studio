@@ -42,11 +42,13 @@ const CompareJson = () => {
       <TextInput
         value={payload.json1}
         setValue={(evt) => handleChangeText(evt, "json1")}
+        label="Antigo JSON"
       />
 
       <TextInput
         value={payload.json2}
         setValue={(evt) => handleChangeText(evt, "json2")}
+        label="Novo JSON"
       />
 
       <Grid item xs={12}>
