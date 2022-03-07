@@ -1,21 +1,20 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import { SnackbarNotification } from "components";
 
 import _isEmpty from "lodash/isEmpty";
+
+import { setNotification } from "features/notificationsSlice";
 
 import { TextInput } from "pages/CompareJson/components/TextInput";
 import { useCompareJson } from "pages/CompareJson/hooks/useCompareJson";
 
 const CompareJson = () => {
+  const dispatch = useDispatch();
   const { onCompare } = useCompareJson();
 
   const [payload, setPayload] = useState({ json1: "", json2: "" });
-  const [snakbarOptions, setSnakbarOptions] = useState({
-    isOpen: false,
-    message: "",
-  });
 
   const handleChangeText = (event, field) => {
     setPayload((prev) => ({ ...prev, [field]: event.target.value }));
@@ -25,7 +24,13 @@ const CompareJson = () => {
     const { data, isSuccess } = onCompare(payload.json1, payload.json2);
 
     if (!isSuccess) {
-      return setSnakbarOptions({ isOpen: true, message: data.message ?? "" });
+      return dispatch(
+        setNotification({
+          type: "snackbar",
+          variant: "error",
+          message: data.message,
+        })
+      );
     }
 
     console.log({
@@ -33,17 +38,12 @@ const CompareJson = () => {
       "Propriedades adicionadas": data.addedElements ?? [],
     });
 
-    console.log({ d: data.differentValues });
     if (_isEmpty(data.differentValues)) {
       console.log("Nenhum tipo de valor diferente.");
     } else {
       console.table(data.differentValues);
     }
     return;
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnakbarOptions({ isOpen: false, message: "" });
   };
 
   return (
@@ -65,14 +65,6 @@ const CompareJson = () => {
           Contained
         </Button>
       </Grid>
-
-      <SnackbarNotification
-        open={snakbarOptions.isOpen}
-        message={snakbarOptions.message}
-        variant="error"
-        onClose={handleCloseSnackbar}
-        index={0}
-      />
     </Grid>
   );
 };
