@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { createSelector } from '@reduxjs/toolkit'
 
 import { useGetWorkflowsQuery, workflowService } from 'services/workflowService'
 
@@ -11,6 +12,7 @@ import {
     CardContent, 
     CardActions,
     CircularProgress, 
+    FormControl, 
     Grid, 
     IconButton,
     Paper,
@@ -20,19 +22,31 @@ import {
     TableContainer,
     TableHead,
     TableRow, 
+    TextField, 
     ToggleButton,
     ToggleButtonGroup,
     Tooltip, 
-    Typography
+    Typography,
+    Stack
 } from '@mui/material'
 import { VisibilityOutlined, ExtensionOutlined, AddOutlined, ViewList, ViewModule } from '@mui/icons-material'
 
 const Workflows = () => {
     const [view, setView] = useState('list')
+    const [searchWorkflow, setSearchWorkflow] = useState('')
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { data: workflows, isFetching } = useGetWorkflowsQuery()
+    const { data: workflows, isFetching } = useGetWorkflowsQuery(undefined, {
+        selectFromResult: result => {
+            if(!searchWorkflow) return result
+
+            return {
+                ...result,
+                data: result.data.filter(workflow => workflow.name.includes(searchWorkflow) || workflow.workflow_id.includes(searchWorkflow))
+            }
+        }
+    })
 
     const handleCreateWorkflow = async (e, name) => {
         e.preventDefault();
@@ -48,6 +62,8 @@ const Workflows = () => {
     const handleCreateDiagram = () => navigate(`/diagram/create`)
 
     const handleSetView = (event, nextView)  => setView(nextView)
+
+    const handleSearchWorkflow = (event) =>  setSearchWorkflow(event.target.value)
 
     if(isFetching) return (
         <Box sx={{
@@ -72,11 +88,17 @@ const Workflows = () => {
                     <Typography variant="h4" component="h1" gutterBottom >Workflows</Typography>
                     <Button variant='outlined' onClick={handleCreateDiagram}>Novo</Button>
                 </Box>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    alignItems: 'center'
-                }} >
+                <Stack spacing={2} direction="row" justifyContent="space-between">
+                    <FormControl variant="standard">
+                        <TextField 
+                            id="search_workflow"
+                            type="text"
+                            size="small"
+                            label="Nome/ID"
+                            value={searchWorkflow}
+                            onChange={handleSearchWorkflow}
+                        />
+                    </FormControl>
                     <ToggleButtonGroup value={view} exclusive onChange={handleSetView} >
                         <ToggleButton value="list" aria-label='list'>
                             <ViewList />
@@ -85,7 +107,7 @@ const Workflows = () => {
                             <ViewModule />    
                         </ToggleButton> 
                     </ToggleButtonGroup>
-                </Box>
+                </Stack>
             </Grid>
             {
                 view === 'card' && workflows?.map((workflow) => (
