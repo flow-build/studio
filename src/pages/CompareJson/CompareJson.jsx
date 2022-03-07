@@ -62,7 +62,7 @@ const CompareJson = () => {
 
       <Grid item xs={12}>
         <Button variant="contained" onClick={onClickCompareButton}>
-          Contained
+          Comparar
         </Button>
       </Grid>
     </Grid>
