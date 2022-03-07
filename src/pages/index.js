@@ -1,13 +1,15 @@
-import { lazy } from 'react'
+import { lazy } from "react";
 
 const Pages = {
-    Dashboard: lazy(() => import('./Dashboard/Dashboard')),
-    History: lazy(() => import('./History/History')),
-    Login: lazy(() => import('./Login/Login')),
-    Workflows: lazy(() => import('./Workflows/Workflows')),
-    WorkflowById: lazy(() => import ('./WorkflowById/WorkflowById')),
-    Diagram: lazy(() => import('./Diagram/Diagram')),
-    DiagramCreate: lazy(() => import('./DiagramCreate/DiagramCreate'))
-}
+  Dashboard: lazy(() => import("./Dashboard/Dashboard")),
+  History: lazy(() => import("./History/History")),
+  Login: lazy(() => import("./Login/Login")),
+  Workflows: lazy(() => import("./Workflows/Workflows")),
+  WorkflowById: lazy(() => import("./WorkflowById/WorkflowById")),
+  Diagram: lazy(() => import("./Diagram/Diagram")),
+  DiagramCreate: lazy(() => import("./DiagramCreate/DiagramCreate")),
 
-export default Pages
+  CompareJSON: lazy(() => import("./CompareJson/CompareJson")),
+};
+
+export default Pages;
