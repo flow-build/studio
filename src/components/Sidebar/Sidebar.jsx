@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -31,6 +31,21 @@ const Sidebar = () => {
     (item) => item.pathname === location?.pathname
   );
 
+  const selectedItemStyle = useMemo(() => {
+    return [
+      {
+        "&": {
+          backgroundImage: (theme) =>
+            `linear-gradient( to right, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
+          color: "#fff",
+        },
+        "& svg": {
+          color: "#fff",
+        },
+      },
+    ];
+  }, []);
+
   const handleCreateWorkflow = async (e, name) => {
     e.preventDefault();
     try {
@@ -54,24 +69,9 @@ const Sidebar = () => {
     >
       <List component="nav">
         {listRoutes.map((route, index) => (
-          <>
-            <Link to={route.pathname} alt={route.name} key={route.name}>
-              <ListItemButton
-                sx={
-                  index === active && [
-                    {
-                      "&": {
-                        backgroundImage: (theme) =>
-                          `linear-gradient( to right, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
-                        color: "#fff",
-                      },
-                      "& svg": {
-                        color: "#fff",
-                      },
-                    },
-                  ]
-                }
-              >
+          <React.Fragment key={route.name}>
+            <Link to={route.pathname} alt={route.name}>
+              <ListItemButton sx={index === active ? selectedItemStyle : {}}>
                 <ListItemIcon>{route.icon}</ListItemIcon>
                 <ListItemText>{route.name}</ListItemText>
               </ListItemButton>
@@ -121,7 +121,7 @@ const Sidebar = () => {
                 ))}
               </Box>
             )}
-          </>
+          </React.Fragment>
         ))}
       </List>
     </Box>
