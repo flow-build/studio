@@ -16,7 +16,7 @@ const listRoutes = [
     component: Pages.Workflows,
   },
   {
-    name: "Compare JSON",
+    name: "Comparar JSONs",
     pathname: "/compare-json",
     icon: <IoCogOutline />,
     component: Pages.Workflows,
