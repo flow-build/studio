@@ -158,8 +158,6 @@ const DiagramPanel = ({ modeler }) => {
     });
   }, [modeler]);
 
-  console.log('History: ', history)
-
   if (!element) return <></>;
 
   return (
@@ -177,11 +175,15 @@ const DiagramPanel = ({ modeler }) => {
                 id="element-properties-tab"
                 aria-controls="element-tabpanel-0"
               />
-              <Tab
-                label="Histórico"
-                id="element-history-tab"
-                aria-controls="element-tabpanel-1"
-              />
+              {
+                selectedProcess && (
+                  <Tab
+                    label="Histórico"
+                    id="element-history-tab"
+                    aria-controls="element-tabpanel-1"
+                  />
+                )
+              }
             </Tabs>
           </Box>
           <Box
