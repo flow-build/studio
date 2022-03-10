@@ -37,7 +37,7 @@ const Layout = () => {
         sx={{
           gridArea: "content",
           padding: "10px",
-          overflowY: "scroll",
+          overflowY: "auto",
         }}
       >
         <Outlet />
