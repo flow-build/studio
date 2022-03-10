@@ -7,6 +7,8 @@ import { setPropertiesDrawerItems, toggleDrawer } from "features/bpmnSlice";
 import { bpmnService } from "services/bpmnService";
 import { workflowService } from 'services/workflowService'
 
+import { statusColors } from 'utils/statusColors'
+
 import AceEditor from "react-ace";
 import {
   Typography,
@@ -125,6 +127,36 @@ const DiagramPanel = ({ modeler }) => {
 
   const handleSetElementTab = (event, newValue) => setElementTab(newValue);
 
+  const handleFollowProcess = async() => {
+    try {
+      const { data: { workflow_id } } = await dispatch(workflowService.endpoints.getProcessStateById.initiate(selectedProcess))
+
+      const { data: diagram } = await dispatch(workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id))
+
+      modeler.importXML(diagram);
+      modeler.get("canvas").zoom("fit-viewport");
+
+      const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+
+      const orderedData = [...data].reverse()
+
+      const modeling = modeler.get('modeling')
+      const elementRegistry = modeler.get('elementRegistry')
+
+      orderedData.forEach((history) => {
+          const element = elementRegistry.get(`Node_${history.node_id}`)
+          
+          modeling.setColor(element, {
+              fill: statusColors[`${history.status}`]
+          })
+      })
+
+      setIsOpen(false);
+    } catch(e) {
+      console.error(`DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`)
+    }
+  }
+
   useEffect(() => {
     async function getHistory() {
       try {
@@ -234,11 +266,6 @@ const DiagramPanel = ({ modeler }) => {
                     highlightActiveLine={true}
                     wrapEnabled={true}
                     editorProps={{ $blockScrolling: true }}
-                    setOptions={{
-                      enableBasicAutocompletion: true,
-                      enableLiveAutocompletion: true,
-                      enableSnippets: true,
-                    }}
                   />
                 </Box>
               </>
@@ -255,9 +282,16 @@ const DiagramPanel = ({ modeler }) => {
                 />
               </FormControl>
             )}
-            <Button variant="contained" fullWidth onClick={handleGetProperties}>
+            <Button variant="contained" fullWidth onClick={handleGetProperties} sx={{ mb: 1}}>
               Propriedades Customizadas
             </Button>
+            {
+             selectedProcess && (is(element, 'bpmn:ServiceTask')) && (
+                <Button variant="contained" fullWidth onClick={handleFollowProcess}>
+                  Seguir Processo
+                </Button>
+              )
+            }
           </Box>
           <Box
             role="tabpanel"
@@ -284,6 +318,7 @@ const DiagramPanel = ({ modeler }) => {
                   showGutter={true}
                   wrapEnabled={true}
                   readOnly={true}
+                  key={h.id}
                 />
               )) : <Typography variant="subtitle2" >Selecione um processo para ver o histórico do elemento no diagrama</Typography>
             }
