@@ -199,6 +199,7 @@ const DiagramCreate = () => {
       });
 
       dispatch(setSelectedProcess(searchProcessId));
+      setSearchProcessId('')
     } catch (e) {
       console.error(
         `DiagramCreate/handleOnDrawDiagram => ${e.error}: ${e.message}`
