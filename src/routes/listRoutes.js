@@ -3,12 +3,12 @@ import { IoCogOutline, IoHomeOutline } from 'react-icons/io5'
 import Pages from '../pages'
 
 const listRoutes = [
-    {
-        name: 'Dashboard',
-        pathname: '/',
-        icon: <IoHomeOutline />,
-        component: Pages.Dashboard
-    },
+    // {
+    //     name: 'Dashboard',
+    //     pathname: '/',
+    //     icon: <IoHomeOutline />,
+    //     component: Pages.Dashboard
+    // },
     {
         name: 'Workflows',
         pathname: '/workflows',
