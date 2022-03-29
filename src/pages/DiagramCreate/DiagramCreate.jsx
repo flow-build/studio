@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
-
-import { workflowService } from "services/workflowService";
-import { setNotification } from "features/notificationsSlice";
-import { setSelectedProcess } from "features/bpmnSlice";
-
-import { isUUID } from "utils/validations";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
@@ -16,7 +8,6 @@ import "assets/styles/bpmnStyles.css";
 
 import extraPropertiesModeler from "bpmn/extraProperties";
 import { blankDiagram } from "utils/blankDiagram";
-import { statusColors } from "utils/statusColors";
 
 import {
   Stack,
@@ -24,30 +15,19 @@ import {
   Input,
   Typography,
   Grid,
-  Tooltip,
-  FormControl,
-  TextField,
-  InputAdornment,
-  IconButton,
+  Tooltip
 } from "@mui/material";
 import {
   ZoomInOutlined,
-  ZoomOutOutlined,
-  SearchOutlined,
+  ZoomOutOutlined
 } from "@mui/icons-material";
-import { DiagramPanel, ProcessStateDialog } from "components";
+import { DiagramPanel, SidebarSearch } from "components";
 
 const DiagramCreate = () => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const container = useRef(null);
 
   const [modeler, setModeler] = useState(null);
-  const [searchProcessId, setSearchProcessId] = useState("");
-  const [isValidProcessId, setIsValidProcessId] = useState(false);
-  const [processStateData, setProcessStateData] = useState(null);
-  const [hasProcessStateDialog, setProcessStateDialog] = useState(false);
 
   const handleUploadFile = ({ target }) => {
     if (!target.files) return;
@@ -121,97 +101,46 @@ const DiagramCreate = () => {
     modeler.get("zoomScroll").stepZoom(-1);
   };
 
-  const handleGetProcessState = async () => {
-    if (!searchProcessId) return;
+  // const handleOnDrawDiagram = async () => {
+  //   if (!searchProcessIdDialogData.workflow_id) return;
 
-    try {
-      const { data, error } = await dispatch(
-        workflowService.endpoints.getProcessStateById.initiate(searchProcessId)
-      );
+  //   dispatch(setSearchProcessIdDialog(false))
 
-      if (error?.status) {
-        dispatch(
-          setNotification({
-            type: "snackbar",
-            variant: "error",
-            message: `It wasn't possible to find the process for ${searchProcessId}`,
-          })
-        );
+  //   try {
+  //     const { data: blueprintXML } = await dispatch(
+  //       workflowService.endpoints.getWorkflowDiagram.initiate(
+  //         searchProcessIdDialogData?.workflow_id
+  //       )
+  //     );
 
-        return;
-      }
+  //     await modeler.importXML(blueprintXML);
 
-      setProcessStateData(data);
-      setProcessStateDialog(true);
-    } catch (e) {
-      console.error(
-        `DiagramCreate/handleGetProcessState => ${e.error}: ${e.message}`
-      );
-    }
-  };
+  //     const { data: process } = await dispatch(
+  //       workflowService.endpoints.getProcessHistory.initiate(
+  //         searchProcessIdDialogData?.id
+  //       )
+  //     );
 
-  const handleSearchProcessId = (event) => {
-    setSearchProcessId(event.target.value);
-    if (isUUID(event.target.value)) {
-      setIsValidProcessId(true);
-    } else {
-      setIsValidProcessId(false);
-      dispatch(
-        setNotification({
-          type: "snackbar",
-          variant: "error",
-          message: "Invalid UUID",
-        })
-      );
-    }
-  };
+  //     const orderedData = [...process].reverse();
+  //     const modeling = modeler.get("modeling");
+  //     const elementRegistry = modeler.get("elementRegistry");
 
-  const handleOnDrawDiagram = async () => {
-    if (!processStateData.workflow_id) return;
+  //     orderedData.forEach((history) => {
+  //       const element = elementRegistry.get(`Node_${history.node_id}`);
 
-    setProcessStateDialog(false);
+  //       modeling.setColor(element, {
+  //         fill: statusColors[`${history.status}`],
+  //       });
+  //     });
 
-    try {
-      const { data: blueprintXML } = await dispatch(
-        workflowService.endpoints.getWorkflowDiagram.initiate(
-          processStateData?.workflow_id
-        )
-      );
-
-      await modeler.importXML(blueprintXML);
-
-      const { data: process } = await dispatch(
-        workflowService.endpoints.getProcessHistory.initiate(
-          processStateData?.id
-        )
-      );
-
-      const orderedData = [...process].reverse();
-      const modeling = modeler.get("modeling");
-      const elementRegistry = modeler.get("elementRegistry");
-
-      orderedData.forEach((history) => {
-        const element = elementRegistry.get(`Node_${history.node_id}`);
-
-        modeling.setColor(element, {
-          fill: statusColors[`${history.status}`],
-        });
-      });
-
-      dispatch(setSelectedProcess(searchProcessId));
-      setSearchProcessId('')
-    } catch (e) {
-      console.error(
-        `DiagramCreate/handleOnDrawDiagram => ${e.error}: ${e.message}`
-      );
-    }
-  };
-
-  const handleOnSearchHistory = async () => {
-    if (!processStateData.id) return;
-
-    navigate(`/history/${processStateData?.id}`);
-  };
+  //     dispatch(setSelectedProcess(searchProcessId));
+  //     setSearchProcessId('')
+  //   } catch (e) {
+  //     console.error(
+  //       `DiagramCreate/handleOnDrawDiagram => ${e.error}: ${e.message}`
+  //     );
+  //   }
+  // };
 
   useEffect(() => {
     handleCreateDiagram(blankDiagram);
@@ -233,29 +162,7 @@ const DiagramCreate = () => {
           Diagrama
         </Typography>
         <Stack spacing={2} direction="row">
-          <FormControl variant="standard">
-            <TextField
-              id="search_process_id"
-              type="text"
-              size="small"
-              label="Process ID"
-              value={searchProcessId}
-              onChange={handleSearchProcessId}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      disabled={!isValidProcessId}
-                      onClick={handleGetProcessState}
-                    >
-                      <SearchOutlined />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </FormControl>
+          <SidebarSearch />
           <Tooltip title="Zoom In">
             <Button variant="outlined" onClick={handleZoomIn}>
               <ZoomInOutlined />
@@ -296,14 +203,6 @@ const DiagramCreate = () => {
       <Grid item xs={12}>
         <DiagramPanel modeler={modeler} />
       </Grid>
-
-      <ProcessStateDialog
-        open={hasProcessStateDialog}
-        onClose={() => setProcessStateDialog(false)}
-        data={processStateData}
-        onDrawDiagram={handleOnDrawDiagram}
-        onSearchHistory={handleOnSearchHistory}
-      />
     </Grid>
   );
 };

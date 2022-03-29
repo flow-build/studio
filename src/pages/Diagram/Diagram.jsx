@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
+import { useDiagram } from 'hooks'
 
 import { toggleProcessDrawer } from 'features/bpmnSlice'
 
@@ -23,19 +24,22 @@ import {
     Grid 
 } from '@mui/material'
 import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
-import { DiagramPanel, ProcessDrawer } from 'components'
+import { DiagramPanel, ProcessDrawer, SidebarSearch, DrawOnDiagram } from 'components'
 
 const Diagram = () => {
     const dispatch = useDispatch()
     const { id } = useParams()
+    const { handleZoomIn, handleZoomOut, handleOnSaveXML } = useDiagram()
     const theme = useTheme()
+
     const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
+
     const { workflow } = useGetWorkflowsQuery(undefined, {
         selectFromResult: ({ data }) => ({
             workflow: data?.find((workflow) => workflow.workflow_id === id)
         })
     })
-    console.log('Workflow: ', workflow)
+    
     const container = useRef(null)
 
     const [modeler, setModeler] = useState(null)
@@ -57,35 +61,6 @@ const Diagram = () => {
         setModeler(model)
 
         model.importXML(diagram)
-    }
-
-    const handleOnSaveXML = async () => {
-        const { xml } = await modeler.saveXML()
-
-        if(!xml) return
-
-        const canvas = modeler.get('canvas')
-        const blob = new Blob([xml], { type: 'xml' })
-        const link = document.createElement('a');
-
-        link.setAttribute('href', URL.createObjectURL(blob))
-        link.setAttribute('download', canvas.getRootElement().businessObject['id' || 'name'])
-
-        link.style.display = 'none'
-
-        link.click()
-    }
-
-    const handleZoomIn = () => {
-        if(!modeler) return
-
-        modeler.get('zoomScroll').stepZoom(1)
-    }
-
-    const handleZoomOut = () => {
-        if(!modeler) return
-
-        modeler.get('zoomScroll').stepZoom(-1)
     }
 
     const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true))
@@ -120,18 +95,19 @@ const Diagram = () => {
             >
                 <Typography variant="h5" component="h2">{workflow?.name || 'Diagrama'}</Typography>
                 <Stack direction="row" spacing={1}>
+                    <SidebarSearch />
                     <Tooltip title="Zoom In">
-                        <Button variant="outlined" onClick={handleZoomIn}>
+                        <Button variant="outlined" onClick={() => handleZoomIn(modeler)}>
                             <ZoomInOutlined />
                         </Button>
                     </Tooltip>
                     <Tooltip title="Zoom out">
-                        <Button variant="outlined" onClick={handleZoomOut}>
+                        <Button variant="outlined" onClick={() => handleZoomOut(modeler)}>
                             <ZoomOutOutlined />
                         </Button>
                     </Tooltip>
                     <Button variant='contained' onClick={handleToggleProcessDrawer} >Listar Processos</Button>
-                    <Button variant='contained' onClick={handleOnSaveXML}>Download XML</Button>
+                    <Button variant='contained' onClick={() => handleOnSaveXML(modeler)}>Download XML</Button>
                 </Stack>
             </Grid>
             <Grid 
@@ -142,13 +118,12 @@ const Diagram = () => {
                     height: 'calc(100vh - 140px)',
                     position: 'relative'
                 }}
-            >
-                
-            </Grid>
+            />
             <Grid item xs={12}>
                 <DiagramPanel modeler={modeler} />
             </Grid>
             <ProcessDrawer modeler={modeler}/>
+            <DrawOnDiagram modeler={modeler} />
         </Grid>
     )
 }

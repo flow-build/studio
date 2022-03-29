@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
+import { setSearchProcessIdDialog, setSearchProcessIdDialogData } from "features/bpmnSlice";
 import { setNotification } from "features/notificationsSlice";
 import { workflowService } from "services/workflowService";
+
+import { isUUID } from "utils/validations";
 
 import {
     FormControl,
@@ -17,9 +19,9 @@ import {
 
 const SidebarSearch = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState("");
+  const [isValidProcessId, setIsValidProcessId] = useState(false)
 
   const handleSearch = async () => {
     if (!searchValue) return;
@@ -41,13 +43,28 @@ const SidebarSearch = () => {
         return;
       }
 
-      if(!data.workflow_id) return
-
-      navigate(`/diagram/${data.workflow_id}`)
-      setSearchValue('')
+      dispatch(setSearchProcessIdDialogData(data))
+      dispatch(setSearchProcessIdDialog(true))
+      setSearchValue("")
     } catch (e) {
       console.error(
         `Components/SidebarSearch/HandleSearch => ${e.error}: ${e.message}`
+      );
+    }
+  };
+
+  const handleSearchValue = (event) => {
+    setSearchValue(event.target.value);
+    if (isUUID(event.target.value)) {
+      setIsValidProcessId(true);
+    } else {
+      setIsValidProcessId(false);
+      dispatch(
+        setNotification({
+          type: "snackbar",
+          variant: "error",
+          message: "UUID inválido.",
+        })
       );
     }
   };
@@ -60,13 +77,13 @@ const SidebarSearch = () => {
             size="small"
             label="Process ID"
             value={searchValue}
-            onChange={(event) => setSearchValue(event.target.value)}
+            onChange={handleSearchValue}
             InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton
                             edge="end"
-                            disabled={!searchValue}
+                            disabled={!isValidProcessId}
                             onClick={handleSearch}
                         >
                             <SearchOutlined />

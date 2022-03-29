@@ -48,8 +48,8 @@ const Sidebar = () => {
             >
                 {
                     listRoutes.map((route, index) => (
-                        <>
-                            <Link to={route.pathname} alt={route.name} key={route.name}>
+                        <React.Fragment key={route.name}>
+                            <Link to={route.pathname} alt={route.name} >
                                 <ListItemButton
                                     sx={
                                         index === active && [
@@ -106,7 +106,7 @@ const Sidebar = () => {
                                     </Box>
                                 )
                             }
-                        </>
+                        </React.Fragment>
                     ))
                 }
             </List>

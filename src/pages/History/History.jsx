@@ -24,7 +24,7 @@ import {
     Typography
 } from '@mui/material'
 
-import { ViewList, ViewModule, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { ViewList, ViewModule } from '@mui/icons-material'
 
 import { CollapsedTableRow } from 'components'
 
@@ -33,6 +33,8 @@ const History = () => {
 
     let { id } = useParams()
     const { data: history, isFetching } = useGetProcessHistoryQuery(id)
+
+    console.log('Data: ', history)
 
     const handleSetView = (event, nextView)  => setView(nextView)
 

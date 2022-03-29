@@ -16,7 +16,11 @@ const AppRoutes = () => {
                 </Route>
                 <Route path="/history/:id" element={<Pages.History />} />
                 <Route path="diagram" element={<Outlet />} >
-                    <Route path=":id" element={<Pages.Diagram />} />
+                    <Route path=":id" element={<Pages.Diagram />} >
+                        <Route path="process" element={<Outlet />} >
+                            <Route path=":pid" element={<Pages.Diagram />} />
+                        </Route>
+                    </Route>
                     <Route path="create" element={<Pages.DiagramCreate />} />
                 </Route>
             </Route>            

@@ -1,11 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { useDiagram } from 'hooks'
 import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowService'
 
 import { toggleProcessDrawer, setSelectedProcess } from 'features/bpmnSlice'
-
-import { statusColors } from 'utils/statusColors'
 
 import {
     Box,
@@ -22,6 +21,7 @@ import {
 const ProcessDrawer = ({ modeler }) => {
     const dispatch = useDispatch()
     const { id } = useParams()
+    const { handleDrawOnDiagram } = useDiagram()
     const { data: processes, isFetching } = useGetWFProcessByIdQuery(id)
 
     const [isProcessDrawerActive] = useSelector(({ bpmn }) => [
@@ -37,16 +37,7 @@ const ProcessDrawer = ({ modeler }) => {
             const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(processId))
             const orderedData = [...data].reverse()
 
-            const modeling = modeler.get('modeling')
-            const elementRegistry = modeler.get('elementRegistry')
-
-            orderedData.forEach((history) => {
-                const element = elementRegistry.get(`Node_${history.node_id}`)
-                
-                modeling.setColor(element, {
-                    fill: statusColors[`${history.status}`]
-                })
-            })
+            handleDrawOnDiagram(modeler, orderedData)
 
             dispatch(setSelectedProcess(processId))
             
@@ -80,8 +71,8 @@ const ProcessDrawer = ({ modeler }) => {
                         <List>
                             {
                                 processes.map((process) => (
-                                    <>
-                                        <ListItem key={process.id} disableGutters disablePadding>
+                                    <React.Fragment key={process.id}>
+                                        <ListItem disableGutters disablePadding>
                                             <ListItemButton onClick={() => handleOnSelectProcess(process.id)}>
                                                 <ListItemText 
                                                     primary={
@@ -102,7 +93,7 @@ const ProcessDrawer = ({ modeler }) => {
                                             </ListItemButton>
                                         </ListItem>
                                         <Divider component="li" />
-                                    </>
+                                    </React.Fragment>
                                 ))
                             }
                         </List>

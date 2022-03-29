@@ -6,6 +6,8 @@ export const bpmnSlice = createSlice({
     propertiesDrawer: [],
     isDrawerActive: false,
     isProcessDrawerActive: false,
+    isSearchIdDialogActive: false,
+    searchProcessIdDialogData: [],
     selectedProcess: "",
   },
   reducers: {
@@ -21,6 +23,12 @@ export const bpmnSlice = createSlice({
     setSelectedProcess: (state, action) => {
       state.selectedProcess = action.payload;
     },
+    setSearchProcessIdDialog: (state, action) => {
+      state.isSearchIdDialogActive = action.payload
+    },
+    setSearchProcessIdDialogData: (state, action) => {
+      state.searchProcessIdDialogData = action.payload
+    }
   },
 });
 
@@ -29,6 +37,8 @@ export const {
   toggleDrawer,
   toggleProcessDrawer,
   setSelectedProcess,
+  setSearchProcessIdDialog,
+  setSearchProcessIdDialogData,
 } = bpmnSlice.actions;
 
 export default bpmnSlice.reducer;

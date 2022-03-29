@@ -15,6 +15,8 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
 const CollapsedTableRow = ({ item }) => {
     const [open, setOpen] = useState(false)
+
+    console.log('Object Keys: ', Object.keys(item?.result).length)
     return (
         <>
             <TableRow
@@ -35,14 +37,14 @@ const CollapsedTableRow = ({ item }) => {
                         }
                     </IconButton>
                 </TableCell>
-                <TableCell>{item.process_id}</TableCell>
-                <TableCell>{item.node_id}</TableCell>
-                <TableCell>{item.next_node_id || "null"}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>{new Date(item.created_at).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
+                <TableCell>{item?.process_id}</TableCell>
+                <TableCell>{item?.node_id}</TableCell>
+                <TableCell>{item?.next_node_id || "null"}</TableCell>
+                <TableCell>{item?.status}</TableCell>
+                <TableCell>{new Date(item?.created_at).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>
             </TableRow>
             {
-                item?.result && Object.keys(item.result).length > 0 ? (
+                item && item?.result && Object.keys(item?.result).length > 0 ? (
                     <TableRow>
                         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                             <Collapse in={open} timeout="auto" component="div" >
@@ -57,10 +59,10 @@ const CollapsedTableRow = ({ item }) => {
                                         </TableHead>
                                         <TableBody>
                                             {
-                                                Object.keys(item.result).map((key, index) => (
+                                                Object.keys(item?.result).map((key, index) => (
                                                     <TableRow key={index}>
                                                         <TableCell>{key}</TableCell>
-                                                        <TableCell>{item.result[key]}</TableCell>
+                                                        <TableCell>{JSON.stringify(item?.result[key])}</TableCell>
                                                     </TableRow>
                                                 ))
                                             }

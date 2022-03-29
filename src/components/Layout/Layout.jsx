@@ -5,7 +5,7 @@ import { Outlet, Navigate, useLocation } from "react-router-dom";
 import { getStorageItem } from "utils/storage";
 
 import { Box } from "@mui/material";
-import { Header, Sidebar, SnackbarNotification } from "components";
+import { Header, Sidebar, SnackbarNotification, ProcessStateDialog } from "components";
 
 const Layout = () => {
   const notifications = useSelector(
@@ -56,6 +56,7 @@ const Layout = () => {
 
             return <></>;
           })}
+          <ProcessStateDialog />
       </Box>
     </Box>
   );
