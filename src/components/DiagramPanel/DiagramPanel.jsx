@@ -1,142 +1,367 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { is } from 'bpmn-js/lib/util/ModelUtil'
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { is } from "bpmn-js/lib/util/ModelUtil";
+import _ from "lodash";
+
+import { setPropertiesDrawerItems, toggleDrawer } from "features/bpmnSlice";
+import { bpmnService } from "services/bpmnService";
+import { workflowService } from 'services/workflowService'
+
+import { statusColors } from 'utils/statusColors'
 
 import AceEditor from "react-ace";
-import { Typography, TextField, Box, Grid, InputLabel, FormControl  } from "@mui/material"
-import { PropertiesDrawer } from 'components'
+import {
+  Typography,
+  TextField,
+  Box,
+  Button,
+  InputLabel,
+  FormControl,
+  Drawer,
+  Dialog,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  Tabs,
+  Tab,
+} from "@mui/material";
+import { PropertiesDrawer } from "components";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
 
 const DiagramPanel = ({ modeler }) => {
-    const [element, setElement] = useState(null)
+  const dispatch = useDispatch();
 
-    const [isDrawerActive] = useSelector(({ bpmn }) => [
-        bpmn.isDrawerActive
-    ])
+  const [element, setElement] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isParametersModalActive, setIsParametersModalActive] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState([]);
+  const [elementTab, setElementTab] = useState(0);
+  const [history, setHistory] = useState([])
 
-    const handleUpdateElement = (event) => {
-        const { name, value } = event.target
-        const modeling = modeler.get('modeling');
+  const [isDrawerActive, selectedProcess] = useSelector(({ bpmn }) => [bpmn.isDrawerActive, bpmn.selectedProcess]);
 
+  const handleUpdateElement = (event) => {
+    const { name, value } = event.target;
+    const modeling = modeler.get("modeling");
+
+    modeling.updateProperties(element, {
+      [name]: value,
+    });
+  };
+
+  const handleCodeEditorChanges = (value) => {
+    const modeling = modeler.get("modeling");
+
+    modeling.updateProperties(element, {
+      "custom:parameters": value,
+    });
+  };
+
+  const handleOnSelectItem = (items) => {
+    if (!items) return;
+
+    const modeling = modeler.get("modeling");
+
+    if (items["category"])
+      modeling.updateProperties(element, {
+        [`custom:category`]: items["category"],
+      });
+
+    if (items["spec"])
+      modeling.updateProperties(element, {
+        [`custom:spec`]: items["spec"],
+      });
+
+    if (items["parameters"]) {
+      if (Boolean(element.businessObject.get("custom:parameters"))) {
+        setSelectedProperty(items);
+        setIsParametersModalActive(true);
+      } else {
         modeling.updateProperties(element, {
-            [name]: value
-        })
+          [`custom:parameters`]: JSON.stringify(items["parameters"]),
+        });
+      }
     }
 
-    const handleCodeEditorChanges = (value) => {
-        const modeling = modeler.get('modeling');
-
-        modeling.updateProperties(element, {
-            'custom:parameters': value
-        })
+    if (!element.businessObject.get("name")) {
+      modeling.updateLabel(element, items["name"]);
     }
 
-    const handleOnSelectItem = (items) => {
-        if(!items) return
+    setIsOpen(true);
+  };
 
-        const modeling = modeler.get('modeling')
+  const handleOnClose = () => setIsOpen(false);
 
-        Object.keys(items).forEach((key) => {
-            modeling.updateProperties(element, {
-                [`custom:${key}`]: key === 'parameters' ? JSON.stringify(items[key]) : items[key]
-            })
-        })
+  const handleGetProperties = async () => {
+    try {
+      setIsOpen(false);
+      dispatch(toggleDrawer(true));
+      const string = element.type.split(":")[1];
+      const { data } = await dispatch(
+        bpmnService.endpoints.getProperties.initiate(string.toLowerCase())
+      );
+
+      dispatch(setPropertiesDrawerItems(data?.items));
+    } catch (e) {
+      console.error(
+        `PropertiesControlPad/handleGetProperties => ${e.error}: ${e.message}`
+      );
+    }
+  };
+
+  const handleMergePropertyValues = (value) => {
+    const modeling = modeler.get("modeling");
+
+    modeling.updateProperties(element, {
+      [`custom:parameters`]: JSON.stringify(
+        _.merge(
+          JSON.parse(element.businessObject.get("custom:parameters")),
+          value
+        )
+      ),
+    });
+  };
+
+  const handleSetElementTab = (event, newValue) => setElementTab(newValue);
+
+  const handleFollowProcess = async() => {
+    try {
+      const { data: { workflow_id } } = await dispatch(workflowService.endpoints.getProcessStateById.initiate(selectedProcess))
+
+      const { data: diagram } = await dispatch(workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id))
+
+      modeler.importXML(diagram);
+      modeler.get("canvas").zoom("fit-viewport");
+
+      const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+
+      const orderedData = [...data].reverse()
+
+      const modeling = modeler.get('modeling')
+      const elementRegistry = modeler.get('elementRegistry')
+
+      orderedData.forEach((history) => {
+          const element = elementRegistry.get(`Node_${history.node_id}`)
+          
+          modeling.setColor(element, {
+              fill: statusColors[`${history.status}`]
+          })
+      })
+
+      setIsOpen(false);
+    } catch(e) {
+      console.error(`DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`)
+    }
+  }
+
+  useEffect(() => {
+    async function getHistory() {
+      try {
+        const { data: history } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+
+        setHistory(history)
+      } catch(e) {
+        console.error(
+          `DiagramPanel/useEffect/getHistory => ${e.error}: ${e.message}`
+        )
+      }
     }
 
-    useEffect(() => {
-        if(!modeler) return
+    if(!selectedProcess) return
 
-        modeler.on('selection.changed', (e) => {
-            if(!e.newSelection[0]) return
+    getHistory()
+  }, [selectedProcess, dispatch])
 
-            setElement(e.newSelection[0])
-        })
+  useEffect(() => {
+    if (!modeler) return;
 
-        modeler.on('element.changed', (e) => {
-            setElement(e.element)
-        })
+    modeler.on("selection.changed", (e) => {
+      if (!e.newSelection[0]) return;
 
-    }, [modeler])
+      setElement(e.newSelection[0]);
+      setIsOpen(true);
+    });
 
-    if(!element) return <></>
+    modeler.on("element.changed", (e) => {
+      setElement(e.element);
+    });
+  }, [modeler]);
 
-    return (
-        <Box
-            sx={{
-                padding: '10px',
-                width: '100%'
-            }}
-        >
-            <Typography variant="h6" component="h4" gutterBottom >Painel de Propriedades</Typography>
-            <Grid container key={element.id} spacing={2}>
-                {
-                   is(element, 'custom:WorkflowInfo') && (
-                       <>
-                            <Grid item xs={12} md={6} lg={12}>
-                                <FormControl fullWidth variant="standard" sx={{ mb: 2 }}>
-                                    <TextField 
-                                        label="Lane ID"
-                                        size="small"
-                                        name="custom:lane_id"
-                                        onChange={handleUpdateElement}
-                                        defaultValue={element.businessObject.get('custom:lane_id')}
-                                    />
-                                </FormControl>
-                                
-                                <FormControl fullWidth variant="standard">
-                                    <TextField
-                                        label="Category"
-                                        size="small"
-                                        name="custom:category"
-                                        defaultValue={element.businessObject.get('custom:category')}
-                                        onChange={handleUpdateElement}
-                                    />
-                                </FormControl>
-                            </Grid>
+  if (!element) return <></>;
 
-                            <Grid item xs={12} md={6} lg={12}>
-                                <Box sx={{ mb: 2 }}>
-                                    <InputLabel htmlFor='custom:parameters' sx={{ mb: 1 }}>Parameters</InputLabel >
-                                    <AceEditor 
-                                        value={element?.businessObject.get('custom:parameters')}
-                                        mode="javascript"
-                                        theme='github'
-                                        name="custom:parameters" 
-                                        onChange={handleCodeEditorChanges} 
-                                        showPrintMargin={true}
-                                        showGutter={true}
-                                        highlightActiveLine={true}
-                                    />
-                                </Box>
-                            </Grid>
-                       </>
-                   ) 
-                }
+  return (
+    <>
+      <Drawer anchor="right" open={isOpen} onClose={handleOnClose}>
+        <Box role="presentation" sx={{ width: 320, padding: 1 }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}>
+            <Tabs
+              value={elementTab}
+              onChange={handleSetElementTab}
+              aria-label="basic tabs props"
+            >
+              <Tab
+                label="Propriedades"
+                id="element-properties-tab"
+                aria-controls="element-tabpanel-0"
+              />
+              {
+                selectedProcess && (
+                  <Tab
+                    label="Histórico"
+                    id="element-history-tab"
+                    aria-controls="element-tabpanel-1"
+                  />
+                )
+              }
+            </Tabs>
+          </Box>
+          <Box
+            component="div"
+            role="tabpanel"
+            id="element-properties-tab"
+            aria-labelledby="element-tabpanel-0"
+            hidden={elementTab !== 0}
+          >
+            <Typography variant="h6" component="h4" gutterBottom>
+              Painel de Propriedades
+            </Typography>
+            {is(element, "custom:WorkflowInfo") && (
+              <>
+                <FormControl fullWidth variant="standard" sx={{ mb: 2 }}>
+                  <TextField
+                    label="Spec"
+                    size="small"
+                    name="custom:spec"
+                    onChange={handleUpdateElement}
+                    defaultValue={element.businessObject.get("custom:spec")}
+                  />
+                </FormControl>
 
-                {
-                    is(element, 'custom:WorkflowLane') && (
-                        <>
-                            <Grid item xs={12}>
-                                <FormControl fullWidth variant="standard">
-                                    <TextField 
-                                        label="Rule"
-                                        size="small"
-                                        name="custom:rule"
-                                        defaultValue={element.businessObject.get('custom:rule')}
-                                        onChange={handleUpdateElement}
-                                    />
-                                </FormControl>
-                            </Grid>
-                        </>
-                    )
-                }
+                <FormControl fullWidth variant="standard">
+                  <TextField
+                    label="Category"
+                    size="small"
+                    name="custom:category"
+                    defaultValue={element.businessObject.get("custom:category")}
+                    onChange={handleUpdateElement}
+                  />
+                </FormControl>
 
-                <PropertiesDrawer isOpen={isDrawerActive} onSelectItem={handleOnSelectItem} />    
-            </Grid>
+                <Box sx={{ mt: 2, mb: 2 }}>
+                  <InputLabel htmlFor="custom:parameters" sx={{ mb: 1 }}>
+                    Parameters
+                  </InputLabel>
+                  <AceEditor
+                    value={element?.businessObject.get("custom:parameters")}
+                    mode="javascript"
+                    theme="github"
+                    name="custom:parameters"
+                    width="100%"
+                    onChange={handleCodeEditorChanges}
+                    showPrintMargin={true}
+                    showGutter={true}
+                    highlightActiveLine={true}
+                    wrapEnabled={true}
+                    editorProps={{ $blockScrolling: true }}
+                  />
+                </Box>
+              </>
+            )}
+
+            {is(element, "custom:WorkflowLane") && (
+              <FormControl fullWidth variant="standard">
+                <TextField
+                  label="Rule"
+                  size="small"
+                  name="custom:rule"
+                  defaultValue={element.businessObject.get("custom:rule")}
+                  onChange={handleUpdateElement}
+                />
+              </FormControl>
+            )}
+            <Button variant="contained" fullWidth onClick={handleGetProperties} sx={{ mb: 1}}>
+              Propriedades Customizadas
+            </Button>
+            {
+             selectedProcess && (is(element, 'bpmn:ServiceTask')) && (
+                <Button variant="contained" fullWidth onClick={handleFollowProcess}>
+                  Seguir Processo
+                </Button>
+              )
+            }
+          </Box>
+          <Box
+            role="tabpanel"
+            hidden={elementTab !== 1}
+            id="element-history-tab"
+            aria-labelledby="element-tabpanel-1"
+          >
+            <Typography variant="h6" component="h4" gutterBottom>
+              Histórico do Nó
+            </Typography>
+
+            {
+              history.length > 0 ? history.filter((h) => h.node_id === element.id.replace('Node_', '')).map((h) => (
+                <AceEditor
+                  value={
+                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status})
+                  }
+                  mode="javascript"
+                  theme="github"
+                  name="custom:parameters"
+                  width="100%"
+                  onChange={handleCodeEditorChanges}
+                  showPrintMargin={true}
+                  showGutter={true}
+                  wrapEnabled={true}
+                  readOnly={true}
+                  key={h.id}
+                />
+              )) : <Typography variant="subtitle2" >Selecione um processo para ver o histórico do elemento no diagrama</Typography>
+            }
+          </Box>
         </Box>
-    )
-}
+      </Drawer>
+      <PropertiesDrawer
+        isOpen={isDrawerActive}
+        onSelectItem={handleOnSelectItem}
+      />
+      <Dialog
+        onClose={() => setIsParametersModalActive(false)}
+        open={isParametersModalActive}
+      >
+        <DialogTitle>Escolha uma Opção</DialogTitle>
+        <List sx={{ pt: 0 }}>
+          <ListItem
+            button
+            onClick={() => {
+              handleCodeEditorChanges(
+                JSON.stringify(selectedProperty?.parameters)
+              );
+              setIsParametersModalActive(false);
+            }}
+          >
+            <ListItemText primary="Substituir valores antigos pelos novos." />
+          </ListItem>
+          <ListItem button onClick={() => setIsParametersModalActive(false)}>
+            <ListItemText primary="Manter os valores atuais." />
+          </ListItem>
+          <ListItem
+            button
+            onClick={() => {
+              handleMergePropertyValues(selectedProperty.parameters);
+              setIsParametersModalActive(false);
+            }}
+          >
+            <ListItemText primary="Mesclar os valores antigos com os novos." />
+          </ListItem>
+        </List>
+      </Dialog>
+    </>
+  );
+};
 
-export default DiagramPanel
+export default DiagramPanel;

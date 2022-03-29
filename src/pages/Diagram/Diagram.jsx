@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
 
+import { toggleProcessDrawer } from 'features/bpmnSlice'
+
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+import "assets/styles/bpmnStyles.css"
 
 import extraPropertiesModeler from 'bpmn/extraProperties'
 
-import { useGetWorkflowDiagramQuery } from 'services/workflowService'
+import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'services/workflowService'
 
 import {
     Box, 
@@ -19,12 +23,19 @@ import {
     Grid 
 } from '@mui/material'
 import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
-import { DiagramPanel } from 'components'
+import { DiagramPanel, ProcessDrawer } from 'components'
 
 const Diagram = () => {
+    const dispatch = useDispatch()
     const { id } = useParams()
     const theme = useTheme()
     const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
+    const { workflow } = useGetWorkflowsQuery(undefined, {
+        selectFromResult: ({ data }) => ({
+            workflow: data?.find((workflow) => workflow.workflow_id === id)
+        })
+    })
+    console.log('Workflow: ', workflow)
     const container = useRef(null)
 
     const [modeler, setModeler] = useState(null)
@@ -77,6 +88,8 @@ const Diagram = () => {
         modeler.get('zoomScroll').stepZoom(-1)
     }
 
+    const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true))
+
     useEffect(() => {
         handleGetWorkflowDiagram()
     }, [id, diagram])
@@ -105,7 +118,7 @@ const Diagram = () => {
                     padding: '5px 10px'
                 }}    
             >
-                <Typography variant="h5" component="h2">Diagrama</Typography>
+                <Typography variant="h5" component="h2">{workflow?.name || 'Diagrama'}</Typography>
                 <Stack direction="row" spacing={1}>
                     <Tooltip title="Zoom In">
                         <Button variant="outlined" onClick={handleZoomIn}>
@@ -117,6 +130,7 @@ const Diagram = () => {
                             <ZoomOutOutlined />
                         </Button>
                     </Tooltip>
+                    <Button variant='contained' onClick={handleToggleProcessDrawer} >Listar Processos</Button>
                     <Button variant='contained' onClick={handleOnSaveXML}>Download XML</Button>
                 </Stack>
             </Grid>
@@ -134,6 +148,7 @@ const Diagram = () => {
             <Grid item xs={12}>
                 <DiagramPanel modeler={modeler} />
             </Grid>
+            <ProcessDrawer modeler={modeler}/>
         </Grid>
     )
 }

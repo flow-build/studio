@@ -1,4 +1,16 @@
 import Modeler from "bpmn-js/lib/Modeler"
+
+import OverrideContextPad from "./OverrideContextPad"
+import AppendEndEventContextPad from './AppendEndEventContextPad'
+import AppendTimerNodeContextPad from './AppendTimerNodeContextPad'
+import AppendFlowNodeContextPad from './AppendFlowNodeContextPad'
+import AppendUserTaskContextPad from "./AppendUserTaskContextPad"
+import AppendServiceTaskContextPad from "./AppendServiceTaskContextPad"
+import AppendSubProcessContextPad from './AppendSubProcessContextPad'
+import AppendProcessContextPad from './AppendProcessContextPad'
+import ChangeElementTypeContextPad from './ChangeElementTypeContextPad'
+import RemoveElementContextPad from './RemoveElementContextPad'
+import ConnectElementContextPad from './ConnectElementContextPad'
 import PropertiesControlPad from './PropertiesControlPad'
 
 const extraPropertiesModeler = (container, options) => {
@@ -20,19 +32,19 @@ const extraPropertiesModeler = (container, options) => {
                         ],
                         "properties": [
                             {
-                            "name": "lane_id",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "spec",
+                                "isAttr": true,
+                                "type": "String"
                             },
                             {
-                            "name": "category",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "category",
+                                "isAttr": true,
+                                "type": "String"
                             },
                             {
-                            "name": "parameters",
-                            "isAttr": true,
-                            "type": "String"
+                                "name": "parameters",
+                                "isAttr": true,
+                                "type": "String"
                             }
                         ]
                     },
@@ -61,7 +73,31 @@ const extraPropertiesModeler = (container, options) => {
         },
         additionalModules: [
             {
-                __init__: ['propertiesControlPad'],
+                __init__: [
+                    'contextPadProvider', 
+                    'appendEndEventContextPad',
+                    'appendTimerNodeContextPad',
+                    'appendFlowNodeContextPad',
+                    'appendUserTaskContextPad', 
+                    'appendServiceTaskContextPad',
+                    'appendSubProcessContextPad',
+                    'appendProcessContextPad',
+                    'changeElementTypeContextPad',
+                    'removeElementContextPad',
+                    'connectElementContextPad',
+                    'propertiesControlPad'
+                ],
+                contextPadProvider: ['type', OverrideContextPad],
+                appendEndEventContextPad: ['type', AppendEndEventContextPad],
+                appendTimerNodeContextPad: ['type', AppendTimerNodeContextPad],
+                appendFlowNodeContextPad: ['type', AppendFlowNodeContextPad],
+                appendUserTaskContextPad: ['type', AppendUserTaskContextPad],
+                appendServiceTaskContextPad: ['type', AppendServiceTaskContextPad],
+                appendSubProcessContextPad: ['type', AppendSubProcessContextPad],
+                appendProcessContextPad: ['type', AppendProcessContextPad],
+                changeElementTypeContextPad: ['type', ChangeElementTypeContextPad],
+                removeElementContextPad: ['type', RemoveElementContextPad],
+                connectElementContextPad: ['type', ConnectElementContextPad],
                 propertiesControlPad: ['type', PropertiesControlPad]
             }
         ],

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import api, { axiosBaseQuery } from 'config/axios'
+import { axiosBaseQuery } from 'config/axios'
 import { createApi } from '@reduxjs/toolkit/query/react'
 
 export const getWorkflowAnonymousToken = async () => {
@@ -42,6 +42,11 @@ export const workflowService = createApi({
                 }
             })
         }),
+        getProcessStateById: builder.query({
+            query: (processId) => ({
+                url: `/processes/${processId}/state`
+            })
+        }),
         createWorkflowByName: builder.query({
             query: ({ name, data }) => ({
                 url: `/workflows/name/${name}/start`,
@@ -57,15 +62,6 @@ export const {
     useGetWFProcessByIdQuery,
     useGetWorkflowDiagramQuery,
     useGetProcessHistoryQuery,
-    useCreateWorkflowByNameQuery
+    useCreateWorkflowByNameQuery,
+    useGetProcessStateByIdQuery
 } = workflowService
-
-export const getProcessHistory = async(processId) => {
-    try {
-        const response = await api.get(`${process.env.REACT_APP_BASE_URL}/processes/${processId}/history`)
-
-        return response.data
-    } catch(e) {
-        throw new Error(`getProcessHistory -> ${e.error}: ${e.message}`)
-    }
-}

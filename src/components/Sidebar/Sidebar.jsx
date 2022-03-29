@@ -16,6 +16,7 @@ import {
     Tooltip
 } from '@mui/material'
 import { VisibilityOutlined, ExtensionOutlined } from '@mui/icons-material'
+import { SidebarSearch } from 'components'
 
 const Sidebar = () => {
     const location = useLocation()
@@ -41,6 +42,7 @@ const Sidebar = () => {
         <Box sx={{
             background: (theme) => theme.palette.background.paper
         }}>
+            <SidebarSearch />
             <List
                 component="nav"
             >
