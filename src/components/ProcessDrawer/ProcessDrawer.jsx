@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowService'
 
-import { toggleProcessDrawer } from 'features/bpmnSlice'
+import { toggleProcessDrawer, setSelectedProcess } from 'features/bpmnSlice'
 
 import { statusColors } from 'utils/statusColors'
 
@@ -47,6 +47,8 @@ const ProcessDrawer = ({ modeler }) => {
                     fill: statusColors[`${history.status}`]
                 })
             })
+
+            dispatch(setSelectedProcess(processId))
             
         } catch(e) {
             console.error(`components/ProcessDrawe/handleOnSelectProcess => ${e.error}: ${e.message}`)

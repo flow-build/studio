@@ -11,7 +11,7 @@ import "assets/styles/bpmnStyles.css"
 
 import extraPropertiesModeler from 'bpmn/extraProperties'
 
-import { useGetWorkflowDiagramQuery } from 'services/workflowService'
+import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'services/workflowService'
 
 import {
     Box, 
@@ -30,6 +30,12 @@ const Diagram = () => {
     const { id } = useParams()
     const theme = useTheme()
     const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
+    const { workflow } = useGetWorkflowsQuery(undefined, {
+        selectFromResult: ({ data }) => ({
+            workflow: data?.find((workflow) => workflow.workflow_id === id)
+        })
+    })
+    console.log('Workflow: ', workflow)
     const container = useRef(null)
 
     const [modeler, setModeler] = useState(null)
@@ -112,7 +118,7 @@ const Diagram = () => {
                     padding: '5px 10px'
                 }}    
             >
-                <Typography variant="h5" component="h2">Diagrama</Typography>
+                <Typography variant="h5" component="h2">{workflow?.name || 'Diagrama'}</Typography>
                 <Stack direction="row" spacing={1}>
                     <Tooltip title="Zoom In">
                         <Button variant="outlined" onClick={handleZoomIn}>

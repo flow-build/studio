@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import axios from "axios";
 
 import { workflowService } from "services/workflowService";
 import { setNotification } from "features/notificationsSlice";
+import { setSelectedProcess } from "features/bpmnSlice";
 
 import { isUUID } from "utils/validations";
 
@@ -180,7 +181,9 @@ const DiagramCreate = () => {
       await modeler.importXML(blueprintXML);
 
       const { data: process } = await dispatch(
-        workflowService.endpoints.getProcessHistory.initiate(processStateData?.id)
+        workflowService.endpoints.getProcessHistory.initiate(
+          processStateData?.id
+        )
       );
 
       const orderedData = [...process].reverse();
@@ -194,6 +197,9 @@ const DiagramCreate = () => {
           fill: statusColors[`${history.status}`],
         });
       });
+
+      dispatch(setSelectedProcess(searchProcessId));
+      setSearchProcessId('')
     } catch (e) {
       console.error(
         `DiagramCreate/handleOnDrawDiagram => ${e.error}: ${e.message}`
@@ -201,11 +207,11 @@ const DiagramCreate = () => {
     }
   };
 
-  const handleOnSearchHistory = async() => {
-    if(!processStateData.id) return
+  const handleOnSearchHistory = async () => {
+    if (!processStateData.id) return;
 
-    navigate(`/history/${processStateData?.id}`)
-  }
+    navigate(`/history/${processStateData?.id}`);
+  };
 
   useEffect(() => {
     handleCreateDiagram(blankDiagram);
