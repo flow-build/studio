@@ -21,7 +21,7 @@ export const workflowService = createApi({
     baseUrl: process.env.REACT_APP_BASE_URL,
   }),
   endpoints: (builder) => ({
-    teste: builder.query({
+    getStateByProcessId: builder.query({
       query: ({ processId, stepNumber }) => ({
         url: `/states/process/${processId}?stepNumber=${stepNumber}`,
       }),
