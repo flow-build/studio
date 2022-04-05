@@ -5,7 +5,7 @@ import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowServ
 
 import { toggleProcessDrawer, setSelectedProcess } from 'features/bpmnSlice'
 
-import { statusColors } from 'utils/statusColors'
+import { contrastingColor, statusColors } from 'utils/statusColors'
 
 import {
     Box,
@@ -44,7 +44,8 @@ const ProcessDrawer = ({ modeler }) => {
                 const element = elementRegistry.get(`Node_${history.node_id}`)
                 
                 modeling.setColor(element, {
-                    fill: statusColors[`${history.status}`]
+                    fill: statusColors[`${history.status}`],
+					stroke: contrastingColor(statusColors[`${history.status}`])
                 })
             })
 
