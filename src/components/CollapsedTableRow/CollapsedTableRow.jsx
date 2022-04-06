@@ -28,16 +28,12 @@ const CollapsedTableRow = ({ item }) => {
 
   const saveJSON = async (processId, stepNumber, fn) => {
     try {
-      console.log({ stepNumber });
       const response = await dispatch(
         workflowService.endpoints.getStateByStepNumber.initiate({ processId, stepNumber })
       );
 
       if (!_isUndefined(response) && !_isUndefined(fn)) {
-        console.log({ response: JSON.stringify(response.data) });
-        // localStorage.setItem(field, JSON.stringify(response.data));
         fn(JSON.stringify(response.data));
-        // dispatch(setOldJson(JSON.stringify(response.data)));
       }
     } catch (error) {
       console.error({ error });
