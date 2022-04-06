@@ -237,24 +237,27 @@ export function useCompare() {
   );
 
   const jsonDiff = useMemo(() => {
-    if (hasDataToCompare) {
-      const previous = mergeData(
+    let previous = [];
+    let current = [];
+
+    if (compare?.oldJson) {
+      previous = mergeData(
         JSON.parse(compare?.oldJson),
-        JSON.parse(compare?.newJson),
+        JSON.parse(compare?.newJson ?? compare?.oldJson),
         "del"
       );
+    }
 
-      const current = mergeData(
-        JSON.parse(compare?.oldJson),
+    if (compare?.newJson) {
+      current = mergeData(
+        JSON.parse(compare?.oldJson ?? compare?.newJson),
         JSON.parse(compare?.newJson),
         "add"
       );
-
-      return { previous, current };
     }
 
-    return {};
-  }, [hasDataToCompare, mergeData, compare?.oldJson, compare?.newJson]);
+    return { previous, current };
+  }, [mergeData, compare?.oldJson, compare?.newJson]);
 
-  return { hasDataToCompare, jsonDiff };
+  return { jsonDiff };
 }
