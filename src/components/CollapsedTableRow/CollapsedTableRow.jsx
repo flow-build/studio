@@ -30,7 +30,7 @@ const CollapsedTableRow = ({ item }) => {
     try {
       console.log({ stepNumber });
       const response = await dispatch(
-        workflowService.endpoints.getStateByProcessId.initiate({ processId, stepNumber })
+        workflowService.endpoints.getStateByStepNumber.initiate({ processId, stepNumber })
       );
 
       if (!_isUndefined(response) && !_isUndefined(fn)) {
