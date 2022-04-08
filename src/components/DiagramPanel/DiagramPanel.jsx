@@ -53,6 +53,7 @@ const DiagramPanel = ({ modeler }) => {
   };
 
   const handleCodeEditorChanges = (value) => {
+
     const modeling = modeler.get("modeling");
 
     modeling.updateProperties(element, {
@@ -307,9 +308,9 @@ const DiagramPanel = ({ modeler }) => {
               history.length > 0 ? history.filter((h) => h.node_id === element.id.replace('Node_', '')).map((h) => (
                 <AceEditor
                   value={
-                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status})
+                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status}, null, 4)
                   }
-                  mode="javascript"
+                  mode="json"
                   theme="github"
                   name="custom:parameters"
                   width="100%"

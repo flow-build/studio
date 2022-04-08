@@ -1,4 +1,6 @@
 import { createTheme } from '@mui/material/styles'
+import { CustomColorPalette } from 'utils/statusColors';
+
 
 export const themeDefault = createTheme({
     palette: {
@@ -33,6 +35,10 @@ export const themeDefault = createTheme({
         background: {
             default: '#151521',
             paper: '#1E1E2D'
-        }
+        },
+		...CustomColorPalette
     },
-})
+});
+
+console.dir(themeDefault);
+
