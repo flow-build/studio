@@ -1,12 +1,17 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import flowbuildLogo from 'assets/images/flowbuild-studio/default.svg'
 
-import * as S from './styles';
 import { getAnonymousToken } from 'services/resources/token';
+
 import { setStorageItem } from 'shared/utils/storage';
 
+import * as S from './styles';
+
 export const SignIn = () => {
+  const navigate = useNavigate()
+
   const [payload, setPayload] = useState({
     email: '',
     password: '',
@@ -21,7 +26,11 @@ export const SignIn = () => {
 
   const onLogin = useCallback(async () => {
     const token = await getAnonymousToken();
-    setStorageItem('TOKEN', token);
+
+    if (token) {
+      setStorageItem('TOKEN', token);
+      navigate('/dashboard');
+    }
   }, [])
 
   return (
