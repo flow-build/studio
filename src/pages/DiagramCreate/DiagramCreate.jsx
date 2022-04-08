@@ -8,15 +8,15 @@ import { workflowService } from "services/workflowService";
 import { setNotification } from "features/notificationsSlice";
 import { setSelectedProcess } from "features/bpmnSlice";
 
-import { isUUID } from "utils/validations";
+import { isUUID } from "shared/utils/validations";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import "assets/styles/bpmnStyles.css";
 
 import extraPropertiesModeler from "bpmn/extraProperties";
-import { blankDiagram } from "utils/blankDiagram";
-import { statusColors } from "utils/statusColors";
+import { blankDiagram } from "shared/utils/blankDiagram";
+import { statusColors } from "shared/utils/statusColors";
 
 import {
   Stack,
@@ -199,7 +199,7 @@ const DiagramCreate = () => {
       });
 
       dispatch(setSelectedProcess(searchProcessId));
-      setSearchProcessId('')
+      setSearchProcessId('');
     } catch (e) {
       console.error(
         `DiagramCreate/handleOnDrawDiagram => ${e.error}: ${e.message}`

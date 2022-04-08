@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 
-import { getStorageItem } from "utils/storage";
+import { getStorageItem } from "shared/utils/storage";
 
 import { Box } from "@mui/material";
 import { Header, Sidebar, SnackbarNotification } from "components";

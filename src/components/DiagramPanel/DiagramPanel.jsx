@@ -5,9 +5,9 @@ import _ from "lodash";
 
 import { setPropertiesDrawerItems, toggleDrawer } from "features/bpmnSlice";
 import { bpmnService } from "services/bpmnService";
-import { workflowService } from 'services/workflowService'
+import { workflowService } from 'services/workflowService';
 
-import { statusColors } from 'utils/statusColors'
+import { statusColors } from 'shared/utils/statusColors';
 
 import AceEditor from "react-ace";
 import {
@@ -39,7 +39,7 @@ const DiagramPanel = ({ modeler }) => {
   const [isParametersModalActive, setIsParametersModalActive] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState([]);
   const [elementTab, setElementTab] = useState(0);
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState([]);
 
   const [isDrawerActive, selectedProcess] = useSelector(({ bpmn }) => [bpmn.isDrawerActive, bpmn.selectedProcess]);
 
@@ -127,53 +127,53 @@ const DiagramPanel = ({ modeler }) => {
 
   const handleSetElementTab = (event, newValue) => setElementTab(newValue);
 
-  const handleFollowProcess = async() => {
+  const handleFollowProcess = async () => {
     try {
-      const { data: { workflow_id } } = await dispatch(workflowService.endpoints.getProcessStateById.initiate(selectedProcess))
+      const { data: { workflow_id } } = await dispatch(workflowService.endpoints.getProcessStateById.initiate(selectedProcess));
 
-      const { data: diagram } = await dispatch(workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id))
+      const { data: diagram } = await dispatch(workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id));
 
       modeler.importXML(diagram);
       modeler.get("canvas").zoom("fit-viewport");
 
-      const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+      const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess));
 
-      const orderedData = [...data].reverse()
+      const orderedData = [...data].reverse();
 
-      const modeling = modeler.get('modeling')
-      const elementRegistry = modeler.get('elementRegistry')
+      const modeling = modeler.get('modeling');
+      const elementRegistry = modeler.get('elementRegistry');
 
       orderedData.forEach((history) => {
-          const element = elementRegistry.get(`Node_${history.node_id}`)
-          
-          modeling.setColor(element, {
-              fill: statusColors[`${history.status}`]
-          })
-      })
+        const element = elementRegistry.get(`Node_${history.node_id}`);
+
+        modeling.setColor(element, {
+          fill: statusColors[`${history.status}`]
+        });
+      });
 
       setIsOpen(false);
-    } catch(e) {
-      console.error(`DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`)
+    } catch (e) {
+      console.error(`DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`);
     }
-  }
+  };
 
   useEffect(() => {
     async function getHistory() {
       try {
-        const { data: history } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+        const { data: history } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess));
 
-        setHistory(history)
-      } catch(e) {
+        setHistory(history);
+      } catch (e) {
         console.error(
           `DiagramPanel/useEffect/getHistory => ${e.error}: ${e.message}`
-        )
+        );
       }
     }
 
-    if(!selectedProcess) return
+    if (!selectedProcess) return;
 
-    getHistory()
-  }, [selectedProcess, dispatch])
+    getHistory();
+  }, [selectedProcess, dispatch]);
 
   useEffect(() => {
     if (!modeler) return;
@@ -282,11 +282,11 @@ const DiagramPanel = ({ modeler }) => {
                 />
               </FormControl>
             )}
-            <Button variant="contained" fullWidth onClick={handleGetProperties} sx={{ mb: 1}}>
+            <Button variant="contained" fullWidth onClick={handleGetProperties} sx={{ mb: 1 }}>
               Propriedades Customizadas
             </Button>
             {
-             selectedProcess && (is(element, 'bpmn:ServiceTask')) && (
+              selectedProcess && (is(element, 'bpmn:ServiceTask')) && (
                 <Button variant="contained" fullWidth onClick={handleFollowProcess}>
                   Seguir Processo
                 </Button>
@@ -307,7 +307,7 @@ const DiagramPanel = ({ modeler }) => {
               history.length > 0 ? history.filter((h) => h.node_id === element.id.replace('Node_', '')).map((h) => (
                 <AceEditor
                   value={
-                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status})
+                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status })
                   }
                   mode="javascript"
                   theme="github"

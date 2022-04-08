@@ -1,11 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowService'
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { workflowService, useGetWFProcessByIdQuery } from 'services/workflowService';
 
-import { toggleProcessDrawer, setSelectedProcess } from 'features/bpmnSlice'
+import { toggleProcessDrawer, setSelectedProcess } from 'features/bpmnSlice';
 
-import { contrastingColor, statusColors } from 'utils/statusColors'
+import { contrastingColor, statusColors } from 'shared/utils/statusColors';
 
 import {
     Box,
@@ -17,44 +17,44 @@ import {
     ListItemButton,
     ListItemText,
     Typography
-} from '@mui/material'
+} from '@mui/material';
 
 const ProcessDrawer = ({ modeler }) => {
-    const dispatch = useDispatch()
-    const { id } = useParams()
-    const { data: processes, isFetching } = useGetWFProcessByIdQuery(id)
+    const dispatch = useDispatch();
+    const { id } = useParams();
+    const { data: processes, isFetching } = useGetWFProcessByIdQuery(id);
 
     const [isProcessDrawerActive] = useSelector(({ bpmn }) => [
         bpmn.isProcessDrawerActive
-    ])
+    ]);
 
-    const handleOnClose = () => dispatch(toggleProcessDrawer(false))
+    const handleOnClose = () => dispatch(toggleProcessDrawer(false));
 
-    const handleOnSelectProcess = async(processId) => {
-        dispatch(toggleProcessDrawer(false))
+    const handleOnSelectProcess = async (processId) => {
+        dispatch(toggleProcessDrawer(false));
 
         try {
-            const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(processId))
-            const orderedData = [...data].reverse()
+            const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(processId));
+            const orderedData = [...data].reverse();
 
-            const modeling = modeler.get('modeling')
-            const elementRegistry = modeler.get('elementRegistry')
+            const modeling = modeler.get('modeling');
+            const elementRegistry = modeler.get('elementRegistry');
 
             orderedData.forEach((history) => {
-                const element = elementRegistry.get(`Node_${history.node_id}`)
-                
+                const element = elementRegistry.get(`Node_${history.node_id}`);
+
                 modeling.setColor(element, {
                     fill: statusColors[`${history.status}`],
-					stroke: contrastingColor(statusColors[`${history.status}`])
-                })
-            })
+                    stroke: contrastingColor(statusColors[`${history.status}`])
+                });
+            });
 
-            dispatch(setSelectedProcess(processId))
-            
-        } catch(e) {
-            console.error(`components/ProcessDrawe/handleOnSelectProcess => ${e.error}: ${e.message}`)
+            dispatch(setSelectedProcess(processId));
+
+        } catch (e) {
+            console.error(`components/ProcessDrawe/handleOnSelectProcess => ${e.error}: ${e.message}`);
         }
-    }
+    };
 
     return (
         <Drawer
@@ -76,15 +76,15 @@ const ProcessDrawer = ({ modeler }) => {
                 ) : (
                     <Box sx={{ width: 320, padding: 1 }} role='presentation'>
                         <Typography component="p" variant="h6">Processos</Typography>
-                        <Divider sx={{ mb: 1 }}/>
-                        <Typography component="p" variant="caption" sx={{mb: 2}}>Selecione um dos processos parar ver sua representação no diagrama.</Typography>
+                        <Divider sx={{ mb: 1 }} />
+                        <Typography component="p" variant="caption" sx={{ mb: 2 }}>Selecione um dos processos parar ver sua representação no diagrama.</Typography>
                         <List>
                             {
                                 processes.map((process) => (
                                     <>
                                         <ListItem key={process.id} disableGutters disablePadding>
                                             <ListItemButton onClick={() => handleOnSelectProcess(process.id)}>
-                                                <ListItemText 
+                                                <ListItemText
                                                     primary={
                                                         <>
                                                             <Typography component="span" variant="body2" color="text.primary">

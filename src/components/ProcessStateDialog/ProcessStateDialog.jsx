@@ -1,6 +1,6 @@
 import React from "react";
 
-import { statusColors } from 'utils/statusColors'
+import { statusColors } from 'shared/utils/statusColors';
 
 import {
   Dialog,
@@ -25,11 +25,11 @@ const ProcessStateDialog = ({ open, onClose, data, onDrawDiagram, onSearchHistor
       </DialogContentText>
       <DialogContentText>
         <Stack direction="row" spacing={1}>
-          <Chip label={data?.current_status} sx={{ background: statusColors[`${data?.current_status}`]}} variant="outlined" />
+          <Chip label={data?.current_status} sx={{ background: statusColors[`${data?.current_status}`] }} variant="outlined" />
         </Stack>
       </DialogContentText>
       <InputLabel htmlFor="result_read-only">Result</InputLabel>
-      <AceEditor 
+      <AceEditor
         value={JSON.stringify(data?.state?.result)}
         mode="javascript"
         theme="github"
@@ -44,6 +44,6 @@ const ProcessStateDialog = ({ open, onClose, data, onDrawDiagram, onSearchHistor
       </Button>
     </DialogActions>
   </Dialog>
-)
+);
 
 export default ProcessStateDialog;

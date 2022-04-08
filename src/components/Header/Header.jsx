@@ -1,44 +1,44 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import LogoUrl from 'assets/images/flowbuildstudio_bg_dark.png'
-import { removeStorageItem } from 'utils/storage'
+import LogoUrl from 'assets/images/flowbuildstudio_bg_dark.png';
+import { removeStorageItem } from 'shared/utils/storage';
 
 import {
-    Avatar,  
-    Box, 
+    Avatar,
+    Box,
     Container,
     IconButton,
     ListItemIcon,
     Menu,
-    MenuItem,  
-    Toolbar, 
+    MenuItem,
+    Toolbar,
     Tooltip,
-    Typography 
-} from '@mui/material'
-import { PersonAdd, Settings, Logout } from '@mui/icons-material'
+    Typography
+} from '@mui/material';
+import { PersonAdd, Settings, Logout } from '@mui/icons-material';
 
 const Header = () => {
-    const [isProfileOptionsOpen, setIsProfileOptionsOpen] = useState(null)
+    const [isProfileOptionsOpen, setIsProfileOptionsOpen] = useState(null);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleOpenProfileOptions = (event) => {
-        setIsProfileOptionsOpen(event.currentTarget)
-    }
+        setIsProfileOptionsOpen(event.currentTarget);
+    };
 
-    const handleCloseProfileOptions = () => setIsProfileOptionsOpen(null)
+    const handleCloseProfileOptions = () => setIsProfileOptionsOpen(null);
 
-    const handleLogout = async() => {
-        await removeStorageItem('TOKEN')
+    const handleLogout = async () => {
+        await removeStorageItem('TOKEN');
 
-        navigate('/login')
-    }
+        navigate('/login');
+    };
 
     return (
         <Box sx={{ gridArea: 'header', background: (theme) => theme.palette.background.paper }}>
             <Container maxWidth='x1' disableGutters sx={{ pl: '10px', pr: '10px' }}>
-                <Toolbar disableGutters sx={{ justifyContent: 'space-between'}}>
+                <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
                     <Box
                         sx={{
                             alignItems: 'center',
@@ -100,7 +100,7 @@ const Header = () => {
                 </Toolbar>
             </Container>
         </Box>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;
