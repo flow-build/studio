@@ -3,6 +3,8 @@ import { useCallback, useState } from 'react';
 import flowbuildLogo from 'assets/images/flowbuild-studio/default.svg'
 
 import * as S from './styles';
+import { getAnonymousToken } from 'services/resources/token';
+import { setStorageItem } from 'shared/utils/storage';
 
 export const SignIn = () => {
   const [payload, setPayload] = useState({
@@ -17,7 +19,9 @@ export const SignIn = () => {
     []
   )
 
-  const onLogin = useCallback(() => {
+  const onLogin = useCallback(async () => {
+    const token = await getAnonymousToken();
+    setStorageItem('TOKEN', token);
   }, [])
 
   return (

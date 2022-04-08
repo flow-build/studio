@@ -4,8 +4,8 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 
 
-import { Button } from 'shared/button'
-import { InputText } from 'shared/input-text'
+import { Button } from 'shared/components/button'
+import { InputText } from 'shared/components/input-text'
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
