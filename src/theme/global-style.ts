@@ -20,4 +20,9 @@ export default createGlobalStyle`
     background: none;
     font-family: "Roboto", sans-serif;
   }
+
+  a {
+    color: unset;
+    text-decoration: none;
+  }
 `;
