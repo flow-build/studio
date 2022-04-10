@@ -12,7 +12,7 @@ export const Sidebar: React.FC<{}> = () => {
     <S.Wrapper>
       <S.NavList>
         {sidebar.menuItems.map((menuItem, index) => (
-          <Link to="" key={index.toString()}>
+          <Link to={menuItem.pathname} key={index.toString()}>
             <S.MenuItem>
               <S.MenuIcon>{menuItem.icon}</S.MenuIcon>
               <S.MenuText>{menuItem.name}</S.MenuText>
