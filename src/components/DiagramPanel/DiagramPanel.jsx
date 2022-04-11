@@ -5,9 +5,9 @@ import _ from "lodash";
 
 import { setPropertiesDrawerItems, toggleDrawer } from "features/bpmnSlice";
 import { bpmnService } from "services/bpmnService";
-import { workflowService } from 'services/workflowService'
+import { workflowService } from "services/workflowService";
 
-import { statusColors } from 'utils/statusColors'
+import { statusColors } from "utils/statusColors";
 
 import AceEditor from "react-ace";
 import {
@@ -39,9 +39,16 @@ const DiagramPanel = ({ modeler }) => {
   const [isParametersModalActive, setIsParametersModalActive] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState([]);
   const [elementTab, setElementTab] = useState(0);
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState([]);
 
-  const [isDrawerActive, selectedProcess] = useSelector(({ bpmn }) => [bpmn.isDrawerActive, bpmn.selectedProcess]);
+  useEffect(() => {
+	console.log(history);
+  }, [history])
+
+  const [isDrawerActive, selectedProcess] = useSelector(({ bpmn }) => [
+    bpmn.isDrawerActive,
+    bpmn.selectedProcess,
+  ]);
 
   const handleUpdateElement = (event) => {
     const { name, value } = event.target;
@@ -53,7 +60,6 @@ const DiagramPanel = ({ modeler }) => {
   };
 
   const handleCodeEditorChanges = (value) => {
-
     const modeling = modeler.get("modeling");
 
     modeling.updateProperties(element, {
@@ -128,53 +134,67 @@ const DiagramPanel = ({ modeler }) => {
 
   const handleSetElementTab = (event, newValue) => setElementTab(newValue);
 
-  const handleFollowProcess = async() => {
+  const handleFollowProcess = async () => {
     try {
-      const { data: { workflow_id } } = await dispatch(workflowService.endpoints.getProcessStateById.initiate(selectedProcess))
+      const {
+        data: { workflow_id },
+      } = await dispatch(
+        workflowService.endpoints.getProcessStateById.initiate(selectedProcess)
+      );
 
-      const { data: diagram } = await dispatch(workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id))
+      const { data: diagram } = await dispatch(
+        workflowService.endpoints.getWorkflowDiagram.initiate(workflow_id)
+      );
 
       modeler.importXML(diagram);
       modeler.get("canvas").zoom("fit-viewport");
 
-      const { data } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+      const { data } = await dispatch(
+        workflowService.endpoints.getProcessHistory.initiate(selectedProcess)
+      );
 
-      const orderedData = [...data].reverse()
+      const orderedData = [...data].reverse();
 
-      const modeling = modeler.get('modeling')
-      const elementRegistry = modeler.get('elementRegistry')
+      const modeling = modeler.get("modeling");
+      const elementRegistry = modeler.get("elementRegistry");
 
       orderedData.forEach((history) => {
-          const element = elementRegistry.get(`Node_${history.node_id}`)
-          
-          modeling.setColor(element, {
-              fill: statusColors[`${history.status}`]
-          })
-      })
+        const element = elementRegistry.get(`Node_${history.node_id}`);
+
+        modeling.setColor(element, {
+          fill: statusColors[`${history.status}`],
+        });
+      });
 
       setIsOpen(false);
-    } catch(e) {
-      console.error(`DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`)
+    } catch (e) {
+      console.error(
+        `DiagramPanel/HandleFollowProcess => ${e.error}: ${e.message}`
+      );
     }
-  }
+  };
 
   useEffect(() => {
     async function getHistory() {
       try {
-        const { data: history } = await dispatch(workflowService.endpoints.getProcessHistory.initiate(selectedProcess))
+        const { data: history } = await dispatch(
+          workflowService.endpoints.getProcessHistory.initiate(selectedProcess)
+        );
 
-        setHistory(history)
-      } catch(e) {
+		console.log(history);
+
+        setHistory(history);
+      } catch (e) {
         console.error(
           `DiagramPanel/useEffect/getHistory => ${e.error}: ${e.message}`
-        )
+        );
       }
     }
 
-    if(!selectedProcess) return
+    if (!selectedProcess) return;
 
-    getHistory()
-  }, [selectedProcess, dispatch])
+    getHistory();
+  }, [selectedProcess, dispatch]);
 
   useEffect(() => {
     if (!modeler) return;
@@ -208,15 +228,13 @@ const DiagramPanel = ({ modeler }) => {
                 id="element-properties-tab"
                 aria-controls="element-tabpanel-0"
               />
-              {
-                selectedProcess && (
-                  <Tab
-                    label="Histórico"
-                    id="element-history-tab"
-                    aria-controls="element-tabpanel-1"
-                  />
-                )
-              }
+              {selectedProcess && (
+                <Tab
+                  label="Histórico"
+                  id="element-history-tab"
+                  aria-controls="element-tabpanel-1"
+                />
+              )}
             </Tabs>
           </Box>
           <Box
@@ -283,16 +301,23 @@ const DiagramPanel = ({ modeler }) => {
                 />
               </FormControl>
             )}
-            <Button variant="contained" fullWidth onClick={handleGetProperties} sx={{ mb: 1}}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleGetProperties}
+              sx={{ mb: 1 }}
+            >
               Propriedades Customizadas
             </Button>
-            {
-             selectedProcess && (is(element, 'bpmn:ServiceTask')) && (
-                <Button variant="contained" fullWidth onClick={handleFollowProcess}>
-                  Seguir Processo
-                </Button>
-              )
-            }
+            {selectedProcess && is(element, "bpmn:ServiceTask") && (
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleFollowProcess}
+              >
+                Seguir Processo
+              </Button>
+            )}
           </Box>
           <Box
             role="tabpanel"
@@ -304,25 +329,34 @@ const DiagramPanel = ({ modeler }) => {
               Histórico do Nó
             </Typography>
 
-            {
-              history.length > 0 ? history.filter((h) => h.node_id === element.id.replace('Node_', '')).map((h) => (
-                <AceEditor
-                  value={
-                    JSON.stringify({ bag: h.bag, result: h.result, status: h.status}, null, 4)
-                  }
-                  mode="json"
-                  theme="github"
-                  name="custom:parameters"
-                  width="100%"
-                  onChange={handleCodeEditorChanges}
-                  showPrintMargin={true}
-                  showGutter={true}
-                  wrapEnabled={true}
-                  readOnly={true}
-                  key={h.id}
-                />
-              )) : <Typography variant="subtitle2" >Selecione um processo para ver o histórico do elemento no diagrama</Typography>
-            }
+            {history.length > 0 ? (
+              history
+                .filter((h) => h.node_id === element.id.replace("Node_", ""))
+                .map((h) => (
+                  <AceEditor
+                    value={JSON.stringify(
+                      { bag: h.bag, result: h.result, status: h.status },
+                      null,
+                      4
+                    )}
+                    mode="javascript"
+                    theme="github"
+                    name="custom:parameters"
+                    width="100%"
+                    onChange={handleCodeEditorChanges}
+                    showPrintMargin={true}
+                    showGutter={true}
+                    wrapEnabled={true}
+                    readOnly={true}
+                    key={h.id}
+                  />
+                ))
+            ) : (
+              <Typography variant="subtitle2">
+                Selecione um processo para ver o histórico do elemento no
+                diagrama
+              </Typography>
+            )}
           </Box>
         </Box>
       </Drawer>
