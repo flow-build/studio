@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 
 export const Wrapper = styled(Box).attrs({
   sx: {
-    gridArea: 'content'
+    gridArea: 'content',
+    overflow: 'auto'
   }
 })``
