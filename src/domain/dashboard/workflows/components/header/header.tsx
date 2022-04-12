@@ -10,14 +10,20 @@ type TPayload = {
   modeview: ModeView
 }
 
-export const Header: React.FC<{}> = () => {
+type Props = {
+  initialModeView?: ModeView,
+  onChange: (newModelView: ModeView) => void
+}
+
+export const Header: React.FC<Props> = ({ initialModeView = ModeView.LIST, onChange }) => {
   const [payload, setPayload] = useState<TPayload>({
-    modeview: ModeView.LIST
+    modeview: initialModeView
   })
 
   const onChangeModeView = useCallback((_, newModeView: ModeView) => {
     setPayload(prev => ({ ...prev, modeview: newModeView }))
-  }, [])
+    onChange(newModeView)
+  }, [onChange])
 
   return (
     <S.Wrapper>
