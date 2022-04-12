@@ -21,3 +21,19 @@ export function contrastingColor(hexcolor) {
 	var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 	return (yiq >= 128) ? 'black' : 'white';
 }
+
+
+export const CustomColorPalette =
+	Object.keys(statusColors).map(k => {
+		return {
+			[k]: {
+				main: statusColors[k],
+				contrastText: '#FFF'
+			}
+		}
+	}).reduce((object, item) => {
+		return {
+			...object,
+			[Object.keys(item)[0]]: item[Object.keys(item)[0]]
+		}
+	}, {});

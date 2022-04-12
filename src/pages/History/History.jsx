@@ -1,32 +1,25 @@
+import { ViewList, ViewModule } from '@mui/icons-material'
+import {
+	Alert,
+	Box,
+	Card, CardActions, CardContent, Chip,
+	CircularProgress,
+	Grid,
+	Paper,
+	Stack,
+	Table, TableBody, TableCell, TableContainer,
+	TableHead,
+	TableRow, ToggleButton,
+	ToggleButtonGroup,
+	Typography
+} from '@mui/material'
+import { CollapsedTableRow } from 'components'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetProcessHistoryQuery } from 'services/workflowService'
 
-import { 
-    Alert,
-    Box, 
-    Card, 
-    CardContent, 
-    CardActions, 
-    Chip, 
-    CircularProgress,
-    Grid,
-    Paper,
-    Stack,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    ToggleButton,
-    ToggleButtonGroup, 
-    Typography
-} from '@mui/material'
 
-import { ViewList, ViewModule, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
-import { CollapsedTableRow } from 'components'
 
 const History = () => {
     const [view, setView] = useState('list')
