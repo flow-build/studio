@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { AddOutlined, ExtensionOutlined, VisibilityOutlined } from '@mui/icons-material'
 
 import { TWorkflow } from 'models/workflow'
@@ -12,6 +13,8 @@ type Props = {
 }
 
 export const Table: React.FC<Props> = ({ data }) => {
+  const navigate = useNavigate()
+
   return (
     <S.Wrapper>
       <S.Table>
@@ -35,9 +38,17 @@ export const Table: React.FC<Props> = ({ data }) => {
               <S.TableCell>{dataItem.version}</S.TableCell>
               <S.TableCell>{getLongFormatByDate(dataItem.created_at)}</S.TableCell>
               <S.TableCell>
-                <IconButton icon={VisibilityOutlined} tooltip="Ver processos" />
+                <IconButton
+                  icon={VisibilityOutlined}
+                  tooltip="Ver processos"
+                  onClick={() => navigate(`${dataItem.workflow_id}/processes`)}
+                />
                 <IconButton icon={AddOutlined} tooltip="Novo processos" />
-                <IconButton icon={ExtensionOutlined} tooltip="Ver diagrama" />
+                <IconButton
+                  icon={ExtensionOutlined}
+                  tooltip="Ver diagrama"
+                  onClick={() => navigate(`${dataItem.workflow_id}/diagram`)}
+                />
               </S.TableCell>
             </S.TableRow>
           ))}
