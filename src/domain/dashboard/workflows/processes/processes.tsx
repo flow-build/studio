@@ -10,12 +10,12 @@ import { Header } from 'domain/dashboard/workflows/processes/components/header'
 import { Table } from 'domain/dashboard/workflows/processes/components/table'
 
 import { TProcess } from 'models/process'
+import { TWorkflow } from 'models/workflow'
 
 import { listByProcessId } from 'services/resources/processes/list-by-process-id'
+import { listWorkflowById } from 'services/resources/workflows/list-by-id'
 
 import * as S from './styles'
-import { listWorkflowById } from 'services/resources/workflows/list-by-id'
-import { TWorkflow } from 'models/workflow'
 
 type TPayload = {
   processes: TProcess[];
