@@ -31,7 +31,7 @@ export const SignIn = () => {
       setStorageItem('TOKEN', token);
       navigate('/dashboard');
     }
-  }, [])
+  }, [navigate])
 
   return (
     <S.Wrapper>
