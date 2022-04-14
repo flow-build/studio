@@ -27,6 +27,7 @@ export default createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
+    height: 5px;
     width: 5px;
   }
 
