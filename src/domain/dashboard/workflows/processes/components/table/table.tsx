@@ -1,4 +1,4 @@
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ExtensionOutlined, VisibilityOutlined } from '@mui/icons-material'
 
 import { TProcess } from 'models/process'
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const Table: React.FC<Props> = ({ data }) => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   return (
     <S.Wrapper>
@@ -38,8 +38,8 @@ export const Table: React.FC<Props> = ({ data }) => {
               <S.TableCell>
                 <IconButton
                   icon={VisibilityOutlined}
-                  tooltip="Ver processos"
-                // onClick={() => navigate(`${dataItem.workflow_id}`)}
+                  tooltip="Ver histórico"
+                  onClick={() => navigate(`${dataItem.id}/history`)}
                 />
 
                 <IconButton
