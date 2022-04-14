@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+/* TODO: Rever redux e o store */
+import { Provider } from 'react-redux'
+import { store } from 'domain/dashboard/workflows/diagram/bpmn/PropertiesControlPad'
+
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store} >
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 
