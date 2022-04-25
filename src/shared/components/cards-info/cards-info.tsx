@@ -7,7 +7,7 @@ import * as S from './styles'
 type Props = {
   title: string;
   subtitle: string;
-  description: string;
+  description?: string;
   headerTitle: string;
   footerTitle: string;
 }
@@ -22,7 +22,7 @@ export const CardsInfo: React.FC<Props> = ({ title, subtitle, description, foote
           <S.Title>{title}</S.Title>
           <S.Subtitle>{subtitle}</S.Subtitle>
 
-          <S.Description>{description}</S.Description>
+          {description && <S.Description>{description}</S.Description>}
         </S.Content>
 
         <S.Actions>
