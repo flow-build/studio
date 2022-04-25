@@ -1,8 +1,13 @@
-import { useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import _debounce from 'lodash/debounce'
 
 import { ModeView } from 'constants/mode-view';
 
 import { Button } from 'shared/components/button'
+
+import { updateFilter } from 'store/slices/filter';
 
 import * as S from './styles'
 
@@ -16,6 +21,8 @@ type Props = {
 }
 
 export const Header: React.FC<Props> = ({ initialModeView = ModeView.LIST, onChange }) => {
+  const dispatch = useDispatch()
+
   const [payload, setPayload] = useState<TPayload>({
     modeview: initialModeView
   })
@@ -24,6 +31,10 @@ export const Header: React.FC<Props> = ({ initialModeView = ModeView.LIST, onCha
     setPayload(prev => ({ ...prev, modeview: newModeView }))
     onChange(newModeView)
   }, [onChange])
+
+  const onChangeFilter = useCallback((event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    dispatch(updateFilter(event.target.value))
+  }, [dispatch])
 
   return (
     <S.Wrapper>
@@ -34,8 +45,8 @@ export const Header: React.FC<Props> = ({ initialModeView = ModeView.LIST, onCha
       <S.Row>
         <S.Input
           id="outlined-required"
-          label="Required"
-          defaultValue="Hello World"
+          label="Nome / ID"
+          onChange={_debounce(onChangeFilter, 500)}
         />
 
         <S.ToggleContainer value={payload.modeview} onChange={onChangeModeView}>
