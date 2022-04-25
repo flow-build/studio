@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { is } from "bpmn-js/lib/util/ModelUtil";
 import _ from "lodash";
 
-import { setPropertiesDrawerItems, toggleDrawer } from "domain/dashboard/workflows/diagram/features/bpmnSlice";
-import { bpmnService } from "domain/dashboard/workflows/diagram/services/bpmnService";
-import { workflowService } from 'domain/dashboard/workflows/diagram/services/workflowService';
+import { setPropertiesDrawerItems, toggleDrawer } from "pages/dashboard/workflows/diagram/features/bpmnSlice";
+import { bpmnService } from "pages/dashboard/workflows/diagram/services/bpmnService";
+import { workflowService } from 'pages/dashboard/workflows/diagram/services/workflowService';
 
-import { statusColors } from 'domain/dashboard/workflows/diagram/utils/statusColors';
+import { statusColors } from 'pages/dashboard/workflows/diagram/utils/statusColors';
 
 import AceEditor from "react-ace";
 import {
@@ -26,7 +26,7 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-import { PropertiesDrawer } from "domain/dashboard/workflows/diagram/components/panel/components/properties-drawer";
+import { PropertiesDrawer } from "pages/dashboard/workflows/diagram/components/panel/components/properties-drawer";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useSidebar } from 'domain/dashboard/components/sidebar/hooks/useSidebar'
+import { useSidebar } from 'pages/dashboard/components/sidebar/hooks/useSidebar'
 
 import * as S from './styles'
 

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { setSearchProcessIdDialog, setSearchProcessIdDialogData } from "domain/dashboard/workflows/diagram/features/bpmnSlice";
-import { setNotification } from "domain/dashboard/workflows/diagram/features/notificationsSlice";
-import { workflowService } from "domain/dashboard/workflows/diagram/services/workflowService";
+import { setSearchProcessIdDialog, setSearchProcessIdDialogData } from "pages/dashboard/workflows/diagram/features/bpmnSlice";
+import { setNotification } from "pages/dashboard/workflows/diagram/features/notificationsSlice";
+import { workflowService } from "pages/dashboard/workflows/diagram/services/workflowService";
 
 /* TODO: Trocar pela lib uuid */
-import { isUUID } from "domain/dashboard/workflows/diagram/utils/validations";
+import { isUUID } from "pages/dashboard/workflows/diagram/utils/validations";
 
 import {
   FormControl,

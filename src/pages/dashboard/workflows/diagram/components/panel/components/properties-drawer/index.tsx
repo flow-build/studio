@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { toggleDrawer } from 'domain/dashboard/workflows/diagram/features/bpmnSlice'
+import { toggleDrawer } from 'pages/dashboard/workflows/diagram/features/bpmnSlice'
 
 import {
   Accordion,

@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom'
 
 import { Content } from 'shared/components/content'
-import { Header } from 'domain/dashboard/components/header'
-import { Sidebar } from 'domain/dashboard/components/sidebar'
+import { Header } from 'pages/dashboard/components/header'
+import { Sidebar } from 'pages/dashboard/components/sidebar'
 
 import * as S from './styles'
 
