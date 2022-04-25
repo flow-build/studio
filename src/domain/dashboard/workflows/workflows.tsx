@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 
 import _isEqual from 'lodash/isEqual'
 
@@ -12,19 +13,24 @@ import { TWorkflow } from 'models/workflow'
 
 import { listWorkflows } from 'services/resources/workflows/list'
 
+import { RootState } from 'store';
+
 import * as S from './styles'
 
 export const Workflows: React.FC<{}> = () => {
+  const filter = useSelector((state: RootState) => state.filter)
+
   const [workflows, setWorkflows] = useState<TWorkflow[]>([]);
   const [modeView, setModeView] = useState(ModeView.LIST)
 
+  const getAllWorkflows = useCallback(async () => {
+    const response = await listWorkflows({ search: filter.value })
+    setWorkflows(response.reverse())
+  }, [filter.value])
+
   useEffect(() => {
-    const request = async () => {
-      const response = await listWorkflows()
-      setWorkflows(response.reverse())
-    }
-    request()
-  }, [])
+    getAllWorkflows()
+  }, [getAllWorkflows])
 
   return (
     <S.Wrapper>
