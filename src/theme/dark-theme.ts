@@ -1,6 +1,11 @@
 import { createTheme } from '@mui/material/styles'
 
 export const darkTheme = createTheme({
+  typography: {
+    allVariants: {
+      color: '#fff'
+    },
+  },
   palette: {
     mode: 'dark',
     primary: {
@@ -33,6 +38,10 @@ export const darkTheme = createTheme({
     background: {
       default: '#151521',
       paper: '#1E1E2D'
+    },
+    text: {
+      primary: "#FFF",
+      secondary: "#fff"
     }
   },
 })
