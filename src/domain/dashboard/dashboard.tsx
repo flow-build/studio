@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-import { Content } from 'domain/dashboard/components/content'
+import { Content } from 'shared/components/content'
 import { Header } from 'domain/dashboard/components/header'
 import { Sidebar } from 'domain/dashboard/components/sidebar'
 
@@ -11,7 +11,7 @@ export const Dashboard: React.FC = () => {
     <S.Wrapper>
       <Header />
       <Sidebar />
-      <Content>
+      <Content padding={2}>
         <Outlet />
       </Content>
     </S.Wrapper>
