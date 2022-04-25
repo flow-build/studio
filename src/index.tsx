@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 
 /* TODO: Rever redux e o store */
 import { Provider } from 'react-redux'
-import { store } from 'domain/dashboard/workflows/diagram/bpmn/PropertiesControlPad'
+import { store } from 'store/index'
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
