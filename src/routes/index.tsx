@@ -6,8 +6,8 @@ export const Pages = {
   SignIn: lazy(() => import('../pages/sign/sign-in').then(module => ({ default: module.SignIn }))),
 
   Workflows: lazy(() => import('../pages/workflows').then(module => ({ default: module.Workflows }))),
-  Processes: lazy(() => import('../pages/workflows/processes').then(module => ({ default: module.Processes }))),
-  History: lazy(() => import('../pages/workflows/processes/history').then(module => ({ default: module.History }))),
+  Processes: lazy(() => import('../pages/processes').then(module => ({ default: module.Processes }))),
+  History: lazy(() => import('../pages/processes/history').then(module => ({ default: module.History }))),
   Diagram: lazy(() => import('../pages/workflows/diagram').then(module => ({ default: module.Diagram })))
 }
 
