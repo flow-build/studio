@@ -24,7 +24,7 @@ export const Table: React.FC<Props> = ({ data }) => {
             <S.TableCell>ID</S.TableCell>
             <S.TableCell>Description</S.TableCell>
             <S.TableCell>Version</S.TableCell>
-            <S.TableCell>Create at</S.TableCell>
+            <S.TableCell>Created at</S.TableCell>
             <S.TableCell>Actions</S.TableCell>
           </S.TableRow>
         </S.TableHead>
