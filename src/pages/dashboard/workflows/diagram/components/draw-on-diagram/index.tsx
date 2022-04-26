@@ -30,6 +30,7 @@ export const DrawOnDiagram: React.FC<any> = ({ modeler }) => {
     }
 
     draw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pid, modeler]);
 
   return <></>;

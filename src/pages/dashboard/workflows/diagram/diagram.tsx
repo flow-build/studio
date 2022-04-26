@@ -71,6 +71,7 @@ export const Diagram = () => {
 
   useEffect(() => {
     handleGetWorkflowDiagram()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, diagram])
 
   if (isFetching) return (
