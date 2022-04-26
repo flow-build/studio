@@ -7,11 +7,12 @@ import { ModeView } from 'constants/mode-view';
 
 import { CardsView } from 'pages/dashboard/workflows/components/cards-view'
 import { Header } from 'pages/dashboard/workflows/components/header'
-import { Table } from 'pages/dashboard/workflows/components/table'
 
 import { TWorkflow } from 'models/workflow'
 
 import { listWorkflows } from 'services/resources/workflows/list'
+
+import { useTable } from "pages/dashboard/workflows/hooks/useTable"
 
 import { RootState } from 'store';
 
@@ -22,6 +23,8 @@ export const Workflows: React.FC<{}> = () => {
 
   const [workflows, setWorkflows] = useState<TWorkflow[]>([]);
   const [modeView, setModeView] = useState(ModeView.LIST)
+
+  const table = useTable(workflows)
 
   const getAllWorkflows = useCallback(async () => {
     const response = await listWorkflows({ search: filter.value })
@@ -40,7 +43,7 @@ export const Workflows: React.FC<{}> = () => {
 
       {_isEqual(modeView, ModeView.LIST) && (
         <S.TableContainer>
-          <Table data={workflows} />
+          <S.Table columnData={table.columnData} rows={table.rows} />
         </S.TableContainer>
       )}
     </S.Wrapper>
