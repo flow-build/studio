@@ -1,5 +1,7 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AddOutlined, ExtensionOutlined, VisibilityOutlined } from '@mui/icons-material'
+import { useSnackbar } from 'notistack';
 
 import { TWorkflow } from 'models/workflow'
 
@@ -7,6 +9,7 @@ import { IconButton } from 'shared/components/icon-button'
 import { getLongFormatByDate } from 'shared/utils/date'
 
 import * as S from './styles'
+import { createProcessByName } from 'services/resources/processes/create-by-name';
 
 type Props = {
   data: TWorkflow[]
@@ -14,6 +17,26 @@ type Props = {
 
 export const Table: React.FC<Props> = ({ data }) => {
   const navigate = useNavigate()
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showNotification = useCallback((message: string) => {
+    enqueueSnackbar(
+      `Processo ${message} criado!`,
+      { autoHideDuration: 2000, variant: 'success' }
+    );
+  }, [enqueueSnackbar])
+
+  const onCreateProcess = useCallback(async (processName: string, workflowId: string) => {
+    try {
+      const response = await createProcessByName(processName);
+      showNotification(processName);
+      navigate(`${workflowId}/processes/${response.process_id}/history`)
+    } catch (error) {
+      console.error(error)
+    }
+
+  }, [navigate, showNotification])
 
   return (
     <S.Wrapper>
@@ -43,7 +66,11 @@ export const Table: React.FC<Props> = ({ data }) => {
                   tooltip="Ver processos"
                   onClick={() => navigate(`${dataItem.workflow_id}/processes`)}
                 />
-                <IconButton icon={AddOutlined} tooltip="Novo processos" />
+                <IconButton
+                  icon={AddOutlined}
+                  tooltip="Novo processos"
+                  onClick={() => onCreateProcess(dataItem.name, dataItem.workflow_id)}
+                />
                 <IconButton
                   icon={ExtensionOutlined}
                   tooltip="Ver diagrama"
