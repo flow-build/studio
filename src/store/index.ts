@@ -5,9 +5,9 @@ import { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMid
 import filterReducer from 'store/slices/filter'
 
 /* TODO: Código legado. Necessário refatorar o diagrama */
-import { bpmnService } from 'pages/workflows/diagram/services/bpmnService';
-import { workflowService } from 'pages/workflows/diagram/services/workflowService';
-import { bpmnSliceReducer, notificationsSliceReducer } from 'pages/workflows/diagram/features';
+import { bpmnService } from 'pages/diagram/services/bpmnService';
+import { workflowService } from 'pages/diagram/services/workflowService';
+import { bpmnSliceReducer, notificationsSliceReducer } from 'pages/diagram/features';
 
 /* TODO: Código legado. Necessário refatorar o diagrama */
 const legacyReducer = {

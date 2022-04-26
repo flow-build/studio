@@ -1,8 +1,8 @@
 import { store } from 'store/index';
 
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil';
-import { setPropertiesDrawerItems, toggleDrawer } from 'pages/workflows/diagram/features/bpmnSlice';
-import { bpmnService } from 'pages/workflows/diagram/services/bpmnService';
+import { setPropertiesDrawerItems, toggleDrawer } from 'pages/diagram/features/bpmnSlice';
+import { bpmnService } from 'pages/diagram/services/bpmnService';
 
 export default class PropertiesControlPad {
     constructor(config, contextPad, create, elementFactory, injector, translate) {

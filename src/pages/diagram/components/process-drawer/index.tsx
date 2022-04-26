@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { useDiagram } from 'pages/workflows/diagram/hooks/useDiagram'
-import { workflowService, useGetWFProcessByIdQuery } from 'pages/workflows/diagram/services/workflowService'
+import { useDiagram } from 'pages/diagram/hooks/useDiagram'
+import { workflowService, useGetWFProcessByIdQuery } from 'pages/diagram/services/workflowService'
 
-import { toggleProcessDrawer, setSelectedProcess } from 'pages/workflows/diagram/features/bpmnSlice'
+import { toggleProcessDrawer, setSelectedProcess } from 'pages/diagram/features/bpmnSlice'
 
 import {
   Box,

@@ -2,17 +2,17 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
-import { useDiagram } from 'pages/workflows/diagram/hooks/useDiagram'
+import { useDiagram } from 'pages/diagram/hooks/useDiagram'
 
-import { toggleProcessDrawer } from 'pages/workflows/diagram/features/bpmnSlice'
+import { toggleProcessDrawer } from 'pages/diagram/features/bpmnSlice'
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import "pages/workflows/diagram/styles/bpmnStyles.css"
+import "pages/diagram/styles/bpmnStyles.css"
 
-import extraPropertiesModeler from 'pages/workflows/diagram/bpmn/extraProperties'
+import extraPropertiesModeler from 'pages/diagram/bpmn/extraProperties'
 
-import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'pages/workflows/diagram/services/workflowService'
+import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'pages/diagram/services/workflowService'
 
 import {
   Box,
@@ -25,10 +25,10 @@ import {
 } from '@mui/material'
 import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
 
-import { DrawOnDiagram } from 'pages/workflows/diagram/components/draw-on-diagram'
-import { DiagramPanel } from 'pages/workflows/diagram/components/panel'
-import { ProcessDrawer } from 'pages/workflows/diagram/components/process-drawer'
-import { SidebarSearch } from 'pages/workflows/diagram/components/sidebar-search'
+import { DrawOnDiagram } from 'pages/diagram/components/draw-on-diagram'
+import { DiagramPanel } from 'pages/diagram/components/panel'
+import { ProcessDrawer } from 'pages/diagram/components/process-drawer'
+import { SidebarSearch } from 'pages/diagram/components/sidebar-search'
 
 export const Diagram = () => {
   const dispatch = useDispatch()

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useDiagram } from "pages/workflows/diagram/hooks/useDiagram";
+import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
-import { workflowService } from "pages/workflows/diagram/services/workflowService";
+import { workflowService } from "pages/diagram/services/workflowService";
 
 export const DrawOnDiagram: React.FC<any> = ({ modeler }) => {
   const dispatch = useDispatch();
