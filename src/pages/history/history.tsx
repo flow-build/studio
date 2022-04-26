@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Table } from 'pages/processes/history/components/table'
+import { Table } from 'pages/history/components/table'
 
 import { TState } from 'models/state'
 
