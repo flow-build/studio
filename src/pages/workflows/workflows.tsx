@@ -5,14 +5,14 @@ import _isEqual from 'lodash/isEqual'
 
 import { ModeView } from 'constants/mode-view';
 
-import { CardsView } from 'pages/dashboard/workflows/components/cards-view'
-import { Header } from 'pages/dashboard/workflows/components/header'
+import { CardsView } from 'pages/workflows/components/cards-view'
+import { Header } from 'pages/workflows/components/header'
 
 import { TWorkflow } from 'models/workflow'
 
 import { listWorkflows } from 'services/resources/workflows/list'
 
-import { useTable } from "pages/dashboard/workflows/hooks/useTable"
+import { useTable } from "pages/workflows/hooks/useTable"
 
 import { RootState } from 'store';
 

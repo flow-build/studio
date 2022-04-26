@@ -5,10 +5,10 @@ export const Pages = {
   Dashboard: lazy(() => import('../pages/dashboard').then(module => ({ default: module.Dashboard }))),
   SignIn: lazy(() => import('../pages/sign/sign-in').then(module => ({ default: module.SignIn }))),
 
-  Workflows: lazy(() => import('../pages/dashboard/workflows').then(module => ({ default: module.Workflows }))),
-  Processes: lazy(() => import('../pages/dashboard/workflows/processes').then(module => ({ default: module.Processes }))),
-  History: lazy(() => import('../pages/dashboard/workflows/processes/history').then(module => ({ default: module.History }))),
-  Diagram: lazy(() => import('../pages/dashboard/workflows/diagram').then(module => ({ default: module.Diagram })))
+  Workflows: lazy(() => import('../pages/workflows').then(module => ({ default: module.Workflows }))),
+  Processes: lazy(() => import('../pages/workflows/processes').then(module => ({ default: module.Processes }))),
+  History: lazy(() => import('../pages/workflows/processes/history').then(module => ({ default: module.History }))),
+  Diagram: lazy(() => import('../pages/workflows/diagram').then(module => ({ default: module.Diagram })))
 }
 
 export const AppRoutes = () => {

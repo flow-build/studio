@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import { AddOutlined, ExtensionOutlined, VisibilityOutlined } from '@mui/icons-material'
 
-import { useWorkflowPage } from "pages/dashboard/workflows/hooks/useWorkflowPage"
+import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage"
 
 import { TWorkflow } from "models/workflow"
 

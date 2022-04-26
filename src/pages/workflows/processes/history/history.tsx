@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { Table } from 'pages/dashboard/workflows/processes/history/components/table'
+import { Table } from 'pages/workflows/processes/history/components/table'
 
 import { TState } from 'models/state'
 
@@ -25,7 +25,7 @@ export const History: React.FC<{}> = () => {
 
   return (
     <S.Wrapper>
-      <h1>History</h1>
+      <S.Title>History</S.Title>
       <Table data={history} />
     </S.Wrapper>
   )

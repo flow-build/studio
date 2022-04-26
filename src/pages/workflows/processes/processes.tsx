@@ -5,9 +5,9 @@ import _isEqual from 'lodash/isEqual'
 
 import { ModeView } from 'constants/mode-view'
 
-import { CardsView } from 'pages/dashboard/workflows/processes/components/cards-view'
-import { Header } from 'pages/dashboard/workflows/processes/components/header'
-import { Table } from 'pages/dashboard/workflows/processes/components/table'
+import { CardsView } from 'pages/workflows/processes/components/cards-view'
+import { Header } from 'pages/workflows/processes/components/header'
+import { Table } from 'pages/workflows/processes/components/table'
 
 import { TProcess } from 'models/process'
 import { TWorkflow } from 'models/workflow'
