@@ -1,4 +1,5 @@
 import { TState } from "models/state";
+
 import { api } from "services/api"
 
 export async function getHistoryByProcessId(processId: string): Promise<TState[]> {

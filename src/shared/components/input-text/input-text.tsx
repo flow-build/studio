@@ -1,5 +1,5 @@
 import { TextFieldProps } from '@mui/material';
-import { InputHTMLAttributes } from 'react';
+
 import * as S from './styles'
 
 type Props = TextFieldProps & {}
