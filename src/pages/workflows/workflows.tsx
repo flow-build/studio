@@ -1,35 +1,46 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import _isEqual from 'lodash/isEqual'
 
 import { ModeView } from 'constants/mode-view';
 
-import { CardsView } from 'pages/workflows/components/cards-view'
-import { Header } from 'pages/workflows/components/header'
-
 import { TWorkflow } from 'models/workflow'
+
+import { CardsView } from 'pages/workflows/components/cards-view'
+import { useTable } from "pages/workflows/hooks/useTable"
 
 import { listWorkflows } from 'services/resources/workflows/list'
 
-import { useTable } from "pages/workflows/hooks/useTable"
+import { ContentHeader } from 'shared/components/content-header';
 
 import { RootState } from 'store';
+import { updateFilter } from 'store/slices/workflow-page';
 
 import * as S from './styles'
 
-export const Workflows: React.FC<{}> = () => {
-  const filter = useSelector((state: RootState) => state.filter)
+export const Workflows: React.FC = () => {
+  const dispatch = useDispatch()
+
+  const workflowPageState = useSelector((state: RootState) => state.workflowPage)
 
   const [workflows, setWorkflows] = useState<TWorkflow[]>([]);
   const [modeView, setModeView] = useState(ModeView.LIST)
 
   const table = useTable(workflows)
 
+  const onChangeModeView = useCallback((newModeView: ModeView) => {
+    setModeView(newModeView)
+  }, [])
+
+  const onFilter = useCallback((event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    dispatch(updateFilter(event.target.value))
+  }, [dispatch])
+
   const getAllWorkflows = useCallback(async () => {
-    const response = await listWorkflows({ search: filter.value })
+    const response = await listWorkflows({ search: workflowPageState.filter })
     setWorkflows(response.reverse())
-  }, [filter.value])
+  }, [workflowPageState.filter])
 
   useEffect(() => {
     getAllWorkflows()
@@ -37,7 +48,12 @@ export const Workflows: React.FC<{}> = () => {
 
   return (
     <S.Wrapper>
-      <Header initialModeView={modeView} onChange={setModeView} />
+      <ContentHeader
+        title='Workflows'
+        inputLabel="Nome / ID"
+        onChangeModeView={onChangeModeView}
+        onChangeInput={onFilter}
+      />
 
       {_isEqual(modeView, ModeView.CARDS) && <CardsView workflows={workflows} />}
 
