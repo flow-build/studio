@@ -18,17 +18,18 @@ import { listWorkflowById } from 'services/resources/workflows/list-by-id'
 
 import * as S from './styles'
 import { Typography } from '@mui/material'
+import { ContentHeader } from 'shared/components/content-header'
 
 type TPayload = {
   processes: TProcess[] | null;
-  workflow?: TWorkflow;
+  workflow: TWorkflow | null;
 }
 
 export const Processes: React.FC<{}> = () => {
   const { id } = useParams()
 
   const [modeView, setModeView] = useState(ModeView.LIST)
-  const [payload, setPayload] = useState<TPayload>({ processes: null, workflow: undefined })
+  const [payload, setPayload] = useState<TPayload>({ processes: null, workflow: null })
 
   const getProcessesInformation = useCallback(async (workflowId: string) => {
     const response = await listByProcessId(workflowId)
@@ -51,17 +52,19 @@ export const Processes: React.FC<{}> = () => {
     request()
   }, [getProcessesInformation, getWorkflowInformation, id])
 
-  if (_isNull(payload.processes)) {
+  if (_isNull(payload.processes) || _isNull(payload.workflow)) {
     return <Typography>Loading...</Typography>;
   }
 
   return (
     <S.Wrapper>
-      <Header
-        title={payload.workflow?.name ?? ''}
-        subtitle={payload.workflow?.workflow_id ?? ''}
-        initialModeView={modeView}
-        onChange={setModeView}
+      <ContentHeader
+        title={`Workflow - ${payload.workflow.name}`}
+        subtitle={`Workflow id: ${payload.workflow.workflow_id}`}
+        hasInput={false}
+        hasButton={false}
+        initialModeView={ModeView.LIST}
+        onChangeModeView={setModeView}
       />
 
       {_isEqual(modeView, ModeView.CARDS) && <CardsView processes={payload.processes} />}
