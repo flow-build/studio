@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
 
 import filterReducer from 'store/slices/filter'
+import workflowPageReducer from 'store/slices/workflow-page'
 
 /* TODO: Código legado. Necessário refatorar o diagrama */
 import { bpmnService } from 'pages/diagram/services/bpmnService';
@@ -26,6 +27,7 @@ const legacyMiddleware = (getDefaultMiddleware: CurriedGetDefaultMiddleware<any>
 export const store = configureStore({
   reducer: {
     filter: filterReducer,
+    workflowPage: workflowPageReducer,
     ...legacyReducer
   },
   middleware: legacyMiddleware
