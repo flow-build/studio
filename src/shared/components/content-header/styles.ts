@@ -23,9 +23,21 @@ export const Row = styled(Grid).attrs({
   align-items: center;
   justify-content: space-between;
 `;
+
+export const InfoContent = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 export const Title = styled(Typography).attrs({
   variant: 'h4',
   component: 'h4',
+  gutterBottom: true
+})``;
+
+export const Subtitle = styled(Typography).attrs({
+  variant: 'caption',
+  component: 'h5',
   gutterBottom: true
 })``;
 

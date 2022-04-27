@@ -26,10 +26,12 @@ type TInput = {
 
 type Props = TButtonProps & TButtonModeView & TInput & {
   title: string;
+  subtitle?: string;
 }
 
 export const ContentHeader: React.FC<Props> = ({
   title,
+  subtitle,
   hasButton = true,
   onButtonClick = () => { },
   initialModeView = ModeView.LIST,
@@ -50,7 +52,10 @@ export const ContentHeader: React.FC<Props> = ({
   return (
     <S.Wrapper>
       <S.Row>
-        <S.Title>{title}</S.Title>
+        <S.InfoContent>
+          <S.Title>{title}</S.Title>
+          {subtitle && <S.Subtitle>{subtitle}</S.Subtitle>}
+        </S.InfoContent>
 
         {hasButton && (
           <S.Button
