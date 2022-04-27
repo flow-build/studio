@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import _isEqual from 'lodash/isEqual'
+import _isNull from 'lodash/isNull'
 
 import { ModeView } from 'constants/mode-view'
 
@@ -16,9 +17,10 @@ import { listByProcessId } from 'services/resources/processes/list-by-process-id
 import { listWorkflowById } from 'services/resources/workflows/list-by-id'
 
 import * as S from './styles'
+import { Typography } from '@mui/material'
 
 type TPayload = {
-  processes: TProcess[];
+  processes: TProcess[] | null;
   workflow?: TWorkflow;
 }
 
@@ -26,7 +28,7 @@ export const Processes: React.FC<{}> = () => {
   const { id } = useParams()
 
   const [modeView, setModeView] = useState(ModeView.LIST)
-  const [payload, setPayload] = useState<TPayload>({ processes: [], workflow: undefined })
+  const [payload, setPayload] = useState<TPayload>({ processes: null, workflow: undefined })
 
   const getProcessesInformation = useCallback(async (workflowId: string) => {
     const response = await listByProcessId(workflowId)
@@ -48,6 +50,10 @@ export const Processes: React.FC<{}> = () => {
 
     request()
   }, [getProcessesInformation, getWorkflowInformation, id])
+
+  if (_isNull(payload.processes)) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <S.Wrapper>
