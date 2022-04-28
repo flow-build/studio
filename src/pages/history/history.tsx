@@ -2,19 +2,25 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Typography } from '@mui/material'
 
+import _isEqual from 'lodash/isEqual'
 import _isNull from 'lodash/isNull'
 
-import { Table } from 'pages/history/components/table'
+import { ModeView } from 'constants/mode-view'
 
 import { TState } from 'models/state'
 
+import { Table } from 'pages/history/components/table'
+
 import { getHistoryByProcessId } from 'services/resources/processes/history'
+
+import { ContentHeader } from 'shared/components/content-header'
 
 import * as S from './styles'
 
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
 
+  const [modeView, setModeView] = useState(ModeView.LIST)
   const [history, setHistory] = useState<TState[] | null>(null)
 
   useEffect(() => {
@@ -32,8 +38,16 @@ export const History: React.FC<{}> = () => {
 
   return (
     <S.Wrapper>
-      <S.Title>History</S.Title>
-      <Table data={history} />
+      <ContentHeader
+        title='Histórico'
+        subtitle={`Process id: ${process_id}`}
+        hasInput={false}
+        hasButton={false}
+        initialModeView={ModeView.LIST}
+        onChangeModeView={setModeView}
+      />
+
+      {_isEqual(modeView, ModeView.LIST) && <Table data={history} />}
     </S.Wrapper>
   )
 }
