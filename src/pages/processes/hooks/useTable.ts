@@ -28,7 +28,7 @@ export function useTable(processes: TProcess[]) {
         process.id,
         process.status,
         getLongFormatByDate(process.created_at)
-      ]
+      ];
 
       const actions = [
         {
@@ -41,7 +41,7 @@ export function useTable(processes: TProcess[]) {
           tooltip: 'Ver diagrama',
           onClick: () => { }
         },
-      ]
+      ];
 
       return { items, actions }
     })
