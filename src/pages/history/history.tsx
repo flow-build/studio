@@ -9,7 +9,6 @@ import { ModeView } from 'constants/mode-view'
 
 import { TState } from 'models/state'
 
-import { Table } from 'pages/history/components/table'
 import { useTable } from 'pages/history/hooks/useTable'
 
 import { getHistoryByProcessId } from 'services/resources/processes/history'
