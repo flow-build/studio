@@ -10,6 +10,7 @@ import { ModeView } from 'constants/mode-view'
 import { TState } from 'models/state'
 
 import { Table } from 'pages/history/components/table'
+import { useTable } from 'pages/history/hooks/useTable'
 
 import { getHistoryByProcessId } from 'services/resources/processes/history'
 
@@ -22,6 +23,8 @@ export const History: React.FC<{}> = () => {
 
   const [modeView, setModeView] = useState(ModeView.LIST)
   const [history, setHistory] = useState<TState[] | null>(null)
+
+  const table = useTable(history ?? [])
 
   useEffect(() => {
     const request = async () => {
@@ -47,7 +50,11 @@ export const History: React.FC<{}> = () => {
         onChangeModeView={setModeView}
       />
 
-      {_isEqual(modeView, ModeView.LIST) && <Table data={history} />}
+      {_isEqual(modeView, ModeView.LIST) && (
+        <S.TableContainer>
+          <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
+        </S.TableContainer>
+      )}
     </S.Wrapper>
   )
 }

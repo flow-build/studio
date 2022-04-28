@@ -1,11 +1,17 @@
 import styled from 'styled-components'
 
-import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
 
-export const Wrapper = styled.div``
+import { Table as SharedTable } from 'shared/components/table'
 
-export const Title = styled(Typography).attrs({
-  variant: 'h4',
-  component: 'h4',
-  gutterBottom: true
+export const Wrapper = styled(Grid).attrs({
+  container: true,
+  spacing: 2
 })``
+
+export const TableContainer = styled(Grid).attrs({
+  item: true,
+  xs: 12
+})``
+
+export const Table = styled(SharedTable)``
