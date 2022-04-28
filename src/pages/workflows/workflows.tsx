@@ -15,7 +15,7 @@ import { listWorkflows } from 'services/resources/workflows/list'
 import { ContentHeader } from 'shared/components/content-header';
 
 import { RootState } from 'store';
-import { updateFilter } from 'store/slices/workflow-page';
+import { resetFilter, updateFilter } from 'store/slices/workflow-page';
 
 import * as S from './styles'
 
@@ -43,8 +43,12 @@ export const Workflows: React.FC = () => {
   }, [workflowPageState.filter])
 
   useEffect(() => {
-    getAllWorkflows()
+    getAllWorkflows();
   }, [getAllWorkflows])
+
+  useEffect(() => {
+    return () => { dispatch(resetFilter()) }
+  }, [dispatch])
 
   return (
     <S.Wrapper>
