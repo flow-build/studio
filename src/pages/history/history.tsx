@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Typography } from '@mui/material'
+
+import _isNull from 'lodash/isNull'
 
 import { Table } from 'pages/history/components/table'
 
@@ -12,7 +15,7 @@ import * as S from './styles'
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
 
-  const [history, setHistory] = useState<TState[]>([])
+  const [history, setHistory] = useState<TState[] | null>(null)
 
   useEffect(() => {
     const request = async () => {
@@ -22,6 +25,10 @@ export const History: React.FC<{}> = () => {
 
     request()
   }, [process_id])
+
+  if (_isNull(history)) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <S.Wrapper>
