@@ -8,6 +8,8 @@ import MuiTableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import TableContainer from '@mui/material/TableContainer'
 
+import { CollapseTableBody } from 'shared/components/table/components/collapse-table-body'
+
 export const Wrapper = styled(TableContainer).attrs({
   component: Paper
 })``
@@ -21,3 +23,5 @@ export const TableBody = styled(MuiTableBody)``
 export const TableHead = styled(MuiTableHead)``
 
 export const TableRow = styled(MuiTableRow)``
+
+export const TableBodyContent = styled(CollapseTableBody)``
