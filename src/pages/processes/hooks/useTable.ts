@@ -39,7 +39,7 @@ export function useTable(processes: TProcess[]) {
         {
           icon: ExtensionOutlined,
           tooltip: 'Ver diagrama',
-          onClick: () => { }
+          onClick: () => processPage.navigateToDiagram(process.id)
         },
       ];
 
