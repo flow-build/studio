@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import masterChiefLogo from 'assets/images/master-chief/master-chief-logo.png'
+import masterChiefLogo from 'assets/images/master-chief/master-chief-logo.svg'
 
 import { getAnonymousToken } from 'services/resources/token';
 

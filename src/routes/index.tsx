@@ -1,7 +1,16 @@
-import { lazy } from 'react'
+// import { lazy } from 'react'
 import { BrowserRouter, Route, Routes/* , Outlet */ } from 'react-router-dom'
 
-export const Pages = {
+import { Dashboard } from 'pages/dashboard'
+import { SignIn } from 'pages/sign/sign-in'
+
+import { Search } from 'pages/search'
+import { Workflows } from 'pages/workflows'
+import { Processes } from 'pages/processes'
+import { History } from 'pages/history'
+import { Diagram } from 'pages/diagram'
+
+/* export const Pages = {
   Dashboard: lazy(() => import('../pages/dashboard').then(module => ({ default: module.Dashboard }))),
   SignIn: lazy(() => import('../pages/sign/sign-in').then(module => ({ default: module.SignIn }))),
 
@@ -11,20 +20,20 @@ export const Pages = {
   Processes: lazy(() => import('../pages/processes').then(module => ({ default: module.Processes }))),
   History: lazy(() => import('../pages/history').then(module => ({ default: module.History }))),
   Diagram: lazy(() => import('../pages/diagram').then(module => ({ default: module.Diagram })))
-}
+} */
 
 export const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Pages.SignIn />} />
-        <Route path="dashboard" element={<Pages.Dashboard />}>
-          <Route path="workflows" element={<Pages.Workflows />} />
-          <Route path="workflows/:id/processes" element={<Pages.Processes />} />
-          <Route path="workflows/:id/processes/:process_id/history" element={<Pages.History />} />
-          <Route path="workflows/:id/diagram" element={<Pages.Diagram />} />
+        <Route path="/" element={<SignIn />} />
+        <Route path="dashboard" element={<Dashboard />}>
+          <Route path="workflows" element={<Workflows />} />
+          <Route path="workflows/:id/processes" element={<Processes />} />
+          <Route path="workflows/:id/processes/:process_id/history" element={<History />} />
+          <Route path="workflows/:id/diagram" element={<Diagram />} />
 
-          <Route path="search" element={<Pages.Search />} />
+          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
