@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import flowbuildLogo from 'assets/images/flowbuild-studio/default.svg'
+import masterChiefLogo from 'assets/images/master-chief/master-chief-logo.png'
 
 import { getAnonymousToken } from 'services/resources/token';
 
@@ -37,7 +37,7 @@ export const SignIn = () => {
     <S.Wrapper>
       <S.LoginContainer>
         <S.LogoContainer>
-          <img src={flowbuildLogo} alt="Logo" />
+          <img src={masterChiefLogo} alt="Logo" width="300px" />
         </S.LogoContainer>
 
         <S.Form>
