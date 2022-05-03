@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Typography } from '@mui/material'
 
-import _isEqual from 'lodash/isEqual'
 import _isNull from 'lodash/isNull'
-
-import { ModeView } from 'constants/mode-view'
 
 import { TState } from 'models/state'
 
@@ -20,7 +17,6 @@ import * as S from './styles'
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
 
-  const [modeView, setModeView] = useState(ModeView.LIST)
   const [history, setHistory] = useState<TState[] | null>(null)
 
   const table = useTable(history ?? [])
@@ -45,15 +41,12 @@ export const History: React.FC<{}> = () => {
         subtitle={`Process id: ${process_id}`}
         hasInput={false}
         hasButton={false}
-        initialModeView={ModeView.LIST}
-        onChangeModeView={setModeView}
+        showToggle={false}
       />
 
-      {_isEqual(modeView, ModeView.LIST) && (
-        <S.TableContainer>
-          <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
-        </S.TableContainer>
-      )}
+      <S.TableContainer>
+        <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
+      </S.TableContainer>
     </S.Wrapper>
   )
 }
