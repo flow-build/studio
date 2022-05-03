@@ -3,16 +3,12 @@ import { Link } from 'react-router-dom'
 
 import { useSidebar } from 'pages/dashboard/components/sidebar/hooks/useSidebar'
 
-import * as S from './styles'
+// import * as S from './styles'
 
-
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -66,21 +62,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 type Props = {
   isOpen: boolean;
-  onClose?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export const Sidebar: React.FC<Props> = ({ isOpen, onClose }) => {
-  const theme = useTheme();
+export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   const sidebar = useSidebar()
 
   return (
     <Drawer variant="permanent" open={isOpen}>
-      <DrawerHeader>
-        <IconButton onClick={onClose}>
-          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-      </DrawerHeader>
+      <DrawerHeader />
+
       <Divider />
+
       <List>
         {sidebar.menuItems.map((menuItem, index) => (
           <Link key={index.toString()} to={menuItem.pathname}>

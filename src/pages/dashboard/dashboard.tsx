@@ -1,14 +1,13 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import { styled } from '@mui/material/styles';
 
 import { Content } from 'shared/components/content'
 import { Header } from 'pages/dashboard/components/header'
 import { Sidebar } from 'pages/dashboard/components/sidebar'
 
+
 import * as S from './styles'
-
-
-import { styled } from '@mui/material/styles';
-import { useState } from 'react'
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -22,19 +21,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export const Dashboard: React.FC = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
 
-  const handleDrawerOpen = () => {
-    setMenuIsOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setMenuIsOpen(false);
-  };
+  const onMenuClick = () => {
+    setMenuIsOpen(!menuIsOpen)
+  }
 
   return (
     <S.Wrapper>
-      <Header isOpen={menuIsOpen} onMenuClick={handleDrawerOpen} />
+      <Header isOpen={menuIsOpen} onMenuClick={onMenuClick} />
 
-      <Sidebar isOpen={menuIsOpen} onClose={handleDrawerClose} />
+      <Sidebar isOpen={menuIsOpen} />
 
       <Content padding={2}>
         <DrawerHeader />
@@ -42,13 +37,4 @@ export const Dashboard: React.FC = () => {
       </Content>
     </S.Wrapper>
   )
-  /* return (
-    <S.Wrapper>
-      <Header />
-      <Sidebar />
-      <Content padding={2}>
-        <Outlet />
-      </Content>
-    </S.Wrapper>
-  ); */
 }

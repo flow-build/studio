@@ -46,10 +46,7 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
           aria-label="open drawer"
           onClick={onMenuClick}
           edge="start"
-          sx={{
-            marginRight: 5,
-            ...(isOpen && { display: 'none' }),
-          }}
+          sx={{ marginRight: 5 }}
         >
           <MenuIcon />
         </IconButton>
@@ -62,11 +59,4 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
       </Toolbar>
     </AppBar>
   )
-
-  /* return (
-    <S.Wrapper>
-      <S.Logo />
-      <S.Avatar alt="Brad Gibson" src="https://randomuser.me/api/portraits/thumb/men/75.jpg" />
-    </S.Wrapper>
-  ); */
 }
