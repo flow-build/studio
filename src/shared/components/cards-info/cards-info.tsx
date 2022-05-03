@@ -1,6 +1,6 @@
-import { AddOutlined, ExtensionOutlined, VisibilityOutlined } from '@mui/icons-material'
+import _isEmpty from 'lodash/isEmpty'
 
-import { IconButton } from 'shared/components/icon-button'
+import { TAction } from 'shared/components/cards-info/types/TAction';
 
 import * as S from './styles'
 
@@ -10,9 +10,19 @@ type Props = {
   description?: string;
   headerTitle: string;
   footerTitle: string;
+
+  actions?: TAction[]
 }
 
-export const CardsInfo: React.FC<Props> = ({ title, subtitle, description, footerTitle, headerTitle }) => {
+export const CardsInfo: React.FC<Props> = ({
+  title,
+  subtitle,
+  description,
+  footerTitle,
+  headerTitle,
+  actions
+}) => {
+
   return (
     <S.Wrapper>
       <S.Card>
@@ -28,11 +38,18 @@ export const CardsInfo: React.FC<Props> = ({ title, subtitle, description, foote
         <S.Actions>
           <S.Caption>{footerTitle}</S.Caption>
 
-          <div>
-            <IconButton icon={VisibilityOutlined} tooltip="Ver processos" />
-            <IconButton icon={AddOutlined} tooltip="Novo processos" />
-            <IconButton icon={ExtensionOutlined} tooltip="Ver diagrama" />
-          </div>
+          {!_isEmpty(actions) && (
+            <div>
+              {actions?.map((action, index) => (
+                <S.IconButton
+                  key={index.toString()}
+                  icon={action.icon}
+                  tooltip={action.tooltip}
+                  onClick={action.onClick}
+                />
+              ))}
+            </div>
+          )}
         </S.Actions>
       </S.Card>
     </S.Wrapper>

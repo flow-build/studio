@@ -6,6 +6,8 @@ import MuiCardActions from '@mui/material/CardActions'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
+import { IconButton as SharedIconButton } from 'shared/components/icon-button'
+
 export const Wrapper = styled(Grid).attrs({
   item: true,
   xs: 12,
@@ -44,3 +46,5 @@ export const Subtitle = styled(Typography).attrs({
 export const Caption = styled(Typography).attrs({
   variant: 'caption'
 })``
+
+export const IconButton = styled(SharedIconButton)``
