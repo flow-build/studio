@@ -5,6 +5,8 @@ export const Pages = {
   Dashboard: lazy(() => import('../pages/dashboard').then(module => ({ default: module.Dashboard }))),
   SignIn: lazy(() => import('../pages/sign/sign-in').then(module => ({ default: module.SignIn }))),
 
+  Search: lazy(() => import('../pages/search').then(module => ({ default: module.Search }))),
+
   Workflows: lazy(() => import('../pages/workflows').then(module => ({ default: module.Workflows }))),
   Processes: lazy(() => import('../pages/processes').then(module => ({ default: module.Processes }))),
   History: lazy(() => import('../pages/history').then(module => ({ default: module.History }))),
@@ -22,7 +24,7 @@ export const AppRoutes = () => {
           <Route path="workflows/:id/processes/:process_id/history" element={<Pages.History />} />
           <Route path="workflows/:id/diagram" element={<Pages.Diagram />} />
 
-          <Route path="workflows/:id/diagram" element={<Pages.Diagram />} />
+          <Route path="search" element={<Pages.Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
