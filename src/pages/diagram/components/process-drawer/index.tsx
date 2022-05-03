@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { useDiagram } from 'pages/diagram/hooks/useDiagram'
+
 import { workflowService, useGetWFProcessByIdQuery } from 'pages/diagram/services/workflowService'
 
 import { toggleProcessDrawer, setSelectedProcess } from 'pages/diagram/features/bpmnSlice'
@@ -18,10 +18,10 @@ import {
   Typography
 } from '@mui/material'
 
-export const ProcessDrawer: React.FC<any> = ({ modeler }) => {
+export const ProcessDrawer: React.FC<any> = ({ generateDiagram }) => {
   const dispatch = useDispatch()
   const { id } = useParams()
-  const { handleDrawOnDiagram } = useDiagram()
+
   const { data: processes, isFetching } = useGetWFProcessByIdQuery(id)
 
   const [isProcessDrawerActive] = useSelector(({ bpmn }: any) => [
@@ -37,10 +37,9 @@ export const ProcessDrawer: React.FC<any> = ({ modeler }) => {
       const { data } = await dispatch<any>(workflowService.endpoints.getProcessHistory.initiate(processId))
       const orderedData = [...data].reverse()
 
-      handleDrawOnDiagram(modeler, orderedData)
+      await generateDiagram(orderedData)
 
       dispatch(setSelectedProcess(processId))
-
     } catch (e: any) {
       console.error(`components/ProcessDrawe/handleOnSelectProcess => ${e.error}: ${e.message}`)
     }
@@ -51,6 +50,7 @@ export const ProcessDrawer: React.FC<any> = ({ modeler }) => {
       anchor='right'
       open={isProcessDrawerActive}
       onClose={handleOnClose}
+      sx={{ zIndex: 9999 }}
     >
       {
         isFetching ? (

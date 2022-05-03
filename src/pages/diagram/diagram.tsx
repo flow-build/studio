@@ -29,11 +29,12 @@ import { DrawOnDiagram } from 'pages/diagram/components/draw-on-diagram'
 import { DiagramPanel } from 'pages/diagram/components/panel'
 import { ProcessDrawer } from 'pages/diagram/components/process-drawer'
 import { SidebarSearch } from 'pages/diagram/components/sidebar-search'
+import { ProcessStateDialog } from 'pages/diagram/components/process-state-dialog'
 
 export const Diagram = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
-  const { handleZoomIn, handleZoomOut, handleOnSaveXML } = useDiagram()
+  const { handleZoomIn, handleZoomOut, handleOnSaveXML, handleDrawOnDiagram } = useDiagram()
   const theme = useTheme()
 
   const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
@@ -48,7 +49,7 @@ export const Diagram = () => {
 
   const [modeler, setModeler] = useState<any>(null)
 
-  const handleGetWorkflowDiagram = async () => {
+  const handleGetWorkflowDiagram = async (data?: any) => {
     if (isFetching) return
 
     if (modeler) {
@@ -62,9 +63,13 @@ export const Diagram = () => {
       }
     })
 
-    setModeler(model)
+    await model.importXML(diagram)
 
-    model.importXML(diagram)
+    if (data) {
+      handleDrawOnDiagram(model, data)
+    }
+
+    setModeler(model)
   }
 
   const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true))
@@ -115,6 +120,7 @@ export const Diagram = () => {
           <Button variant='contained' onClick={() => handleOnSaveXML(modeler)}>Download XML</Button>
         </Stack>
       </Grid>
+
       <Grid
         item
         xs={12}
@@ -124,11 +130,15 @@ export const Diagram = () => {
           position: 'relative'
         }}
       />
+
       <Grid item xs={12}>
         <DiagramPanel modeler={modeler} />
       </Grid>
-      <ProcessDrawer modeler={modeler} />
+
+      <ProcessDrawer generateDiagram={handleGetWorkflowDiagram} />
       <DrawOnDiagram modeler={modeler} />
+
+      <ProcessStateDialog generateDiagram={handleGetWorkflowDiagram} />
     </Grid>
   )
 }
