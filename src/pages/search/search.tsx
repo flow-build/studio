@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@mui/icons-material'
-import { IconButton, InputAdornment, TextField } from '@mui/material'
+import { IconButton, InputAdornment, TextField, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { setSearchProcessIdDialog, setSearchProcessIdDialogData } from 'pages/diagram/features/bpmnSlice'
 import { ChangeEvent, useState } from 'react'
@@ -41,6 +41,10 @@ export const Search: React.FC<Props> = () => {
 
   return (
     <S.Wrapper>
+      <Typography variant="h5" component="h2" sx={{ marginBottom: 4 }}>
+        Busque um diagrama pelo Process ID
+      </Typography>
+
       <TextField
         id="outlined-required"
         label="Process ID"
