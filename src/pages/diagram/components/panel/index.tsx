@@ -7,7 +7,7 @@ import { setPropertiesDrawerItems, toggleDrawer } from "pages/diagram/features/b
 import { bpmnService } from "pages/diagram/services/bpmnService";
 import { workflowService } from 'pages/diagram/services/workflowService';
 
-import { statusColors } from 'pages/diagram/utils/statusColors';
+import { contrastingColor, statusColors } from 'pages/diagram/utils/statusColors';
 
 import AceEditor from "react-ace";
 import {
@@ -147,7 +147,8 @@ export const DiagramPanel: React.FC<any> = ({ modeler }) => {
         const element = elementRegistry.get(`Node_${history.node_id}`);
 
         modeling.setColor(element, {
-          fill: statusColors[`${history.status}`]
+          fill: statusColors[`${history.status}`],
+          stroke: contrastingColor(statusColors[`${history.status}`])
         });
       });
 
