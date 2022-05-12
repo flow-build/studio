@@ -9,7 +9,6 @@
   overflow: hidden;
 }
 
-.c-json-line,
 .c-json-p,
 .c-json-feet {
   position: relative;
@@ -20,6 +19,10 @@
 }
 
 .c-json-line {
+  position: relative;
+  text-align: left;
+  padding: 0;
+  margin: 0;
   padding: 0;
 }
 
@@ -30,8 +33,6 @@
 .c-line-add {
   background-color: #e6ffed;
 }
-
-.c-line-none {}
 
 .c-of-del:after {
   content: '-';
