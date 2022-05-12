@@ -9,20 +9,16 @@
   overflow: hidden;
 }
 
+.c-json-line,
 .c-json-p,
 .c-json-feet {
   position: relative;
   text-align: left;
-  padding: 0;
   margin: 0;
   padding: 2px 0;
 }
 
 .c-json-line {
-  position: relative;
-  text-align: left;
-  padding: 0;
-  margin: 0;
   padding: 0;
 }
 
