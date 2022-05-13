@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -17,11 +17,25 @@ import {
   ListItemText,
   IconButton,
   Tooltip,
+  Typography
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { VisibilityOutlined, ExtensionOutlined } from "@mui/icons-material";
 import { SidebarSearch } from "components";
 
+const StyledTypography = styled(Typography)(({ isActive }) => ({
+  width: '20px',
+  height: '20px',
+  borderRadius: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: isActive ? '#27AE60' : '#BABAC1'
+}));
+
 const Sidebar = () => {
+  const compare = useSelector((state) => state.compare);
+
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -157,8 +171,16 @@ const Sidebar = () => {
               <ListItemButton sx={index === active ? selectedItemStyle : {}}>
                 <ListItemIcon>{route.icon}</ListItemIcon>
                 <ListItemText>{route.name}</ListItemText>
+
+                {route.pathname === '/compare-json' &&
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <StyledTypography isActive={!!(compare?.oldJson)}>1</StyledTypography>
+                    <StyledTypography isActive={!!(compare?.newJson)}>2</StyledTypography>
+                  </div>
+                }
               </ListItemButton>
             </Link>
+
             {route.pathname === "/workflows" && workflows?.length > 0 && (
               <Box>
                 {workflows.map((workflow) => (

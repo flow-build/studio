@@ -9,10 +9,6 @@ import { isObject, isArray, getType } from "pages/CompareJson/utils";
 export function useCompare() {
   const compare = useSelector((state) => state.compare);
 
-  const hasDataToCompare = useMemo(() => {
-    return !_isEmpty(compare?.oldJson) && !_isEmpty(compare?.newJson);
-  }, [compare]);
-
   const isComplexType = useCallback((param) => {
     return isObject(param) || isArray(param);
   }, []);
@@ -108,13 +104,9 @@ export function useCompare() {
         // new added keys
         let addedKeys = findRemovedKeys(newJsonKeys, oldJsonKeys);
 
-        // console.log({ deletedKeys });
-        // console.log({ addedKeys });
-
         if (type === "del") {
           // push deleted keys
           deletedKeys.forEach((key, index) => {
-            // console.log("delete array", deletedKeys);
             let needComma = true;
             if (
               keptKeys.length === 0 &&
@@ -137,14 +129,10 @@ export function useCompare() {
           }
 
           if (_isEqual(oldJson[key], newJson[key])) {
-            // console.log("isEqual");
-            // console.log({ key });
             target.push(
               parseValue(key, newJson[key], showIndex, needComma, "none")
             );
           } else if (isTheSametype(oldJson[key], newJson[key])) {
-            // console.log("isTheSameType");
-            // console.log({ key });
             if (isComplexType(newJson[key])) {
               let _target = parseValue(
                 key,
@@ -174,8 +162,6 @@ export function useCompare() {
               }
             }
           } else {
-            // console.log("else");
-            // console.log({ key });
             if (type === "del") {
               target.push(
                 parseValue(key, oldJson[key], showIndex, true, "del")
@@ -206,12 +192,10 @@ export function useCompare() {
         }
 
         if (type === "del" && _isEmpty(deletedKeys) && !_isEmpty(addedKeys)) {
-          console.log("del");
           target.push(parseValue("", "", showIndex, false, "empty"));
         }
 
         if (type === "add" && _isEmpty(addedKeys) && !_isEmpty(deletedKeys)) {
-          console.log("add");
           target.push(parseValue("", "", showIndex, false, "empty"));
         }
       };
@@ -237,24 +221,27 @@ export function useCompare() {
   );
 
   const jsonDiff = useMemo(() => {
-    if (hasDataToCompare) {
-      const previous = mergeData(
+    let previous = [];
+    let current = [];
+
+    if (compare?.oldJson) {
+      previous = mergeData(
         JSON.parse(compare?.oldJson),
-        JSON.parse(compare?.newJson),
+        JSON.parse(compare?.newJson ?? compare?.oldJson),
         "del"
       );
+    }
 
-      const current = mergeData(
-        JSON.parse(compare?.oldJson),
+    if (compare?.newJson) {
+      current = mergeData(
+        JSON.parse(compare?.oldJson ?? compare?.newJson),
         JSON.parse(compare?.newJson),
         "add"
       );
-
-      return { previous, current };
     }
 
-    return {};
-  }, [hasDataToCompare, mergeData, compare?.oldJson, compare?.newJson]);
+    return { previous, current };
+  }, [mergeData, compare?.oldJson, compare?.newJson]);
 
-  return { hasDataToCompare, jsonDiff };
+  return { jsonDiff };
 }

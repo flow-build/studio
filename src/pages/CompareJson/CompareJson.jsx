@@ -1,52 +1,42 @@
 import React from "react";
 
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-
-import EmptyContent from "./components/EmptyContent/EmptyContent";
 
 import { useCompare } from "pages/CompareJson/hooks/useCompare";
 
-import { Tree } from "pages/CompareJson/components/Tree";
-
 import "./json.css";
+import { useDispatch } from "react-redux";
+import { setNewJson, setOldJson } from "features/compare.slice";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import { Section } from 'pages/CompareJson/components/Section';
+
 
 const CompareJson = () => {
+  const dispatch = useDispatch();
   const compareHook = useCompare();
-
-  if (!compareHook.hasDataToCompare) {
-    return <EmptyContent />;
-  }
 
   const { current, previous } = compareHook.jsonDiff;
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container columns={12}>
-        <Grid item xs={6}>
-          <Item>
-            {previous.map((item, index) => (
-              <Tree key={index} {...item} />
-            ))}
-          </Item>
-        </Grid>
+  const clearJson = (callbackFn) => {
+    dispatch(callbackFn(undefined));
+  };
 
-        <Grid item xs={6}>
-          <Item>
-            {current.map((item, index) => (
-              <Tree key={index} {...item} />
-            ))}
-          </Item>
-        </Grid>
+  return (
+    <Box sx={{ flexGrow: 1 }} height="100%">
+      <Grid container columns={12} columnSpacing={6} height="100%">
+        <Section
+          label="1"
+          onClear={() => clearJson(setOldJson)}
+          data={previous}
+          onSearch={(json) => dispatch(setOldJson(json))}
+        />
+        <Section
+          label="2"
+          onClear={() => clearJson(setNewJson)}
+          data={current}
+          onSearch={(json) => dispatch(setNewJson(json))}
+        />
       </Grid>
     </Box>
   );
