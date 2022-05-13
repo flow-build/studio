@@ -16,7 +16,8 @@ export const compareSlice = createSlice({
       state.newJson = payload;
     },
     resetState: (state) => {
-      state = INITIAL_STATE;
+      state.oldJson = undefined;
+      state.newJson = undefined;
     },
   },
 });
