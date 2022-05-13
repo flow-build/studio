@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
 
 import filterReducer from 'store/slices/filter'
+import comparePageReducer from 'store/slices/compare-page'
 import workflowPageReducer from 'store/slices/workflow-page'
 
 /* TODO: Código legado. Necessário refatorar o diagrama */
@@ -28,6 +29,7 @@ export const store = configureStore({
   reducer: {
     filter: filterReducer,
     workflowPage: workflowPageReducer,
+    comparePage: comparePageReducer,
     ...legacyReducer
   },
   middleware: legacyMiddleware
