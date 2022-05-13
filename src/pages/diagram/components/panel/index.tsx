@@ -208,15 +208,13 @@ export const DiagramPanel: React.FC<any> = ({ modeler }) => {
                 id="element-properties-tab"
                 aria-controls="element-tabpanel-0"
               />
-              {
-                selectedProcess && (
-                  <Tab
-                    label="Histórico"
-                    id="element-history-tab"
-                    aria-controls="element-tabpanel-1"
-                  />
-                )
-              }
+              {selectedProcess && (
+                <Tab
+                  label="Histórico"
+                  id="element-history-tab"
+                  aria-controls="element-tabpanel-1"
+                />
+              )}
             </Tabs>
           </Box>
           <Box

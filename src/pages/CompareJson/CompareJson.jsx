@@ -1,0 +1,45 @@
+import React from "react";
+
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+
+import { useCompare } from "pages/CompareJson/hooks/useCompare";
+
+import "./json.css";
+import { useDispatch } from "react-redux";
+import { setNewJson, setOldJson } from "features/compare.slice";
+
+import { Section } from 'pages/CompareJson/components/Section';
+
+
+const CompareJson = () => {
+  const dispatch = useDispatch();
+  const compareHook = useCompare();
+
+  const { current, previous } = compareHook.jsonDiff;
+
+  const clearJson = (callbackFn) => {
+    dispatch(callbackFn(undefined));
+  };
+
+  return (
+    <Box sx={{ flexGrow: 1 }} height="100%">
+      <Grid container columns={12} columnSpacing={6} height="100%">
+        <Section
+          label="1"
+          onClear={() => clearJson(setOldJson)}
+          data={previous}
+          onSearch={(json) => dispatch(setOldJson(json))}
+        />
+        <Section
+          label="2"
+          onClear={() => clearJson(setNewJson)}
+          data={current}
+          onSearch={(json) => dispatch(setNewJson(json))}
+        />
+      </Grid>
+    </Box>
+  );
+};
+
+export default CompareJson;
