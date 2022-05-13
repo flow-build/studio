@@ -1,11 +1,9 @@
 import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-
-import masterChief from 'assets/images/master-chief/master-chief.jpg'
 
 import * as S from './styles'
 
@@ -53,10 +51,10 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
         </IconButton>
 
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Master Chief - Studio
+          Flowbuild - Studio
         </Typography>
 
-        <S.Avatar alt="Brad Gibson" src={masterChief} />
+        <S.Avatar alt="Brad Gibson" src="https://randomuser.me/api/portraits/thumb/men/75.jpg" />
       </Toolbar>
     </AppBar>
   )
