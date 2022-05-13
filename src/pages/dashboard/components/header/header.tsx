@@ -1,12 +1,13 @@
-import * as S from './styles'
-
-
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+
+import masterChief from 'assets/images/master-chief/master-chief.jpg'
+
+import * as S from './styles'
 
 const drawerWidth = 240;
 
@@ -52,10 +53,10 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
         </IconButton>
 
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          Flowbuild - Studio
+          Master Chief - Studio
         </Typography>
 
-        <S.Avatar alt="Brad Gibson" src="https://randomuser.me/api/portraits/thumb/men/75.jpg" />
+        <S.Avatar alt="Brad Gibson" src={masterChief} />
       </Toolbar>
     </AppBar>
   )

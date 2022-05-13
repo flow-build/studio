@@ -1,14 +1,4 @@
-const statusColors = {
-  waiting: '#00A676',
-  delegated: '#00A676',
-  error: '#6E0E0A',
-  interrupted: '#D74E09',
-  expired: '#D74E09',
-  forbidden: '#D74E09',
-  finished: '#124E78',
-  running: '#2691DF',
-  pending: '#2691DF'
-} as any;
+import { contrastingColor, statusColors } from "../utils/statusColors";
 
 export function useDiagram() {
   const handleZoomIn = (modeler: any) => {
@@ -57,7 +47,8 @@ export function useDiagram() {
       const element = elementRegistry.get(`Node_${history.node_id}`)
 
       modeling.setColor(element, {
-        fill: statusColors[history.status]
+        fill: statusColors[history.status],
+        stroke: contrastingColor(statusColors[`${history.status}`])
       })
     })
   }
