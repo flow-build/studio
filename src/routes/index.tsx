@@ -6,6 +6,7 @@ import { SignIn } from 'pages/sign/sign-in'
 
 import { Search } from 'pages/search'
 import { Workflows } from 'pages/workflows'
+import { CompareJson } from 'pages/compare-json'
 import { Processes } from 'pages/processes'
 import { History } from 'pages/history'
 import { Diagram } from 'pages/diagram'
@@ -32,6 +33,8 @@ export const AppRoutes = () => {
           <Route path="workflows/:id/processes" element={<Processes />} />
           <Route path="workflows/:id/processes/:process_id/history" element={<History />} />
           <Route path="workflows/:id/diagram" element={<Diagram />} />
+
+          <Route path="compare-json" element={<CompareJson />} />
 
           <Route path="search" element={<Search />} />
         </Route>
