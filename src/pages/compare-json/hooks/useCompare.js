@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
-import { isObject, isArray, getType } from "pages/CompareJson/utils";
+import { isObject, isArray, getType } from "pages/compare-json/utils";
 
 export function useCompare() {
   const compare = useSelector((state) => state.comparePage);

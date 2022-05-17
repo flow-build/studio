@@ -3,16 +3,16 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { useCompare } from "pages/CompareJson/hooks/useCompare";
+import { useCompare } from "pages/compare-json/hooks/useCompare";
 
 import "./json.css";
 import { useDispatch } from "react-redux";
-import { setNewJson, setOldJson } from "features/compare.slice";
+import { setNewJson, setOldJson } from "store/slices/compare-page";
 
-import { Section } from 'pages/CompareJson/components/Section';
+import { Section } from 'pages/compare-json/components/Section';
 
 
-const CompareJson = () => {
+export const CompareJson = () => {
   const dispatch = useDispatch();
   const compareHook = useCompare();
 
@@ -41,5 +41,3 @@ const CompareJson = () => {
     </Box>
   );
 };
-
-export default CompareJson;

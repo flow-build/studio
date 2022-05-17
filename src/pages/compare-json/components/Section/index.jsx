@@ -13,11 +13,11 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Box from '@mui/material/Box';
 
-import EmptyContent from "pages/CompareJson/components/EmptyContent/EmptyContent";
+import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyContent";
 
-import { workflowService } from "services/workflowService";
+import { workflowService } from "pages/diagram/services/workflowService";
 
-import { Tree } from "pages/CompareJson/components/Tree";
+import { Tree } from "pages/compare-json/components/Tree";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
