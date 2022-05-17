@@ -1,0 +1,88 @@
+.djs-container {
+  --blue-base-65: #4d90ff;
+  --blue-base-65-opacity-30: rgba(77, 144, 255, 0.3);
+  --blue-darken-48: #005df7;
+  --blue-darken-55: #1a70ff;
+  --blue-lighten-82: #a2c5ff;
+
+  --red-base-62: #ff3d3d;
+  --red-base-62-lighten-90: rgb(255, 235, 235);
+
+  --silver-darken-94: #7c7ca8;
+
+  --color-000000: #000000;
+  --color-000000-opacity-05: rgba(0, 0, 0, 0.05);
+  --color-000000-opacity-10: rgba(0, 0, 0, 0.1);
+  --color-333333: #333333;
+  --color-666666: #666666;
+  --color-aaaaaa: #aaaaaa;
+  --color-cccccc: #cccccc;
+  --color-cdcdcd: #cdcdcd;
+  --color-dddddd: #dddddd;
+  --color-f6f6f6: #f6f6f6;
+  --color-fafafa: #fafafa;
+  --color-fefefe: #1E1E2D;
+  --color-ffffff: #ffffff;
+
+  --bendpoint-fill-color: var(--blue-base-65-opacity-30);
+  --bendpoint-stroke-color: var(--blue-base-65);
+
+  --context-pad-entry-background-color: var(--color-fefefe);
+  --context-pad-entry-hover-background-color: var(--silver-darken-94);
+
+  --element-dragger-color: var(--blue-base-65);
+  --element-hover-outline-fill-color: var(--blue-darken-48);
+  --element-selected-outline-stroke-color: var(--blue-base-65);
+
+  --lasso-fill-color: var(--color-000000-opacity-05);
+  --lasso-stroke-color: var(--color-000000);
+
+  --palette-entry-color: var(--color-333333);
+  --palette-entry-hover-color: var(--blue-darken-48);
+  --palette-entry-selected-color: var(--blue-base-65);
+  --palette-separator-color: var(--color-aaaaaa);
+  --palette-toggle-hover-background-color: var(--color-666666);
+  --palette-background-color: var(--color-fafafa);
+  --palette-border-color: var(--color-cccccc);
+
+  --popup-body-background-color: var(--color-fefefe);
+  --popup-header-entry-selected-color: var(--blue-base-65);
+  --popup-header-entry-selected-background-color: var(--color-000000-opacity-10);
+  --popup-header-separator-color: var(--color-dddddd);
+  --popup-background-color: var(--color-fafafa);
+  --popup-border-color: var(--color-cccccc);
+
+  --resizer-fill-color: var(--blue-base-65-opacity-30);
+  --resizer-stroke-color: var(--blue-base-65);
+
+  --search-container-background-color: var(--color-fafafa);
+  --search-container-border-color: var(--blue-darken-55);
+  --search-container-box-shadow-color: var(--blue-lighten-82);
+  --search-container-box-shadow-inset-color: var(--color-cdcdcd);
+  --search-input-border-color: var(--color-cccccc);
+  --search-result-border-color: var(--color-aaaaaa);
+  --search-result-highlight-color: var(--color-000000);
+  --search-result-selected-color: var(--blue-base-65-opacity-30);
+
+  --shape-attach-allowed-stroke-color: var(--blue-base-65);
+  --shape-connect-allowed-fill-color: var(--color-f6f6f6);
+  --shape-drop-allowed-fill-color: var(--color-f6f6f6);
+  --shape-drop-not-allowed-fill-color: var(--red-base-62-lighten-90);
+  --shape-resize-preview-stroke-color: var(--blue-base-65);
+
+  --snap-line-stroke-color: var(--blue-base-65-opacity-30);
+
+  --space-tool-crosshair-stroke-color: var(--color-000000);
+
+  --tooltip-error-background-color: var(--red-base-62-lighten-90);
+  --tooltip-error-border-color: var(--red-base-62);
+  --tooltip-error-color: var(--red-base-62);
+}
+
+.djs-direct-editing-content {
+  color: var(--color-fefefe);
+}
+
+[class^="bpmn-icon-"]:before, [class*=" bpmn-icon-"]:before {
+  color: #fff;
+}
