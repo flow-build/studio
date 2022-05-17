@@ -82,3 +82,7 @@
 .djs-direct-editing-content {
   color: var(--color-fefefe);
 }
+
+[class^="bpmn-icon-"]:before, [class*=" bpmn-icon-"]:before {
+  color: #fff;
+}
