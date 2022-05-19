@@ -195,8 +195,8 @@ export const DiagramPanel: React.FC<any> = ({ modeler }) => {
 
   return (
     <>
-      <Drawer anchor="right" open={isOpen} onClose={handleOnClose}>
-        <Box role="presentation" sx={{ width: 320, padding: 1 }}>
+      <Drawer anchor="right" open={isOpen} onClose={handleOnClose}  sx={{ zIndex: 9999 }}>
+        <Box role="presentation" sx={{ width: 640, padding: 1 }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}>
             <Tabs
               value={elementTab}
