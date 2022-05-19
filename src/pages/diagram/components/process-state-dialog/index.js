@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import AceEditor from "react-ace";
 import { workflowService } from "pages/diagram/services/workflowService";
+import { listWorkflowById } from 'services/resources/workflows/list-by-id';
 
 export const ProcessStateDialog = ({ generateDiagram }) => {
   const dispatch = useDispatch();
@@ -54,11 +55,29 @@ export const ProcessStateDialog = ({ generateDiagram }) => {
 
   const handleOnClose = () => dispatch(setSearchProcessIdDialog(false));
 
+  const  [workflowName,setWorkflowName] = useState();
+  useEffect(() => {  
+
+    const request = async () => {
+      if (searchProcessIdDialogData.workflow_id){
+        const workflow = await listWorkflowById(
+          searchProcessIdDialogData.workflow_id          
+        );
+        setWorkflowName(workflow.name);
+      }    
+      
+    };
+
+    request();
+  }, [searchProcessIdDialogData.workflow_id]);
+  
   return (
     <Dialog onClose={handleOnClose} open={isSearchProcessIdDialogActive}>
       <DialogTitle>Informações do Processo</DialogTitle>
       <DialogContent>
         <DialogContentText>ID: {searchProcessIdDialogData?.id}</DialogContentText>
+        <DialogContentText>Workflow Name: {workflowName}</DialogContentText>
+        <DialogContentText>Node ID: {searchProcessIdDialogData?.state?.node_id}</DialogContentText>
         <DialogContentText>
           Step: {searchProcessIdDialogData?.state?.step_number}
         </DialogContentText>
