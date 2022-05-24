@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -22,12 +22,12 @@ export const ProcessDrawer: React.FC<any> = ({ generateDiagram }) => {
   const dispatch = useDispatch()
   const { id } = useParams()
 
-  const { data: processes, isFetching } = useGetWFProcessByIdQuery(id)
+  const { data: processes, isFetching, refetch } = useGetWFProcessByIdQuery(id)
 
   const [isProcessDrawerActive] = useSelector(({ bpmn }: any) => [
     bpmn.isProcessDrawerActive
   ])
-
+ 
   const handleOnClose = () => dispatch(toggleProcessDrawer(false))
 
   const handleOnSelectProcess = async (processId: any) => {
@@ -44,7 +44,12 @@ export const ProcessDrawer: React.FC<any> = ({ generateDiagram }) => {
       console.error(`components/ProcessDrawe/handleOnSelectProcess => ${e.error}: ${e.message}`)
     }
   }
-
+  useEffect(()=> {
+    if(isProcessDrawerActive){
+      refetch()
+    }    
+  },[isProcessDrawerActive, refetch])
+  
   return (
     <Drawer
       anchor='right'

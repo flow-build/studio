@@ -5,13 +5,11 @@ import { useTheme } from '@mui/material/styles'
 import { useDiagram } from 'pages/diagram/hooks/useDiagram'
 
 import { toggleProcessDrawer } from 'pages/diagram/features/bpmnSlice'
-
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import "pages/diagram/styles/bpmnStyles.css"
 
 import extraPropertiesModeler from 'pages/diagram/bpmn/extraProperties'
-
 import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'pages/diagram/services/workflowService'
 
 import {
@@ -24,6 +22,7 @@ import {
   Grid
 } from '@mui/material'
 import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
+
 
 import { DrawOnDiagram } from 'pages/diagram/components/draw-on-diagram'
 import { DiagramPanel } from 'pages/diagram/components/panel'
@@ -72,12 +71,17 @@ export const Diagram = () => {
     setModeler(model)
   }
 
-  const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true))
-
+  const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true)) 
   useEffect(() => {
     handleGetWorkflowDiagram()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, diagram])
+
+ 
+  const handleCleanButton = () => {
+    handleGetWorkflowDiagram()
+  } 
+
 
   if (isFetching) return (
     <Box sx={{
@@ -116,6 +120,7 @@ export const Diagram = () => {
               <ZoomOutOutlined />
             </Button>
           </Tooltip>
+          <Button variant='contained' onClick={handleCleanButton}>Limpar</Button>
           <Button variant='contained' onClick={handleToggleProcessDrawer} >Listar Processos</Button>
           <Button variant='contained' onClick={() => handleOnSaveXML(modeler)}>Download XML</Button>
         </Stack>
