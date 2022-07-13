@@ -2,8 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
-
-import { Search } from "pages/search";
 import { Workflows } from "pages/workflows";
 import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
@@ -28,8 +26,6 @@ export const AppRoutes = () => {
           />
 
           <Route path="compare-json" element={<CompareJson />} />
-
-          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
