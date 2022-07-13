@@ -1,11 +1,13 @@
 import { TProcess } from "models/process";
-import { api } from "services/api"
+import { api } from "services/api";
 
-export async function listByProcessId(workflowId: string): Promise<TProcess[]> {
+export async function listByWorkflowId(
+  workflowId: string
+): Promise<TProcess[]> {
   try {
-    const { data } = await api.get(`/workflows/${workflowId}/processes`)
+    const { data } = await api.get(`/workflows/${workflowId}/processes`);
     return data;
   } catch (error) {
-    throw new Error("Erro ao listar processo pelo processId")
+    throw new Error("Erro ao listar processo pelo processId");
   }
 }
