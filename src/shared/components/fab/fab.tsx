@@ -3,16 +3,12 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { IAction } from "shared/components/fab/types/IAction";
+
 import * as S from "./styles";
 
-interface Action {
-  icon: JSX.Element;
-  tooltip: string;
-  onClick?: () => any;
-}
-
 type Props = {
-  actions: Action[];
+  actions: IAction[];
 };
 
 export const Fab: React.FC<Props> = ({ actions }) => {
