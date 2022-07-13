@@ -6,6 +6,20 @@ import { useTheme } from "@mui/material/styles";
 
 import _isEmpty from "lodash/isEmpty";
 
+import { ServiceTask } from "pages/diagram/components/context-pad/service-task";
+import { UserTask } from "pages/diagram/components/context-pad/user-task";
+import { ResetPad } from "pages/diagram/components/context-pad/reset-pad";
+import { CustomPalette } from "pages/diagram/components/custom-palette";
+import { EndEvent } from "pages/diagram/components/context-pad/end-event";
+import { Timer } from "pages/diagram/components/context-pad/timer";
+import { Flow } from "pages/diagram/components/context-pad/flow";
+import { SubProcess } from "pages/diagram/components/context-pad/sub-process";
+import { Process } from "pages/diagram/components/context-pad/process";
+import { ChangeElement } from "pages/diagram/components/context-pad/change-element";
+import { Properties } from "pages/diagram/components/context-pad/properties";
+import { RemoveElement } from "pages/diagram/components/context-pad/remove-element";
+import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
+
 import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 interface IColor {
@@ -68,6 +82,38 @@ export function useDiagram() {
         defaultFillColor: theme?.palette?.background?.default,
         defaultStrokeColor: theme?.palette?.common?.white,
       },
+      additionalModules: [
+        {
+          __init__: [
+            "contextPadProvider",
+            "customEndEventPad",
+            "customTimerPad",
+            "customFlowPad",
+            "customUserTaskPad",
+            "customServiceTaskPad",
+            "customSubProcessPad",
+            "customProcessPad",
+            "customPropertiesPad",
+            "customChangeElementPad",
+            "customRemoveElementPad",
+            "customConnectElementPad",
+            "customPalette",
+          ],
+          contextPadProvider: ["type", ResetPad],
+          customEndEventPad: ["type", EndEvent], // Menu que aparece quando clica no shape
+          customTimerPad: ["type", Timer], // Menu que aparece quando clica no shape
+          customFlowPad: ["type", Flow], // Menu que aparece quando clica no shape
+          customUserTaskPad: ["type", UserTask], // Menu que aparece quando clica no shape
+          customServiceTaskPad: ["type", ServiceTask], // Menu que aparece quando clica no shape
+          customSubProcessPad: ["type", SubProcess], // Menu que aparece quando clica no shape
+          customProcessPad: ["type", Process], // Menu que aparece quando clica no shape
+          customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
+          customChangeElementPad: ["type", ChangeElement], // Menu que aparece quando clica no shape
+          customRemoveElementPad: ["type", RemoveElement], // Menu que aparece quando clica no shape
+          customConnectElementPad: ["type", ConnectElement], // Menu que aparece quando clica no shape
+          customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
+        },
+      ],
     }) as any;
   }, [theme?.palette?.background?.default, theme?.palette?.common?.white]);
 
