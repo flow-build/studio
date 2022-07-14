@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { is } from "bpmn-js/lib/util/ModelUtil";
 import _ from "lodash";
 
-import { setPropertiesDrawerItems, toggleDrawer } from "pages/diagram/features/bpmnSlice";
+import { setPropertiesDrawerItems, setSearchProcessIdDialog, setSearchProcessIdDialogData, setSelectedProcess, toggleDrawer } from "pages/diagram/features/bpmnSlice";
 import { bpmnService } from "pages/diagram/services/bpmnService";
 import { workflowService } from 'pages/diagram/services/workflowService';
 
@@ -30,8 +30,13 @@ import { PropertiesDrawer } from "pages/diagram/components/panel/components/prop
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
+import { listByProcessId } from "services/resources/processes/list-by-process-id";
+import { getHistoryByProcessId } from "services/resources/processes/history";
+import { listStatesByProcessId } from "services/resources/processes/list-states";
+import { useNavigate } from "react-router-dom";
 
 export const DiagramPanel: React.FC<any> = ({ modeler }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
 
   const [element, setElement] = useState<any>(null);
@@ -179,7 +184,55 @@ export const DiagramPanel: React.FC<any> = ({ modeler }) => {
   useEffect(() => {
     if (!modeler) return;
 
-    modeler.on("selection.changed", (e: any) => {
+    modeler.on("selection.changed", async (e: any) => {
+      // console.log({ element: e.newSelection })
+      if (e.newSelection && e.newSelection[0]) {
+        // console.log({ teste1: e.newSelection[0].id })
+        if (e.newSelection[0].id === 'Node_START') {
+          // console.log({ selectedProcess })
+          const processList = (await getHistoryByProcessId(selectedProcess)).reverse() as any
+          // console.log({ processListStart: processList })
+
+          const parent_process_id = processList[0].actor_data.parentProcessData.id;
+          const response = await listStatesByProcessId(parent_process_id)
+
+          await dispatch(setSelectedProcess(parent_process_id))
+          dispatch(setSearchProcessIdDialogData(response))
+          dispatch(setSearchProcessIdDialog(true))
+          navigate(`/dashboard/workflows/${response.workflow_id}/diagram`)
+
+          return;
+        }
+
+
+        const category = e.newSelection[0].businessObject.$attrs['ns0:category'];
+
+        if (category === 'startprocess' && selectedProcess) {
+          // console.log({ teste0: e.newSelection[0] })
+          // console.log({ teste1: e.newSelection[0].id })
+          // const hue = await listByProcessId(workflowId)
+          // console.log({ hue })
+          const processList = await getHistoryByProcessId(selectedProcess)
+          // console.log({ processList })
+          const nodeSelected = processList.find(process => process.node_id === e.newSelection[0].id.replace('Node_', ''))
+          // console.log({ nodeSelected })
+
+          const child_process_id = nodeSelected?.result?.process_id;
+          // console.log({ child_process_id })
+
+          const response = await listStatesByProcessId(child_process_id)
+          // console.log({ response })
+
+          await dispatch(setSelectedProcess(child_process_id))
+          dispatch(setSearchProcessIdDialogData(response))
+          dispatch(setSearchProcessIdDialog(true))
+          navigate(`/dashboard/workflows/${response.workflow_id}/diagram`)
+
+          return;
+        }
+
+      }
+
       if (!e.newSelection[0]) return;
 
       setElement(e.newSelection[0]);
@@ -189,13 +242,13 @@ export const DiagramPanel: React.FC<any> = ({ modeler }) => {
     modeler.on("element.changed", (e: any) => {
       setElement(e.element);
     });
-  }, [modeler]);
+  }, [modeler, selectedProcess]);
 
   if (!element) return <></>;
 
   return (
     <>
-      <Drawer anchor="right" open={isOpen} onClose={handleOnClose}  sx={{ zIndex: 9999 }}>
+      <Drawer anchor="right" open={isOpen} onClose={handleOnClose} sx={{ zIndex: 9999 }}>
         <Box role="presentation" sx={{ width: 640, padding: 1 }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}>
             <Tabs
