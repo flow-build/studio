@@ -10,7 +10,6 @@ type Props = {
   description?: string;
   headerTitle: string;
   footerTitle: string;
-
   actions?: TAction[]
 }
 
