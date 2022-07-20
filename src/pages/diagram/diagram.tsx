@@ -84,6 +84,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onClose={() => setIsOpen(false)}
         onSelectItem={onSelectItem}
       />
+
+      <S.PropertiesDialog isOpen={true} onClose={() => {}} />
     </>
   );
 };
