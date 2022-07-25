@@ -26,7 +26,7 @@ export default class ConnectElement {
     ) {
       return {
         "connect-element": {
-          group: "utils",
+          group: "model",
           className: "bpmn-icon-connection-multi",
           title: translate(
             "Connect using " +
@@ -46,7 +46,7 @@ export default class ConnectElement {
     if (is(element.businessObject, "bpmn:TextAnnotation")) {
       return {
         "connect-element": {
-          group: "utils",
+          group: "model",
           className: "bpmn-icon-connection-multi",
           title: translate("Connect using Association"),
           action: {
@@ -65,7 +65,7 @@ export default class ConnectElement {
     ) {
       return {
         "connect-element": {
-          group: "utils",
+          group: "model",
           className: "bpmn-icon-connection-multi",
           title: translate("Connect using DataInputAssociation"),
           action: {

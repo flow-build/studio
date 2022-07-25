@@ -25,7 +25,7 @@ export default class RemoveElement {
     if (deleteAllowed) {
       return {
         "delete.element": {
-          group: "utils",
+          group: "actions",
           className: "bpmn-icon-trash",
           title: translate("Remove"),
           action: {

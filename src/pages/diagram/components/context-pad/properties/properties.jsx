@@ -33,7 +33,7 @@ export default class Properties {
     ) {
       return {
         "handle.get-properties": {
-          group: "model",
+          group: "utils",
           className: "bpmn-icon-sequential-mi-marker",
           title: this.translate("Get Properties"),
           action: {
