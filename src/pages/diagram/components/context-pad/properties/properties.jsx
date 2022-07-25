@@ -1,9 +1,7 @@
+import { store } from "store/index";
+
 import { isAny } from "bpmn-js/lib/features/modeling/util/ModelingUtil";
-// import {
-//   setPropertiesDrawerItems,
-//   toggleDrawer,
-// } from "pages/diagram/features/bpmnSlice";
-// import { bpmnService } from "pages/diagram/services/bpmnService";
+import { setShowPropertiesDialog } from "store/slices/diagram";
 
 export default class Properties {
   constructor(config, contextPad, create, elementFactory, injector, translate) {
@@ -16,19 +14,9 @@ export default class Properties {
 
   getContextPadEntries(element) {
     async function handleGetProperties(event, element) {
-      alert("TODO: Abrir lista de propriedades");
-      // try {
-      //   store.dispatch(toggleDrawer(true));
-      //   const string = element.type.split(":")[1];
-      //   const { data } = await store.dispatch(
-      //     bpmnService.endpoints.getProperties.initiate(string.toLowerCase())
-      //   );
-      //   store.dispatch(setPropertiesDrawerItems(data?.items));
-      // } catch (e) {
-      //   console.error(
-      //     `PropertiesControlPad/handleGetProperties => ${e.error}: ${e.message}`
-      //   );
-      // }
+      store.dispatch(
+        setShowPropertiesDialog({ isVisible: true, data: { element } })
+      );
     }
 
     if (

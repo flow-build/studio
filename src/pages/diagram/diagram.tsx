@@ -16,8 +16,12 @@ import { getHistoryByProcessId } from "services/resources/processes/history";
 
 import { Fab } from "shared/components/fab";
 
+import { RootState } from "store";
+
 import * as S from "./styles";
 import { IAction } from "shared/components/fab/types/IAction";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowPropertiesDialog } from "store/slices/diagram";
 
 type Props = {};
 
@@ -25,6 +29,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
   const diagram = useDiagram();
   const paint = usePaint();
+
+  const dispatch = useDispatch();
+
+  const { propertiesDialog } = useSelector(
+    (state: RootState) => state.diagramPage
+  );
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -85,7 +95,14 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onSelectItem={onSelectItem}
       />
 
-      <S.PropertiesDialog isOpen={true} onClose={() => {}} />
+      {propertiesDialog.isVisible && (
+        <S.PropertiesDialog
+          isOpen={propertiesDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowPropertiesDialog({ isVisible: false }))
+          }
+        />
+      )}
     </>
   );
 };

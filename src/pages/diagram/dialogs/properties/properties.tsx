@@ -1,8 +1,14 @@
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+import { FC, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+
+import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
+
 import Box from "@mui/material/Box";
+
+import { getWorkflowByName } from "services/resources/workflows/get-by-name";
+
+import { RootState } from "store";
 
 import * as S from "./styles";
 
@@ -11,71 +17,52 @@ type Props = {
   onClose?: () => void;
 };
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+export const Properties: FC<Props> = ({ isOpen, onClose }) => {
+  const [properties, setProperties] = useState({
+    category: undefined,
+    parameters: undefined,
+  });
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
+  const { propertiesDialog } = useSelector(
+    (state: RootState) => state.diagramPage
   );
-}
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+  useEffect(() => {
+    const request = async () => {
+      const element = propertiesDialog.data.element;
+      const elementId = element.id.replace("Node_", "");
 
-export const Properties: React.FC<Props> = ({ isOpen, onClose }) => {
-  const [value, setValue] = React.useState(0);
+      const workflow = await getWorkflowByName("pizza2");
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+      const nodeSelected = workflow.blueprint_spec.nodes.find((node: any) =>
+        _isEqual(node.id, elementId)
+      );
 
-  console.log({ value });
+      setProperties({
+        category: nodeSelected.category,
+        parameters: nodeSelected.parameters,
+      });
+    };
+
+    request();
+  }, [propertiesDialog.data.element]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
-      <S.Title>Propriedades</S.Title>
+      <S.Title>
+        Propriedades
+        <S.CloseButton onClick={onClose} />
+      </S.Title>
 
       <S.Content>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            centered
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Propriedade" {...a11yProps(0)} />
-            <Tab label="Customização" {...a11yProps(1)} />
-          </Tabs>
+        {!_isEmpty(properties.category) && (
+          <S.Text>Category: {properties.category}</S.Text>
+        )}
+
+        <Box sx={{ mt: 2 }}>
+          <S.Text>Parameters</S.Text>
+          <S.Editor value={JSON.stringify(properties.parameters, null, 4)} />
         </Box>
-        <TabPanel value={value} index={0}>
-          Item One
-          <button onClick={() => setValue(1)}>Proximo</button>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          Item Two
-        </TabPanel>
       </S.Content>
     </S.Wrapper>
   );
