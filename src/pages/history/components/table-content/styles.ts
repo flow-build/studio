@@ -33,9 +33,7 @@ export const TitleTable = styled(Typography).attrs({
 })``;
 
 export const CopyIcon = styled(IconButton)``;
-
 export const CopyOutlinedIcon = styled(ContentCopyOutlinedIcon)``;
-
 export const TooltipIcon = styled(Tooltip)``;
 
 export const Table = styled(MuiTable)`
