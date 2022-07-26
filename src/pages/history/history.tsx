@@ -13,6 +13,8 @@ import { getHistoryByProcessId } from 'services/resources/processes/history'
 import { ContentHeader } from 'shared/components/content-header'
 
 import * as S from './styles'
+import { IconButton } from 'shared/components/icon-button'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
@@ -34,8 +36,18 @@ export const History: React.FC<{}> = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  function backToProcessList() {
+    window.history.back();
+  }
+
   return (
     <S.Wrapper>
+      <IconButton
+        icon={KeyboardBackspaceIcon}
+        onClick={backToProcessList}
+        tooltip="voltar"
+      ></IconButton>
+
       <ContentHeader
         title='Histórico'
         subtitle={`Process id: ${process_id}`}
