@@ -12,8 +12,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "shared/components/icon-button";
 
 export const Wrapper = styled(Dialog).attrs({
-  "aria-labelledby": "Show properties",
-  "aria-describedby": "Show all properties of shape",
+  "aria-labelledby": "Confirmation",
+  "aria-describedby": "Confirm action",
   scroll: "paper",
   fullWidth: true,
   maxWidth: "xs",
