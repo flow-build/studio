@@ -4,7 +4,11 @@ import Modeler from "bpmn-js/lib/Modeler";
 
 import { useTheme } from "@mui/material/styles";
 
+import _first from "lodash/first";
+import _greaterThan from "lodash/gt";
 import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
+import _size from "lodash/size";
 
 import { ServiceTask } from "pages/diagram/components/context-pad/service-task";
 import { UserTask } from "pages/diagram/components/context-pad/user-task";
@@ -21,6 +25,12 @@ import { RemoveElement } from "pages/diagram/components/context-pad/remove-eleme
 import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
 
 import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { useDispatch } from "react-redux";
+import { setShowConfirmationDialog } from "store/slices/diagram";
+import { TProcess } from "models/process";
+import { getHistoryByProcessId } from "services/resources/processes/history";
+import { listStatesByProcessId } from "services/resources/processes/list-states";
+import { useNavigate } from "react-router-dom";
 
 interface IColor {
   backgroundColor?: string;
@@ -36,8 +46,10 @@ interface IElement {
 
 let bpmnViewer: any = null;
 
-export function useDiagram() {
+export function useDiagram(processSelected?: TProcess) {
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const diagramBPMN = useRef();
 
@@ -162,11 +174,78 @@ export function useDiagram() {
     setInitialElements(arr);
   }, []);
 
+  const onSelectionChanged = useCallback(
+    async (elements: any) => {
+      console.log("============", processSelected);
+      /* TODO: Refatorar */
+      if (_isEmpty(elements?.newSelection)) {
+        return;
+      }
+
+      const totalElements = _size(elements?.newSelection);
+      const isMultipleSelection = _greaterThan(totalElements, 1);
+
+      if (isMultipleSelection) {
+        return;
+      }
+
+      const element = _first<{ [key: string]: any }>(elements?.newSelection);
+
+      if (_isEmpty(element)) {
+        return;
+      }
+
+      /* TODO: Refatorar */
+      /* Handle Node_START */
+      if (_isEqual(element?.id, "Node_START")) {
+        return;
+      }
+
+      const category = element?.businessObject.$attrs["custom:category"];
+
+      if (_isEqual(category, "startprocess") && !_isEmpty(processSelected)) {
+        const processList = await getHistoryByProcessId(
+          (processSelected as TProcess).id
+        );
+
+        const nodeSelected = processList.find(
+          (process) => process.node_id === element?.id.replace("Node_", "")
+        );
+
+        const child_process_id = nodeSelected?.result?.process_id;
+
+        if (!_isEmpty(child_process_id)) {
+          dispatch(
+            setShowConfirmationDialog({
+              isVisible: true,
+              data: {
+                message: "Tem certeza que deseja navegar para o processo?",
+                onConfirm: async () => {
+                  const response = await listStatesByProcessId(
+                    child_process_id
+                  );
+
+                  return navigate(
+                    `/dashboard/workflows/${response.workflow_id}/diagram`
+                  );
+                },
+              },
+            })
+          );
+        }
+      }
+    },
+    [dispatch, navigate, processSelected]
+  );
+
   useEffect(() => {
     if (diagramBPMN?.current) {
       bpmnViewer = createModeler();
 
       bpmnViewer.on("import.done", onImportDone);
+
+      // console.log("processSelected", processSelected);
+      // bpmnViewer.on("selection.changed", onSelectionChanged);
 
       if (!_isEmpty(diagramXML)) {
         bpmnViewer.importXML(diagramXML);
@@ -174,7 +253,18 @@ export function useDiagram() {
     }
 
     return () => bpmnViewer?.destroy();
-  }, [createModeler, diagramBPMN, diagramXML, onImportDone]);
+  }, [
+    createModeler,
+    diagramBPMN,
+    diagramXML,
+    onImportDone,
+    // onSelectionChanged,
+    // processSelected,
+  ]);
+
+  useEffect(() => {
+    bpmnViewer.on("selection.changed", onSelectionChanged);
+  }, [onSelectionChanged]);
 
   return {
     downloadXML,

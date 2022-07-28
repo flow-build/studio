@@ -21,20 +21,22 @@ import { RootState } from "store";
 import * as S from "./styles";
 import { IAction } from "shared/components/fab/types/IAction";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowPropertiesDialog } from "store/slices/diagram";
+import {
+  setShowConfirmationDialog,
+  setShowPropertiesDialog,
+} from "store/slices/diagram";
 
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
-  const diagram = useDiagram();
+  const [processSelected, setProcessSelected] = useState<TProcess>();
+  const diagram = useDiagram(processSelected);
   const paint = usePaint();
 
   const dispatch = useDispatch();
 
-  const { propertiesDialog } = useSelector(
-    (state: RootState) => state.diagramPage
-  );
+  const diagramPageState = useSelector((state: RootState) => state.diagramPage);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,17 +54,23 @@ export const DiagramRefactored: React.FC<Props> = () => {
     {
       icon: <CleaningServicesIcon />,
       tooltip: "Resetar cor",
-      onClick: () => {
-        const modeling = diagram.modeler.get("modeling");
-        paint.elementsByDefault({
-          modeling,
-          elements: diagram.initialElements,
-        });
-      },
+      onClick: resetColor,
     },
   ];
 
+  function resetColor() {
+    setProcessSelected(undefined);
+    const modeling = diagram.modeler.get("modeling");
+    paint.elementsByDefault({
+      modeling,
+      elements: diagram.initialElements,
+    });
+  }
+
   async function onSelectItem(process: TProcess) {
+    resetColor();
+    setProcessSelected(process);
+
     const history = await getHistoryByProcessId(process.id);
     const orderedStates = history.reverse();
 
@@ -95,11 +103,20 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onSelectItem={onSelectItem}
       />
 
-      {propertiesDialog.isVisible && (
+      {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
-          isOpen={propertiesDialog.isVisible}
+          isOpen={diagramPageState.propertiesDialog.isVisible}
           onClose={() =>
             dispatch(setShowPropertiesDialog({ isVisible: false }))
+          }
+        />
+      )}
+
+      {diagramPageState.confirmationDialog.isVisible && (
+        <S.ConfirmationDialog
+          isOpen={diagramPageState.confirmationDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowConfirmationDialog({ isVisible: false }))
           }
         />
       )}
