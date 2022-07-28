@@ -176,7 +176,7 @@ export function useDiagram(processSelected?: TProcess) {
 
   const onSelectionChanged = useCallback(
     async (elements: any) => {
-      console.log("============", processSelected);
+      // console.log("============", processSelected);
       /* TODO: Refatorar */
       if (_isEmpty(elements?.newSelection)) {
         return;

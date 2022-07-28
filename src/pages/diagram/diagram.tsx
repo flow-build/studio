@@ -22,6 +22,7 @@ import * as S from "./styles";
 import { IAction } from "shared/components/fab/types/IAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setProcessSelected,
   setShowConfirmationDialog,
   setShowPropertiesDialog,
 } from "store/slices/diagram";
@@ -30,13 +31,12 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
-  const [processSelected, setProcessSelected] = useState<TProcess>();
-  const diagram = useDiagram(processSelected);
+  // const [processSelected, setProcessSelected] = useState<TProcess>();
+  const diagramPageState = useSelector((state: RootState) => state.diagramPage);
+  const diagram = useDiagram(diagramPageState.processSelected);
   const paint = usePaint();
 
   const dispatch = useDispatch();
-
-  const diagramPageState = useSelector((state: RootState) => state.diagramPage);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,7 +59,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
   ];
 
   function resetColor() {
-    setProcessSelected(undefined);
+    // setProcessSelected(undefined);
+    dispatch(setProcessSelected(undefined));
     const modeling = diagram.modeler.get("modeling");
     paint.elementsByDefault({
       modeling,
@@ -69,7 +70,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   async function onSelectItem(process: TProcess) {
     resetColor();
-    setProcessSelected(process);
+    // setProcessSelected(process);
+    dispatch(setProcessSelected(process));
 
     const history = await getHistoryByProcessId(process.id);
     const orderedStates = history.reverse();

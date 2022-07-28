@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TProcess } from "models/process";
 
 interface IInitialState {
   propertiesDialog: { isVisible: boolean; data?: any };
   confirmationDialog: { isVisible: boolean; data?: any };
+  processSelected?: TProcess;
 }
 
 const initialState: IInitialState = {
@@ -15,20 +17,19 @@ const initialState: IInitialState = {
     isVisible: false,
     data: {},
   },
+
+  processSelected: undefined,
 };
 
 export const diagramSlice = createSlice({
   name: "diagram",
   initialState,
   reducers: {
-    setShowPropertiesDialog: (
+    setProcessSelected: (
       state,
-      action: PayloadAction<{ isVisible: boolean; data?: any }>
+      action: PayloadAction<TProcess | undefined>
     ) => {
-      state.propertiesDialog = {
-        isVisible: action.payload.isVisible,
-        data: action.payload.data ?? {},
-      };
+      state.processSelected = action.payload ?? ({} as TProcess);
     },
 
     setShowConfirmationDialog: (
@@ -40,10 +41,23 @@ export const diagramSlice = createSlice({
         data: action.payload.data ?? {},
       };
     },
+
+    setShowPropertiesDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.propertiesDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
   },
 });
 
-export const { setShowPropertiesDialog, setShowConfirmationDialog } =
-  diagramSlice.actions;
+export const {
+  setProcessSelected,
+  setShowConfirmationDialog,
+  setShowPropertiesDialog,
+} = diagramSlice.actions;
 
 export default diagramSlice.reducer;
