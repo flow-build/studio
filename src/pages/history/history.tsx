@@ -1,55 +1,44 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Typography } from '@mui/material'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
-import _isNull from 'lodash/isNull'
+import _isNull from "lodash/isNull";
 
-import { TState } from 'models/state'
+import { TState } from "models/state";
 
-import { useTable } from 'pages/history/hooks/useTable'
+import { useTable } from "pages/history/hooks/useTable";
 
-import { getHistoryByProcessId } from 'services/resources/processes/history'
+import { getHistoryByProcessId } from "services/resources/processes/history";
 
-import { ContentHeader } from 'shared/components/content-header'
+import { ContentHeader } from "shared/components/content-header";
 
-import * as S from './styles'
-import { IconButton } from 'shared/components/icon-button'
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import * as S from "./styles";
+
 
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
 
-  const [history, setHistory] = useState<TState[] | null>(null)
+  const [history, setHistory] = useState<TState[] | null>(null);
 
-  const table = useTable(history ?? [])
+  const table = useTable(history ?? []);
 
   useEffect(() => {
     const request = async () => {
-      const response = await getHistoryByProcessId(process_id ?? '')
-      setHistory(response.reverse())
-    }
+      const response = await getHistoryByProcessId(process_id ?? "");
+      setHistory(response.reverse());
+    };
 
-    request()
-  }, [process_id])
+    request();
+  }, [process_id]);
 
   if (_isNull(history)) {
     return <Typography>Loading...</Typography>;
   }
 
-  function backToProcessList() {
-    window.history.back();
-  }
-
   return (
     <S.Wrapper>
-      <IconButton
-        icon={KeyboardBackspaceIcon}
-        onClick={backToProcessList}
-        tooltip="voltar"
-      ></IconButton>
-
       <ContentHeader
-        title='Histórico'
+        title="Histórico"
         subtitle={`Process id: ${process_id}`}
         hasInput={false}
         hasButton={false}
@@ -60,5 +49,5 @@ export const History: React.FC<{}> = () => {
         <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
       </S.TableContainer>
     </S.Wrapper>
-  )
-}
+  );
+};

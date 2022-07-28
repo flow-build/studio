@@ -59,18 +59,8 @@ export const Workflows: React.FC = () => {
     };
   }, [dispatch]);
 
-  function backToProcessList() {
-    window.history.back();
-  }
-
   return (
     <S.Wrapper>
-      <IconButton
-        icon={KeyboardBackspaceIcon}
-        onClick={backToProcessList}
-        tooltip="voltar"
-      ></IconButton>
-
       <ContentHeader
         title="Workflows"
         inputLabel="Nome / ID"
