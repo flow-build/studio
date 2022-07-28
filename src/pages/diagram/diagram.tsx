@@ -41,28 +41,37 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const actions: IAction[] = [
-    {
-      icon: <ListIcon />,
-      tooltip: "Listar processos",
-      onClick: () => setIsOpen(true),
-    },
-    {
-      icon: <InfoIcon />,
-      tooltip: "Informações do processo",
-      onClick: () => dispatch(setShowProcessInfoDialog({ isVisible: true })),
-    },
-    {
-      icon: <FileDownloadIcon />,
-      tooltip: "Download XML",
-      onClick: () => diagram.downloadXML(diagram.modeler),
-    },
-    {
-      icon: <CleaningServicesIcon />,
-      tooltip: "Resetar cor",
-      onClick: resetColor,
-    },
-  ];
+  const actions = getActions();
+
+  function getActions(): IAction[] {
+    const arr = [
+      {
+        icon: <ListIcon />,
+        tooltip: "Listar processos",
+        onClick: () => setIsOpen(true),
+      },
+      {
+        icon: <FileDownloadIcon />,
+        tooltip: "Download XML",
+        onClick: () => diagram.downloadXML(diagram.modeler),
+      },
+      {
+        icon: <CleaningServicesIcon />,
+        tooltip: "Resetar cor",
+        onClick: resetColor,
+      },
+    ];
+
+    if (!_isEmpty(diagramPageState.processSelected)) {
+      arr.push({
+        icon: <InfoIcon />,
+        tooltip: "Informações do processo",
+        onClick: () => dispatch(setShowProcessInfoDialog({ isVisible: true })),
+      });
+    }
+
+    return arr;
+  }
 
   function resetColor() {
     dispatch(setProcessSelected(undefined));
