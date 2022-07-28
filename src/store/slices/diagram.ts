@@ -4,6 +4,7 @@ import { TProcess } from "models/process";
 interface IInitialState {
   propertiesDialog: { isVisible: boolean; data?: any };
   confirmationDialog: { isVisible: boolean; data?: any };
+  processInfoDialog: { isVisible: boolean; data?: any };
   processSelected?: TProcess;
 }
 
@@ -18,6 +19,11 @@ const initialState: IInitialState = {
     data: {},
   },
 
+  processInfoDialog: {
+    isVisible: false,
+    data: {},
+  },
+
   processSelected: undefined,
 };
 
@@ -25,6 +31,16 @@ export const diagramSlice = createSlice({
   name: "diagram",
   initialState,
   reducers: {
+    setShowProcessInfoDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.processInfoDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
+
     setProcessSelected: (
       state,
       action: PayloadAction<TProcess | undefined>
@@ -58,6 +74,7 @@ export const {
   setProcessSelected,
   setShowConfirmationDialog,
   setShowPropertiesDialog,
+  setShowProcessInfoDialog,
 } = diagramSlice.actions;
 
 export default diagramSlice.reducer;
