@@ -31,9 +31,8 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
-  // const [processSelected, setProcessSelected] = useState<TProcess>();
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
-  const diagram = useDiagram(diagramPageState.processSelected);
+  const diagram = useDiagram();
   const paint = usePaint();
 
   const dispatch = useDispatch();
@@ -59,7 +58,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
   ];
 
   function resetColor() {
-    // setProcessSelected(undefined);
     dispatch(setProcessSelected(undefined));
     const modeling = diagram.modeler.get("modeling");
     paint.elementsByDefault({
@@ -70,20 +68,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   async function onSelectItem(process: TProcess) {
     resetColor();
-    // setProcessSelected(process);
     dispatch(setProcessSelected(process));
-
-    const history = await getHistoryByProcessId(process.id);
-    const orderedStates = history.reverse();
-
-    const modeling = diagram.modeler.get("modeling");
-    const elementRegistry = diagram.modeler.get("elementRegistry");
-
-    paint.elementsByStates({
-      elements: elementRegistry.getAll(),
-      modeling,
-      states: orderedStates,
-    });
   }
 
   useEffect(() => {
@@ -91,6 +76,28 @@ export const DiagramRefactored: React.FC<Props> = () => {
       diagram.loadDiagram(workflowId ?? "");
     }
   }, [diagram, workflowId]);
+
+  useEffect(() => {
+    const paintElementsByProcessId = async () => {
+      if (!_isEmpty(diagramPageState.processSelected)) {
+        const history = await getHistoryByProcessId(
+          diagramPageState.processSelected?.id as string
+        );
+        const orderedStates = history.reverse();
+
+        const modeling = diagram.modeler.get("modeling");
+        const elementRegistry = diagram.modeler.get("elementRegistry");
+
+        paint.elementsByStates({
+          elements: elementRegistry.getAll(),
+          modeling,
+          states: orderedStates,
+        });
+      }
+    };
+
+    paintElementsByProcessId();
+  }, [diagram.modeler, diagramPageState.processSelected, paint]);
 
   return (
     <>

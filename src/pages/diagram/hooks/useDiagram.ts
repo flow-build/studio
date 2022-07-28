@@ -25,12 +25,16 @@ import { RemoveElement } from "pages/diagram/components/context-pad/remove-eleme
 import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
 
 import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
-import { useDispatch } from "react-redux";
-import { setShowConfirmationDialog } from "store/slices/diagram";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setProcessSelected,
+  setShowConfirmationDialog,
+} from "store/slices/diagram";
 import { TProcess } from "models/process";
 import { getHistoryByProcessId } from "services/resources/processes/history";
 import { listStatesByProcessId } from "services/resources/processes/list-states";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "store";
 
 interface IColor {
   backgroundColor?: string;
@@ -46,7 +50,7 @@ interface IElement {
 
 let bpmnViewer: any = null;
 
-export function useDiagram(processSelected?: TProcess) {
+export function useDiagram() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -57,6 +61,7 @@ export function useDiagram(processSelected?: TProcess) {
   const [diagramXML, setDiagramXML] = useState<any>();
 
   const { enqueueSnackbar } = useSnackbar();
+  const diagramPageState = useSelector((state: RootState) => state.diagramPage);
 
   async function downloadXML(modeler: any) {
     try {
@@ -172,11 +177,25 @@ export function useDiagram(processSelected?: TProcess) {
     });
 
     setInitialElements(arr);
+    // setHaha(new Date());
   }, []);
+
+  useEffect(() => {
+    if (diagramBPMN?.current) {
+      bpmnViewer = createModeler();
+
+      bpmnViewer.on("import.done", onImportDone);
+
+      if (!_isEmpty(diagramXML)) {
+        bpmnViewer.importXML(diagramXML);
+      }
+    }
+
+    return () => bpmnViewer?.destroy();
+  }, [createModeler, diagramBPMN, diagramXML, onImportDone]);
 
   const onSelectionChanged = useCallback(
     async (elements: any) => {
-      // console.log("============", processSelected);
       /* TODO: Refatorar */
       if (_isEmpty(elements?.newSelection)) {
         return;
@@ -194,10 +213,42 @@ export function useDiagram(processSelected?: TProcess) {
       if (_isEmpty(element)) {
         return;
       }
+      const processSelected = diagramPageState.processSelected;
+
+      console.log({ element });
 
       /* TODO: Refatorar */
       /* Handle Node_START */
       if (_isEqual(element?.id, "Node_START")) {
+        const processList = (
+          await getHistoryByProcessId((processSelected as TProcess).id)
+        ).reverse() as any;
+
+        const parent_process_id =
+          processList[0].actor_data.parentProcessData.id;
+
+        if (!_isEmpty(parent_process_id)) {
+          dispatch(
+            setShowConfirmationDialog({
+              isVisible: true,
+              data: {
+                message: "Tem certeza que deseja navegar para o processo pai?",
+                onConfirm: async () => {
+                  const response = await listStatesByProcessId(
+                    parent_process_id
+                  );
+
+                  dispatch(setProcessSelected(response));
+
+                  return navigate(
+                    `/dashboard/workflows/${response.workflow_id}/diagram`
+                  );
+                },
+              },
+            })
+          );
+        }
+
         return;
       }
 
@@ -219,11 +270,14 @@ export function useDiagram(processSelected?: TProcess) {
             setShowConfirmationDialog({
               isVisible: true,
               data: {
-                message: "Tem certeza que deseja navegar para o processo?",
+                message:
+                  "Tem certeza que deseja navegar para o processo filho?",
                 onConfirm: async () => {
                   const response = await listStatesByProcessId(
                     child_process_id
                   );
+
+                  dispatch(setProcessSelected(response));
 
                   return navigate(
                     `/dashboard/workflows/${response.workflow_id}/diagram`
@@ -235,36 +289,17 @@ export function useDiagram(processSelected?: TProcess) {
         }
       }
     },
-    [dispatch, navigate, processSelected]
+    [diagramPageState.processSelected, dispatch, navigate]
   );
 
   useEffect(() => {
-    if (diagramBPMN?.current) {
-      bpmnViewer = createModeler();
-
-      bpmnViewer.on("import.done", onImportDone);
-
-      // console.log("processSelected", processSelected);
-      // bpmnViewer.on("selection.changed", onSelectionChanged);
-
-      if (!_isEmpty(diagramXML)) {
-        bpmnViewer.importXML(diagramXML);
-      }
+    if (
+      !_isEmpty(initialElements) &&
+      !_isEmpty(diagramPageState.processSelected)
+    ) {
+      bpmnViewer?.on("selection.changed", onSelectionChanged);
     }
-
-    return () => bpmnViewer?.destroy();
-  }, [
-    createModeler,
-    diagramBPMN,
-    diagramXML,
-    onImportDone,
-    // onSelectionChanged,
-    // processSelected,
-  ]);
-
-  useEffect(() => {
-    bpmnViewer.on("selection.changed", onSelectionChanged);
-  }, [onSelectionChanged]);
+  }, [diagramPageState.processSelected, initialElements, onSelectionChanged]);
 
   return {
     downloadXML,
