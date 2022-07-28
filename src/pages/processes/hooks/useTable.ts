@@ -1,51 +1,56 @@
-import { useMemo } from "react"
-import { ExtensionOutlined, VisibilityOutlined } from "@mui/icons-material"
+import { useMemo } from "react";
+import { useDispatch } from "react-redux";
+import { ExtensionOutlined, VisibilityOutlined } from "@mui/icons-material";
 
-import { TProcess } from "models/process"
+import { TProcess } from "models/process";
 
-import { useProcessesPage } from "pages/processes/hooks/useProcessesPage"
+import { useProcessesPage } from "pages/processes/hooks/useProcessesPage";
 
-import { getLongFormatByDate } from "shared/utils/date"
-
+import { getLongFormatByDate } from "shared/utils/date";
+import { setProcessSelected } from "store/slices/diagram";
 
 export function useTable(processes: TProcess[]) {
-  const processPage = useProcessesPage()
+  const processPage = useProcessesPage();
+  const dispatch = useDispatch();
 
   const columnData = useMemo(() => {
     return [
-      { id: 'name', name: 'Name' },
-      { id: 'id', name: 'ID' },
-      { id: 'status', name: 'Status' },
-      { id: 'createdAt', name: 'Created at' },
-      { id: 'actions', name: 'Actions' },
-    ]
-  }, [])
+      { id: "name", name: "Name" },
+      { id: "id", name: "ID" },
+      { id: "status", name: "Status" },
+      { id: "createdAt", name: "Created at" },
+      { id: "actions", name: "Actions" },
+    ];
+  }, []);
 
   const rows = useMemo(() => {
-    return processes.map(process => {
+    return processes.map((process) => {
       const items = [
         process.state.node_name,
         process.id,
         process.status,
-        getLongFormatByDate(process.created_at)
+        getLongFormatByDate(process.created_at),
       ];
 
       const actions = [
         {
           icon: VisibilityOutlined,
-          tooltip: 'Ver histórico',
-          onClick: () => processPage.navigateToHistory(process.id)
+          tooltip: "Ver histórico",
+          onClick: () => processPage.navigateToHistory(process.id),
         },
         {
           icon: ExtensionOutlined,
-          tooltip: 'Ver diagrama',
-          onClick: () => processPage.navigateToDiagram(process.id)
+          tooltip: "Ver diagrama",
+          onClick: () => {
+            dispatch(setProcessSelected(process));
+            processPage.navigateToDiagram(process.id);
+          },
         },
       ];
 
-      return { items, actions }
-    })
-  }, [processPage, processes])
+      return { items, actions };
+    });
+  }, [dispatch, processPage, processes]);
 
-  return { columnData, rows }
+  return { columnData, rows };
 }

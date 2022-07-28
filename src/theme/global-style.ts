@@ -1,7 +1,12 @@
+import diagramCSS from 'bpmn-js/dist/assets/diagram-js.css'
+import bpmnFontCSS from 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
+
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-  
+  ${diagramCSS}
+  ${bpmnFontCSS}
+
   * {
     margin: 0;
     padding: 0;
@@ -13,6 +18,8 @@ export default createGlobalStyle`
     max-width: 100vw;
     height: 100%;
     width: 100%;
+
+    overflow: hidden;
   }
 
   *, button, input {
