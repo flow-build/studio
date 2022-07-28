@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import ListIcon from "@mui/icons-material/ListOutlined";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import InfoIcon from "@mui/icons-material/Info";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -24,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setProcessSelected,
   setShowConfirmationDialog,
+  setShowProcessInfoDialog,
   setShowPropertiesDialog,
 } from "store/slices/diagram";
 
@@ -44,6 +46,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
       icon: <ListIcon />,
       tooltip: "Listar processos",
       onClick: () => setIsOpen(true),
+    },
+    {
+      icon: <InfoIcon />,
+      tooltip: "Informações do processo",
+      onClick: () => dispatch(setShowProcessInfoDialog({ isVisible: true })),
     },
     {
       icon: <FileDownloadIcon />,
@@ -126,6 +133,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
           isOpen={diagramPageState.confirmationDialog.isVisible}
           onClose={() =>
             dispatch(setShowConfirmationDialog({ isVisible: false }))
+          }
+        />
+      )}
+
+      {diagramPageState.processInfoDialog.isVisible && (
+        <S.ProcessInfoDialog
+          isOpen={diagramPageState.processInfoDialog.isVisible}
+          process={diagramPageState.processSelected as TProcess}
+          onClose={() =>
+            dispatch(setShowProcessInfoDialog({ isVisible: false }))
           }
         />
       )}
