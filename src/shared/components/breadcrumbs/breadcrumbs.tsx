@@ -1,25 +1,32 @@
 import { useLocation, useParams } from "react-router-dom";
-import { BreadcrumbsText } from "../breadcrumb-text";
+
+import _isEqual from "lodash/isEqual";
+
+import { Text } from "shared/components/breadcrumbs/components/text";
+
 import * as S from "./styles";
 
 export const BreadcrumbsNavigation = () => {
   const location = useLocation();
-  const { id, process_id } = useParams();
+  const params = useParams();
 
   const pathnames = location.pathname.split("/").filter((x) => x);
+  const breadcrumbs = pathnames.filter((pathname) => !valueIsParam(pathname));
 
-  console.log(location);
-  console.log(pathnames);
+  function valueIsParam(value: string) {
+    return _isEqual(value, params?.id) || _isEqual(value, params?.process_id);
+  }
 
   return (
     <S.NavBreadcrumbs aria-label="breadcrumb">
-      {pathnames.map((value, index) => (
-        <BreadcrumbsText
+      {breadcrumbs.map((value, index) => (
+        <Text
           key={index}
+          isLast={_isEqual(breadcrumbs.length - 1, index)}
           text={value}
           index={index}
           pathnames={pathnames}
-          params={[id as string, process_id as string]}
+          isParam={valueIsParam}
         />
       ))}
     </S.NavBreadcrumbs>
