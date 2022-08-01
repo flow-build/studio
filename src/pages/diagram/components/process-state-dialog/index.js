@@ -23,6 +23,8 @@ import {
 import AceEditor from "react-ace";
 import { workflowService } from "pages/diagram/services/workflowService";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
+import { IconButton } from "./../../../../shared/components/icon-button/icon-button";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const ProcessStateDialog = ({ generateDiagram }) => {
   const dispatch = useDispatch();
@@ -81,7 +83,20 @@ export const ProcessStateDialog = ({ generateDiagram }) => {
 
   return (
     <Dialog onClose={handleOnClose} open={isSearchProcessIdDialogActive}>
-      <DialogTitle>Informações do Processo</DialogTitle>
+      <DialogTitle>
+        Informações do Processo
+        <IconButton
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[300],
+          }}
+          icon={CloseIcon}
+          onClick={handleOnClose}
+          tooltip="fechar"
+        ></IconButton>
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>
           ID: {searchProcessIdDialogData?.id}
