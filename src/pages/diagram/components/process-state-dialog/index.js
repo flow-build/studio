@@ -21,6 +21,7 @@ import {
   Chip,
 } from "@mui/material";
 import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/theme-dracula";
 import { workflowService } from "pages/diagram/services/workflowService";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
@@ -105,24 +106,26 @@ export const ProcessStateDialog = ({ generateDiagram }) => {
         </Stack>
         <InputLabel htmlFor="result_read-only">Result</InputLabel>
         <AceEditor
-          value={`{
-  currentStatus: ${searchProcessIdDialogData?.current_status},
-  stepNumber: ${searchProcessIdDialogData?.state?.step_number},
-  result: {
-    ${JSON.stringify(searchProcessIdDialogData?.state?.result)}
-  },
-  bag: {
-    ${JSON.stringify(searchProcessIdDialogData?.state?.bag)}
-  },
-  environment: ${searchProcessIdDialogData?.state?.environment},
-}`}
+          value={JSON.stringify(
+            {
+              current_status: searchProcessIdDialogData?.current_status,
+              step_number: searchProcessIdDialogData?.step_number,
+              bag: searchProcessIdDialogData?.state?.bag,
+              result: searchProcessIdDialogData?.state?.result,
+              environment: searchProcessIdDialogData?.state?.environment,
+            },
+            null,
+            "\t"
+          )}
           mode="json"
-          theme="github"
+          theme="dracula"
           wrapEnabled
           readOnly
-          showLineNumbers={true}
           setOptions={{
-            tabSize: 4,
+            showPrintMargin: true,
+            copyWithEmptySelection: true,
+            mergeUndoDeltas: true,
+            fixedWidthGutter: true,
           }}
         />
       </DialogContent>
