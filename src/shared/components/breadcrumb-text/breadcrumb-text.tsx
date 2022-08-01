@@ -1,14 +1,9 @@
 import { Link as RouterLink } from "react-router-dom";
-import Link, { LinkProps } from "@mui/material/Link";
-
+import Link from "@mui/material/Link";
 import * as S from "./styles";
+import { ILinkRouterProps } from "./types/ILinkRouterProps";
 
-interface LinkRouterProps extends LinkProps {
-  to: string;
-  replace?: boolean;
-}
-
-const LinkRouter = (props: LinkRouterProps) => (
+const LinkRouter = (props: ILinkRouterProps) => (
   <Link {...props} component={RouterLink as any} />
 );
 
@@ -16,7 +11,7 @@ type Props = {
   text: string;
   pathnames: string[];
   index: number;
-  params: (string | undefined)[];
+  params: string[];
 };
 
 export const BreadcrumbsText: React.FC<Props> = ({
@@ -26,7 +21,11 @@ export const BreadcrumbsText: React.FC<Props> = ({
   params,
 }) => {
   const last = index === pathnames.length - 1;
-  const to = `${pathnames.slice(0, index + 1).join("/")}`;
+  const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+
+  console.log(last)
+
+  console.log(to);
 
   function valueIsParam(value: string) {
     return params.includes(value);
@@ -37,15 +36,11 @@ export const BreadcrumbsText: React.FC<Props> = ({
   }
 
   if (last) {
-    return (
-      <S.NavTitle color="text.primary" key={to}>
-        {text}
-      </S.NavTitle>
-    );
+    return <S.NavTitle color="text.primary">{text}</S.NavTitle>;
   }
 
   return (
-    <LinkRouter underline="hover" color="inherit" to={to} key={to}>
+    <LinkRouter underline="hover" color="inherit" to={to}>
       {text}
     </LinkRouter>
   );

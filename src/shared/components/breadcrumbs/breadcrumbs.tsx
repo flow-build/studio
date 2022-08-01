@@ -7,7 +7,9 @@ export const BreadcrumbsNavigation = () => {
   const { id, process_id } = useParams();
 
   const pathnames = location.pathname.split("/").filter((x) => x);
-  console.log(pathnames)
+
+  console.log(location);
+  console.log(pathnames);
 
   return (
     <S.NavBreadcrumbs aria-label="breadcrumb">
@@ -17,7 +19,7 @@ export const BreadcrumbsNavigation = () => {
           text={value}
           index={index}
           pathnames={pathnames}
-          params={[id, process_id]}
+          params={[id as string, process_id as string]}
         />
       ))}
     </S.NavBreadcrumbs>
