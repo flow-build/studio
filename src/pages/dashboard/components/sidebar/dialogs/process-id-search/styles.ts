@@ -7,9 +7,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import Button from "@mui/material/Button";
 import DialogContentText from "@mui/material/DialogContentText";
-import { default as MuiStack} from "@mui/material/Stack";
-import { default as MuiChip} from "@mui/material/Chip";
-
+import { default as MuiStack } from "@mui/material/Stack";
+import { default as MuiChip } from "@mui/material/Chip";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -24,12 +23,12 @@ export const Input = styled(TextField).attrs({
   id: "outlined-required",
   label: "Process Id",
   required: true,
-  sx:{marginBottom: 3},
+  sx: { marginTop: 2 },
 })``;
 
 export const Dialog = styled(MuiDialog).attrs({
   fullWidth: true,
-  maxWidth:'sm',
+  maxWidth: "sm",
 })``;
 
 export const Title = styled(DialogTitle)``;
@@ -40,19 +39,19 @@ export const Content = styled(DialogContent)`
 `;
 
 export const CancelButton = styled(Button).attrs({
-  variant: 'text',
+  variant: "text",
 })``;
 
 export const SearchButton = styled(Button).attrs({
-  variant: 'contained',
+  variant: "contained",
 })``;
 
 export const DialogText = styled(DialogContentText)``;
 
 export const Stack = styled(MuiStack)`
-  direction:row;
+  direction: row;
 `;
 
 export const Chip = styled(MuiChip).attrs({
-  variant: 'outlined',
+  variant: "outlined",
 })``;
