@@ -56,9 +56,16 @@ export const ListProcesses: React.FC<Props> = ({
       <S.Content dividers>
         <List>
           {processes.map((process) => (
-            <ListItem disablePadding>
+            <ListItem key='process' disablePadding>
               <ListItemButton onClick={() => onClickListItemButton(process)}>
-                <ListItemText primary={process.id} secondary={process.status} />
+                <ListItemText
+                  primary={process.id}
+                  secondary={process.status}
+                ></ListItemText>
+                <ListItemText
+                  primary={process.created_at}
+                  secondary={process.state.node_id}
+                ></ListItemText>
                 <S.RightArrow />
               </ListItemButton>
             </ListItem>
