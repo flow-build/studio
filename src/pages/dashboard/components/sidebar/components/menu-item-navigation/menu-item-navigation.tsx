@@ -1,41 +1,44 @@
 import { Link } from "react-router-dom";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 
+import * as S from "../../styles";
 
 type Props = {
   pathname: string;
   isOpen: boolean;
   icon: string;
   name: string;
+  tooltip: string;
 };
 
-export const MenuItemNavigation: React.FC<Props> = ({ pathname, isOpen, icon, name }) => {
-
+export const MenuItemNavigation: React.FC<Props> = ({
+  pathname,
+  isOpen,
+  icon,
+  name,
+  tooltip,
+}) => {
   return (
     <Link to={pathname}>
-      <ListItemButton
-        sx={{
-          minHeight: 48,
-          justifyContent: isOpen ? "initial" : "center",
-          px: 2.5,
-        }}
-      >
-        <ListItemIcon
+      <S.TooltipIcon title={!isOpen ? tooltip : ""}>
+        <S.MenuItem
           sx={{
-            minWidth: 0,
-            mr: isOpen ? 3 : "auto",
-            justifyContent: "center",
+            minHeight: 48,
+            justifyContent: isOpen ? "initial" : "center",
+            px: 2.5,
           }}
         >
-          {icon}
-        </ListItemIcon>
-        <ListItemText
-          primary={name}
-          sx={{ opacity: isOpen ? 1 : 0 }}
-        />
-      </ListItemButton>
+          <S.MenuIcon
+            sx={{
+              minWidth: 0,
+              mr: isOpen ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            {icon}
+          </S.MenuIcon>
+          <S.MenuText primary={name} sx={{ opacity: isOpen ? 1 : 0 }} />
+        </S.MenuItem>
+      </S.TooltipIcon>
     </Link>
   );
 };

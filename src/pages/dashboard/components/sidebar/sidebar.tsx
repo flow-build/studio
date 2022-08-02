@@ -13,6 +13,7 @@ import { MenuItemNavigation } from "./components/menu-item-navigation/menu-item-
 import { MenuItemAction } from "./components/menu-item-action/menu-item-action";
 import { ProcessIdSearch } from "./dialogs/process-id-search";
 
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -71,9 +72,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     <>
       <Drawer variant="permanent" open={isOpen}>
         <DrawerHeader />
-
         <Divider />
-
         <List>
           {sidebar.menuItems.map((menuItem, index) =>
             menuItem.type === TypeMenuItem.NAVIGATION ? (
@@ -83,6 +82,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
                 isOpen={isOpen}
                 icon={menuItem.icon}
                 name={menuItem.name}
+                tooltip={menuItem.tooltip}
               />
             ) : (
               <MenuItemAction
@@ -91,6 +91,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
                 isOpen={isOpen}
                 icon={menuItem.icon}
                 name={menuItem.name}
+                tooltip={menuItem.tooltip}
               />
             )
           )}
