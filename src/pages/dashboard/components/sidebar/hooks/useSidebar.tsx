@@ -11,6 +11,7 @@ interface IMenuItem {
   icon: any;
   type: TypeMenuItem;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  tooltip: string;
 }
 
 export function useSidebar() {
@@ -31,18 +32,21 @@ export function useSidebar() {
         pathname: "workflows",
         icon: <SchemaIcon />,
         type: TypeMenuItem.NAVIGATION,
+        tooltip: "Workflows",
       },
       {
         name: "Comparar States",
         pathname: "compare-json",
         icon: <CompareArrowsIcon />,
         type: TypeMenuItem.NAVIGATION,
+        tooltip: "Comparar States",
       },
       {
         name: "Buscar",
         onClick: openSearchDialog,
         icon: <SearchIcon />,
         type: TypeMenuItem.OPEN_DIALOG,
+        tooltip: "Buscar",
       },
     ] as IMenuItem[];
   }, []);
