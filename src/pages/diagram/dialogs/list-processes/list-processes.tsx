@@ -47,7 +47,7 @@ export const ListProcesses: React.FC<Props> = ({
     if (isOpen) {
       request();
     }
-  });
+  }, [isOpen, workflowId]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
