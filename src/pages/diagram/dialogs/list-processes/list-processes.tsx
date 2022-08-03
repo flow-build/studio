@@ -12,6 +12,7 @@ import { TProcess } from "models/process";
 import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
 
 import * as S from "./styles";
+import { getLongFormatByDate } from "./../../../../shared/utils/date";
 
 type Props = {
   isOpen: boolean;
@@ -58,7 +59,16 @@ export const ListProcesses: React.FC<Props> = ({
           {processes.map((process) => (
             <ListItem disablePadding>
               <ListItemButton onClick={() => onClickListItemButton(process)}>
-                <ListItemText primary={process.id} secondary={process.status} />
+                <ListItemText
+                  primary={process.id}
+                  secondary={
+                    <React.Fragment>
+                      <S.ListText>{process.state.node_id} </S.ListText>-{" "}
+                      {getLongFormatByDate(process.created_at)}
+                    </React.Fragment>
+                  }
+                />
+
                 <S.RightArrow />
               </ListItemButton>
             </ListItem>
