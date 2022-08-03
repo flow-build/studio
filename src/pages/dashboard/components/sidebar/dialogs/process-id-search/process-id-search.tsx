@@ -31,6 +31,7 @@ export const ProcessIdSearch: React.FC<Props> = ({ isOpen, onClose }) => {
 
   async function handleClickProcessId() {
     const response = await listStatesByProcessId(payload.processId);
+
     dispatch(setProcessSelected(response));
 
     navigate(`/dashboard/workflows/${response.workflow_id}/diagram`);
