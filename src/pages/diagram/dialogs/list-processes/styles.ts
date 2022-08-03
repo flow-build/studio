@@ -6,6 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Typography } from "@mui/material";
 
 export const Wrapper = styled(Dialog).attrs({
   "aria-labelledby": "List process dialog",
@@ -20,5 +21,11 @@ export const Title = styled(DialogTitle)``;
 export const Text = styled(DialogContentText)``;
 
 export const Content = styled(DialogContent)``;
+
+export const ListText = styled(Typography).attrs({
+  component: "span",
+  variant: "body2",
+  color: "textPrimary",
+})``;
 
 export const RightArrow = styled(ArrowForwardIosIcon)``;
