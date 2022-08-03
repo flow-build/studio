@@ -64,6 +64,7 @@ export const ListProcesses: React.FC<Props> = ({
                   secondary={
                     <React.Fragment>
                       <S.ListText>{process.state.node_id} </S.ListText>-{" "}
+                      {process.status} -{" "}
                       {getLongFormatByDate(process.created_at)}
                     </React.Fragment>
                   }
