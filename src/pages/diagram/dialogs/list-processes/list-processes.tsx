@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Button from "@mui/material/Button";
-import DialogActions from "@mui/material/DialogActions";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -51,7 +49,10 @@ export const ListProcesses: React.FC<Props> = ({
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
-      <S.Title>Lista de processos</S.Title>
+      <S.Title>
+        Lista de processos
+        <S.CloseButton onClick={onClose} />
+      </S.Title>
 
       <S.Content dividers>
         <List>
@@ -65,13 +66,6 @@ export const ListProcesses: React.FC<Props> = ({
           ))}
         </List>
       </S.Content>
-
-      <DialogActions>
-        <Button onClick={onClose}>Disagree</Button>
-        <Button onClick={onClose} autoFocus>
-          Agree
-        </Button>
-      </DialogActions>
     </S.Wrapper>
   );
 };
