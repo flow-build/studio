@@ -5,9 +5,9 @@ import _debounce from "lodash/debounce";
 import { ModeView } from "constants/mode-view";
 
 import { TPayload } from "shared/components/content-header/types/TPayload";
+import { BreadcrumbsNavigation } from "shared/components/breadcrumbs";
 
 import * as S from "./styles";
-import { BreadcrumbsNavigation } from "shared/components/breadcrumbs";
 
 type TButtonProps = {
   hasButton?: boolean;
