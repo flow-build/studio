@@ -13,13 +13,12 @@ import { useTable } from "pages/processes/hooks/useTable";
 import { TProcess } from "models/process";
 import { TWorkflow } from "models/workflow";
 
-import { listByProcessId } from "services/resources/processes/list-by-process-id";
+import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
 import { ContentHeader } from "shared/components/content-header";
 
 import * as S from "./styles";
-
 
 type TPayload = {
   processes: TProcess[] | null;
@@ -38,7 +37,7 @@ export const Processes: React.FC<{}> = () => {
   const table = useTable(payload.processes ?? []);
 
   const getProcessesInformation = useCallback(async (workflowId: string) => {
-    const response = await listByProcessId(workflowId);
+    const response = await listByWorkflowId(workflowId);
     return response;
   }, []);
 

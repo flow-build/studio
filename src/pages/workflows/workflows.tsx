@@ -18,8 +18,6 @@ import { RootState } from "store";
 import { resetFilter, updateFilter } from "store/slices/workflow-page";
 
 import * as S from "./styles";
-import { IconButton } from "shared/components/icon-button";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 export const Workflows: React.FC = () => {
   const dispatch = useDispatch();
