@@ -140,6 +140,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
+          workflowId={workflowId ?? ""}
           isOpen={diagramPageState.propertiesDialog.isVisible}
           onClose={() =>
             dispatch(setShowPropertiesDialog({ isVisible: false }))

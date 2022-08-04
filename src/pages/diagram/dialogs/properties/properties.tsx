@@ -6,18 +6,18 @@ import _isEqual from "lodash/isEqual";
 
 import Box from "@mui/material/Box";
 
-import { getWorkflowByName } from "services/resources/workflows/get-by-name";
-
 import { RootState } from "store";
 
 import * as S from "./styles";
+import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
+  workflowId: string;
 };
 
-export const Properties: FC<Props> = ({ isOpen, onClose }) => {
+export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
   const [properties, setProperties] = useState({
     category: undefined,
     parameters: undefined,
@@ -32,7 +32,7 @@ export const Properties: FC<Props> = ({ isOpen, onClose }) => {
       const element = propertiesDialog.data.element;
       const elementId = element.id.replace("Node_", "");
 
-      const workflow = await getWorkflowByName("pizza2");
+      const workflow = await listWorkflowById(workflowId);
 
       const nodeSelected = workflow.blueprint_spec.nodes.find((node: any) =>
         _isEqual(node.id, elementId)
@@ -44,8 +44,10 @@ export const Properties: FC<Props> = ({ isOpen, onClose }) => {
       });
     };
 
-    request();
-  }, [propertiesDialog.data.element]);
+    if (workflowId) {
+      request();
+    }
+  }, [propertiesDialog.data.element, workflowId]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>

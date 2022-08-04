@@ -8,8 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 
 import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-dracula";
 
 import { IconButton } from "shared/components/icon-button";
 
@@ -37,14 +36,18 @@ export const Text = styled(DialogContentText)``;
 export const Content = styled(DialogContent)``;
 
 export const Editor = styled(AceEditor).attrs({
-  mode: "javascript",
-  theme: "github",
+  mode: "json",
+  theme: "dracula",
   name: "custom:parameters",
   width: "100%",
   fontSize: 16,
   readOnly: true,
-  showPrintMargin: true,
-  showGutter: true,
-  highlightActiveLine: true,
-  wrapEnabled: true,
+  setOptions: {
+    showPrintMargin: false,
+    showGutter: true,
+    highlightActiveLine: true,
+    copyWithEmptySelection: true,
+    mergeUndoDeltas: true,
+    fixedWidthGutter: true,
+  },
 })``;
