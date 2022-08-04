@@ -9,6 +9,8 @@ import { TProcess } from "models/process";
 
 import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
 
+import { getLongFormatByDate } from "shared/utils/date";
+
 import * as S from "./styles";
 
 type Props = {
@@ -36,6 +38,13 @@ export const ListProcesses: React.FC<Props> = ({
     }
   }
 
+  function getSubtitle(process: TProcess) {
+    const createdAt = getLongFormatByDate(process.created_at);
+    const { state, status } = process;
+
+    return `${state.node_id} - ${status} - ${createdAt}`;
+  }
+
   useEffect(() => {
     const request = async () => {
       const response = await listByWorkflowId(workflowId);
@@ -59,7 +68,10 @@ export const ListProcesses: React.FC<Props> = ({
           {processes.map((process) => (
             <ListItem disablePadding>
               <ListItemButton onClick={() => onClickListItemButton(process)}>
-                <ListItemText primary={process.id} secondary={process.status} />
+                <ListItemText
+                  primary={process.id}
+                  secondary={getSubtitle(process)}
+                />
                 <S.RightArrow />
               </ListItemButton>
             </ListItem>
