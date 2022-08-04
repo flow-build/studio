@@ -1,149 +1,170 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
-import { useDiagram } from 'pages/diagram/hooks/useDiagram'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import { toggleProcessDrawer } from 'pages/diagram/features/bpmnSlice'
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import "pages/diagram/styles/bpmnStyles.css"
+import ListIcon from "@mui/icons-material/ListOutlined";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import InfoIcon from "@mui/icons-material/Info";
 
-import extraPropertiesModeler from 'pages/diagram/bpmn/extraProperties'
-import { useGetWorkflowDiagramQuery, useGetWorkflowsQuery } from 'pages/diagram/services/workflowService'
+import _isEmpty from "lodash/isEmpty";
 
+import { TProcess } from "models/process";
+
+import { useDiagram } from "pages/diagram/hooks/useDiagram";
+import { usePaint } from "pages/diagram/hooks/usePaint";
+
+import { getHistoryByProcessId } from "services/resources/processes/history";
+
+import { Fab } from "shared/components/fab";
+
+import { RootState } from "store";
+
+import * as S from "./styles";
+import { IAction } from "shared/components/fab/types/IAction";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  Box,
-  Button,
-  CircularProgress,
-  Tooltip,
-  Typography,
-  Stack,
-  Grid
-} from '@mui/material'
-import { ZoomInOutlined, ZoomOutOutlined } from '@mui/icons-material'
+  setProcessSelected,
+  setShowConfirmationDialog,
+  setShowProcessInfoDialog,
+  setShowPropertiesDialog,
+} from "store/slices/diagram";
 
+type Props = {};
 
-import { DrawOnDiagram } from 'pages/diagram/components/draw-on-diagram'
-import { DiagramPanel } from 'pages/diagram/components/panel'
-import { ProcessDrawer } from 'pages/diagram/components/process-drawer'
-import { SidebarSearch } from 'pages/diagram/components/sidebar-search'
-import { ProcessStateDialog } from 'pages/diagram/components/process-state-dialog'
+export const DiagramRefactored: React.FC<Props> = () => {
+  const { workflowId } = useParams();
+  const diagramPageState = useSelector((state: RootState) => state.diagramPage);
+  const diagram = useDiagram();
+  const paint = usePaint();
 
-export const Diagram = () => {
-  const dispatch = useDispatch()
-  const { id } = useParams()
-  const { handleZoomIn, handleZoomOut, handleOnSaveXML, handleDrawOnDiagram } = useDiagram()
-  const theme = useTheme()
+  const dispatch = useDispatch();
 
-  const { data: diagram, isFetching } = useGetWorkflowDiagramQuery(id)
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { workflow } = useGetWorkflowsQuery(undefined, {
-    selectFromResult: ({ data }: any) => ({
-      workflow: data?.find((workflow: any) => workflow.workflow_id === id)
-    })
-  })
+  const actions = getActions();
 
-  const container = useRef(null)
+  function getActions(): IAction[] {
+    const arr = [
+      {
+        icon: <ListIcon />,
+        tooltip: "Listar processos",
+        onClick: () => setIsOpen(true),
+      },
+      {
+        icon: <FileDownloadIcon />,
+        tooltip: "Download XML",
+        onClick: () => diagram.downloadXML(diagram.modeler),
+      },
+      {
+        icon: <CleaningServicesIcon />,
+        tooltip: "Resetar cor",
+        onClick: resetColor,
+      },
+    ];
 
-  const [modeler, setModeler] = useState<any>(null)
-
-  const handleGetWorkflowDiagram = async (data?: any) => {
-    if (isFetching) return
-
-    if (modeler) {
-      modeler.destroy()
+    if (!_isEmpty(diagramPageState.processSelected)) {
+      arr.push({
+        icon: <InfoIcon />,
+        tooltip: "Informações do processo",
+        onClick: () => dispatch(setShowProcessInfoDialog({ isVisible: true })),
+      });
     }
 
-    const model = extraPropertiesModeler(container.current, {
-      bpmnRenderer: {
-        defaultFillColor: theme?.palette?.background?.default,
-        defaultStrokeColor: theme?.palette?.common?.white
-      }
-    })
-
-    await model.importXML(diagram)
-
-    if (data) {
-      handleDrawOnDiagram(model, data)
-    }
-
-    setModeler(model)
+    return arr;
   }
 
-  const handleToggleProcessDrawer = () => dispatch(toggleProcessDrawer(true)) 
+  function resetColor() {
+    dispatch(setProcessSelected(undefined));
+    const modeling = diagram.modeler.get("modeling");
+    paint.elementsByDefault({
+      modeling,
+      elements: diagram.initialElements,
+    });
+  }
+
+  async function onSelectItem(process: TProcess) {
+    resetColor();
+    dispatch(setProcessSelected(process));
+  }
+
   useEffect(() => {
-    handleGetWorkflowDiagram()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, diagram])
+    if (!_isEmpty(workflowId)) {
+      diagram.loadDiagram(workflowId ?? "");
+    }
+  }, [diagram, workflowId]);
 
- 
-  const handleCleanButton = () => {
-    handleGetWorkflowDiagram()
-  } 
+  useEffect(() => {
+    const paintElementsByProcessId = async () => {
+      if (!_isEmpty(diagramPageState.processSelected)) {
+        const history = await getHistoryByProcessId(
+          diagramPageState.processSelected?.id as string
+        );
+        const orderedStates = history.reverse();
 
+        const modeling = diagram.modeler.get("modeling");
+        const elementRegistry = diagram.modeler.get("elementRegistry");
 
-  if (isFetching) return (
-    <Box sx={{
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }} >
-      <CircularProgress />
-    </Box>
-  )
+        paint.elementsByDefault({
+          modeling,
+          elements: diagram.initialElements,
+        });
+
+        paint.elementsByStates({
+          elements: elementRegistry.getAll(),
+          modeling,
+          states: orderedStates,
+        });
+      }
+    };
+
+    paintElementsByProcessId();
+  }, [
+    diagram.initialElements,
+    diagram.modeler,
+    diagramPageState.processSelected,
+    paint,
+  ]);
 
   return (
-    <Grid container spacing={1}>
-      <Grid
-        item
-        xs={12}
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: '5px 10px'
-        }}
-      >
-        <Typography variant="h5" component="h2">{workflow?.name || 'Diagrama'}</Typography>
-        <Stack direction="row" spacing={1}>
-          <SidebarSearch />
-          <Tooltip title="Zoom In">
-            <Button variant="outlined" onClick={() => handleZoomIn(modeler)}>
-              <ZoomInOutlined />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Zoom out">
-            <Button variant="outlined" onClick={() => handleZoomOut(modeler)}>
-              <ZoomOutOutlined />
-            </Button>
-          </Tooltip>
-          <Button variant='contained' onClick={handleCleanButton}>Limpar</Button>
-          <Button variant='contained' onClick={handleToggleProcessDrawer} >Listar Processos</Button>
-          <Button variant='contained' onClick={() => handleOnSaveXML(modeler)}>Download XML</Button>
-        </Stack>
-      </Grid>
+    <>
+      <S.Wrapper ref={diagram.bpmn as any}>
+        <Fab actions={actions} />
+      </S.Wrapper>
 
-      <Grid
-        item
-        xs={12}
-        ref={container}
-        sx={{
-          height: 'calc(100vh - 140px)',
-          position: 'relative'
-        }}
+      <S.ListProcessesDialog
+        workflowId={workflowId ?? ""}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onSelectItem={onSelectItem}
       />
 
-      <Grid item xs={12}>
-        <DiagramPanel modeler={modeler} />
-      </Grid>
+      {diagramPageState.propertiesDialog.isVisible && (
+        <S.PropertiesDialog
+          isOpen={diagramPageState.propertiesDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowPropertiesDialog({ isVisible: false }))
+          }
+        />
+      )}
 
-      <ProcessDrawer generateDiagram={handleGetWorkflowDiagram} />
-      <DrawOnDiagram modeler={modeler} />
+      {diagramPageState.confirmationDialog.isVisible && (
+        <S.ConfirmationDialog
+          isOpen={diagramPageState.confirmationDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowConfirmationDialog({ isVisible: false }))
+          }
+        />
+      )}
 
-      <ProcessStateDialog generateDiagram={handleGetWorkflowDiagram} />
-    </Grid>
-  )
-}
+      {diagramPageState.processInfoDialog.isVisible && (
+        <S.ProcessInfoDialog
+          isOpen={diagramPageState.processInfoDialog.isVisible}
+          process={diagramPageState.processSelected as TProcess}
+          onClose={() =>
+            dispatch(setShowProcessInfoDialog({ isVisible: false }))
+          }
+        />
+      )}
+    </>
+  );
+};

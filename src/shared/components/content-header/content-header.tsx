@@ -1,58 +1,67 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import _debounce from 'lodash/debounce'
+import _debounce from "lodash/debounce";
 
-import { ModeView } from 'constants/mode-view';
+import { ModeView } from "constants/mode-view";
 
-import { TPayload } from 'shared/components/content-header/types/TPayload';
+import { TPayload } from "shared/components/content-header/types/TPayload";
+import { BreadcrumbsNavigation } from "shared/components/breadcrumbs";
 
-import * as S from './styles'
+import * as S from "./styles";
 
 type TButtonProps = {
   hasButton?: boolean;
   onButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+};
 
 type TButtonModeView = {
   initialModeView?: ModeView;
   onChangeModeView?: (newModelView: ModeView) => void;
-}
+};
 
 type TInput = {
   hasInput?: boolean;
   inputLabel?: string;
-  onChangeInput?: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
-}
+  onChangeInput?: (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+};
 
-type Props = TButtonProps & TButtonModeView & TInput & {
-  title: string;
-  subtitle?: string;
-  showToggle?: boolean;
-}
+type Props = TButtonProps &
+  TButtonModeView &
+  TInput & {
+    title: string;
+    subtitle?: string;
+    showToggle?: boolean;
+  };
 
 export const ContentHeader: React.FC<Props> = ({
   title,
   subtitle,
   hasButton = true,
-  onButtonClick = () => { },
+  onButtonClick = () => {},
   initialModeView = ModeView.LIST,
-  onChangeModeView = () => { },
+  onChangeModeView = () => {},
   hasInput = true,
-  inputLabel = '',
-  onChangeInput = () => { },
-  showToggle = true
+  inputLabel = "",
+  onChangeInput = () => {},
+  showToggle = true,
 }) => {
   const [payload, setPayload] = useState<TPayload>({
-    modeview: initialModeView
-  })
+    modeview: initialModeView,
+  });
 
-  const onChangeToggle = useCallback((_, newModeView: ModeView) => {
-    setPayload(prev => ({ ...prev, modeview: newModeView }));
-    onChangeModeView(newModeView);
-  }, [onChangeModeView])
+  const onChangeToggle = useCallback(
+    (_, newModeView: ModeView) => {
+      setPayload((prev) => ({ ...prev, modeview: newModeView }));
+      onChangeModeView(newModeView);
+    },
+    [onChangeModeView]
+  );
 
   return (
     <S.Wrapper>
+      <BreadcrumbsNavigation />
       <S.Row>
         <S.InfoContent>
           <S.Title>{title}</S.Title>
@@ -60,11 +69,7 @@ export const ContentHeader: React.FC<Props> = ({
         </S.InfoContent>
 
         {hasButton && (
-          <S.Button
-            title='Novo'
-            variant='outlined'
-            onClick={onButtonClick}
-          />
+          <S.Button title="Novo" variant="outlined" onClick={onButtonClick} />
         )}
       </S.Row>
 
@@ -90,5 +95,5 @@ export const ContentHeader: React.FC<Props> = ({
         )}
       </S.Row>
     </S.Wrapper>
-  )
-}
+  );
+};
