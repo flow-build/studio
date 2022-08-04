@@ -34,4 +34,3 @@ export const Text = styled(DialogContentText)``;
 export const Content = styled(DialogContent)``;
 
 export const RightArrow = styled(ArrowForwardIosIcon)``;
-
