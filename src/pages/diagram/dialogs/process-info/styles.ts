@@ -12,8 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { IconButton } from "shared/components/icon-button";
 
 import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-dracula";
 
 export const Wrapper = styled(Dialog).attrs({
   "aria-labelledby": "Show process' info",
@@ -47,14 +46,21 @@ export const OkButton = styled(Button).attrs({
 })``;
 
 export const Editor = styled(AceEditor).attrs({
-  mode: "javascript",
-  theme: "github",
+  mode: "json",
+  theme: "dracula",
   name: "custom:parameters",
   width: "100%",
   fontSize: 16,
   readOnly: true,
-  showPrintMargin: true,
-  showGutter: true,
-  highlightActiveLine: true,
-  wrapEnabled: true,
-})``;
+  setOptions: {
+    showPrintMargin: false,
+    showGutter: true,
+    highlightActiveLine: true,
+    wrapEnabled: true,
+    copyWithEmptySelection: true,
+    mergeUndoDeltas: true,
+    fixedWidthGutter: true,
+  },
+})`
+  margin-top: 10px;
+`;
