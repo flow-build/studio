@@ -10,23 +10,22 @@ export const TableContent: React.FC<Props> = ({
   title,
   copyValue,
   editorValue,
-}) => { 
+}) => {
   function onClickCopy() {
-    navigator.clipboard.writeText(
-      JSON.stringify(copyValue, null, "\t")
-    );
+    navigator.clipboard.writeText(JSON.stringify(copyValue, null, "\t"));
   }
+
   return (
     <>
       <S.BoxTable>
         <S.TitleTable>{title}</S.TitleTable>
-        <S.TooltipIcon title={"copiar"}>
-          <S.CopyIcon
-            onClick={onClickCopy}
-          >
+
+        <S.TooltipIcon title="copiar">
+          <S.CopyIcon onClick={onClickCopy}>
             <S.CopyOutlinedIcon />
           </S.CopyIcon>
         </S.TooltipIcon>
+
         <S.Table>
           <S.TableBody>
             <S.TableRow>

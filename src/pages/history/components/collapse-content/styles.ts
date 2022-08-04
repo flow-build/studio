@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import { TableContent } from "pages/history/components/table-content";
+
 export const BoxTable = styled(Box).attrs({
   margin: 1,
   mr: 6,
@@ -25,5 +27,4 @@ export const TextTable = styled(Typography).attrs({
   component: "p",
 })``;
 
-
-
+export const Content = styled(TableContent)``;

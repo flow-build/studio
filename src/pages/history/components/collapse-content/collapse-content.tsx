@@ -1,7 +1,6 @@
 import _isEmpty from "lodash/isEmpty";
 
 import { TState } from "models/state";
-import { TableContent } from "../table-content";
 
 import * as S from "./styles";
 
@@ -21,13 +20,15 @@ export const CollapseContent: React.FC<Props> = ({ state }) => {
 
   return (
     <>
-      <TableContent title="Bag" copyValue={state.bag} editorValue={state.bag} />
-      <TableContent
+      <S.Content title="Bag" copyValue={state.bag} editorValue={state.bag} />
+
+      <S.Content
         title="Result"
         copyValue={state.result}
         editorValue={state.result}
       />
-      <TableContent
+
+      <S.Content
         title="Actor data"
         copyValue={state.actor_data}
         editorValue={state.actor_data}

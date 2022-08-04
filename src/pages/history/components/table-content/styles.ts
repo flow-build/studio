@@ -1,19 +1,19 @@
 import styled from "styled-components";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import MuiTable from "@mui/material/Table";
-import MuiTableCell from "@mui/material/TableCell";
-import MuiTableBody from "@mui/material/TableBody";
-import MuiTableHead from "@mui/material/TableHead";
-import MuiTableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import AceEditor from "react-ace/";
+
+import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-dracula";
-import "ace-builds/src-noconflict/ace";
+
+import Box from "@mui/material/Box";
+import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import IconButton from "@mui/material/IconButton";
+import MuiTable from "@mui/material/Table";
+import MuiTableBody from "@mui/material/TableBody";
+import MuiTableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 export const BoxTable = styled(Box).attrs({
   margin: 1,
@@ -39,11 +39,8 @@ export const TooltipIcon = styled(Tooltip)``;
 export const Table = styled(MuiTable)`
   size: "small";
 `;
-export const TableCell = styled(MuiTableCell)``;
 
 export const TableBody = styled(MuiTableBody)``;
-
-export const TableHead = styled(MuiTableHead)``;
 
 export const TableRow = styled(MuiTableRow)``;
 
