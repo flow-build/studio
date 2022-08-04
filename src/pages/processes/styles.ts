@@ -16,7 +16,7 @@ export const TableContainer = styled(Grid).attrs({
   item: true,
   xs: 12,
 })`
-  height: calc(100% - 145px);
+  height: calc(100% - 195px);
   overflow-y: auto;
 `;
 
