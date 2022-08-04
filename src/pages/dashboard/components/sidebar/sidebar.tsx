@@ -98,10 +98,12 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
         </List>
       </Drawer>
 
-      <ProcessIdSearch
-        isOpen={sidebar.isOpenDialog}
-        onClose={sidebar.onCloseDialog}
-      />
+      {sidebar.isOpenDialog && (
+        <ProcessIdSearch
+          isOpen={sidebar.isOpenDialog}
+          onClose={sidebar.onCloseDialog}
+        />
+      )}
     </>
   );
 };
