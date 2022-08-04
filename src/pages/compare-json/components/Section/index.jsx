@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
@@ -16,6 +15,7 @@ import Box from "@mui/material/Box";
 import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyContent";
 
 import { Tree } from "pages/compare-json/components/Tree";
+import { api } from "services/api";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -30,7 +30,6 @@ export const Section = ({
   onSearch = () => {},
   data = [],
 }) => {
-  const dispatch = useDispatch();
   const [payload, setPayload] = useState({
     processId: "",
     step: "",
@@ -47,26 +46,21 @@ export const Section = ({
         return !isNaN(str) && !isNaN(parseFloat(str));
       };
 
-      let endpoint;
-      let param;
+      let response;
 
       if (isNumber(step)) {
-        // endpoint = workflowService.endpoints.getStateByStepNumber;
-        param = { stepNumber: step };
+        const URL = `/states/process/${processId}?stepNumber=${step}`;
+        response = await api.get(URL);
       } else {
         // endpoint = workflowService.endpoints.getStateByNodeId;
-        param = { nodeId: step };
+        // param = { nodeId: step };
       }
-
-      const response = await dispatch(
-        endpoint.initiate({ processId, ...param })
-      );
 
       if (!_isUndefined(response) && !_isUndefined(onSearch)) {
         onSearch(JSON.stringify(response.data));
       }
     },
-    [dispatch, onSearch]
+    [onSearch]
   );
 
   return (
