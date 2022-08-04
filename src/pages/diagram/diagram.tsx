@@ -104,6 +104,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         const modeling = diagram.modeler.get("modeling");
         const elementRegistry = diagram.modeler.get("elementRegistry");
 
+        paint.elementsByDefault({
+          modeling,
+          elements: diagram.initialElements,
+        });
+
         paint.elementsByStates({
           elements: elementRegistry.getAll(),
           modeling,
@@ -113,7 +118,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
     };
 
     paintElementsByProcessId();
-  }, [diagram.modeler, diagramPageState.processSelected, paint]);
+  }, [
+    diagram.initialElements,
+    diagram.modeler,
+    diagramPageState.processSelected,
+    paint,
+  ]);
 
   return (
     <>

@@ -31,6 +31,7 @@ export const ProcessIdSearch: React.FC<Props> = ({ isOpen, onClose }) => {
 
   async function handleClickProcessId() {
     const response = await listStatesByProcessId(payload.processId);
+
     dispatch(setProcessSelected(response));
 
     navigate(`/dashboard/workflows/${response.workflow_id}/diagram`);
@@ -40,12 +41,18 @@ export const ProcessIdSearch: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <S.Dialog open={isOpen} onClose={onClose}>
       <S.Title>Consultar </S.Title>
+
       <S.Content>
+        <S.DialogText>
+          Insira o id do processo a qual deseja ver as informações
+        </S.DialogText>
+
         <S.Input
           value={payload?.processId}
           onChange={(event) => onChangePayload(event.target.value, "processId")}
         />
       </S.Content>
+
       <DialogActions>
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         <S.SearchButton onClick={handleClickProcessId}>

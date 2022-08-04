@@ -1,17 +1,17 @@
 import React from "react";
-
-import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
-
-// import * as S from './styles'
+import { Link } from "react-router-dom";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
-import MuiDrawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import MuiDrawer from "@mui/material/Drawer";
+
 import { TypeMenuItem } from "constants/type-menu-item";
-import { MenuItemNavigation } from "./components/menu-item-navigation/menu-item-navigation";
-import { MenuItemAction } from "./components/menu-item-action/menu-item-action";
-import { ProcessIdSearch } from "./dialogs/process-id-search";
+
+import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
+import { ProcessIdSearch } from "pages/dashboard/components/sidebar/dialogs/process-id-search";
+
+import * as S from "./styles";
 
 const drawerWidth = 240;
 
@@ -71,36 +71,38 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     <>
       <Drawer variant="permanent" open={isOpen}>
         <DrawerHeader />
-
         <Divider />
-
         <List>
           {sidebar.menuItems.map((menuItem, index) =>
             menuItem.type === TypeMenuItem.NAVIGATION ? (
-              <MenuItemNavigation
-                key={index.toString()}
-                pathname={menuItem.pathname}
-                isOpen={isOpen}
-                icon={menuItem.icon}
-                name={menuItem.name}
-              />
+              <Link key={index.toString()} to={menuItem.pathname}>
+                <S.MenuItem
+                  isOpen={isOpen}
+                  icon={menuItem.icon}
+                  name={menuItem.name}
+                  tooltip={menuItem.tooltip}
+                />
+              </Link>
             ) : (
-              <MenuItemAction
-                onClick={menuItem.onClick}
+              <S.MenuItem
                 key={index.toString()}
+                onClick={menuItem.onClick}
                 isOpen={isOpen}
                 icon={menuItem.icon}
                 name={menuItem.name}
+                tooltip={menuItem.tooltip}
               />
             )
           )}
         </List>
       </Drawer>
 
-      <ProcessIdSearch
-        isOpen={sidebar.isOpenDialog}
-        onClose={sidebar.onCloseDialog}
-      />
+      {sidebar.isOpenDialog && (
+        <ProcessIdSearch
+          isOpen={sidebar.isOpenDialog}
+          onClose={sidebar.onCloseDialog}
+        />
+      )}
     </>
   );
 };
