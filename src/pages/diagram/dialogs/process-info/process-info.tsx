@@ -49,8 +49,19 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
         <S.Text>Node id: {process.state.node_id}</S.Text>
         <S.Text>Step: {process.state.step_number}</S.Text>
 
-        <S.Text>Result</S.Text>
-        <S.Editor value={JSON.stringify(payload?.state.result, null, "\t")} />
+        <S.Editor
+          value={JSON.stringify(
+            {
+              current_status: payload?.state?.status,
+              step_number: payload?.state?.step_number,
+              bag: payload?.state?.bag,
+              result: payload?.state?.result,
+              environment: payload?.state?.environment ?? null,
+            },
+            null,
+            "\t"
+          )}
+        />
       </S.Content>
 
       <S.ActionsContainer>
