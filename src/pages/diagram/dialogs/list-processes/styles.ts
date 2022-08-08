@@ -7,11 +7,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
+
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import Stack from "@mui/material/Stack";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+
 import { IconButton } from "shared/components/icon-button";
 import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
 
 export const Wrapper = styled(Dialog).attrs({
   "aria-labelledby": "List process dialog",
@@ -20,13 +24,27 @@ export const Wrapper = styled(Dialog).attrs({
   fullWidth: true,
   maxWidth: "md",
 })``;
-
 export const InputContainer = styled("div")``;
 
-export const Provider = styled(LocalizationProvider)``;
-export const StackDate = styled(Stack)``;
-export const DatePicker = styled(StaticDatePicker)``;
-export const InputDate = styled(TextField)``;
+export const Provider = styled(LocalizationProvider).attrs({
+  dateAdapter: AdapterDateFns,
+})``;
+
+export const DatePicker = styled(DesktopDatePicker)``;
+
+export const InputDate = styled(TextField)`
+  /* background-color: green; */
+  width: 14rem;
+`;
+export const DateContainer = styled("div")`
+  /* background-color: red; */
+  width: 35rem;
+  display: flex;
+  justify-content: space-around;
+  margin-left: 0.2rem;
+  margin-bottom: 1rem;
+`;
+
 export const Title = styled(DialogTitle)`
   display: flex;
   align-items: center;
@@ -45,6 +63,12 @@ export const InputProcess = styled(TextField).attrs({
 export const CloseButton = styled(IconButton).attrs({
   icon: CloseIcon,
   ariaLabel: "close",
+})``;
+
+export const SearchButton = styled(IconButton).attrs({
+  icon: SearchIcon,
+  ariaLabel: "search",
+  tooltip: "pesquisar",
 })``;
 
 export const Text = styled(DialogContentText)``;
