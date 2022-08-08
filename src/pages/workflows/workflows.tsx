@@ -62,6 +62,7 @@ export const Workflows: React.FC = () => {
       <ContentHeader
         title="Workflows"
         inputLabel="Nome / ID"
+        buttonTitle="Novo"
         onChangeModeView={onChangeModeView}
         onChangeInput={onFilter}
       />
