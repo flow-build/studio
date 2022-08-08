@@ -11,6 +11,7 @@ import * as S from "./styles";
 
 type TButtonProps = {
   hasButton?: boolean;
+  buttonTitle?: string;
   onButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -46,6 +47,7 @@ export const ContentHeader: React.FC<Props> = ({
   inputLabel = "",
   onChangeInput = () => {},
   showToggle = true,
+  buttonTitle = "",
 }) => {
   const [payload, setPayload] = useState<TPayload>({
     modeview: initialModeView,
@@ -69,7 +71,7 @@ export const ContentHeader: React.FC<Props> = ({
         </S.InfoContent>
 
         {hasButton && (
-          <S.Button title="Novo" variant="outlined" onClick={onButtonClick} />
+          <S.Button title={buttonTitle} variant="outlined" onClick={onButtonClick} />
         )}
       </S.Row>
 

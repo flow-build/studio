@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 
@@ -22,14 +22,14 @@ export const History: React.FC<{}> = () => {
 
   const table = useTable(history ?? []);
 
-  useEffect(() => {
-    const request = async () => {
-      const response = await getHistoryByProcessId(process_id ?? "");
-      setHistory(response.reverse());
-    };
+  const request = useCallback(async () => {
+    const response = await getHistoryByProcessId(process_id ?? "");
+    setHistory(response.reverse());
+  },[process_id]);
 
+  useEffect(() => {
     request();
-  }, [process_id]);
+  }, [request]);
 
   if (_isNull(history)) {
     return <Typography>Loading...</Typography>;
@@ -41,7 +41,8 @@ export const History: React.FC<{}> = () => {
         title="Histórico"
         subtitle={`Process id: ${process_id}`}
         hasInput={false}
-        hasButton={false}
+        buttonTitle="Atualizar"
+        onButtonClick={request}
         showToggle={false}
       />
 
