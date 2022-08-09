@@ -63,6 +63,9 @@ export const Form: React.FC<Props> = ({ onClick }) => {
               onChangeProcesses(event as Date, "initialDate");
             }}
             renderInput={(params: any) => <S.InputDate {...params} />}
+            componentsProps={{
+              actionBar: { actions: ["clear"] },
+            }}
           />
           <S.DatePicker
             label="Data final"
@@ -73,7 +76,6 @@ export const Form: React.FC<Props> = ({ onClick }) => {
             }}
             renderInput={(params: any) => <S.InputDate {...params} />}
             componentsProps={{
-              // pass props `actions={['clear']}` to the actionBar slot
               actionBar: { actions: ["clear"] },
             }}
           />
