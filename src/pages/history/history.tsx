@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 
 import _isNull from "lodash/isNull";
@@ -14,9 +14,9 @@ import { ContentHeader } from "shared/components/content-header";
 
 import * as S from "./styles";
 
-
 export const History: React.FC<{}> = () => {
   const { process_id } = useParams();
+  const navigate = useNavigate();
 
   const [history, setHistory] = useState<TState[] | null>(null);
 
@@ -35,15 +35,25 @@ export const History: React.FC<{}> = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  function backToProcessList() {
+    navigate(`/dashboard/workflows/${process_id}/diagram`);
+  }
+
+  console.log("process_id", process_id);
+
   return (
     <S.Wrapper>
-      <ContentHeader
-        title="Histórico"
-        subtitle={`Process id: ${process_id}`}
-        hasInput={false}
-        hasButton={false}
-        showToggle={false}
-      />
+      <S.HeaderContainer>
+        <ContentHeader
+          title="Histórico"
+          subtitle={`Process id: ${process_id}`}
+          hasInput={false}
+          hasButton={false}
+          showToggle={false}
+        />
+
+        <S.BackButton onClick={() => backToProcessList()} />
+      </S.HeaderContainer>
 
       <S.TableContainer>
         <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
