@@ -1,16 +1,23 @@
 import { useState } from "react";
 import * as S from "./styles";
 
+interface IPayload {
+  status?: string;
+  nodeId?: string;
+  initialDate: Date | null;
+  finalDate: Date | null;
+}
+
 type Props = {
-  onClick?: () => void;
+  onClick?: (payload: IPayload) => void;
 };
 
 export const Form: React.FC<Props> = ({ onClick }) => {
-  const [searchProcess, setSearchProcess] = useState({
+  const [searchProcess, setSearchProcess] = useState<IPayload>({
     status: "",
     nodeId: "",
-    initialDate: new Date(),
-    finalDate: new Date(),
+    initialDate: null,
+    finalDate: null,
   });
 
   const onChangeProcesses = (
@@ -20,29 +27,32 @@ export const Form: React.FC<Props> = ({ onClick }) => {
     setSearchProcess((prev: any) => ({ ...prev, [campo]: value }));
   };
 
+  function onSubmit() {
+    if (onClick) {
+      onClick(searchProcess);
+    }
+  }
 
   return (
     <S.Wrapper>
       <S.InputContainer>
         <S.InputProcess
-          label="node id"
+          label="Node id"
           value={searchProcess?.nodeId}
           onChange={(event) => {
             onChangeProcesses(event.target.value, "nodeId");
           }}
-        >
-          node_id
-        </S.InputProcess>
+        />
+
         <S.InputProcess
-          label="status"
+          label="Status"
           value={searchProcess?.status}
           onChange={(event) => {
             onChangeProcesses(event.target.value, "status");
           }}
-        >
-          status
-        </S.InputProcess>
+        />
       </S.InputContainer>
+
       <S.DateContainer>
         <S.Provider>
           <S.DatePicker
@@ -62,9 +72,14 @@ export const Form: React.FC<Props> = ({ onClick }) => {
               onChangeProcesses(event as Date, "finalDate");
             }}
             renderInput={(params: any) => <S.InputDate {...params} />}
+            componentsProps={{
+              // pass props `actions={['clear']}` to the actionBar slot
+              actionBar: { actions: ["clear"] },
+            }}
           />
         </S.Provider>
-        <S.SearchButton onClick={onClick} />
+
+        <S.SearchButton onClick={onSubmit} />
       </S.DateContainer>
     </S.Wrapper>
   );

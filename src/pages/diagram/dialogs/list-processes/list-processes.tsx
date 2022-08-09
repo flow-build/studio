@@ -5,10 +5,20 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
+import isAfter from "date-fns/isAfter";
+import isBefore from "date-fns/isBefore";
+
+import _isNull from "lodash/isNull";
+import _isEmpty from "lodash/isEmpty";
+
 import { TProcess } from "models/process";
-import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
-import { getLongFormatByDate } from "shared/utils/date";
+
 import { Form } from "pages/diagram/dialogs/list-processes/components/form/form";
+
+import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
+
+import { getLongFormatByDate } from "shared/utils/date";
+
 import * as S from "./styles";
 
 type Props = {
@@ -17,6 +27,7 @@ type Props = {
   workflowId: string;
   onSelectItem?: (process: TProcess) => void;
 };
+
 export const ListProcesses: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -24,6 +35,7 @@ export const ListProcesses: React.FC<Props> = ({
   onSelectItem,
 }) => {
   const [processes, setProcesses] = useState<TProcess[]>([]);
+  const [filtered, setFiltered] = useState<TProcess[]>([]);
 
   function onClickListItemButton(process: TProcess) {
     if (onClose) {
@@ -44,14 +56,49 @@ export const ListProcesses: React.FC<Props> = ({
     const request = async () => {
       const response = await listByWorkflowId(workflowId);
       setProcesses(response);
+      setFiltered(response);
     };
     if (isOpen) {
       request();
     }
   }, [isOpen, workflowId]);
 
-  function onFilter() {
-    setProcesses([]);
+  function onFilter(payload: any) {
+    console.log("payload", payload);
+    console.log("processes", processes);
+
+    const filter = processes.filter((process) => {
+      console.log("huehue", new Date(process.created_at));
+
+      const nodeId =
+        _isEmpty(payload.nodeId) ||
+        process.state.node_id.includes(payload.nodeId);
+
+      const status =
+        _isEmpty(payload.status) || process.status.includes(payload.status);
+
+      const before =
+        _isNull(payload.finalDate) ||
+        isBefore(new Date(process.created_at), payload.finalDate);
+
+      const after =
+        _isNull(payload.initialDate) ||
+        isAfter(new Date(process.created_at), payload.initialDate);
+
+      console.log("isNull(payload.initialDate)", _isNull(payload.initialDate));
+      console.log("initialDate", payload.initialDate);
+      console.log({ after });
+
+      if (nodeId && status && before && after) {
+        return true;
+      }
+
+      return false;
+    });
+
+    console.log("filter", filter);
+    setFiltered(filter);
+    // setProcesses([]);
   }
 
   return (
@@ -60,11 +107,12 @@ export const ListProcesses: React.FC<Props> = ({
         Lista de processos
         <S.CloseButton onClick={onClose} />
       </S.Title>
+
       <Form onClick={onFilter} />
-      {console.log(onFilter, "onFilter")}
+
       <S.Content dividers>
         <List>
-          {processes.map((process) => (
+          {filtered.map((process) => (
             <ListItem disablePadding>
               <ListItemButton onClick={() => onClickListItemButton(process)}>
                 <ListItemText
