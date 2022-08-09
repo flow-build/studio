@@ -93,46 +93,61 @@ export function useDiagram() {
   }, []);
 
   const createModeler = useCallback(() => {
+    const editIcons = [
+      {
+        __init__: [
+          "contextPadProvider",
+          "customEndEventPad",
+          "customTimerPad",
+          "customFlowPad",
+          "customUserTaskPad",
+          "customServiceTaskPad",
+          "customSubProcessPad",
+          "customProcessPad",
+          "customConnectElementPad",
+          "customChangeElementPad",
+          "customPropertiesPad",
+          "customRemoveElementPad",
+          "customPalette",
+        ],
+        contextPadProvider: ["type", ResetPad],
+        customEndEventPad: ["type", EndEvent], // Menu que aparece quando clica no shape
+        customTimerPad: ["type", Timer], // Menu que aparece quando clica no shape
+        customFlowPad: ["type", Flow], // Menu que aparece quando clica no shape
+        customUserTaskPad: ["type", UserTask], // Menu que aparece quando clica no shape
+        customServiceTaskPad: ["type", ServiceTask], // Menu que aparece quando clica no shape
+        customSubProcessPad: ["type", SubProcess], // Menu que aparece quando clica no shape
+        customProcessPad: ["type", Process], // Menu que aparece quando clica no shape
+        customConnectElementPad: ["type", ConnectElement], // Menu que aparece quando clica no shape
+        customChangeElementPad: ["type", ChangeElement], // Menu que aparece quando clica no shape
+        customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
+        customRemoveElementPad: ["type", RemoveElement], // Menu que aparece quando clica no shape
+        customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
+      },
+    ];
+
+    const readonlyIcons = [
+      {
+        __init__: [
+          "contextPadProvider",
+          "customPropertiesPad",
+          "customPalette",
+        ],
+        contextPadProvider: ["type", ResetPad],
+        customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
+        customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
+      },
+    ];
+
     return new Modeler({
       container: diagramBPMN.current,
       bpmnRenderer: {
         defaultFillColor: theme?.palette?.background?.default,
         defaultStrokeColor: theme?.palette?.common?.white,
       },
-      additionalModules: [
-        {
-          __init__: [
-            "contextPadProvider",
-            "customEndEventPad",
-            "customTimerPad",
-            "customFlowPad",
-            "customUserTaskPad",
-            "customServiceTaskPad",
-            "customSubProcessPad",
-            "customProcessPad",
-            "customConnectElementPad",
-            "customChangeElementPad",
-            "customPropertiesPad",
-            "customRemoveElementPad",
-            "customPalette",
-          ],
-          contextPadProvider: ["type", ResetPad],
-          customEndEventPad: ["type", EndEvent], // Menu que aparece quando clica no shape
-          customTimerPad: ["type", Timer], // Menu que aparece quando clica no shape
-          customFlowPad: ["type", Flow], // Menu que aparece quando clica no shape
-          customUserTaskPad: ["type", UserTask], // Menu que aparece quando clica no shape
-          customServiceTaskPad: ["type", ServiceTask], // Menu que aparece quando clica no shape
-          customSubProcessPad: ["type", SubProcess], // Menu que aparece quando clica no shape
-          customProcessPad: ["type", Process], // Menu que aparece quando clica no shape
-          customConnectElementPad: ["type", ConnectElement], // Menu que aparece quando clica no shape
-          customChangeElementPad: ["type", ChangeElement], // Menu que aparece quando clica no shape
-          customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
-          customRemoveElementPad: ["type", RemoveElement], // Menu que aparece quando clica no shape
-          customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
-        },
-      ],
+      additionalModules: diagramPageState.processSelected? readonlyIcons : editIcons
     }) as any;
-  }, [theme?.palette?.background?.default, theme?.palette?.common?.white]);
+  }, [theme?.palette?.background?.default, theme?.palette?.common?.white, diagramPageState.processSelected]);
 
   const onImportDone = useCallback((event: any) => {
     const { error /* , warnings */ } = event;
