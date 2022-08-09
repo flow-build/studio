@@ -1,49 +1,54 @@
 import styled from "styled-components";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import ptBRLocale from "date-fns/locale/pt-BR";
 
 import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import { IconButton } from "shared/components/icon-button";
+
+import { DatePicker } from "shared/components/date-picker/date-picker";
+import { ptBR } from "@mui/x-data-grid";
+
+import { Button } from "shared/components/button";
 
 export const Wrapper = styled.div``;
 
-export const InputContainer = styled.div``;
+export const InputContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+`;
 
 export const Provider = styled(LocalizationProvider).attrs({
   dateAdapter: AdapterDateFns,
+  adapterLocale: ptBRLocale,
+  localeText: ptBR,
 })``;
 
-export const DatePicker = styled(DesktopDatePicker)``;
-
-export const InputDate = styled(TextField)`
-  /* background-color: green; */
-  width: 14rem;
-`;
+export const DatePickerInput = styled(DatePicker)``;
 
 export const InputProcess = styled(TextField).attrs({
   variant: "outlined",
   sx: {
-    m: 2,
-    display: "inline-block",
+    m: 1,
     width: "25ch",
   },
 })``;
 
-export const SearchButton = styled(IconButton).attrs({
-  icon: SearchIcon,
-  ariaLabel: "search",
-  tooltip: "pesquisar",
+export const SearchButton = styled(Button).attrs({
+  title: "pesquisar",
+  sx: {
+    m: 2,
+  },
 })``;
 
-export const DateContainer = styled.div`
-  /* background-color: red; */
-  width: 35rem;
-  display: flex;
-  justify-content: space-around;
-  margin-left: 0.2rem;
-  margin-bottom: 1rem;
-`;
+export const ClearButton = styled(Button).attrs({
+  title: "limpar filtro",
+  color: "error",
+  sx: {
+    ml: 38,
+  },
+})``;
+
+export const Buttons = styled.div.attrs({})``;

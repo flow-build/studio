@@ -1,19 +1,24 @@
 import * as S from "./styles";
-import { TextFieldProps } from "@mui/material";
 
 type Props = {
   label?: string;
-  inputFormat?: string;
-  value?: any;
-  onChange?: (value: unknown, keyboardInputValue?: string | undefined) => void;
-  renderInput?: (
-    props: TextFieldProps
-  ) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
-  componentsProps: {
-    actionBar: { actions: ["clear"]};
-  };
+  value: Date | null;
+  onChange: (value: Date, keyboardInputValue?: string | undefined) => void;
 };
 
-export const DatePicker: React.FC<Props> = ({ ...props }) => {
-  return <S.Wrapper {...props} />;
+export const DatePicker: React.FC<Props> = ({ label, value, onChange }) => {
+  return (
+    <S.DesktopDate
+      label={label}
+      inputFormat="dd/MM/yyyy"
+      value={value}
+      onChange={(value, keyboardInputValue) =>
+        onChange(value as Date, keyboardInputValue)
+      }
+      renderInput={(params: any) => <S.InputDate {...params} />}
+      componentsProps={{
+        actionBar: { actions: ["clear"] },
+      }}
+    />
+  );
 };

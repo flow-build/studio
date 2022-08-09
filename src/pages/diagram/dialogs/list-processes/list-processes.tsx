@@ -33,6 +33,7 @@ export const ListProcesses: React.FC<Props> = ({
   onClose,
   workflowId,
   onSelectItem,
+  process,
 }) => {
   const [processes, setProcesses] = useState<TProcess[]>([]);
   const [filtered, setFiltered] = useState<TProcess[]>([]);
@@ -64,12 +65,7 @@ export const ListProcesses: React.FC<Props> = ({
   }, [isOpen, workflowId]);
 
   function onFilter(payload: any) {
-    console.log("payload", payload);
-    console.log("processes", processes);
-
     const filter = processes.filter((process) => {
-      console.log("huehue", new Date(process.created_at));
-
       const nodeId =
         _isEmpty(payload.nodeId) ||
         process.state.node_id.includes(payload.nodeId);
@@ -85,10 +81,6 @@ export const ListProcesses: React.FC<Props> = ({
         _isNull(payload.initialDate) ||
         isAfter(new Date(process.created_at), payload.initialDate);
 
-      console.log("isNull(payload.initialDate)", _isNull(payload.initialDate));
-      console.log("initialDate", payload.initialDate);
-      console.log({ after });
-
       if (nodeId && status && before && after) {
         return true;
       }
@@ -96,9 +88,7 @@ export const ListProcesses: React.FC<Props> = ({
       return false;
     });
 
-    console.log("filter", filter);
     setFiltered(filter);
-    // setProcesses([]);
   }
 
   return (

@@ -33,6 +33,15 @@ export const Form: React.FC<Props> = ({ onClick }) => {
     }
   }
 
+  function cleanFilter() {
+    setSearchProcess({
+      status: "",
+      nodeId: "",
+      initialDate: null,
+      finalDate: null,
+    });
+  }
+
   return (
     <S.Wrapper>
       <S.InputContainer>
@@ -51,38 +60,29 @@ export const Form: React.FC<Props> = ({ onClick }) => {
             onChangeProcesses(event.target.value, "status");
           }}
         />
-      </S.InputContainer>
 
-      <S.DateContainer>
         <S.Provider>
-          <S.DatePicker
+          <S.DatePickerInput
             label="Data inicial"
-            inputFormat="dd/MM/yyyy"
             value={searchProcess?.initialDate}
             onChange={(event) => {
               onChangeProcesses(event as Date, "initialDate");
             }}
-            renderInput={(params: any) => <S.InputDate {...params} />}
-            componentsProps={{
-              actionBar: { actions: ["clear"] },
-            }}
           />
-          <S.DatePicker
+
+          <S.DatePickerInput
             label="Data final"
-            inputFormat="dd/MM/yyyy"
             value={searchProcess?.finalDate}
             onChange={(event) => {
               onChangeProcesses(event as Date, "finalDate");
             }}
-            renderInput={(params: any) => <S.InputDate {...params} />}
-            componentsProps={{
-              actionBar: { actions: ["clear"] },
-            }}
           />
         </S.Provider>
-
+      </S.InputContainer>
+      <S.Buttons>
+        <S.ClearButton onClick={cleanFilter} process={process} />
         <S.SearchButton onClick={onSubmit} />
-      </S.DateContainer>
+      </S.Buttons>
     </S.Wrapper>
   );
 };
