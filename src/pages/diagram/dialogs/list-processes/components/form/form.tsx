@@ -34,12 +34,16 @@ export const Form: React.FC<Props> = ({ onClick }) => {
   }
 
   function cleanFilter() {
-    setSearchProcess({
+    const filter = {
       status: "",
       nodeId: "",
       initialDate: null,
       finalDate: null,
-    });
+    };
+    setSearchProcess(filter);
+    if (onClick) {
+      onClick(filter);
+    }
   }
 
   return (
@@ -80,7 +84,7 @@ export const Form: React.FC<Props> = ({ onClick }) => {
         </S.Provider>
       </S.InputContainer>
       <S.Buttons>
-        <S.ClearButton onClick={cleanFilter} process={process} />
+        <S.ClearButton onClick={cleanFilter} />
         <S.SearchButton onClick={onSubmit} />
       </S.Buttons>
     </S.Wrapper>
