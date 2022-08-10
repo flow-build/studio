@@ -29,7 +29,9 @@ export const BackButton = styled(IconButton).attrs({
   ariaLabel: "close",
   tooltip: "voltar",
   title: "Voltar",
-})``;
+})`
+  margin-bottom: 4rem;
+`;
 
 export const TableContainer = styled(Grid).attrs({
   item: true,
