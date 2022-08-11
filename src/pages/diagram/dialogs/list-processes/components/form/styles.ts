@@ -51,4 +51,4 @@ export const ClearButton = styled(Button).attrs({
   },
 })``;
 
-export const Buttons = styled.div.attrs({})``;
+export const Buttons = styled.div``;
