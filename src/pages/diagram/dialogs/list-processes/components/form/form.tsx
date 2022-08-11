@@ -1,19 +1,14 @@
 import { useState } from "react";
+import { IFilter } from "pages/diagram/dialogs/list-processes/types/IFilter";
 import * as S from "./styles";
 
-interface IPayload {
-  status?: string;
-  nodeId?: string;
-  initialDate: Date | null;
-  finalDate: Date | null;
-}
 
 type Props = {
-  onClick?: (payload: IPayload) => void;
+  onClick?: (payload: IFilter) => void;
 };
 
 export const Form: React.FC<Props> = ({ onClick }) => {
-  const [searchProcess, setSearchProcess] = useState<IPayload>({
+  const [searchProcess, setSearchProcess] = useState<IFilter>({
     status: "",
     nodeId: "",
     initialDate: null,
@@ -22,7 +17,7 @@ export const Form: React.FC<Props> = ({ onClick }) => {
 
   const onChangeProcesses = (
     value: string | Date,
-    campo: "status" | "nodeId" | "initialDate" | "finalDate"
+    campo: keyof IFilter,
   ) => {
     setSearchProcess((prev: any) => ({ ...prev, [campo]: value }));
   };
