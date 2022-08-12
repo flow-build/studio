@@ -7,6 +7,7 @@ import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
+import { Settings } from "pages/settings";
 
 export const AppRoutes = () => {
   return (
@@ -24,8 +25,8 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-
           <Route path="compare-json" element={<CompareJson />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>

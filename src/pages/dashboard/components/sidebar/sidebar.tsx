@@ -94,6 +94,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
               />
             )
           )}
+          {/* CONFIGURAÇÕES AQUI */}
         </List>
       </Drawer>
 
@@ -106,3 +107,4 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     </>
   );
 };
+
