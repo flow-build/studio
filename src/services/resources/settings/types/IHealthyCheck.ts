@@ -7,4 +7,6 @@ export interface IHealthyCheck {
   engine: IEngine;
   "diagram-builder": string;
   mqtt: IMqtt;
+  url: string;
+  port: string;
 }

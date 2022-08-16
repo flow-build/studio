@@ -1,10 +1,14 @@
 import { IHealthyCheck } from "services/resources/settings/types/IHealthyCheck";
 
-import { api } from "services/api";
+// import { api } from "services/api";
+import axios from "axios";
 
-export async function healthcheck(): Promise<IHealthyCheck> {
+export async function healthcheck(
+  url: string,
+  port: string
+): Promise<IHealthyCheck> {
   try {
-    const { data } = await api.get(`/healthcheck`);
+    const { data } = await axios.get(url + ":" + port + `/healthcheck`);
     return {
       ...data,
       mqtt: {
