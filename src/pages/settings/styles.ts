@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { InputText } from "shared/components/input-text";
 import Button from "@mui/material/Button";
 
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+
 export const Container = styled.div``;
 
 export const Title = styled.h1`
@@ -9,14 +12,17 @@ export const Title = styled.h1`
   margin: 2rem 1rem;
 `;
 
-export const FormInputs = styled.form`
-  width: 30rem;
-  height: 24rem;
+export const FormServer = styled.form`
+  width: 55rem;
+  height: 1rem;
   margin-top: 5rem;
+`;
+
+export const ContainerServer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const InputServerURL = styled(InputText).attrs({
@@ -29,10 +35,44 @@ export const InputServerURL = styled(InputText).attrs({
 
 export const InputServerPort = styled(InputText).attrs({
   id: "outlined-multiline-flexible",
-  label: "Porta do servidor do flowbuild",
+  label: "Porta do flowbuild",
 })`
-  width: 25rem;
+  width: 10rem;
   margin-top: 1rem;
+`;
+
+export const SubmitButton = styled(Button).attrs({
+  variant: "contained",
+})`
+  width: 8rem;
+  height: 3.5rem;
+`;
+
+export const IconSuccess = styled(CheckCircleIcon).attrs({})`
+  color: green;
+`;
+
+export const IconError = styled(CancelIcon).attrs({})`
+  color: red;
+`;
+
+export const P = styled.p`
+  color: #fff;
+`;
+
+export const FormMqtt = styled.form`
+  width: 55rem;
+  height: 1rem;
+  margin-top: 5rem;
+`;
+
+export const ContainerMqtt = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 1.5rem;
 `;
 
 export const InputMQTTServerURL = styled(InputText).attrs({
@@ -45,16 +85,8 @@ export const InputMQTTServerURL = styled(InputText).attrs({
 
 export const InputMQTTServerPort = styled(InputText).attrs({
   id: "outlined-multiline-flexible",
-  label: "Porta do servidor de MQT",
+  label: "Porta do MQT",
 })`
-  width: 25rem;
+  width: 10rem;
   margin-top: 1rem;
-`;
-
-export const SubmitButton = styled(Button).attrs({
-  variant: "contained",
-})`
-  width: 25rem;
-  height: 3.5rem;
-  margin-top: 0.8rem;
 `;
