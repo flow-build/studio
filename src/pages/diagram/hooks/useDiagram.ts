@@ -19,6 +19,7 @@ import { Timer } from "pages/diagram/components/context-pad/timer";
 import { Flow } from "pages/diagram/components/context-pad/flow";
 import { SubProcess } from "pages/diagram/components/context-pad/sub-process";
 import { Process } from "pages/diagram/components/context-pad/process";
+import { NextProcess } from "../components/context-pad/next-process";
 import { ChangeElement } from "pages/diagram/components/context-pad/change-element";
 import { Properties } from "pages/diagram/components/context-pad/properties";
 import { RemoveElement } from "pages/diagram/components/context-pad/remove-element";
@@ -104,6 +105,7 @@ export function useDiagram() {
           "customServiceTaskPad",
           "customSubProcessPad",
           "customProcessPad",
+          "customNextProcess",
           "customConnectElementPad",
           "customChangeElementPad",
           "customPropertiesPad",
@@ -118,6 +120,7 @@ export function useDiagram() {
         customServiceTaskPad: ["type", ServiceTask], // Menu que aparece quando clica no shape
         customSubProcessPad: ["type", SubProcess], // Menu que aparece quando clica no shape
         customProcessPad: ["type", Process], // Menu que aparece quando clica no shape
+        customNextProcess: ["type", NextProcess], 
         customConnectElementPad: ["type", ConnectElement], // Menu que aparece quando clica no shape
         customChangeElementPad: ["type", ChangeElement], // Menu que aparece quando clica no shape
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
@@ -131,9 +134,11 @@ export function useDiagram() {
         __init__: [
           "contextPadProvider",
           "customPropertiesPad",
+          "customNextProcess",
           "customPalette",
         ],
         contextPadProvider: ["type", ResetPad],
+        customNextProcess: ["type", NextProcess], 
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
         customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
       },
