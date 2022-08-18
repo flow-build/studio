@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 
+import _isEqual from "lodash/isEqual";
 import _isNull from "lodash/isNull";
 
 import { TState } from "models/state";
@@ -14,22 +15,30 @@ import { ContentHeader } from "shared/components/content-header";
 
 import * as S from "./styles";
 
-
 export const History: React.FC<{}> = () => {
-  const { process_id } = useParams();
+  const params = useParams();
+  const [processId, setProcessId] = useState<string>();
 
   const [history, setHistory] = useState<TState[] | null>(null);
 
   const table = useTable(history ?? []);
 
   const request = useCallback(async () => {
-    const response = await getHistoryByProcessId(process_id ?? "");
+    const response = await getHistoryByProcessId(processId ?? "");
     setHistory(response.reverse());
-  },[process_id]);
+  }, [processId]);
 
   useEffect(() => {
-    request();
-  }, [request]);
+    if (processId) {
+      request();
+    }
+  }, [processId, request]);
+
+  useEffect(() => {
+    if (!_isEqual(processId, params.process_id)) {
+      setProcessId(params.process_id);
+    }
+  }, [params.process_id, processId]);
 
   if (_isNull(history)) {
     return <Typography>Loading...</Typography>;
@@ -39,7 +48,7 @@ export const History: React.FC<{}> = () => {
     <S.Wrapper>
       <ContentHeader
         title="Histórico"
-        subtitle={`Process id: ${process_id}`}
+        subtitle={`Process id: ${processId}`}
         hasInput={false}
         buttonTitle="Atualizar"
         onButtonClick={request}
