@@ -42,19 +42,18 @@ export const Dashboard: React.FC = () => {
   return (
     <S.Wrapper>
       <Header isOpen={menuIsOpen} onMenuClick={onMenuClick} />
-
       <Sidebar isOpen={menuIsOpen} />
-
       <Content padding={2} pt={0}>
-        <iframe
-          title="frame"
-          src={iframeUrl}
-          frameBorder={0}
-          width={900}
-          height={600}
-          allowTransparency
-        />
         <DrawerHeader />
+        <S.Frame>
+          <iframe
+            title="frame"
+            src={iframeUrl}
+            width="100%"
+            height="650px"
+            allowTransparency
+          />
+        </S.Frame>
         <Outlet />
       </Content>
     </S.Wrapper>
