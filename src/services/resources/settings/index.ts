@@ -1,6 +1,5 @@
 import { IHealthyCheck } from "services/resources/settings/types/IHealthyCheck";
 
-// import { api } from "services/api";
 import axios from "axios";
 
 export async function healthcheck(
@@ -9,6 +8,7 @@ export async function healthcheck(
 ): Promise<IHealthyCheck> {
   try {
     const { data } = await axios.get(url + ":" + port + `/healthcheck`);
+    console.log("data", data);
     return {
       ...data,
       mqtt: {

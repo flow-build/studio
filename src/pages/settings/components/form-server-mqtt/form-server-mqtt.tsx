@@ -11,7 +11,7 @@ interface IPayload {
   mqttServerPort: string;
 }
 
-export const FormMqtt: React.FC<{}> = () => {
+export const FormServerMqtt: React.FC<{}> = () => {
   const [formSettingsData, setFormSettingsData] = useState<IPayload>({
     mqttServerUrl: "",
     mqttServerPort: "",
