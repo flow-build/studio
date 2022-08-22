@@ -8,7 +8,7 @@ export async function healthcheck(
 ): Promise<IHealthyCheck> {
   try {
     const { data } = await axios.get(url + ":" + port + `/healthcheck`);
-    console.log("data", data);
+
     return {
       ...data,
       mqtt: {
