@@ -7,10 +7,13 @@ import { getAnonymousToken } from "services/resources/token";
 
 import { setStorageItem } from "shared/utils/storage";
 
+import { useSnackbar } from "notistack";
+
 import * as S from "./styles";
 
 export const SignIn = () => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [payload, setPayload] = useState({
     email: "",
@@ -29,8 +32,14 @@ export const SignIn = () => {
 
     if (token) {
       setStorageItem("TOKEN", token);
-      console.log("token", token);
       navigate("/dashboard");
+    } else {
+      navigate("dashboard/settings");
+      const message = "Erro. Insira URL e porta válida para a aplicação";
+      enqueueSnackbar(message, {
+        autoHideDuration: 4000,
+        variant: "error",
+      });
     }
   }, [navigate]);
 
@@ -68,4 +77,3 @@ export const SignIn = () => {
     </S.Wrapper>
   );
 };
-

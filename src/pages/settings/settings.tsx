@@ -1,17 +1,19 @@
 import { useState } from "react";
 
 import _isEmpty from "lodash/isEmpty";
-
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-
-import * as S from "./styles";
 import { setStorageItem } from "shared/utils/storage";
 import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import * as S from "./styles";
 
 export const Settings: React.FC = () => {
   const [server, setServer] = useState<IPayloadForm>();
   const [mqtt, setMqtt] = useState<IPayloadForm>();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const isDisabled = _isEmpty(server) || _isEmpty(mqtt);
 
@@ -32,12 +34,18 @@ export const Settings: React.FC = () => {
       const token = await getAnonymousToken();
       if (token) {
         setStorageItem("TOKEN", token);
+        navigate("/dashboard/workflows");
+      } else {
+        const message = "Erro no retorno do Token. Por favor tentar novamente!";
+        enqueueSnackbar(message, {
+          autoHideDuration: 4000,
+          variant: "error",
+        });
       }
     }
   }
 
   return (
-    /* Settings */
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
 

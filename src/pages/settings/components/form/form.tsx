@@ -48,7 +48,6 @@ export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
   }
 
   return (
-    /* Form */
     <S.Wrapper>
       <S.Input
         label={labelUrl}
