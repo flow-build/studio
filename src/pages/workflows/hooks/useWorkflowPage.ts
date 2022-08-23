@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback} from "react"
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack';
 import { createProcessByName } from "services/resources/processes/create-by-name";
@@ -23,16 +23,17 @@ export function useWorkflowPage() {
     try {
       const response = await createProcessByName(processName);
       showNotification(processName);
-      navigate(`${workflowId}/processes/${response.process_id}/history`)
+  
+      
     } catch (error) {
       console.error(error)
     }
-  }, [navigate, showNotification])
+  }, [showNotification])
 
   const navigateToDiagram = useCallback((workflowId: string) => {
     navigate(`${workflowId}/diagram`)
   }, [navigate])
-
+ 
   return {
     navigateToProcess,
     createProcess,
