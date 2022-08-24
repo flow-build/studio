@@ -1,4 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+
+import _isEmpty from "lodash/isEmpty";
 
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
@@ -9,11 +11,26 @@ import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
 import { Settings } from "pages/settings";
 
+import { getStorageItem } from "shared/utils/storage";
+
 export const AppRoutes = () => {
+  function handleSignIn() {
+    const hasEnv = !_isEmpty(process.env.REACT_APP_BASE_URL);
+    const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
+
+    if (hasEnv || hasLocalStorage) {
+      return <SignIn />;
+    }
+
+    return <Navigate to="settings" replace />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={handleSignIn()} />
+        <Route path="settings" element={<Settings />} />
+
         <Route path="dashboard" element={<Dashboard />}>
           <Route path="workflows" element={<Workflows />} />
           <Route path="workflows/:id/processes" element={<Processes />} />
