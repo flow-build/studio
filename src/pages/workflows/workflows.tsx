@@ -15,7 +15,11 @@ import { listWorkflows } from "services/resources/workflows/list";
 import { ContentHeader } from "shared/components/content-header";
 
 import { RootState } from "store";
-import { resetFilter, updateFilter } from "store/slices/workflow-page";
+import {
+  resetFilter,
+  setStartProcessDialog,
+  updateFilter,
+} from "store/slices/workflow-page";
 
 import * as S from "./styles";
 
@@ -58,24 +62,31 @@ export const Workflows: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <S.Wrapper>
-      <ContentHeader
-        title="Workflows"
-        inputLabel="Nome / ID"
-        buttonTitle="Novo"
-        onChangeModeView={onChangeModeView}
-        onChangeInput={onFilter}
+    <>
+      <S.Wrapper>
+        <ContentHeader
+          title="Workflows"
+          inputLabel="Nome / ID"
+          buttonTitle="Novo"
+          onChangeModeView={onChangeModeView}
+          onChangeInput={onFilter}
+        />
+
+        {_isEqual(modeView, ModeView.CARDS) && (
+          <CardsView workflows={workflows} />
+        )}
+
+        {_isEqual(modeView, ModeView.LIST) && (
+          <S.TableContainer>
+            <S.Table columnData={table.columnData} rows={table.rows} />
+          </S.TableContainer>
+        )}
+      </S.Wrapper>
+
+      <S.StartProcessDialog
+        isOpen={workflowPageState.startProcessDialog.isVisible}
+        onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
       />
-
-      {_isEqual(modeView, ModeView.CARDS) && (
-        <CardsView workflows={workflows} />
-      )}
-
-      {_isEqual(modeView, ModeView.LIST) && (
-        <S.TableContainer>
-          <S.Table columnData={table.columnData} rows={table.rows} />
-        </S.TableContainer>
-      )}
-    </S.Wrapper>
+    </>
   );
 };

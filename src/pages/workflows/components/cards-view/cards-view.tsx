@@ -5,10 +5,8 @@ import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
 import { TWorkflow } from "models/workflow";
 
 import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
-import { useState } from "react";
 
 import { getLongFormatByDate } from "shared/utils/date";
-import { Modal } from "../modal";
 
 import * as S from "./styles";
 
@@ -18,7 +16,6 @@ type Props = {
 
 export const CardsView: React.FC<Props> = ({ workflows }) => {
   const workflowPage = useWorkflowPage();
-  const [openDialog, setOpenDialog] = useState(false);
 
   const getActions = (workflow: TWorkflow) => {
     return [
@@ -30,7 +27,8 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
       {
         icon: AddOutlined,
         tooltip: "Novo processo",
-        onClick: () => setOpenDialog(true),
+        onClick: () =>
+          workflowPage.createProcess(workflow.name, workflow.workflow_id),
       },
       {
         icon: ExtensionOutlined,
@@ -38,10 +36,6 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
         onClick: () => workflowPage.navigateToDiagram(workflow.workflow_id),
       },
     ];
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
   };
 
   return (
@@ -57,14 +51,6 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
           actions={getActions(workflow)}
         />
       ))}
-
-      <Modal
-        onClose={handleDialogClose}
-        open={openDialog}
-        onClick={() =>
-          workflowPage.createProcess(workflow.name, workflow.workflow_id)
-        }
-      />
     </>
   );
 };
