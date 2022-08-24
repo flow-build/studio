@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { useNavigate } from "react-router-dom";
+
 import * as S from "./styles";
-import { Navigation } from "@mui/icons-material";
 
 type Props = {
   isOpen: boolean;
@@ -16,10 +16,14 @@ export const Confirmation: React.FC<Props> = ({ isOpen, onClose }) => {
   );
 
   function onConfirm() {
-    confirmationDialog.data.onConfirm();
-      if(confirmationDialog.data.navigateTo){
-        navigate(confirmationDialog.data.navigateTo)
-      }
+    if (confirmationDialog.data.onConfirm) {
+      confirmationDialog.data.onConfirm();
+    }
+
+    if (confirmationDialog.data.navigateTo) {
+      navigate(confirmationDialog.data.navigateTo);
+    }
+
     if (onClose) {
       onClose();
     }
