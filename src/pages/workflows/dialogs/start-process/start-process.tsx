@@ -76,8 +76,15 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
       </S.Title>
 
       <S.Content>
-        <S.Editor onChange={(newValue) => setPayload(newValue)} />
-        <S.Editor readOnly value={inputSchema} />
+        <S.Text>
+          Input Schema
+          <S.Editor readOnly value={inputSchema} />
+        </S.Text>
+
+        <S.Text>
+          Json Editor
+          <S.Editor onChange={(newValue) => setPayload(newValue)} />
+        </S.Text>
       </S.Content>
 
       <S.ActionsContainer>
