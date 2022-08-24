@@ -22,7 +22,7 @@ export default class Flow {
 
         autoPlace.append(element, shape);
       } else {
-        appendFlowNodeStart(event, element);
+        appendFlowNodeStart(event);
       }
     }
 
