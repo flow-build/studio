@@ -78,3 +78,4 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
     </S.Wrapper>
   );
 };
+

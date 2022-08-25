@@ -17,7 +17,7 @@ export const Wrapper = styled(Dialog).attrs({
   "aria-describedby": "Show all properties of shape",
   scroll: "paper",
   fullWidth: true,
-  maxWidth: "md",
+  maxWidth: "lg",
 })``;
 
 export const Title = styled(DialogTitle)`
@@ -33,7 +33,12 @@ export const CloseButton = styled(IconButton).attrs({
 
 export const Text = styled(DialogContentText)``;
 
-export const Content = styled(DialogContent)``;
+export const Content = styled(DialogContent)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 export const Editor = styled(AceEditor).attrs({
   mode: "json",
