@@ -26,7 +26,7 @@ export default class Timer {
 
         autoPlace.append(element, shape);
       } else {
-        appendTimerNodeStart(event, element);
+        appendTimerNodeStart(event);
       }
     }
 

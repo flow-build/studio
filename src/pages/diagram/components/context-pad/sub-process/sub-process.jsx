@@ -20,7 +20,7 @@ export default class SubProcess {
 
         autoPlace.append(element, shape);
       } else {
-        appendSubProcessStart(event, element);
+        appendSubProcessStart(event);
       }
     }
 
