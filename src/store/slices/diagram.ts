@@ -6,6 +6,7 @@ interface IInitialState {
   confirmationDialog: { isVisible: boolean; data?: any };
   processInfoDialog: { isVisible: boolean; data?: any };
   processSelected?: TProcess;
+  element?: { category: string; id: string };
 }
 
 const initialState: IInitialState = {
@@ -25,6 +26,8 @@ const initialState: IInitialState = {
   },
 
   processSelected: undefined,
+
+  element: undefined,
 };
 
 export const diagramSlice = createSlice({
@@ -46,6 +49,13 @@ export const diagramSlice = createSlice({
       action: PayloadAction<TProcess | undefined>
     ) => {
       state.processSelected = action.payload ?? ({} as TProcess);
+    },
+
+    setElement: (
+      state,
+      action: PayloadAction<{ category: string; id: string } | undefined>
+    ) => {
+      state.element = action.payload;
     },
 
     setShowConfirmationDialog: (
@@ -75,6 +85,7 @@ export const {
   setShowConfirmationDialog,
   setShowPropertiesDialog,
   setShowProcessInfoDialog,
+  setElement,
 } = diagramSlice.actions;
 
 export default diagramSlice.reducer;

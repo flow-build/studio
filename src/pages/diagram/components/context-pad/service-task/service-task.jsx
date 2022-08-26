@@ -20,7 +20,7 @@ export default class ServiceTask {
 
         autoPlace.append(element, shape);
       } else {
-        appendServiceTaskStart(event, element);
+        appendServiceTaskStart(event);
       }
     }
 

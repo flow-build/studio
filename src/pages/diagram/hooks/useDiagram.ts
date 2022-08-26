@@ -7,7 +7,6 @@ import { useTheme } from "@mui/material/styles";
 import _first from "lodash/first";
 import _greaterThan from "lodash/gt";
 import _isEmpty from "lodash/isEmpty";
-import _isEqual from "lodash/isEqual";
 import _size from "lodash/size";
 
 import { ServiceTask } from "pages/diagram/components/context-pad/service-task";
@@ -19,6 +18,7 @@ import { Timer } from "pages/diagram/components/context-pad/timer";
 import { Flow } from "pages/diagram/components/context-pad/flow";
 import { SubProcess } from "pages/diagram/components/context-pad/sub-process";
 import { Process } from "pages/diagram/components/context-pad/process";
+import { NextProcess } from "../components/context-pad/next-process";
 import { ChangeElement } from "pages/diagram/components/context-pad/change-element";
 import { Properties } from "pages/diagram/components/context-pad/properties";
 import { RemoveElement } from "pages/diagram/components/context-pad/remove-element";
@@ -26,14 +26,8 @@ import { ConnectElement } from "pages/diagram/components/context-pad/connect-ele
 
 import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setProcessSelected,
-  setShowConfirmationDialog,
-} from "store/slices/diagram";
-import { TProcess } from "models/process";
-import { getHistoryByProcessId } from "services/resources/processes/history";
-import { listStatesByProcessId } from "services/resources/processes/list-states";
-import { useNavigate } from "react-router-dom";
+import { setElement } from "store/slices/diagram";
+
 import { RootState } from "store";
 
 interface IColor {
@@ -53,7 +47,6 @@ let bpmnViewer: any = null;
 export function useDiagram() {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const diagramBPMN = useRef();
 
@@ -131,9 +124,11 @@ export function useDiagram() {
         __init__: [
           "contextPadProvider",
           "customPropertiesPad",
+          "customNextProcess",
           "customPalette",
         ],
         contextPadProvider: ["type", ResetPad],
+        customNextProcess: ["type", NextProcess],
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
         customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
       },
@@ -145,15 +140,22 @@ export function useDiagram() {
         defaultFillColor: theme?.palette?.background?.default,
         defaultStrokeColor: theme?.palette?.common?.white,
       },
-      additionalModules: diagramPageState.processSelected? readonlyIcons : editIcons
+      additionalModules: !_isEmpty(diagramPageState.processSelected)
+        ? readonlyIcons
+        : editIcons,
     }) as any;
-  }, [theme?.palette?.background?.default, theme?.palette?.common?.white, diagramPageState.processSelected]);
+  }, [
+    theme?.palette?.background?.default,
+    theme?.palette?.common?.white,
+    diagramPageState.processSelected,
+  ]);
 
   const onImportDone = useCallback((event: any) => {
     const { error /* , warnings */ } = event;
 
     if (error) {
       // return this.handleError(error);
+      return;
     }
 
     bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
@@ -228,83 +230,12 @@ export function useDiagram() {
       if (_isEmpty(element)) {
         return;
       }
-      const processSelected = diagramPageState.processSelected;
-
-      console.log({ element });
-
-      /* TODO: Refatorar */
-      /* Handle Node_START */
-      if (_isEqual(element?.id, "Node_START")) {
-        const processList = (
-          await getHistoryByProcessId((processSelected as TProcess).id)
-        ).reverse() as any;
-
-        const parent_process_id =
-          processList[0].actor_data.parentProcessData.id;
-
-        if (!_isEmpty(parent_process_id)) {
-          dispatch(
-            setShowConfirmationDialog({
-              isVisible: true,
-              data: {
-                message: "Tem certeza que deseja navegar para o processo pai?",
-                onConfirm: async () => {
-                  const response = await listStatesByProcessId(
-                    parent_process_id
-                  );
-
-                  dispatch(setProcessSelected(response));
-
-                  return navigate(
-                    `/dashboard/workflows/${response.workflow_id}/diagram`
-                  );
-                },
-              },
-            })
-          );
-        }
-
-        return;
-      }
 
       const category = element?.businessObject.$attrs["custom:category"];
 
-      if (_isEqual(category, "startprocess") && !_isEmpty(processSelected)) {
-        const processList = await getHistoryByProcessId(
-          (processSelected as TProcess).id
-        );
-
-        const nodeSelected = processList.find(
-          (process) => process.node_id === element?.id.replace("Node_", "")
-        );
-
-        const child_process_id = nodeSelected?.result?.process_id;
-
-        if (!_isEmpty(child_process_id)) {
-          dispatch(
-            setShowConfirmationDialog({
-              isVisible: true,
-              data: {
-                message:
-                  "Tem certeza que deseja navegar para o processo filho?",
-                onConfirm: async () => {
-                  const response = await listStatesByProcessId(
-                    child_process_id
-                  );
-
-                  dispatch(setProcessSelected(response));
-
-                  return navigate(
-                    `/dashboard/workflows/${response.workflow_id}/diagram`
-                  );
-                },
-              },
-            })
-          );
-        }
-      }
+      dispatch(setElement({ category, id: element?.id }));
     },
-    [diagramPageState.processSelected, dispatch, navigate]
+    [dispatch]
   );
 
   useEffect(() => {
