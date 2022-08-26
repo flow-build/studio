@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 
 import _isEqual from "lodash/isEqual";
@@ -18,6 +18,8 @@ import * as S from "./styles";
 export const History: React.FC<{}> = () => {
   const params = useParams();
   const [processId, setProcessId] = useState<string>();
+  const navigate = useNavigate();
+  const GO_BACK = -1;
 
   const [history, setHistory] = useState<TState[] | null>(null);
 
@@ -46,14 +48,17 @@ export const History: React.FC<{}> = () => {
 
   return (
     <S.Wrapper>
-      <ContentHeader
-        title="Histórico"
-        subtitle={`Process id: ${processId}`}
-        hasInput={false}
-        buttonTitle="Atualizar"
-        onButtonClick={request}
-        showToggle={false}
-      />
+      <S.HeaderContainer>
+        <ContentHeader
+          title="Histórico"
+          subtitle={`Process id: ${processId}`}
+          hasInput={false}
+          buttonTitle="Atualizar"
+          onButtonClick={request}
+          showToggle={false}
+        />
+        <S.BackButton onClick={() => navigate(GO_BACK)} />
+      </S.HeaderContainer>
 
       <S.TableContainer>
         <S.Table columnData={table.columnData} rows={table.rows} isCollapse />

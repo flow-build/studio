@@ -20,7 +20,7 @@ export default class EndEvent {
 
         autoPlace.append(element, shape);
       } else {
-        appendEndEventStart(event, element);
+        appendEndEventStart(event);
       }
     }
 

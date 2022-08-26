@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const INITIAL_STATE = {
+interface IInitialState {
+  oldJson?: string,
+  newJson?: string,
+};
+
+const INITIAL_STATE: IInitialState = {
   oldJson: undefined,
   newJson: undefined,
 };
