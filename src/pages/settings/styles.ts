@@ -1,8 +1,20 @@
 import styled from "styled-components";
 import { Form as BaseForm } from "pages/settings/components/form";
 import { Button as BaseButton } from "shared/components/button";
+import Box from "@mui/material/Box";
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled(Box).attrs({
+  sx: {
+    height: 1000,
+    marginTop: -4,
+    paddingLeft: 2,
+    paddingTop: 2,
+    background: (theme) => theme.palette.background.default,
+  },
+})`
+  width: "100vw";
+  height: "100vh";
+`;
 
 export const Title = styled.h1`
   color: #fff;
