@@ -2,17 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import { listStatesByProcessId } from "services/resources/processes/list-states";
-import {
-  setSearchProcessIdDialog,
-  setSearchProcessIdDialogData,
-} from "pages/diagram/features/bpmnSlice";
+import { DialogActions } from "@mui/material";
+
 import { IPayload } from "pages/dashboard/components/sidebar/dialogs/process-id-search/types/IPayload";
 
+import { listStatesByProcessId } from "services/resources/processes/list-states";
 
-import { DialogActions } from "@mui/material";
+import { setProcessSelected } from "store/slices/diagram";
+
 import * as S from "./styles";
-
 
 type Props = {
   isOpen: boolean;
@@ -34,25 +32,27 @@ export const ProcessIdSearch: React.FC<Props> = ({ isOpen, onClose }) => {
   async function handleClickProcessId() {
     const response = await listStatesByProcessId(payload.processId);
 
-    /* TODO: Remover legacy code */
-    dispatch(setSearchProcessIdDialogData(response));
-    dispatch(setSearchProcessIdDialog(true));
+    dispatch(setProcessSelected(response));
 
     navigate(`/dashboard/workflows/${response.workflow_id}/diagram`);
-
     onClose();
   }
 
-
   return (
-    <S.Dialog open={isOpen}>
+    <S.Dialog open={isOpen} onClose={onClose}>
       <S.Title>Consultar </S.Title>
+
       <S.Content>
+        <S.DialogText>
+          Insira o id do processo a qual deseja ver as informações
+        </S.DialogText>
+
         <S.Input
           value={payload?.processId}
           onChange={(event) => onChangePayload(event.target.value, "processId")}
         />
       </S.Content>
+
       <DialogActions>
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         <S.SearchButton onClick={handleClickProcessId}>

@@ -1,23 +1,25 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
 
-import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
+import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 
 import Grid from "@mui/material/Grid";
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
 import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyContent";
 
-import { workflowService } from "pages/diagram/services/workflowService";
-
 import { Tree } from "pages/compare-json/components/Tree";
+import { api } from "services/api";
+
+import * as S from "./styles";
+
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,62 +28,101 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const Section = ({ label = '', onClear = () => { }, onSearch = () => { }, data = [] }) => {
-  const dispatch = useDispatch();
+export const Section = ({
+  label = "",
+  onClear = () => { },
+  onSearch = () => { },
+  data = [],
+}) => {
   const [payload, setPayload] = useState({
-    processId: '',
-    step: '',
+    processId: "",
+    step: "",
   });
 
-  const searchState = useCallback(async (processId, step) => {
-    if (!processId || !step) {
-      return;
+  const searchState = useCallback(
+    async (processId, step) => {
+      if (!processId || !step) {
+        return;
+      }
+
+      const isNumber = (str) => {
+        if (typeof str != "string") return false; // we only process strings!
+        return !isNaN(str) && !isNaN(parseFloat(str));
+      };
+
+      let response;
+
+      if (isNumber(step)) {
+        const URL = `/states/process/${processId}?stepNumber=${step}`;
+        response = await api.get(URL);
+      } else {
+        // endpoint = workflowService.endpoints.getStateByNodeId;
+        // param = { nodeId: step };
+      }
+
+      if (!_isUndefined(response) && !_isUndefined(onSearch)) {
+        onSearch(JSON.stringify(response.data));
+      }
+    },
+    [onSearch]
+  );
+
+  function backClick() {
+    const back = Number(payload.step)
+    const newBack = back - 1
+
+    const newBackPayload = {
+      processId: payload.processId,
+      step: `${newBack}`,
     }
 
-    const isNumber = (str) => {
-      if (typeof str != "string") return false; // we only process strings!  
-      return !isNaN(str) && !isNaN(parseFloat(str));
-    };
+    setPayload(newBackPayload);
+    onSearchPayload(newBackPayload);
+  }
 
-    let endpoint;
-    let param;
+  function fowardClick() {
+    const foward = Number(payload.step)
+    const newFoward = foward + 1
 
-    if (isNumber(step)) {
-      endpoint = workflowService.endpoints.getStateByStepNumber;
-      param = { stepNumber: step };
-    } else {
-      endpoint = workflowService.endpoints.getStateByNodeId;
-      param = { nodeId: step };
+    const newFowardPayload = {
+      processId: payload.processId,
+      step: `${newFoward}`,
     }
 
-    const response = await dispatch(
-      endpoint.initiate({ processId, ...param })
-    );
+    setPayload(newFowardPayload)
+    onSearchPayload(newFowardPayload);
+  }
 
-    if (!_isUndefined(response) && !_isUndefined(onSearch)) {
-      onSearch(JSON.stringify(response.data));
-    }
+  function onSearchPayload(data) {
+    searchState(data.processId, data.step);
+  }
 
-  }, [dispatch, onSearch]);
 
   return (
-    <Grid item xs={6} height="100%" flex={1} style={{ overflowY: _isEmpty(data) ? 'hidden' : 'auto' }}>
+    <Grid
+      item
+      xs={6}
+      height="100%"
+      flex={1}
+      style={{ overflowY: _isEmpty(data) ? "hidden" : "auto" }}
+    >
       <Box
-        paddingTop='10px'
+        paddingTop="10px"
         display="flex"
         alignItems="center"
         justifyContent="space-between"
         width="100%"
-        bgColor='#1A2027'
+        bgColor="#1A2027"
       >
         <span>{label}</span>
+        <S.BackProcessButton onClick={backClick} />
         <TextField
           id="outlined-basic"
           label="Process ID"
           variant="outlined"
           value={payload.processId}
-          onChange={
-            (event) => setPayload(prev => ({ ...prev, processId: event.target.value }))
+          onChange={(event) =>
+            setPayload((prev) => ({ ...prev, processId: event.target.value }))
           }
         />
 
@@ -90,14 +131,15 @@ export const Section = ({ label = '', onClear = () => { }, onSearch = () => { },
           label="Step"
           variant="outlined"
           value={payload.step}
-          onChange={
-            (event) => setPayload(prev => ({ ...prev, step: event.target.value }))
+          onChange={(event) =>
+            setPayload((prev) => ({ ...prev, step: event.target.value }))
           }
         />
+        <S.FowardProcessButton onClick={fowardClick} />
 
         <IconButton
           aria-label="search a state"
-          onClick={() => searchState(payload.processId, payload.step)}
+          onClick={onSearchPayload(payload)}
         >
           <SearchIcon />
         </IconButton>
@@ -108,11 +150,13 @@ export const Section = ({ label = '', onClear = () => { }, onSearch = () => { },
 
       {_isEmpty(data) && <EmptyContent />}
 
-      {!_isEmpty(data) && <Item>
-        {data.map((item, index) => (
-          <Tree key={index} {...item} />
-        ))}
-      </Item>}
+      {!_isEmpty(data) && (
+        <Item>
+          {data.map((item, index) => (
+            <Tree key={index} {...item} />
+          ))}
+        </Item>
+      )}
     </Grid>
   );
 };
