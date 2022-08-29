@@ -1,5 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "store";
+import { useNavigate } from "react-router-dom";
+
 import * as S from "./styles";
 
 type Props = {
@@ -8,12 +10,19 @@ type Props = {
 };
 
 export const Confirmation: React.FC<Props> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const { confirmationDialog } = useSelector(
     (state: RootState) => state.diagramPage
   );
 
   function onConfirm() {
-    confirmationDialog.data.onConfirm();
+    if (confirmationDialog.data.onConfirm) {
+      confirmationDialog.data.onConfirm();
+    }
+
+    if (confirmationDialog.data.navigateTo) {
+      navigate(confirmationDialog.data.navigateTo);
+    }
 
     if (onClose) {
       onClose();
