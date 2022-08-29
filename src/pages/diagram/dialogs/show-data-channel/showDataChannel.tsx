@@ -4,12 +4,15 @@ import { useSelector } from "react-redux";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
+import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 import { RootState } from "store";
 
 import * as S from "./styles";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
+import { Section } from "pages/compare-json/components/Section";
 
 type Props = {
   isOpen: boolean;
@@ -17,19 +20,19 @@ type Props = {
   workflowId: string;
 };
 
-export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
-  const [properties, setProperties] = useState({
+export const ShowDataChannel: FC<Props> = ({ isOpen, onClose, workflowId }) => {
+  const [dataChannel, setDataChannel] = useState({
     category: undefined,
     parameters: undefined,
   });
 
-  const { propertiesDialog } = useSelector(
+  const { showDataChannelDialog } = useSelector(
     (state: RootState) => state.diagramPage
   );
 
-  useEffect( () => {
+  useEffect(() => {
     const request = async () => {
-      const element = propertiesDialog.data.element;
+      const element = showDataChannelDialog.data.element;
       const elementId = element.id.replace("Node_", "");
 
       const workflow = await listWorkflowById(workflowId);
@@ -38,33 +41,32 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
         _isEqual(node.id, elementId)
       );
 
-      setProperties({
+      setDataChannel({
         category: nodeSelected.category,
         parameters: nodeSelected.parameters,
       });
     };
-
     if (workflowId) {
       request();
     }
-  }, [propertiesDialog.data.element, workflowId]);
+  }, [showDataChannelDialog.data.element, workflowId]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
       <S.Title>
-        Propriedades
+        show data
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
       <S.Content>
-        {!_isEmpty(properties.category) && (
-          <S.Text>Category: {properties.category}</S.Text>
-        )}
-
-        <Box sx={{ mt: 2 }}>
-          <S.Text>Parameters</S.Text>
-          <S.Editor value={JSON.stringify(properties.parameters, null, 4)} />
-        </Box>
+        <Grid container spacing={1}>
+          <Grid item xs>
+            <Paper>xs</Paper>
+          </Grid>
+          <Grid item xs>
+            <Paper sx={{ height: 140 }}>xs=6</Paper>
+          </Grid>
+        </Grid>
       </S.Content>
     </S.Wrapper>
   );

@@ -27,6 +27,7 @@ import {
   setShowConfirmationDialog,
   setShowProcessInfoDialog,
   setShowPropertiesDialog,
+  setShowDataChannelDialog,
 } from "store/slices/diagram";
 
 type Props = {};
@@ -144,6 +145,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
           isOpen={diagramPageState.propertiesDialog.isVisible}
           onClose={() =>
             dispatch(setShowPropertiesDialog({ isVisible: false }))
+          }
+        />
+      )}
+
+      {diagramPageState.showDataChannelDialog.isVisible && (
+        <S.ShowDataChannelDialog
+          workflowId={workflowId ?? ""}
+          isOpen={diagramPageState.showDataChannelDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowDataChannelDialog({ isVisible: false }))
           }
         />
       )}
