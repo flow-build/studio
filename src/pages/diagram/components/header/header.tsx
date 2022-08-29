@@ -4,13 +4,16 @@ import { TWorkflow } from "models/workflow";
 
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
+import statusOk from 'assets/images/latest-version-button/status-ok.svg'
+import statusWarning from 'assets/images/latest-version-button/status-warning.svg'
 import * as S from "./styles";
 
 type Props = {
-  workflowId: string;
+  workflowId: string; 
+  isLastVersion: boolean;
 };
 
-export const Header: React.FC<Props> = ({ workflowId }) => {
+export const Header: React.FC<Props> = ({ workflowId, isLastVersion }) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
 
   useEffect(() => {
@@ -34,9 +37,19 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
         <S.Title>Version: {workflow?.version}</S.Title>
       </S.TitleContent>
 
-      <S.Tooltip title="Última versão">
-        <S.SyncIcon />
-      </S.Tooltip>
+      {isLastVersion ? (
+        <S.Tooltip title="Ultima versão">
+          <S.Status>
+            <img src={statusOk} alt="StatusOk" />
+          </S.Status>
+        </S.Tooltip>
+      ) : (
+        <S.Tooltip title="Atualizar versão">
+          <S.Status>
+            <img src={statusWarning}  alt="StatusWarning"/> 
+          </S.Status>
+        </S.Tooltip>
+      )}
     </S.Wrapper>
   );
 };
