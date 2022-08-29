@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Box from "@mui/material/Box";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -19,6 +20,10 @@ export const Wrapper = styled(Dialog).attrs({
   fullWidth: true,
   maxWidth: "lg",
 })``;
+
+export const BoxContent = styled(Box)`
+  width: 17.4rem;
+`;
 
 export const Title = styled(DialogTitle)`
   display: flex;

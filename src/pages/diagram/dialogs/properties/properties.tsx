@@ -4,8 +4,6 @@ import { useSelector } from "react-redux";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
-import Box from "@mui/material/Box";
-
 import { RootState } from "store";
 
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
@@ -18,22 +16,31 @@ type Props = {
   onClose?: () => void;
   workflowId: string;
 };
-
-interface IProperties {
+interface INodeData {
+  bag?: { [key: string]: any };
+  result?: { [key: string]: any };
   category?: string;
   parameters?: { [key: string]: any };
-  bag?: { [key: string]: any };
-  previousNode?: TState;
-  result?: { [key: string]: any };
+}
+interface IPayload {
+  current: INodeData;
+  previous: INodeData;
 }
 
 export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
-  const [properties, setProperties] = useState<IProperties>({
-    category: undefined,
-    parameters: undefined,
-    bag: undefined,
-    result: undefined,
-    previousNode: undefined,
+  const [nodeData, setNodeData] = useState<IPayload>({
+    current: {
+      bag: {},
+      result: {},
+      category: "",
+      parameters: {},
+    },
+    previous: {
+      bag: {},
+      result: {},
+      category: "",
+      parameters: {},
+    },
   });
 
   const { propertiesDialog } = useSelector(
@@ -65,12 +72,23 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
         ) as TState;
       }
 
-      setProperties({
-        category: nodeSelected.category,
-        parameters: nodeSelected.parameters,
-        bag: nodeSelectedFromHistory?.bag,
-        result: nodeSelectedFromHistory?.result,
-        previousNode: previousNode,
+      const previrousCategory = workflow.blueprint_spec.nodes.find(
+        (node: any) => _isEqual(node.id, previousNode?.node_id)
+      );
+
+      setNodeData({
+        current: {
+          bag: nodeSelectedFromHistory?.bag,
+          result: nodeSelectedFromHistory?.result,
+          category: nodeSelected.category,
+          parameters: nodeSelected?.parameters,
+        },
+        previous: {
+          bag: previousNode?.bag,
+          result: previousNode?.result,
+          category: previrousCategory?.category,
+          parameters: previrousCategory?.parameters,
+        },
       });
     };
 
@@ -78,6 +96,18 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
       request();
     }
   }, [propertiesDialog.data.element, workflowId, history]);
+
+  const previousNode = {
+    bag: nodeData?.previous?.bag,
+    result: nodeData?.previous?.result,
+  };
+
+  const spec = nodeData?.current?.parameters;
+
+  const propertiesState = {
+    bag: nodeData?.current.bag,
+    result: nodeData?.current?.result,
+  };
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
@@ -87,71 +117,37 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
       </S.Title>
 
       <S.Content>
-        <Box
-          sx={{
-            width: 350,
-          }}
-        >
-          {!_isEmpty(properties.category) && (
-            <S.Text>Category: {properties.category}</S.Text>
+        <S.BoxContent>
+          {!_isEmpty(nodeData?.previous?.category) && (
+            <S.Text>Category: {nodeData?.previous?.category}</S.Text>
           )}
           <S.Text>Previous State</S.Text>
-          <S.Editor
-            value={JSON.stringify(
-              {
-                bag: properties?.previousNode?.bag,
-                result: properties?.previousNode?.result,
-              },
-              null,
-              4
-            )}
-          />
-        </Box>
+          <S.Editor value={JSON.stringify(previousNode, null, 4)} />
+        </S.BoxContent>
 
-        <Box
-          sx={{
-            width: 350,
-            marginLeft: 2,
-          }}
-        >
-          {!_isEmpty(properties.category) && (
-            <S.Text>Category: {properties.category}</S.Text>
+        <S.BoxContent>
+          {!_isEmpty(nodeData?.current?.category) && (
+            <S.Text>Category: {nodeData?.current?.category}</S.Text>
           )}
           <S.Text>Spec</S.Text>
-          <S.Editor value={JSON.stringify(properties.parameters, null, 4)} />
-        </Box>
+          <S.Editor value={JSON.stringify(spec, null, 4)} />
+        </S.BoxContent>
 
-        <Box
-          sx={{
-            width: 350,
-            marginLeft: 2,
-          }}
-        >
-          {!_isEmpty(properties.category) && (
-            <S.Text>Category: {properties.category}</S.Text>
+        <S.BoxContent>
+          {!_isEmpty(nodeData?.current?.category) && (
+            <S.Text>Category: {nodeData?.current?.category}</S.Text>
           )}
           <S.Text>Execution Data</S.Text>
           <S.Editor />
-        </Box>
+        </S.BoxContent>
 
-        <Box
-          sx={{
-            width: 350,
-            marginLeft: 2,
-          }}
-        >
-          {!_isEmpty(properties.category) && (
-            <S.Text>Category: {properties.category}</S.Text>
+        <S.BoxContent>
+          {!_isEmpty(nodeData?.current?.category) && (
+            <S.Text>Category: {nodeData?.current?.category}</S.Text>
           )}
           <S.Text>State</S.Text>
-          <S.Editor
-            value={JSON.stringify(
-              { bag: properties.bag, result: properties.result },
-              null,
-              4
-            )}
-          />
-        </Box>
+          <S.Editor value={JSON.stringify(propertiesState, null, 4)} />
+        </S.BoxContent>
       </S.Content>
     </S.Wrapper>
   );
