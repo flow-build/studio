@@ -16,8 +16,7 @@ export function useProcessesPage() {
   const navigateToDiagram = useCallback(
     async (processId: string) => {
       const response = await listStatesByProcessId(processId);
-
-      navigate(`/dashboard/workflows/${response.workflow_id}/diagram`);
+      navigate(`/dashboard/workflows/${response.workflow.id}/diagram`);
     },
     [navigate]
   );
