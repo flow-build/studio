@@ -15,8 +15,8 @@ export function useTable(processes: TProcess[]) {
 
   const columnData = useMemo(() => {
     return [
-      { id: "name", name: "Name" },
-      { id: "id", name: "ID" },
+      { id: "nodeID", name: "Node Id" },
+      { id: "processId", name: "Process ID" },
       { id: "status", name: "Status" },
       { id: "createdAt", name: "Created at" },
       { id: "actions", name: "Actions" },
