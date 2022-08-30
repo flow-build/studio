@@ -13,6 +13,7 @@ import { RootState } from "store";
 import * as S from "./styles";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 import { Section } from "pages/compare-json/components/Section";
+import { getProps } from "services/resources/processes/activity-manager";
 
 type Props = {
   isOpen: boolean;
@@ -32,19 +33,15 @@ export const ShowDataChannel: FC<Props> = ({ isOpen, onClose, workflowId }) => {
 
   useEffect(() => {
     const request = async () => {
-      const element = showDataChannelDialog.data.element;
-      const elementId = element.id.replace("Node_", "");
 
-      const workflow = await listWorkflowById(workflowId);
+      // const element = showDataChannelDialog.data.element;
 
-      const nodeSelected = workflow.blueprint_spec.nodes.find((node: any) =>
-        _isEqual(node.id, elementId)
-      );
+      // console.log(element)
 
-      setDataChannel({
-        category: nodeSelected.category,
-        parameters: nodeSelected.parameters,
-      });
+      const response = await getProps("oi");
+
+      // console.log(response);
+      
     };
     if (workflowId) {
       request();
@@ -61,10 +58,15 @@ export const ShowDataChannel: FC<Props> = ({ isOpen, onClose, workflowId }) => {
       <S.Content>
         <Grid container spacing={1}>
           <Grid item xs>
-            <Paper>xs</Paper>
+            <Paper sx={{ height: 530 }}>
+              {" "}
+              <S.Editor
+                value={JSON.stringify(dataChannel.parameters, null, 4)}
+              />
+            </Paper>
           </Grid>
           <Grid item xs>
-            <Paper sx={{ height: 140 }}>xs=6</Paper>
+            <Paper sx={{ height: 530 }}></Paper>
           </Grid>
         </Grid>
       </S.Content>

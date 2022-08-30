@@ -19,6 +19,7 @@ export default class ReceiveData {
 
   getContextPadEntries(element: IElement) {
     function handleReceiveData(element: IElement) {
+      console.log(element);
       store.dispatch(
         setShowDataChannelDialog({ isVisible: true, data: { element } })
       );
