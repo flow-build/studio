@@ -71,7 +71,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
       <S.Title>
-        Novo processo
+        New Process
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
@@ -82,14 +82,14 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         </S.Text>
 
         <S.Text>
-          Json Editor
+          Initial Bag
           <S.Editor onChange={(newValue) => setPayload(newValue)} />
         </S.Text>
       </S.Content>
 
       <S.ActionsContainer>
-        <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
-        <S.OkButton onClick={onConfirm}>Iniciar</S.OkButton>
+        <S.CancelButton onClick={onClose}>Cancel</S.CancelButton>
+        <S.OkButton onClick={onConfirm}>Start</S.OkButton>
       </S.ActionsContainer>
     </S.Wrapper>
   );
