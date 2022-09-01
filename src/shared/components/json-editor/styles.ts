@@ -4,16 +4,18 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-dracula";
 
 export const Wrapper = styled(AceEditor).attrs({
+  placeholder: "Digite o json",
   mode: "json",
   theme: "dracula",
   name: "custom:parameters",
   width: "100%",
   fontSize: 16,
+  fontFamily: "Courier",
   setOptions: {
-    selectionStyle: 'line',
+    selectionStyle: "line",
     highlightActiveLine: true,
     highlightSelectedWord: true,
-    cursorStyle: 'ace',
+    cursorStyle: "ace",
     mergeUndoDeltas: true,
     autoScrollEditorIntoView: true,
     showPrintMargin: false,
@@ -32,5 +34,13 @@ export const Wrapper = styled(AceEditor).attrs({
     useWorker: false,
     useSoftTabs: true,
     tabSize: 4,
+
+    cursorStart: 1,
   },
-})``;
+})`
+  *,
+  button,
+  input {
+    font-family: unset !important;
+  }
+`;
