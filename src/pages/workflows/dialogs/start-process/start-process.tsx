@@ -35,20 +35,32 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     });
   }
 
-  async function onConfirm() {
-    const processName = workflowPageState.startProcessDialog.data.processName;
-    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-
-    const response = await createProcessByName(
-      processName,
-      JSON.parse(payload ?? "{}")
-    );
-    showNotification(processName);
-    navigate(`${workflowId}/processes/${response.process_id}/history`);
-
-    if (onClose) {
-      onClose();
+  function isValidJSONString(str: any) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
     }
+    return true;
+  }
+
+  async function onConfirm() {
+    // const processName = workflowPageState.startProcessDialog.data.processName;
+    // const workflowId = workflowPageState.startProcessDialog.data.workflowId;
+
+    // const response = await createProcessByName(
+    //   processName,
+    //   JSON.parse(payload ?? "{}")
+    // );
+    // showNotification(processName);
+    // navigate(`${workflowId}/processes/${response.process_id}/history`);
+
+    // if (onClose) {
+    //   onClose();
+    // }
+    console.log("IsValidJSONString", isValidJSONString(payload));
+
+    // CRIAR NOTIFICAÇÃO DE JSON INVALIDO COM O NOTISTACK
   }
 
   useEffect(() => {
