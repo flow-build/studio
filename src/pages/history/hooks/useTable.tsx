@@ -12,12 +12,13 @@ import { CollapseContent } from "pages/history/components/collapse-content";
 import { getLongFormatByDate } from "shared/utils/date";
 
 import { RootState } from "store";
-import comparePage, { setNewJson, setOldJson } from "store/slices/compare-page";
+import { setNewJson, setOldJson } from "store/slices/compare-page";
+import { useNavigate } from "react-router-dom";
 
 export function useTable(states: TState[]) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const comparePageState = useSelector((store: RootState) => store.comparePage);
-  console.log(comparePageState);
 
   function handleIconClick(
     json: string | undefined,
@@ -25,11 +26,28 @@ export function useTable(states: TState[]) {
     fn: (param?: string) => any
   ) {
     const parsedJson = json && (JSON.parse(json) as TState);
+    const parsedNewJson =
+      comparePageState.newJson &&
+      (JSON.parse(comparePageState.newJson) as TState);
+
+    const parsedOldJson =
+      comparePageState.oldJson &&
+      (JSON.parse(comparePageState.oldJson) as TState);
 
     if (parsedJson && _isEqual(state.id, parsedJson.id)) {
       dispatch(fn(undefined));
     } else {
-      dispatch(fn(JSON.stringify(state)));
+      if (
+        (parsedNewJson && _isEqual(state.id, parsedNewJson.id)) ||
+        (parsedOldJson && _isEqual(state.id, parsedOldJson.id))
+      ) {
+        if (comparePageState.newJson && comparePageState.oldJson !== undefined) {
+          navigate(`/dashboard/compare-json`);
+          console.log(comparePageState)
+        }
+      } else {
+        dispatch(fn(JSON.stringify(state)));
+      }
     }
   }
 
@@ -64,10 +82,9 @@ export function useTable(states: TState[]) {
       ];
       const actions = [
         {
-          icon:
-            handleIcon(comparePageState.oldJson, state)
-              ? CheckBox
-              : LooksOne,
+          icon: handleIcon(comparePageState.oldJson, state)
+            ? CheckBox
+            : () => <LooksOne />,
           tooltip: "selecionar processo",
           onClick: () => {
             handleIconClick(comparePageState.oldJson, state, setOldJson);
