@@ -27,11 +27,19 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const [inputSchema, setInputSchema] = useState();
   const [payload, setPayload] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   function showNotification(message: string) {
     enqueueSnackbar(`Processo ${message} criado!`, {
       autoHideDuration: 2000,
       variant: "success",
+    });
+  }
+
+  function errorNotification(message: string) {
+    enqueueSnackbar("JSON inválido", {
+      autoHideDuration: 2000,
+      variant: "error",
     });
   }
 
@@ -45,22 +53,26 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   async function onConfirm() {
-    // const processName = workflowPageState.startProcessDialog.data.processName;
-    // const workflowId = workflowPageState.startProcessDialog.data.workflowId;
+    if (!isValidJSONString(payload)) {
+      errorNotification("");
+      setIsLoading(false);
+      return;
+    }
+    const processName = workflowPageState.startProcessDialog.data.processName;
+    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
 
-    // const response = await createProcessByName(
-    //   processName,
-    //   JSON.parse(payload ?? "{}")
-    // );
-    // showNotification(processName);
-    // navigate(`${workflowId}/processes/${response.process_id}/history`);
+    const response = await createProcessByName(
+      processName,
+      JSON.parse(payload ?? "{}")
+    );
+    showNotification(processName);
 
-    // if (onClose) {
-    //   onClose();
-    // }
-    console.log("IsValidJSONString", isValidJSONString(payload));
+    setIsLoading(true);
+    navigate(`${workflowId}/processes/${response.process_id}/history`);
 
-    // CRIAR NOTIFICAÇÃO DE JSON INVALIDO COM O NOTISTACK
+    if (onClose) {
+      onClose();
+    }
   }
 
   useEffect(() => {
@@ -101,7 +113,11 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
       <S.ActionsContainer>
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
-        <S.OkButton onClick={onConfirm}>Iniciar</S.OkButton>
+
+        <S.OkButton onClick={onConfirm}>
+          {isLoading && <S.Loading />}
+          {!isLoading && <S.Text>Iniciar</S.Text>}
+        </S.OkButton>
       </S.ActionsContainer>
     </S.Wrapper>
   );
