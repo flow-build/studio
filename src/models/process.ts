@@ -5,7 +5,5 @@ export type TProcess = {
   id: string;
   state: TState;
   status: string;
-  workflow: {
-    id: string;
-  };
+  workflow_id: string;
 };
