@@ -19,7 +19,6 @@ import { Fab } from "shared/components/fab";
 
 import { RootState } from "store";
 
-import * as S from "./styles";
 import { IAction } from "shared/components/fab/types/IAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -28,6 +27,9 @@ import {
   setShowProcessInfoDialog,
   setShowPropertiesDialog,
 } from "store/slices/diagram";
+import { setHistory } from "store/slices/process-history";
+
+import * as S from "./styles";
 
 type Props = {};
 
@@ -99,7 +101,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
         const history = await getHistoryByProcessId(
           diagramPageState.processSelected?.id as string
         );
-        const orderedStates = history.reverse();
+
+        const orderedStates = history.slice().reverse();
 
         const modeling = diagram.modeler.get("modeling");
         const elementRegistry = diagram.modeler.get("elementRegistry");
@@ -114,6 +117,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
           modeling,
           states: orderedStates,
         });
+
+        dispatch(setHistory(orderedStates));
       }
     };
 
@@ -123,15 +128,14 @@ export const DiagramRefactored: React.FC<Props> = () => {
     diagram.modeler,
     diagramPageState.processSelected,
     paint,
+    dispatch,
   ]);
 
   return (
     <>
       <S.Wrapper ref={diagram.bpmn as any}>
         {!_isEmpty(diagramPageState.processSelected) && (
-          <S.Header
-            workflowId={diagramPageState.processSelected?.workflow_id as string}
-          />
+          <S.Header workflowId={workflowId as string} />
         )}
 
         <Fab actions={actions} />
