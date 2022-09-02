@@ -15,11 +15,5 @@ export const Wrapper = styled(Box).attrs({
   }
 })``
 
-export const Frame = styled.div` 
-  margin-top: 12px;
-  width: 100%;
-  height: 600px;
-`;
-
 
 /*  */
