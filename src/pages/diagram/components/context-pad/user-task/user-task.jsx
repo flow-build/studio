@@ -24,7 +24,7 @@ export default class UserTask {
 
         autoPlace.append(element, shape);
       } else {
-        appendUserTaskStart(event, element);
+        appendUserTaskStart(event);
       }
     }
 

@@ -17,6 +17,10 @@ import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyConten
 import { Tree } from "pages/compare-json/components/Tree";
 import { api } from "services/api";
 
+import * as S from "./styles";
+
+
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -26,13 +30,14 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export const Section = ({
   label = "",
-  onClear = () => {},
-  onSearch = () => {},
+  onClear = () => { },
+  onSearch = () => { },
   data = [],
+  state
 }) => {
   const [payload, setPayload] = useState({
-    processId: "",
-    step: "",
+    processId: state?.id ?? "",
+    step: state?.step_number ?? "",
   });
 
   const searchState = useCallback(
@@ -63,6 +68,37 @@ export const Section = ({
     [onSearch]
   );
 
+  function backClick() {
+    const back = Number(payload.step)
+    const newBack = back - 1
+
+    const newBackPayload = {
+      processId: payload.processId,
+      step: `${newBack}`,
+    }
+
+    setPayload(newBackPayload);
+    onSearchPayload(newBackPayload);
+  }
+
+  function fowardClick() {
+    const foward = Number(payload.step)
+    const newFoward  = foward + 1
+
+    const newFowardPayload = {
+      processId: payload.processId,
+      step: `${newFoward}`,
+    }
+
+    setPayload(newFowardPayload)
+    onSearchPayload(newFowardPayload);
+  }
+
+  function onSearchPayload(data) {
+    searchState(data.processId, data.step);
+  }
+
+
   return (
     <Grid
       item
@@ -80,6 +116,7 @@ export const Section = ({
         bgColor="#1A2027"
       >
         <span>{label}</span>
+        <S.BackProcessButton onClick={backClick} />
         <TextField
           id="outlined-basic"
           label="Process ID"
@@ -99,10 +136,11 @@ export const Section = ({
             setPayload((prev) => ({ ...prev, step: event.target.value }))
           }
         />
+        <S.FowardProcessButton onClick={fowardClick} />
 
         <IconButton
           aria-label="search a state"
-          onClick={() => searchState(payload.processId, payload.step)}
+          onClick={onSearchPayload(payload)}
         >
           <SearchIcon />
         </IconButton>

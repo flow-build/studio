@@ -9,7 +9,7 @@ import { TState } from "models/state";
 
 import { CollapseContent } from "pages/history/components/collapse-content";
 
-import { getLongFormatByDate } from "shared/utils/date";
+import { getDateTimeFormatByDate } from "shared/utils/date";
 
 import { RootState } from "store";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
@@ -133,7 +133,7 @@ export function useTable(states: TState[]) {
         state.node_id,
         state.next_node_id ?? "null",
         state.status,
-        getLongFormatByDate(state.created_at),
+        getDateTimeFormatByDate(state.created_at),
       ];
 
       const actions = [
@@ -170,3 +170,4 @@ export function useTable(states: TState[]) {
 
   return { columnData, rows };
 }
+
