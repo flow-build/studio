@@ -42,7 +42,6 @@ export function useTable(states: TState[]) {
       if (_isEqual(side, SIDE.LEFT)) {
         return dispatch(setOldJson(undefined));
       }
-
       return dispatch(setNewJson(undefined));
     },
     [dispatch]
@@ -57,7 +56,7 @@ export function useTable(states: TState[]) {
       let isRightEmpty = _isEmpty(compareRight);
 
       if (_isEqual(side, SIDE.LEFT)) {
-        const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
+                const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
 
         if (isSavedOnLeft) {
           isLeftEmpty = true;
