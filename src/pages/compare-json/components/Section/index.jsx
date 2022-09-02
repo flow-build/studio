@@ -33,10 +33,11 @@ export const Section = ({
   onClear = () => {},
   onSearch = () => {},
   data = [],
+  state,
 }) => {
   const [payload, setPayload] = useState({
-    processId: "",
-    step: "",
+    processId: state?.id ?? "",
+    step: state?.step_number ?? "",
   });
 
   const searchState = useCallback(

@@ -7,12 +7,16 @@ import { ListProcesses } from "pages/diagram/dialogs/list-processes";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
 
+import { Header as BaseHeader } from "pages/diagram/components/header";
+
 export const Wrapper = styled(Grid).attrs({
   container: true,
 })`
-  height: calc(100% - 64px);
+  height: calc(100% - 64px - 50px);
   position: relative;
 `;
+
+export const Header = styled(BaseHeader)``;
 
 export const ListProcessesDialog = styled(ListProcesses)``;
 
