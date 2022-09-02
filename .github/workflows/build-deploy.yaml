@@ -1,4 +1,4 @@
-name: Build
+name: Build & Deploy
 on:
   push:
     branches:
@@ -11,14 +11,42 @@ env:
   REACT_APP_MQTT_PORT: ${{secrets.REACT_APP_MQTT_PORT}}
 
 jobs:
-  deployment:
+  build: 
     runs-on: ubuntu-latest
+    steps:
+      - name: Some check on branch
+        id: branch_check
+        run: |
+          echo "Running on branch ${{ github.ref }}"
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "::set-output name=env_name::production"
+          elif [ "${{ github.ref }}" = "refs/heads/developer" ]; then
+            echo "::set-output name=env_name::development"
+          elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
+            echo "::set-output name=env_name::production"
+          else
+             echo "::set-output name=env_name::development"
+          fi         
+          
+      - name: Use variable setup in previous step
+        run: echo "Using variable ${{ steps.branch_check.outputs.env_name }}"
+        
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
+
+  deployment:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment: 
+      name: ${{ needs.build.outputs.env_name }}
 
     strategy:
       matrix:
         node-version: [14.x]
 
     steps:
+      - name: Check Environment Name
+        run: echo "Using environment ${{ needs.build.outputs.env_name }}"
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
