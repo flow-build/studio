@@ -54,22 +54,21 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
   async function onConfirm() {
     if (!isValidJSONString(payload)) {
-      errorNotification("");
       setIsLoading(false);
+      errorNotification("");
       return;
     }
+    setIsLoading(true);
     const processName = workflowPageState.startProcessDialog.data.processName;
     const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-
     const response = await createProcessByName(
       processName,
       JSON.parse(payload ?? "{}")
     );
     showNotification(processName);
-
-    setIsLoading(true);
-    navigate(`${workflowId}/processes/${response.process_id}/history`);
-
+    setTimeout(() => {
+      navigate(`${workflowId}/processes/${response.process_id}/history`);
+    }, 2000);
     if (onClose) {
       onClose();
     }
@@ -115,8 +114,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
 
         <S.OkButton onClick={onConfirm}>
-          {isLoading && <S.Loading />}
-          {!isLoading && <S.Text>Iniciar</S.Text>}
+          {isLoading ? <S.Loading /> : <S.Text>Iniciar</S.Text>}
         </S.OkButton>
       </S.ActionsContainer>
     </S.Wrapper>
