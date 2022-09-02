@@ -6,4 +6,5 @@ export type TWorkflow = {
   name: string;
   version: number;
   workflow_id: string;
+  isLatest: boolean;
 };

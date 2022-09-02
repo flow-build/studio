@@ -20,7 +20,7 @@ export default class Process {
 
         autoPlace.append(element, shape);
       } else {
-        appendProcessStart(event, element);
+        appendProcessStart(event);
       }
     }
 

@@ -28,7 +28,7 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
   useEffect(() => {
     const request = async () => {
       const response = await getHistoryByProcessId(process.id);
-      const workflow = await listWorkflowById(process.workflow_id);
+      const workflow = await listWorkflowById(process.workflow.id);
 
       setPayload({ state: _first(response) as TState, workflow });
     };
@@ -68,7 +68,7 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
         <S.OkButton
           onClick={() =>
             navigate(
-              `/dashboard/workflows/${process.workflow_id}/processes/${process.id}/history`
+              `/dashboard/workflows/${process.workflow.id}/processes/${process.id}/history`
             )
           }
         >
