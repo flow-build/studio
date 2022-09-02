@@ -135,9 +135,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
     <>
       <S.Wrapper ref={diagram.bpmn as any}>
         {!_isEmpty(diagramPageState.processSelected) && (
-          <S.Header
-            workflowId={diagramPageState.processSelected?.workflow_id as string}
-          />
+          <S.Header workflowId={workflowId as string} />
         )}
 
         <Fab actions={actions} />
