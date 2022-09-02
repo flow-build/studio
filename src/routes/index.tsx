@@ -7,6 +7,7 @@ import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
+import { Metabase } from "pages/metabase";
 
 export const AppRoutes = () => {
   return (
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="dashboard" element={<Dashboard />}>
+          <Route index element={<Metabase />} />
           <Route path="workflows" element={<Workflows />} />
           <Route path="workflows/:id/processes" element={<Processes />} />
           <Route

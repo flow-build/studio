@@ -94,7 +94,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
       <S.Title>
-        Novo processo
+        Novo Processo
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
