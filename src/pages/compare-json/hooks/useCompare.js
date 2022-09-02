@@ -243,5 +243,8 @@ export function useCompare() {
     return { previous, current };
   }, [mergeData, compare?.oldJson, compare?.newJson]);
 
-  return { jsonDiff };
+  const getOldJson = compare?.oldJson && JSON.parse(compare?.oldJson)
+  const getNewJson = compare?.newJson && JSON.parse(compare?.newJson)
+
+  return { jsonDiff, getOldJson, getNewJson };
 }
