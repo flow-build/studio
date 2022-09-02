@@ -33,10 +33,11 @@ export const Section = ({
   onClear = () => { },
   onSearch = () => { },
   data = [],
+  state
 }) => {
   const [payload, setPayload] = useState({
-    processId: "",
-    step: "",
+    processId: state?.id ?? "",
+    step: state?.step_number ?? "",
   });
 
   const searchState = useCallback(
@@ -82,7 +83,7 @@ export const Section = ({
 
   function fowardClick() {
     const foward = Number(payload.step)
-    const newFoward = foward + 1
+    const newFoward  = foward + 1
 
     const newFowardPayload = {
       processId: payload.processId,
