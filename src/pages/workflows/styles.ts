@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import Grid from "@mui/material/Grid";
 
+import { StartProcess } from "pages/workflows/dialogs/start-process";
+
 import { Table as SharedTable } from "shared/components/table";
 
 export const Wrapper = styled(Grid).attrs({
@@ -21,3 +23,5 @@ export const TableContainer = styled(Grid).attrs({
 `;
 
 export const Table = styled(SharedTable)``;
+
+export const StartProcessDialog = styled(StartProcess)``;

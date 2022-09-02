@@ -22,11 +22,19 @@ export const CollapseContent: React.FC<Props> = ({ state }) => {
     <>
       <S.Content title="Bag" copyValue={state.bag} editorValue={state.bag} />
 
-      <S.Content
-        title="Result"
-        copyValue={state.result}
-        editorValue={state.result}
-      />
+      {state.error === null ? (
+        <S.Content
+          title="Result"
+          copyValue={state.result}
+          editorValue={state.result}
+        />
+      ) : (
+        <S.Content
+          title="Error"
+          copyValue={state.error}
+          editorValue={state.error}
+        />
+      )}
 
       <S.Content
         title="Actor data"
