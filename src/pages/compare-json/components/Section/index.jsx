@@ -1,118 +1,169 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
 
-import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
+import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 
 import Grid from "@mui/material/Grid";
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
 import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyContent";
 
-import { workflowService } from "pages/diagram/services/workflowService";
-
 import { Tree } from "pages/compare-json/components/Tree";
+import { api } from "services/api";
+
+import * as S from "./styles";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   textAlign: "center",
   color: theme.palette.text.secondary,
+  marginTop: "4.5rem",
+  marginLeft: "1.1rem",
 }));
 
-export const Section = ({ label = '', onClear = () => { }, onSearch = () => { }, data = [] }) => {
-  const dispatch = useDispatch();
+export const Section = ({
+  label = "",
+  onClear = () => {},
+  onSearch = () => {},
+  data = [],
+  state,
+}) => {
   const [payload, setPayload] = useState({
-    processId: '',
-    step: '',
+    processId: state?.id ?? "",
+    step: state?.step_number ?? "",
   });
 
-  const searchState = useCallback(async (processId, step) => {
-    if (!processId || !step) {
-      return;
-    }
+  const searchState = useCallback(
+    async (processId, step) => {
+      if (!processId || !step) {
+        return;
+      }
 
-    const isNumber = (str) => {
-      if (typeof str != "string") return false; // we only process strings!  
-      return !isNaN(str) && !isNaN(parseFloat(str));
+      const isNumber = (str) => {
+        if (typeof str != "string") return false; // we only process strings!
+        return !isNaN(str) && !isNaN(parseFloat(str));
+      };
+
+      let response;
+
+      if (isNumber(step)) {
+        const URL = `/states/process/${processId}?stepNumber=${step}`;
+        response = await api.get(URL);
+      } else {
+        // endpoint = workflowService.endpoints.getStateByNodeId;
+        // param = { nodeId: step };
+      }
+
+      if (!_isUndefined(response) && !_isUndefined(onSearch)) {
+        onSearch(JSON.stringify(response.data));
+      }
+    },
+    [onSearch]
+  );
+
+  function backClick() {
+    const back = Number(payload.step);
+    const newBack = back - 1;
+
+    const newBackPayload = {
+      processId: payload.processId,
+      step: `${newBack}`,
     };
 
-    let endpoint;
-    let param;
+    setPayload(newBackPayload);
+    onSearchPayload(newBackPayload);
+  }
 
-    if (isNumber(step)) {
-      endpoint = workflowService.endpoints.getStateByStepNumber;
-      param = { stepNumber: step };
-    } else {
-      endpoint = workflowService.endpoints.getStateByNodeId;
-      param = { nodeId: step };
-    }
+  function fowardClick() {
+    const foward = Number(payload.step);
+    const newFoward = foward + 1;
 
-    const response = await dispatch(
-      endpoint.initiate({ processId, ...param })
-    );
+    const newFowardPayload = {
+      processId: payload.processId,
+      step: `${newFoward}`,
+    };
 
-    if (!_isUndefined(response) && !_isUndefined(onSearch)) {
-      onSearch(JSON.stringify(response.data));
-    }
+    setPayload(newFowardPayload);
+    onSearchPayload(newFowardPayload);
+  }
 
-  }, [dispatch, onSearch]);
+  function onSearchPayload(data) {
+    searchState(data.processId, data.step);
+  }
 
   return (
-    <Grid item xs={6} height="100%" flex={1} style={{ overflowY: _isEmpty(data) ? 'hidden' : 'auto' }}>
-      <Box
-        paddingTop='10px'
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        width="100%"
-        bgColor='#1A2027'
-      >
-        <span>{label}</span>
-        <TextField
-          id="outlined-basic"
-          label="Process ID"
-          variant="outlined"
-          value={payload.processId}
-          onChange={
-            (event) => setPayload(prev => ({ ...prev, processId: event.target.value }))
-          }
-        />
-
-        <TextField
-          id="outlined-basic"
-          label="Step"
-          variant="outlined"
-          value={payload.step}
-          onChange={
-            (event) => setPayload(prev => ({ ...prev, step: event.target.value }))
-          }
-        />
-
-        <IconButton
-          aria-label="search a state"
-          onClick={() => searchState(payload.processId, payload.step)}
+    <Grid
+      item
+      xs={6}
+      height="100%"
+      flex={1}
+      style={{ overflowY: _isEmpty(data) ? "hidden" : "auto" }}
+    >
+      <S.Container>
+        <Box
+          padding="0.6rem"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-evenly"
+          width="100%"
+          color="white"
+          zIndex={2}
         >
-          <SearchIcon />
-        </IconButton>
-        <IconButton aria-label="delete" onClick={onClear}>
-          <DeleteIcon />
-        </IconButton>
-      </Box>
+          <span>{label}</span>
+          <S.BackProcessButton onClick={backClick} />
+          <TextField
+            id="outlined-size-small"
+            defaultValue="Small"
+            size="small"
+            label="Process ID"
+            variant="outlined"
+            value={payload.processId}
+            onChange={(event) =>
+              setPayload((prev) => ({ ...prev, processId: event.target.value }))
+            }
+            sx={{}}
+          />
 
+          <TextField
+            id="outlined-size-small"
+            defaultValue="Small"
+            size="small"
+            label="Step"
+            variant="outlined"
+            value={payload.step}
+            onChange={(event) =>
+              setPayload((prev) => ({ ...prev, step: event.target.value }))
+            }
+          />
+          <S.FowardProcessButton onClick={fowardClick} />
+
+          <IconButton
+            aria-label="search a state"
+            onClick={onSearchPayload(payload)}
+          >
+            <SearchIcon />
+          </IconButton>
+          <IconButton aria-label="delete" onClick={onClear}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      </S.Container>
       {_isEmpty(data) && <EmptyContent />}
 
-      {!_isEmpty(data) && <Item>
-        {data.map((item, index) => (
-          <Tree key={index} {...item} />
-        ))}
-      </Item>}
+      {!_isEmpty(data) && (
+        <Item>
+          {data.map((item, index) => (
+            <Tree key={index} {...item} />
+          ))}
+        </Item>
+      )}
     </Grid>
   );
 };
