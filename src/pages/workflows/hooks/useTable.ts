@@ -9,7 +9,7 @@ import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
 
 import { TWorkflow } from "models/workflow";
 
-import { getLongFormatByDate } from "shared/utils/date";
+import { getDateTimeFormatByDate } from "shared/utils/date";
 import { useDispatch } from "react-redux";
 import { setProcessSelected } from "store/slices/diagram";
 
@@ -35,7 +35,7 @@ export function useTable(workflows: TWorkflow[]) {
         workflow.workflow_id,
         workflow.description,
         workflow.version,
-        getLongFormatByDate(workflow.created_at),
+        getDateTimeFormatByDate(workflow.created_at),
       ];
 
       const actions = [
@@ -69,3 +69,4 @@ export function useTable(workflows: TWorkflow[]) {
     columnData,
   };
 }
+

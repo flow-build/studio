@@ -6,7 +6,7 @@ import { TProcess } from "models/process";
 
 import { useProcessesPage } from "pages/processes/hooks/useProcessesPage";
 
-import { getLongFormatByDate } from "shared/utils/date";
+import { getDateTimeFormatByDate } from "shared/utils/date";
 import { setProcessSelected } from "store/slices/diagram";
 
 export function useTable(processes: TProcess[]) {
@@ -29,7 +29,7 @@ export function useTable(processes: TProcess[]) {
         process.state.node_name,
         process.id,
         process.status,
-        getLongFormatByDate(process.created_at),
+        getDateTimeFormatByDate(process.created_at),
       ];
 
       const actions = [
