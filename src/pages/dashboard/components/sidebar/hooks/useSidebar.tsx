@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
-import HomeIcon from '@mui/icons-material/Home';
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import { TypeMenuItem } from "constants/type-menu-item";
 
 interface IMenuItem {
@@ -31,7 +31,7 @@ export function useSidebar() {
       {
         name: "Dashboard",
         pathname: "/dashboard",
-        icon: <HomeIcon />,
+        icon: <DashboardIcon />,
         type: TypeMenuItem.NAVIGATION,
         tooltip: "Dashboard",
       },
