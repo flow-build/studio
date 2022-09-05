@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
+import DashboardIcon from '@mui/icons-material/Dashboard'
 import { TypeMenuItem } from "constants/type-menu-item";
 
 interface IMenuItem {
@@ -27,6 +28,13 @@ export function useSidebar() {
 
   const menuItems = useMemo(() => {
     return [
+      {
+        name: "Dashboard",
+        pathname: "/dashboard",
+        icon: <DashboardIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Dashboard",
+      },
       {
         name: "Workflows",
         pathname: "workflows",
