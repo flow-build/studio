@@ -17,6 +17,8 @@ import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyConten
 import { Tree } from "pages/compare-json/components/Tree";
 import { api } from "services/api";
 
+import { useSelector } from "react-redux";
+
 import * as S from "./styles";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -35,8 +37,9 @@ export const Section = ({
   data = [],
   state,
 }) => {
+  const processIdHistory = useSelector((state) => state.processId);
   const [payload, setPayload] = useState({
-    processId: state?.id ?? "",
+    processId: processIdHistory.processId ?? "",
     step: state?.step_number ?? "",
   });
 
