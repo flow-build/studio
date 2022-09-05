@@ -23,7 +23,7 @@ export const Metabase: React.FC = () => {
         title="frame"
         src={iframeUrl}
         width="100%"
-        height="650px"
+        height="915px"
         allowTransparency
       />
     </S.Frame>
