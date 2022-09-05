@@ -113,38 +113,29 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
     <S.Wrapper open={isOpen} onClose={onClose}>
       <S.Title>
         Propriedades
+        {!_isEmpty(nodeData?.current?.category) && (
+          <S.Text>Category: {nodeData?.current?.category}</S.Text>
+        )}
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
       <S.Content>
         <S.BoxContent>
-          {!_isEmpty(nodeData?.previous?.category) && (
-            <S.Text>Category: {nodeData?.previous?.category}</S.Text>
-          )}
           <S.Text>Previous State</S.Text>
           <S.Editor value={JSON.stringify(previousNode, null, 4)} />
         </S.BoxContent>
 
         <S.BoxContent>
-          {!_isEmpty(nodeData?.current?.category) && (
-            <S.Text>Category: {nodeData?.current?.category}</S.Text>
-          )}
           <S.Text>Spec</S.Text>
           <S.Editor value={JSON.stringify(spec, null, 4)} />
         </S.BoxContent>
 
         <S.BoxContent>
-          {!_isEmpty(nodeData?.current?.category) && (
-            <S.Text>Category: {nodeData?.current?.category}</S.Text>
-          )}
           <S.Text>Execution Data</S.Text>
           <S.Editor />
         </S.BoxContent>
 
         <S.BoxContent>
-          {!_isEmpty(nodeData?.current?.category) && (
-            <S.Text>Category: {nodeData?.current?.category}</S.Text>
-          )}
           <S.Text>State</S.Text>
           <S.Editor value={JSON.stringify(propertiesState, null, 4)} />
         </S.BoxContent>
