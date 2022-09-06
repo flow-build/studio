@@ -17,11 +17,15 @@ import EmptyContent from "pages/compare-json/components/EmptyContent/EmptyConten
 import { Tree } from "pages/compare-json/components/Tree";
 import { api } from "services/api";
 
+import * as S from "./styles";
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   textAlign: "center",
   color: theme.palette.text.secondary,
+  marginTop: "4.5rem",
+  marginLeft: "1.1rem",
 }));
 
 export const Section = ({
@@ -29,10 +33,11 @@ export const Section = ({
   onClear = () => {},
   onSearch = () => {},
   data = [],
+  state,
 }) => {
   const [payload, setPayload] = useState({
-    processId: "",
-    step: "",
+    processId: state?.id ?? "",
+    step: state?.step_number ?? "",
   });
 
   const searchState = useCallback(
@@ -63,6 +68,36 @@ export const Section = ({
     [onSearch]
   );
 
+  function backClick() {
+    const back = Number(payload.step);
+    const newBack = back - 1;
+
+    const newBackPayload = {
+      processId: payload.processId,
+      step: `${newBack}`,
+    };
+
+    setPayload(newBackPayload);
+    onSearchPayload(newBackPayload);
+  }
+
+  function fowardClick() {
+    const foward = Number(payload.step);
+    const newFoward = foward + 1;
+
+    const newFowardPayload = {
+      processId: payload.processId,
+      step: `${newFoward}`,
+    };
+
+    setPayload(newFowardPayload);
+    onSearchPayload(newFowardPayload);
+  }
+
+  function onSearchPayload(data) {
+    searchState(data.processId, data.step);
+  }
+
   return (
     <Grid
       item
@@ -71,46 +106,55 @@ export const Section = ({
       flex={1}
       style={{ overflowY: _isEmpty(data) ? "hidden" : "auto" }}
     >
-      <Box
-        paddingTop="10px"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        width="100%"
-        bgColor="#1A2027"
-      >
-        <span>{label}</span>
-        <TextField
-          id="outlined-basic"
-          label="Process ID"
-          variant="outlined"
-          value={payload.processId}
-          onChange={(event) =>
-            setPayload((prev) => ({ ...prev, processId: event.target.value }))
-          }
-        />
-
-        <TextField
-          id="outlined-basic"
-          label="Step"
-          variant="outlined"
-          value={payload.step}
-          onChange={(event) =>
-            setPayload((prev) => ({ ...prev, step: event.target.value }))
-          }
-        />
-
-        <IconButton
-          aria-label="search a state"
-          onClick={() => searchState(payload.processId, payload.step)}
+      <S.Container>
+        <Box
+          padding="0.6rem"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-evenly"
+          width="100%"
+          color="white"
+          zIndex={2}
         >
-          <SearchIcon />
-        </IconButton>
-        <IconButton aria-label="delete" onClick={onClear}>
-          <DeleteIcon />
-        </IconButton>
-      </Box>
+          <span>{label}</span>
+          <S.BackProcessButton onClick={backClick} />
+          <TextField
+            id="outlined-size-small"
+            defaultValue="Small"
+            size="small"
+            label="Process ID"
+            variant="outlined"
+            value={payload.processId}
+            onChange={(event) =>
+              setPayload((prev) => ({ ...prev, processId: event.target.value }))
+            }
+            sx={{}}
+          />
 
+          <TextField
+            id="outlined-size-small"
+            defaultValue="Small"
+            size="small"
+            label="Step"
+            variant="outlined"
+            value={payload.step}
+            onChange={(event) =>
+              setPayload((prev) => ({ ...prev, step: event.target.value }))
+            }
+          />
+          <S.FowardProcessButton onClick={fowardClick} />
+
+          <IconButton
+            aria-label="search a state"
+            onClick={onSearchPayload(payload)}
+          >
+            <SearchIcon />
+          </IconButton>
+          <IconButton aria-label="delete" onClick={onClear}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      </S.Container>
       {_isEmpty(data) && <EmptyContent />}
 
       {!_isEmpty(data) && (

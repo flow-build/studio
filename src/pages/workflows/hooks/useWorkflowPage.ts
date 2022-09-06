@@ -1,41 +1,46 @@
-import { useCallback } from "react"
-import { useNavigate } from 'react-router-dom'
-import { useSnackbar } from 'notistack';
-import { createProcessByName } from "services/resources/processes/create-by-name";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { setStartProcessDialog } from "store/slices/workflow-page";
 
 export function useWorkflowPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const { enqueueSnackbar } = useSnackbar();
+  const navigateToProcess = useCallback(
+    (workflowId: string) => {
+      navigate(`${workflowId}/processes`);
+    },
+    [navigate]
+  );
 
-  const navigateToProcess = useCallback((workflowId: string) => {
-    navigate(`${workflowId}/processes`)
-  }, [navigate])
+  const createProcess = useCallback(
+    async (processName: string, workflowId: string) => {
+      try {
+        dispatch(
+          setStartProcessDialog({
+            isVisible: true,
+            data: { workflowId, processName },
+          })
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [dispatch]
+  );
 
-  const showNotification = useCallback((message: string) => {
-    enqueueSnackbar(
-      `Processo ${message} criado!`,
-      { autoHideDuration: 2000, variant: 'success' }
-    );
-  }, [enqueueSnackbar])
-
-  const createProcess = useCallback(async (processName: string, workflowId: string) => {
-    try {
-      const response = await createProcessByName(processName);
-      showNotification(processName);
-      navigate(`${workflowId}/processes/${response.process_id}/history`)
-    } catch (error) {
-      console.error(error)
-    }
-  }, [navigate, showNotification])
-
-  const navigateToDiagram = useCallback((workflowId: string) => {
-    navigate(`${workflowId}/diagram`)
-  }, [navigate])
+  const navigateToDiagram = useCallback(
+    (workflowId: string) => {
+      navigate(`${workflowId}/diagram`);
+    },
+    [navigate]
+  );
 
   return {
     navigateToProcess,
     createProcess,
     navigateToDiagram,
-  }
+  };
 }

@@ -28,7 +28,8 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
   useEffect(() => {
     const request = async () => {
       const response = await getHistoryByProcessId(process.id);
-      const workflow = await listWorkflowById(process.workflow_id);
+      const workflowId = process.workflow_id ?? (process as any)?.workflow.id;
+      const workflow = await listWorkflowById(workflowId);
 
       setPayload({ state: _first(response) as TState, workflow });
     };
@@ -66,11 +67,14 @@ export const ProcessInfo: FC<Props> = ({ isOpen, process, onClose }) => {
 
       <S.ActionsContainer>
         <S.OkButton
-          onClick={() =>
+          onClick={() => {
+            const workflowId =
+              process.workflow_id ?? (process as any)?.workflow.id;
+
             navigate(
-              `/dashboard/workflows/${process.workflow_id}/processes/${process.id}/history`
-            )
-          }
+              `/dashboard/workflows/${workflowId}/processes/${process.id}/history`
+            );
+          }}
         >
           Ver histórico
         </S.OkButton>

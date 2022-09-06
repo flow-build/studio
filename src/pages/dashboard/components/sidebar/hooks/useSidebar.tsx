@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
 
@@ -28,6 +29,13 @@ export function useSidebar() {
 
   const menuItems = useMemo(() => {
     return [
+      {
+        name: "Dashboard",
+        pathname: "/dashboard",
+        icon: <DashboardIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Dashboard",
+      },
       {
         name: "Workflows",
         pathname: "workflows",
@@ -61,3 +69,4 @@ export function useSidebar() {
 
   return { menuItems, isOpenDialog, onCloseDialog };
 }
+

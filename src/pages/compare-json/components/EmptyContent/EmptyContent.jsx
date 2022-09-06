@@ -13,7 +13,11 @@ const EmptyContent = () => {
     justifyContent: "center",
   };
 
-  const articleIconStyleSX = { fontSize: 70, marginBottom: "30px" };
+  const articleIconStyleSX = {
+    fontSize: 70,
+    marginBottom: "30px",
+    color: "white",
+  };
 
   return (
     <Container fixed sx={containerStyleSX}>

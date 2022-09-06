@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Box from "@mui/material/Box";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -17,8 +18,12 @@ export const Wrapper = styled(Dialog).attrs({
   "aria-describedby": "Show all properties of shape",
   scroll: "paper",
   fullWidth: true,
-  maxWidth: "md",
+  maxWidth: "lg",
 })``;
+
+export const BoxContent = styled(Box)`
+  width: 17.4rem;
+`;
 
 export const Title = styled(DialogTitle)`
   display: flex;
@@ -33,7 +38,12 @@ export const CloseButton = styled(IconButton).attrs({
 
 export const Text = styled(DialogContentText)``;
 
-export const Content = styled(DialogContent)``;
+export const Content = styled(DialogContent)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 export const Editor = styled(AceEditor).attrs({
   mode: "json",

@@ -18,6 +18,8 @@ export const CompareJson = () => {
 
   const { current, previous } = compareHook.jsonDiff;
 
+  const {getOldJson, getNewJson} = compareHook;
+
   const clearJson = (callbackFn) => {
     dispatch(callbackFn(undefined));
   };
@@ -29,12 +31,14 @@ export const CompareJson = () => {
           label="1"
           onClear={() => clearJson(setOldJson)}
           data={previous}
+          state={getOldJson}
           onSearch={(json) => dispatch(setOldJson(json))}
         />
         <Section
           label="2"
           onClear={() => clearJson(setNewJson)}
           data={current}
+          state={getNewJson}
           onSearch={(json) => dispatch(setNewJson(json))}
         />
       </Grid>

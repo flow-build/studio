@@ -5,6 +5,7 @@ import diagramReducer from "store/slices/diagram";
 import filterReducer from "store/slices/filter";
 import comparePageReducer from "store/slices/compare-page";
 import workflowPageReducer from "store/slices/workflow-page";
+import historyReducer from "store/slices/process-history";
 import settingsReducer from "store/slices/settings";
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     workflowPage: workflowPageReducer,
     comparePage: comparePageReducer,
     diagramPage: diagramReducer,
+    processHistory: historyReducer,
     settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
