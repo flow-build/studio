@@ -12,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { IconButton } from "shared/components/icon-button";
 import { JsonEditor } from "shared/components/json-editor";
+import { InputText } from "shared/components/input-text";
 
 import Form from "@rjsf/core";
 
@@ -79,4 +80,12 @@ export const FormSchema = styled(Form).attrs({})`
   .btzZXO input {
     background: none;
   }
+`;
+
+export const TesteHuehue = styled(Button).attrs({
+  variant: "contained",
+})``;
+
+export const SmiteInput = styled(InputText)`
+  // background-color: red;
 `;
