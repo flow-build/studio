@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -9,8 +9,9 @@ import "./json.css";
 import { useDispatch } from "react-redux";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
 
-import { Section } from 'pages/compare-json/components/Section';
+import { Section } from "pages/compare-json/components/Section";
 
+import { useCallbackPrompt } from "./hooks/useCallbackPrompt";
 
 export const CompareJson = () => {
   const dispatch = useDispatch();
@@ -18,16 +19,34 @@ export const CompareJson = () => {
 
   const { current, previous } = compareHook.jsonDiff;
 
-  const {getOldJson, getNewJson} = compareHook;
+  const { getOldJson, getNewJson } = compareHook;
 
-  const clearJson = (callbackFn) => {
-    dispatch(callbackFn(undefined));
-  };
+  const[showDialog, setShowDialog]= useState<Boolean>(false)
+
+  const showPrompt = useCallbackPrompt(showDialog)
+
+
+  const handleChange = (event) =>{
+    setShowDialog(true)
+  }
+
+  // const clearJson = (callbackFn) => {
+  //   dispatch(callbackFn(undefined));
+  // };
+
+  // useEffect(()=>{
+  //   return()=>{
+  //     console.log("return")
+  //     // clearJson(setOldJson),
+  //     // clearJson(setNewJson)
+  //   }
+  // },[])
 
   return (
     <Box sx={{ flexGrow: 1 }} height="100%">
       <Grid container columns={12} columnSpacing={6} height="100%">
-        <Section
+
+        {/* <Section
           label="1"
           onClear={() => clearJson(setOldJson)}
           data={previous}
@@ -40,7 +59,7 @@ export const CompareJson = () => {
           data={current}
           state={getNewJson}
           onSearch={(json) => dispatch(setNewJson(json))}
-        />
+        /> */}
       </Grid>
     </Box>
   );
