@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,9 +11,10 @@ import { setNewJson, setOldJson } from "store/slices/compare-page";
 
 import { Section } from "pages/compare-json/components/Section";
 
-import { useCallbackPrompt } from "./hooks/useCallbackPrompt";
+import { Action, createBrowserHistory } from "history";
 
 export const CompareJson = () => {
+  const history = createBrowserHistory();
   const dispatch = useDispatch();
   const compareHook = useCompare();
 
@@ -21,32 +22,27 @@ export const CompareJson = () => {
 
   const { getOldJson, getNewJson } = compareHook;
 
-  const[showDialog, setShowDialog]= useState<Boolean>(false)
+  const clearJson = useCallback(
+    (callbackFn) => {
+      dispatch(callbackFn(undefined));
+    },
+    [dispatch]
+  );
 
-  const showPrompt = useCallbackPrompt(showDialog)
-
-
-  const handleChange = (event) =>{
-    setShowDialog(true)
-  }
-
-  // const clearJson = (callbackFn) => {
-  //   dispatch(callbackFn(undefined));
-  // };
-
-  // useEffect(()=>{
-  //   return()=>{
-  //     console.log("return")
-  //     // clearJson(setOldJson),
-  //     // clearJson(setNewJson)
-  //   }
-  // },[])
+  useEffect(() => {
+    const unlisten = history.listen(({ location, action }) => {
+      if (action === Action.Pop) {
+        clearJson(setOldJson);
+        clearJson(setNewJson);
+        unlisten();
+      }
+    });
+  }, [clearJson, history]);
 
   return (
     <Box sx={{ flexGrow: 1 }} height="100%">
       <Grid container columns={12} columnSpacing={6} height="100%">
-
-        {/* <Section
+        <Section
           label="1"
           onClear={() => clearJson(setOldJson)}
           data={previous}
@@ -59,7 +55,7 @@ export const CompareJson = () => {
           data={current}
           state={getNewJson}
           onSearch={(json) => dispatch(setNewJson(json))}
-        /> */}
+        />
       </Grid>
     </Box>
   );
