@@ -10,11 +10,16 @@ import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
 import { RootState } from "store";
 
+// import Form from "@rjsf/material-ui";
+
+import validator from "@rjsf/validator-ajv6";
+
 import * as S from "./styles";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
+  schema: {};
 };
 
 export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
@@ -60,13 +65,28 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         const nodeStart = workflow.blueprint_spec.nodes.find((node: any) =>
           _isEqual(node.type, "Start")
         );
-
         setInputSchema(nodeStart.parameters.input_schema);
       };
 
       request();
     }
   }, [workflowPageState.startProcessDialog.data.workflowId]);
+
+  console.log("dados do input shema", inputSchema);
+  // console.log("payload");
+
+  // formulário do react json schema
+  const schema = inputSchema;
+  // const schema = {
+  //   title: "Todo",
+  //   type: "object",
+  //   required: ["title"],
+  //   properties: {
+  //     title: { type: "string", title: "Title", default: "A new task" },
+  //     // done: { type: "boolean", title: "Done?", default: false },
+  //   },
+  // };
+  const log = (type: any) => console.log.bind(console, type);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
@@ -76,15 +96,32 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
       </S.Title>
 
       <S.Content>
+        {/* {!inputSchema ? (
+          <S.BoxMessage>
+            <S.Text>
+              The process does not require any formal input schema
+            </S.Text>
+          </S.BoxMessage>
+        ) : ( */}
         <S.Text>
           Input Schema
           <S.Editor readOnly value={inputSchema} />
         </S.Text>
+        {/* )} */}
 
-        <S.Text>
+        {/* <S.Text>
           Initial Bag
           <S.Editor onChange={(newValue) => setPayload(newValue)} />
-        </S.Text>
+        </S.Text> */}
+
+        <S.FormSchema
+          schema={schema}
+          // uiSchema={}
+          validator={validator}
+          onChange={log("changed")}
+          // onSubmit={log("submitted")}
+          onError={log("errors")}
+        />
       </S.Content>
 
       <S.ActionsContainer>
