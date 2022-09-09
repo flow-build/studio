@@ -112,7 +112,7 @@ export const Properties: FC<Props> = ({ isOpen, onClose, workflowId }) => {
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
       <S.Title>
-        Propriedades
+        Properties
         {!_isEmpty(nodeData?.current?.category) && (
           <S.Text>Category: {nodeData?.current?.category}</S.Text>
         )}
