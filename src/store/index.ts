@@ -6,6 +6,7 @@ import filterReducer from "store/slices/filter";
 import comparePageReducer from "store/slices/compare-page";
 import workflowPageReducer from "store/slices/workflow-page";
 import historyReducer from "store/slices/process-history";
+import processIdReducer from "store/slices/process-id";
 import settingsReducer from "store/slices/settings";
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     comparePage: comparePageReducer,
     diagramPage: diagramReducer,
     processHistory: historyReducer,
+    processId: processIdReducer,
     settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
