@@ -5,14 +5,11 @@ import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import { RootState } from "store";
 
 import * as S from "./styles";
-import { listWorkflowById } from "services/resources/workflows/list-by-id";
-import { Section } from "pages/compare-json/components/Section";
 import { getProps } from "services/resources/processes/activity-manager";
 
 type Props = {
