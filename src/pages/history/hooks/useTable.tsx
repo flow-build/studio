@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LooksOne, LooksTwo, CheckBox } from "@mui/icons-material";
 
 import _isEqual from "lodash/isEqual";
 import _isEmpty from "lodash/isEmpty";
@@ -13,6 +12,7 @@ import { getDateTimeFormatByDate } from "shared/utils/date";
 
 import { RootState } from "store";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
+import { Button } from "shared/components/button";
 
 enum SIDE {
   LEFT,
@@ -54,7 +54,7 @@ export function useTable(states: TState[]) {
       let isRightEmpty = _isEmpty(compareRight);
 
       if (_isEqual(side, SIDE.LEFT)) {
-                const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
+        const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
 
         if (isSavedOnLeft) {
           isLeftEmpty = true;
@@ -91,12 +91,7 @@ export function useTable(states: TState[]) {
         dispatch(setNewJson(JSON.stringify(state)));
       }
     },
-    [
-      clearCompare,
-      comparePageState.newJson,
-      comparePageState.oldJson,
-      dispatch,
-    ]
+    [clearCompare, comparePageState.newJson, comparePageState.oldJson, dispatch]
   );
 
   function handleIcon(json: string | undefined, state: TState) {
@@ -132,8 +127,8 @@ export function useTable(states: TState[]) {
       const actions = [
         {
           icon: handleIcon(comparePageState.oldJson, state)
-            ? () => <CheckBox color="success" />
-            : () => <LooksOne />,
+            ? () => <Button title="Left" variant="contained" />
+            : () => <Button title="Left" variant="outlined" />,
           tooltip: "selecionar processo",
           onClick: () => {
             handleIconClick(SIDE.LEFT, state);
@@ -141,8 +136,8 @@ export function useTable(states: TState[]) {
         },
         {
           icon: handleIcon(comparePageState.newJson, state)
-            ? () => <CheckBox color="success" />
-            : LooksTwo,
+            ? () => <Button title="Right" variant="contained" />
+            : () => <Button title="Right" variant="outlined" />,
           tooltip: "selecionar processo",
           onClick: () => {
             handleIconClick(SIDE.RIGHT, state);
@@ -163,4 +158,3 @@ export function useTable(states: TState[]) {
 
   return { columnData, rows };
 }
-
