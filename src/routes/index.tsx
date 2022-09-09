@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
 import { Workflows } from "pages/workflows";
-// import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
@@ -24,8 +23,6 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-
-          {/* <Route path="compare-json" element={<CompareJson />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
