@@ -35,13 +35,6 @@ export function useSidebar() {
         tooltip: "Workflows",
       },
       {
-        name: "Comparar States",
-        pathname: "compare-json",
-        icon: <CompareArrowsIcon />,
-        type: TypeMenuItem.NAVIGATION,
-        tooltip: "Comparar States",
-      },
-      {
         name: "Buscar",
         onClick: openSearchDialog,
         icon: <SearchIcon />,

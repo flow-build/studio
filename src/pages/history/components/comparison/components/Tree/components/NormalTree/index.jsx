@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 
-import { getIndent } from "pages/compare-json/utils";
+import { getIndent } from "pages/history/components/comparison/utils";
 
 export const NormalTree = (props) => {
   let {

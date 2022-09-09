@@ -14,6 +14,7 @@ import { getHistoryByProcessId } from "services/resources/processes/history";
 import { ContentHeader } from "shared/components/content-header";
 
 import * as S from "./styles";
+import { Comparison } from "./components/comparison/comparison";
 
 export const History: React.FC<{}> = () => {
   const params = useParams();
@@ -50,7 +51,7 @@ export const History: React.FC<{}> = () => {
     <S.Wrapper>
       <S.HeaderContainer>
         <ContentHeader
-          title="Histórico"
+          title="History"
           subtitle={`Process id: ${processId}`}
           hasInput={false}
           buttonTitle="Atualizar"
@@ -63,6 +64,8 @@ export const History: React.FC<{}> = () => {
       <S.TableContainer>
         <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
       </S.TableContainer>
+
+      <Comparison></Comparison>
     </S.Wrapper>
   );
 };
