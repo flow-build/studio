@@ -13,7 +13,6 @@ import { getDateTimeFormatByDate } from "shared/utils/date";
 
 import { RootState } from "store";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
-import { useNavigate } from "react-router-dom";
 
 enum SIDE {
   LEFT,
@@ -22,7 +21,6 @@ enum SIDE {
 
 export function useTable(states: TState[]) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const comparePageState = useSelector((store: RootState) => store.comparePage);
 
   function parseJson<T>(jsonStringfied?: string) {
@@ -92,17 +90,12 @@ export function useTable(states: TState[]) {
         isRightEmpty = false;
         dispatch(setNewJson(JSON.stringify(state)));
       }
-
-      if (!isLeftEmpty && !isRightEmpty) {
-        navigate("/dashboard/compare-json");
-      }
     },
     [
       clearCompare,
       comparePageState.newJson,
       comparePageState.oldJson,
       dispatch,
-      navigate,
     ]
   );
 
