@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
-import DashboardIcon from '@mui/icons-material/Dashboard'
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
 
 interface IMenuItem {
@@ -56,8 +57,16 @@ export function useSidebar() {
         type: TypeMenuItem.OPEN_DIALOG,
         tooltip: "Buscar",
       },
+      {
+        name: "Configurações",
+        pathname: "settings",
+        icon: <SettingsIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Configurações",
+      },
     ] as IMenuItem[];
   }, []);
 
   return { menuItems, isOpenDialog, onCloseDialog };
 }
+
