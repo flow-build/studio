@@ -43,7 +43,6 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-          <Route path="compare-json" element={<CompareJson />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
