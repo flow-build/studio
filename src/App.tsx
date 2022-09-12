@@ -1,13 +1,12 @@
-import { Suspense } from 'react'
-import { ThemeProvider } from '@mui/material/styles'
-import { SnackbarProvider } from 'notistack';
+import { Suspense, useEffect } from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import { SnackbarProvider } from "notistack";
 
-import { AppRoutes } from './routes'
+import { AppRoutes } from "./routes";
 
-import GlobalStyle from 'theme/global-style'
+import GlobalStyle from "theme/global-style";
 
-import { darkTheme } from 'theme/dark-theme'
-// import { Alert } from '@mui/material';
+import { darkTheme } from "theme/dark-theme";
 
 function App() {
   return (
@@ -22,7 +21,5 @@ function App() {
     </ThemeProvider>
   );
 }
-
-/* content={(key, message) => (<Alert onClose={() => { }} severity='success' sx={{ width: '100%' }} >{message}</Alert>)} */
 
 export default App;

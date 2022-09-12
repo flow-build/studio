@@ -6,6 +6,7 @@ import filterReducer from "store/slices/filter";
 import comparePageReducer from "store/slices/compare-page";
 import workflowPageReducer from "store/slices/workflow-page";
 import historyReducer from "store/slices/process-history";
+import processIdReducer from "store/slices/process-id";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     comparePage: comparePageReducer,
     diagramPage: diagramReducer,
     processHistory: historyReducer,
+    processId: processIdReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

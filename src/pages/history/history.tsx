@@ -13,6 +13,8 @@ import { getHistoryByProcessId } from "services/resources/processes/history";
 
 import { ContentHeader } from "shared/components/content-header";
 
+import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
 import { Comparison } from "./components/comparison/comparison";
 
@@ -21,6 +23,8 @@ export const History: React.FC<{}> = () => {
   const [processId, setProcessId] = useState<string>();
   const navigate = useNavigate();
   const GO_BACK = -1;
+
+  const dispatch = useDispatch();
 
   const [history, setHistory] = useState<TState[] | null>(null);
 

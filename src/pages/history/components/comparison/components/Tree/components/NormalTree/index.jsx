@@ -48,3 +48,4 @@ NormalTree.propTypes = {
   lastLineType: PropTypes.oneOf(["add", "del", "none"]),
   lastLine: PropTypes.number,
 };
+

@@ -1,56 +1,62 @@
-import axios from 'axios'
+import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { getAnonymousToken } from 'services/resources/token';
+import { getAnonymousToken } from "services/resources/token";
 
-import { getStorageItem, setStorageItem } from 'shared/utils/storage';
+import { getStorageItem, setStorageItem } from "shared/utils/storage";
+
+const baseUrl = getStorageItem("SERVER_URL");
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL
+  baseURL: baseUrl ?? process.env.REACT_APP_BASE_URL,
 });
 
 type TToken = {
   exp: number;
-}
+};
 
 function isTokenExpired(token: string) {
-  const { exp } = jwt_decode<TToken>(token)
-  const expireDate = new Date(exp * 1000).getTime()
+  const { exp } = jwt_decode<TToken>(token);
+  const expireDate = new Date(exp * 1000).getTime();
 
   return Date.now() > expireDate;
 }
 
 api.interceptors.request.use(
   async (config) => {
-    const token = getStorageItem('TOKEN');
+    const token = getStorageItem("TOKEN");
 
     if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return config
+    return config;
   },
   (error) => {
-    console.error(`Interceptors Request -> ${error.name}: ${error.message}`)
+    console.error(`Interceptors Request -> ${error.name}: ${error.message}`);
   }
-)
+);
 
 api.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
-    let token = getStorageItem('TOKEN');
+  async (error: any) => {
+    let token = getStorageItem("TOKEN");
 
     if (token && isTokenExpired(token)) {
-      token = await getAnonymousToken()
-      setStorageItem('TOKEN', token);
+      token = await getAnonymousToken();
+      setStorageItem("TOKEN", token);
 
-      error.config.headers['Authorization'] = 'Bearer ' + token;
-      return api.request(error.config)
+      error.config.headers["Authorization"] = "Bearer " + token;
+      return api.request(error.config);
     }
 
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
-export { api }
+function setBaseUrl(url: string) {
+  api.defaults.baseURL = url;
+}
+
+export { api, setBaseUrl };
