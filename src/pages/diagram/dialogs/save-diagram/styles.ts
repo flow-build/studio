@@ -47,7 +47,6 @@ export const DiagramInput = styled(Input).attrs({
 export const SaveDiagramButton = styled(Button).attrs({
     title: "salvar",
     sx: {
-      m: 1,
       mt: 20,
     },
 })``;
