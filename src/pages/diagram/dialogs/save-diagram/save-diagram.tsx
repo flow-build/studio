@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
-import { TWorkflow } from "models/workflow";
-import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
+import { saveDiagramName } from "services/resources/diagrams/save-diagram";
 
 import * as S from "./styles";
+import { IDiagram } from "./types/IDiagram";
 
 type Props = {
   isOpen: boolean;
@@ -11,28 +10,29 @@ type Props = {
 };
 
 export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
-  const [process, setProcesses] = useState<TWorkflow[]>([]);
+  const [saveDiagram, setSaveDiagram] = useState<IDiagram>({
+    name: "",
+    userId: "",
+    xml: "",
+  });
 
-  function onClickListItemButton(process: TWorkflow) {
-    if (onClose) {
-      onClose();
+  useEffect(() => {
+    const request = async () => {
+      const response = await saveDiagramName(
+        saveDiagram.name,
+        saveDiagram.userId,
+        saveDiagram.xml
+      );
+      setSaveDiagram(response);
+    };
+    if (isOpen) {
+      request();
     }
+  }, [isOpen, saveDiagram.name, saveDiagram.userId, saveDiagram.xml]);
+
+  function diagramName(name) {
+    setSaveDiagram();
   }
-
-  //   function getSubtitle(process: TWorkflow) {
-  //     const { state, status } = process;
-  //     return `${state.node_id} - ${status}`;
-  //   }
-
-  //   useEffect(() => {
-  //     const request = async () => {
-  //       const response = await listByWorkflowId(workflowId);
-  //       setProcesses(response);
-  //     };
-  //     if (isOpen) {
-  //       request();
-  //     }
-  //   }, [isOpen, workflowId]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
@@ -42,7 +42,12 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
       </S.DiagramTitle>
 
       <S.DiagramContent>
-        <S.DiagramInput />
+        <S.DiagramInput
+          value={saveDiagram?.name}
+          onChange={(event) => {
+            onChangeProcesses(event.target.value, "nodeId");
+          }}
+        />
         <S.SaveDiagramButton />
       </S.DiagramContent>
     </S.Wrapper>
