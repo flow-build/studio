@@ -30,26 +30,30 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   }, [isOpen, saveDiagram.name, saveDiagram.userId, saveDiagram.xml]);
 
-  function diagramName(name) {
-    setSaveDiagram();
-  }
+  // function diagramName(name) {
+  //   setSaveDiagram();
+  // }
 
   return (
-    <S.Wrapper open={isOpen} onClose={onClose}>
+    <S.DiagramWrapper open={isOpen} onClose={onClose}>
       <S.DiagramTitle>
         Salvar Diagrama
         <S.CloseDiagramButton onClick={onClose} />
       </S.DiagramTitle>
-
       <S.DiagramContent>
         <S.DiagramInput
           value={saveDiagram?.name}
-          onChange={(event) => {
-            onChangeProcesses(event.target.value, "nodeId");
-          }}
+          // onChange={(event) => {
+          //   onChangeProcesses(event.target.value, "nodeId");
+          // }}
         />
-        <S.SaveDiagramButton />
       </S.DiagramContent>
-    </S.Wrapper>
+      <S.DiagramDivider />
+      <S.ButtonWrapper>
+        <S.CancelDiagramButton> Cancelar </S.CancelDiagramButton>
+        <S.ButtonDivider />
+        <S.SaveDiagramButton> Salvar</S.SaveDiagramButton>
+      </S.ButtonWrapper>
+    </S.DiagramWrapper>
   );
 };
