@@ -13,13 +13,18 @@ import { getHistoryByProcessId } from "services/resources/processes/history";
 
 import { ContentHeader } from "shared/components/content-header";
 
+import { useDispatch } from "react-redux";
+
 import * as S from "./styles";
+import { setHistoryProcessId } from "store/slices/process-id";
 
 export const History: React.FC<{}> = () => {
   const params = useParams();
   const [processId, setProcessId] = useState<string>();
   const navigate = useNavigate();
   const GO_BACK = -1;
+
+  const dispatch = useDispatch();
 
   const [history, setHistory] = useState<TState[] | null>(null);
 
@@ -45,6 +50,8 @@ export const History: React.FC<{}> = () => {
   if (_isNull(history)) {
     return <Typography>Loading...</Typography>;
   }
+
+  dispatch(setHistoryProcessId(params.process_id));
 
   return (
     <S.Wrapper>

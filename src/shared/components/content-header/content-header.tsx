@@ -71,7 +71,11 @@ export const ContentHeader: React.FC<Props> = ({
         </S.InfoContent>
 
         {hasButton && (
-          <S.Button title={buttonTitle} variant="outlined" onClick={onButtonClick} />
+          <S.Button
+            title={buttonTitle}
+            variant="outlined"
+            onClick={onButtonClick}
+          />
         )}
       </S.Row>
 

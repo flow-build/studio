@@ -50,7 +50,7 @@ export const Editor = styled(AceEditor).attrs({
   theme: "dracula",
   name: "custom:parameters",
   width: "100%",
-  fontSize: 16,
+  fontSize: 12,
   readOnly: true,
   setOptions: {
     showPrintMargin: false,
