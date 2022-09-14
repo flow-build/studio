@@ -4,7 +4,7 @@ import { JSONSchema7 } from "json-schema";
 import * as S from "./styles";
 
 type Props = Pick<IAceEditorProps, "readOnly" | "onChange"> & {
-  value: { [key: string]: any } | JSONSchema7;
+  value?: { [key: string]: any } | JSONSchema7;
 };
 
 export const JsonEditor: React.FC<Props> = ({ readOnly, value, onChange }) => {
@@ -16,3 +16,4 @@ export const JsonEditor: React.FC<Props> = ({ readOnly, value, onChange }) => {
     />
   );
 };
+

@@ -35,15 +35,26 @@ export const CloseButton = styled(IconButton).attrs({
   ariaLabel: "close",
 })``;
 
-export const Text = styled(DialogContentText)``;
+export const Text = styled(DialogContentText)`
+  width: 26rem;
+`;
 
 export const Content = styled(DialogContent)`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const BoxContent = styled(Box).attrs({})`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Editor = styled(JsonEditor)``;
+
+export const ContainerInputShema = styled(Box)``;
+
+export const ContainerEditorInputShema = styled(Box)``;
 
 export const ActionsContainer = styled(DialogActions)``;
 
@@ -57,35 +68,42 @@ export const OkButton = styled(Button).attrs({
   size: "small",
 })``;
 
-export const BoxMessage = styled(Box).attrs({})`
+export const BoxMessage = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-export const FormSchema = styled(Form).attrs({})`
-  /* .form-control input {
-    background: "white";
-  } */
-
-  /* *,
-  button,
-  input {
-    border: 0;
-    background: none;
-    font-family: "Roboto", sans-serif;
-  } */
-
-  .btzZXO button,
-  .btzZXO input {
-    background: none;
-  }
+export const FormSchema = styled(Form).attrs({
+  uiSchema: {
+    "ui:submitButtonOptions": {
+      norender: true,
+    },
+  },
+})`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  width: 26rem;
+  height: 100%;
 `;
-
-export const TesteHuehue = styled(Button).attrs({
-  variant: "contained",
-})``;
 
 export const SmiteInput = styled(InputText)`
-  // background-color: red;
+  width: 25rem;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  margin-left: -2.9rem;
 `;
+
+export const SetManually = styled(Button).attrs({
+  autoFocus: true,
+  variant: "contained",
+  size: "small",
+})``;
+
+export const SeeSchema = styled(Button).attrs({
+  autoFocus: true,
+  variant: "contained",
+  size: "small",
+})``;

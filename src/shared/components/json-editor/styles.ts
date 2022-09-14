@@ -10,10 +10,10 @@ export const Wrapper = styled(AceEditor).attrs({
   width: "100%",
   fontSize: 16,
   setOptions: {
-    selectionStyle: 'line',
+    selectionStyle: "line",
     highlightActiveLine: true,
     highlightSelectedWord: true,
-    cursorStyle: 'ace',
+    cursorStyle: "ace",
     mergeUndoDeltas: true,
     autoScrollEditorIntoView: true,
     showPrintMargin: false,
@@ -34,3 +34,4 @@ export const Wrapper = styled(AceEditor).attrs({
     tabSize: 4,
   },
 })``;
+
