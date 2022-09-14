@@ -4,6 +4,7 @@ import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { CompareArrows } from "@mui/icons-material";
 import { TypeMenuItem } from "constants/type-menu-item";
 
 interface IMenuItem {
@@ -41,6 +42,13 @@ export function useSidebar() {
         icon: <SchemaIcon />,
         type: TypeMenuItem.NAVIGATION,
         tooltip: "Workflows",
+      },
+      {
+        name: "CompareState",
+        pathname: "/compareState",
+        icon: <CompareArrows/>,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "CompareState",
       },
       {
         name: "Buscar",

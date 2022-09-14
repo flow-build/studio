@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { Tree } from "pages/history/components/comparison/components/Tree";
+import { Tree } from "pages/compare-state/components/Tree";
 
-import { getIndent, isArray } from "pages/history/components/comparison/utils";
+import { getIndent, isArray } from "pages/compare-state/utils";
 
 export const ComplexTree = (props) => {
   let {

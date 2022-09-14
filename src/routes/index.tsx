@@ -1,38 +1,19 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-
-import _isEmpty from "lodash/isEmpty";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
 import { Workflows } from "pages/workflows";
 import { Processes } from "pages/processes";
+import { CompareState } from "pages/compare-state";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
-import { Metabase } from "pages/metabase";
-import { Settings } from "pages/settings";
-
-import { getStorageItem } from "shared/utils/storage";
 
 export const AppRoutes = () => {
-  function handleSignIn() {
-    const hasEnv = !_isEmpty(process.env.REACT_APP_BASE_URL);
-    const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
-
-    if (hasEnv || hasLocalStorage) {
-      return <SignIn />;
-    }
-
-    return <Navigate to="settings" replace />;
-  }
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={handleSignIn()} />
-        <Route path="settings" element={<Settings />} />
-
+        <Route path="/" element={<SignIn />} />
         <Route path="dashboard" element={<Dashboard />}>
-          <Route index element={<Metabase />} />
           <Route path="workflows" element={<Workflows />} />
           <Route path="workflows/:id/processes" element={<Processes />} />
           <Route
@@ -43,7 +24,7 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-          <Route path="settings" element={<Settings />} />
+          <Route path="compare-state" element={<CompareState />}/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 
-import { ComplexTree } from "pages/history/components/comparison/components/Tree/components/ComplexTree";
-import { NormalTree } from "pages/history/components/comparison/components/Tree/components/NormalTree";
+import { ComplexTree } from "pages/compare-state/components/Tree/components/ComplexTree";
+import { NormalTree } from "pages/compare-state/components/Tree/components/NormalTree";
 
-import { needFormat } from "pages/history/components/comparison/utils";
+import { needFormat } from "pages/compare-state/utils";
 
 export const Tree = (props) => {
   let { type } = props;

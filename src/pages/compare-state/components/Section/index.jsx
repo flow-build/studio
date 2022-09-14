@@ -12,9 +12,9 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 
-import EmptyContent from "pages/history/components/comparison/components/EmptyContent/EmptyContent";
+import EmptyContent from "pages/compare-state/components/EmptyContent/EmptyContent";
 
-import { Tree } from "pages/history/components/comparison/components/Tree";
+import { Tree } from "pages/compare-state/components/Tree";
 import { api } from "services/api";
 
 import { useSelector } from "react-redux";

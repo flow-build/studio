@@ -3,17 +3,17 @@ import React, { useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { useCompare } from "pages/history/components/comparison/hooks/useCompare";
+import { useCompare } from "pages/compare-state/hooks/useCompare";
 
 import "./json.css";
 import { useDispatch } from "react-redux";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
 
-import { Section } from "pages/history/components/comparison/components/Section";
+import { Section } from "pages/compare-state/components/Section/index";
 
 import { Action, createBrowserHistory } from "history";
 
-export const Comparison = () => {
+export const CompareState = () => {
   const history = createBrowserHistory();
   const dispatch = useDispatch();
   const compareHook = useCompare();
