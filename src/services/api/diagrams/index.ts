@@ -1,5 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const apiDiagrams = axios.create({
-    baseURL: 'http://diagrams.flowbuild.com.br:3000/diagrams'
-})
+  baseURL: "http://diagrams.flowbuild.com.br:3000",
+});
+
+

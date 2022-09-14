@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
 import { saveDiagramName } from "services/resources/diagrams/save-diagram";
+import { IDiagram } from "./types/IDiagram";
 
 import * as S from "./styles";
-import { IDiagram } from "./types/IDiagram";
 
 type Props = {
   isOpen: boolean;
@@ -16,23 +17,18 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
     xml: "",
   });
 
-  useEffect(() => {
-    const request = async () => {
-      const response = await saveDiagramName(
-        saveDiagram.name,
-        saveDiagram.userId,
-        saveDiagram.xml
-      );
-      setSaveDiagram(response);
-    };
-    if (isOpen) {
-      request();
-    }
-  }, [isOpen, saveDiagram.name, saveDiagram.userId, saveDiagram.xml]);
+  const onChangeDiagramName = (
+    valor: string,
+    campo: "name" | "userId" | "xml"
+  ) => {
+    setSaveDiagram((prev) => ({ ...prev, [campo]: valor }));
+  };
 
-  // function diagramName(name) {
-  //   setSaveDiagram();
-  // }
+  async function handleClickDiagramName(name: any) {
+    const response = await saveDiagramName(saveDiagram.name, saveDiagram.userId,saveDiagram.xml );
+
+    setSaveDiagram(response);
+  }
 
   return (
     <S.DiagramWrapper open={isOpen} onClose={onClose}>
@@ -43,16 +39,22 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
       <S.DiagramContent>
         <S.DiagramInput
           value={saveDiagram?.name}
-          // onChange={(event) => {
-          //   onChangeProcesses(event.target.value, "nodeId");
-          // }}
+          onChange={(event) => {
+            onChangeDiagramName(event.target.value, "name");
+          }}
         />
       </S.DiagramContent>
       <S.DiagramDivider />
       <S.ButtonWrapper>
-        <S.CancelDiagramButton> Cancelar </S.CancelDiagramButton>
+        <S.CancelDiagramButton onClick={onClose}>
+          {" "}
+          Cancelar{" "}
+        </S.CancelDiagramButton>
         <S.ButtonDivider />
-        <S.SaveDiagramButton> Salvar</S.SaveDiagramButton>
+        <S.SaveDiagramButton onClick={handleClickDiagramName}>
+          {" "}
+          Salvar
+        </S.SaveDiagramButton>
       </S.ButtonWrapper>
     </S.DiagramWrapper>
   );
