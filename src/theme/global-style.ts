@@ -1,7 +1,7 @@
-import diagramCSS from 'bpmn-js/dist/assets/diagram-js.css'
-import bpmnFontCSS from 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
+import diagramCSS from "bpmn-js/dist/assets/diagram-js.css";
+import bpmnFontCSS from "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   ${diagramCSS}
@@ -25,7 +25,6 @@ export default createGlobalStyle`
   *, button, input {
     border: 0;
     background: none;
-    font-family: "Roboto", sans-serif;
   }
 
   a {
