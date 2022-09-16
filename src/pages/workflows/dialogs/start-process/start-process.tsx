@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
@@ -14,35 +14,24 @@ import { RootState } from "store";
 import { JSONSchema7 } from "json-schema";
 
 import * as S from "./styles";
+import { EmptyInputSchema } from "./components/empty-input-schema/empty-input-schema";
+import { InputSchemaContent } from "./components/input-schema-content";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
 };
 
-const CustomTextarea = (props: any) => {
-  return <S.SmiteInput />;
-};
-
-const widgets = {
-  BaseInput: CustomTextarea,
-};
-
 export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-
-  const [showElementInputSchema, setShowElementInputSchema] = useState(false);
-  const [showElementEditInputSchema, setShowElementEditInputSchema] =
-    useState(false);
-  const [showElementForm, setShowElementForm] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const workflowPageState = useSelector(
     (state: RootState) => state.workflowPage
   );
 
   const [inputSchema, setInputSchema] = useState<JSONSchema7>();
-  const [payload, setPayload] = useState<string>();
 
   function showNotification(message: string) {
     enqueueSnackbar(`Processo ${message} criado!`, {
@@ -51,7 +40,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     });
   }
 
-  async function onConfirm() {
+  async function onConfirm(payload: string) {
     const processName = workflowPageState.startProcessDialog.data.processName;
     const workflowId = workflowPageState.startProcessDialog.data.workflowId;
     const response = await createProcessByName(
@@ -77,16 +66,12 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
           _isEqual(node.type, "Start")
         );
         setInputSchema(nodeStart.parameters.input_schema as JSONSchema7);
+        setIsLoading(false);
       };
 
       request();
     }
   }, [workflowPageState.startProcessDialog.data.workflowId]);
-
-  function onClick() {
-    setShowElementEditInputSchema((prev) => !prev);
-    setShowElementForm((prev) => !prev);
-  }
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
@@ -95,72 +80,19 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
-      <S.Content>
-        {_isEmpty(inputSchema) ? (
-          <>
-            <S.BoxContent>
-              <S.BoxMessage>
-                <S.Text>
-                  The process does not require any formal input schema
-                </S.Text>
-              </S.BoxMessage>
-              <S.Text>
-                Initial Bag - Do you want to provide optional data?
-                <S.Editor onChange={(newValue) => setPayload(newValue)} />
-              </S.Text>
-            </S.BoxContent>
-            <S.ActionsContainer>
-              <S.CancelButton onClick={onClose}>Cancel</S.CancelButton>
-              <S.OkButton onClick={onConfirm}>Start</S.OkButton>
-            </S.ActionsContainer>
-          </>
-        ) : (
-          <>
-            <S.BoxContent>
-              {showElementForm ? (
-                <S.FormSchema schema={inputSchema} widgets={widgets} />
-              ) : null}
+      {isLoading && (
+        <S.Text>
+          Loading... <S.Loading />
+        </S.Text>
+      )}
 
-              <S.ContainerEditorInputShema>
-                {showElementEditInputSchema ? (
-                  <>
-                    <S.Text>
-                      JSON Editor
-                      <S.Editor onChange={(newValue) => setPayload(newValue)} />
-                    </S.Text>
-                  </>
-                ) : null}
-              </S.ContainerEditorInputShema>
+      {!isLoading && _isEmpty(inputSchema) && (
+        <EmptyInputSchema onConfirm={onConfirm} />
+      )}
 
-              <S.ContainerInputShema>
-                {showElementInputSchema ? (
-                  <>
-                    <S.Text>
-                      Input Schema
-                      <S.Editor readOnly value={inputSchema as JSONSchema7} />
-                    </S.Text>
-                  </>
-                ) : null}
-              </S.ContainerInputShema>
-            </S.BoxContent>
-            <S.ActionsContainer>
-              {inputSchema?.additionalProperties === false ? (
-                <S.SetManually disabled>Set Manually</S.SetManually>
-              ) : (
-                <S.SetManually onClick={() => onClick()}>
-                  Set Manually
-                </S.SetManually>
-              )}
-              <S.OkButton onClick={onConfirm}>Start</S.OkButton>
-              <S.SeeSchema
-                onClick={() => setShowElementInputSchema((prev: any) => !prev)}
-              >
-                See Schema
-              </S.SeeSchema>
-            </S.ActionsContainer>
-          </>
-        )}
-      </S.Content>
+      {!isLoading && !_isEmpty(inputSchema) && (
+        <InputSchemaContent inputSchema={inputSchema} onConfirm={onConfirm} />
+      )}
     </S.Wrapper>
   );
 };
