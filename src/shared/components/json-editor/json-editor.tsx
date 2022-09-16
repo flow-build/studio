@@ -8,8 +8,9 @@ export const JsonEditor: React.FC<Props> = ({ readOnly, value, onChange }) => {
   return (
     <S.Wrapper
       readOnly={readOnly}
-      value={JSON.stringify(value, null, "\t")}
+      // value={JSON.stringify(value, null, "\t")}
       onChange={onChange}
     />
   );
 };
+
