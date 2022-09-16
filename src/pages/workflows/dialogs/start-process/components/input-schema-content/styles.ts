@@ -51,7 +51,7 @@ export const FormSchema = styled(Form).attrs({
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
-  width: 26rem;
+  width: 25rem;
   height: 100%;
 `;
 
