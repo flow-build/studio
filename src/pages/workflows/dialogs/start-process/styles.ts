@@ -54,6 +54,10 @@ export const OkButton = styled(Button).attrs({
   size: "small",
 })``;
 
+export const TextOkButton = styled.p`
+  color: #fff;
+`;
+
 export const Loading = styled(CircularProgress).attrs({
   color: "inherit",
   size: "1.3rem",

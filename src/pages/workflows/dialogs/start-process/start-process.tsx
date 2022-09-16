@@ -36,13 +36,6 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     });
   }
 
-  function errorNotification(message: string) {
-    enqueueSnackbar("JSON inválido", {
-      autoHideDuration: 2000,
-      variant: "error",
-    });
-  }
-
   function isValidJSONString(str: any) {
     try {
       JSON.parse(str);
@@ -55,7 +48,6 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   async function onConfirm() {
     if (!isValidJSONString(payload)) {
       setIsLoading(false);
-      errorNotification("");
       return;
     }
     setIsLoading(true);
@@ -113,8 +105,8 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
       <S.ActionsContainer>
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
 
-        <S.OkButton onClick={onConfirm}>
-          {isLoading ? <S.Loading /> : <S.Text>Iniciar</S.Text>}
+        <S.OkButton disabled={!isValidJSONString(payload)} onClick={onConfirm}>
+          {isLoading ? <S.Loading /> : <S.TextOkButton>Iniciar</S.TextOkButton>}
         </S.OkButton>
       </S.ActionsContainer>
     </S.Wrapper>
