@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 
 interface IMenuItem {
   name: string;
@@ -58,6 +59,13 @@ export function useSidebar() {
         tooltip: "Buscar",
       },
       {
+        name: "Nodes",
+        pathname: "nodes",
+        icon: <AccountTreeIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Configurações",
+      },
+      {
         name: "Configurações",
         pathname: "settings",
         icon: <SettingsIcon />,
@@ -69,4 +77,3 @@ export function useSidebar() {
 
   return { menuItems, isOpenDialog, onCloseDialog };
 }
-
