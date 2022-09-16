@@ -75,8 +75,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         <S.CloseButton onClick={onClose} />
       </S.Title>
 
-      <S.Editor onChange={(newValue) => setPayload(newValue)} />
-      {/* <S.Content>
+      <S.Content>
         <S.Text>
           Input Schema
           <S.Editor readOnly value={inputSchema} />
@@ -91,7 +90,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
       <S.ActionsContainer>
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
         <S.OkButton onClick={onConfirm}>Iniciar</S.OkButton>
-      </S.ActionsContainer> */}
+      </S.ActionsContainer>
     </S.Wrapper>
   );
 };
