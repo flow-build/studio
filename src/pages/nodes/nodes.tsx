@@ -1,6 +1,7 @@
 import * as S from "./styles";
 
 import { ContentHeader } from "shared/components/content-header";
+import { Card } from "./components/card";
 
 export const Nodes: React.FC<{}> = () => {
   return (
@@ -13,7 +14,7 @@ export const Nodes: React.FC<{}> = () => {
         // onButtonClick={request}
         // showToggle={false}
       />
-      <S.Title>Nodes </S.Title>
+      <Card />
     </S.Wrapper>
   );
 };
