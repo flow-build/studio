@@ -2,10 +2,8 @@ import styled from "styled-components";
 
 import Grid from "@mui/material/Grid";
 
-import { IconButton } from "shared/components/icon-button";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-
 import { Table as SharedTable } from "shared/components/table";
+import { Button as SharedButton } from 'shared/components/button'
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -24,14 +22,7 @@ export const HeaderContainer = styled.div`
   justify-content: center;
 `;
 
-export const BackButton = styled(IconButton).attrs({
-  icon: KeyboardBackspaceIcon,
-  ariaLabel: "close",
-  tooltip: "voltar",
-  title: "Voltar",
-})`
-  margin-bottom: 4rem;
-`;
+export const Button = styled(SharedButton)``;
 
 export const TableContainer = styled(Grid).attrs({
   item: true,

@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Typography } from "@mui/material";
 
+import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 import _isNull from "lodash/isNull";
 
@@ -13,21 +15,24 @@ import { getHistoryByProcessId } from "services/resources/processes/history";
 
 import { ContentHeader } from "shared/components/content-header";
 
-import { useDispatch } from "react-redux";
+import { RootState } from "store";
 
 import * as S from "./styles";
+import { ContentPasteOffSharp } from "@mui/icons-material";
 
 export const History: React.FC<{}> = () => {
   const params = useParams();
-  const [processId, setProcessId] = useState<string>();
   const navigate = useNavigate();
-  const GO_BACK = -1;
-
-  const dispatch = useDispatch();
+  const [processId, setProcessId] = useState<string>();
+  const comparePage = useSelector((store: RootState) => store.comparePage);
 
   const [history, setHistory] = useState<TState[] | null>(null);
 
   const table = useTable(history ?? []);
+
+  const disable =
+    _isEmpty(comparePage.oldJson) || _isEmpty(comparePage.newJson);
+  const GO_BACK = -1;
 
   const request = useCallback(async () => {
     const response = await getHistoryByProcessId(processId ?? "");
@@ -50,6 +55,29 @@ export const History: React.FC<{}> = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  const buttonUpdate = {
+    title: "Atualizar",
+    onClick: () => {
+      request()
+    },
+  };
+
+  const buttonNavigate = {
+    title: "Navigate",
+    disabled: disable,
+    onClick: () => {
+      navigate("/dashboard/compare-state");
+    },
+  };
+
+  const buttonBack = {
+    title: "Back",
+    onClick: () => {
+      navigate(GO_BACK);
+    },
+    variant: "outlined",
+  };
+
   return (
     <S.Wrapper>
       <S.HeaderContainer>
@@ -57,17 +85,15 @@ export const History: React.FC<{}> = () => {
           title="History"
           subtitle={`Process id: ${processId}`}
           hasInput={false}
-          buttonTitle="Atualizar"
-          onButtonClick={request}
+          hasBackButton={false}
+          buttons={[buttonUpdate, buttonNavigate, buttonBack]}
           showToggle={false}
         />
-        <S.BackButton onClick={() => navigate(GO_BACK)} />
       </S.HeaderContainer>
 
       <S.TableContainer>
         <S.Table columnData={table.columnData} rows={table.rows} isCollapse />
       </S.TableContainer>
-
     </S.Wrapper>
   );
 };

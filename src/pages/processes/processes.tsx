@@ -67,7 +67,7 @@ export const Processes: React.FC<{}> = () => {
         title={`Workflow - ${payload.workflow.name}`}
         subtitle={`Workflow id: ${payload.workflow.workflow_id}`}
         hasInput={false}
-        hasButton={false}
+        buttons = {[]}
         initialModeView={ModeView.LIST}
         onChangeModeView={setModeView}
       />

@@ -26,6 +26,10 @@ import * as S from "./styles";
 export const Workflows: React.FC = () => {
   const dispatch = useDispatch();
 
+  const buttonNew = { title: "Novo", variant: "outlined" };
+
+  const buttonUpdate = { title: "Atualizar" }
+
   const workflowPageState = useSelector(
     (state: RootState) => state.workflowPage
   );
@@ -67,7 +71,7 @@ export const Workflows: React.FC = () => {
         <ContentHeader
           title="Workflows"
           inputLabel="Nome / ID"
-          buttonTitle="Novo"
+          buttons={[ buttonNew, buttonUpdate]}
           onChangeModeView={onChangeModeView}
           onChangeInput={onFilter}
         />
