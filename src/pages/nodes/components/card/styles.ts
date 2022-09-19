@@ -11,21 +11,27 @@ export const Wrapper = styled(Grid).attrs({
     marginTop: 0,
   },
 })`
+  margin: 1rem;
   height: calc(100% - 64px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
 `;
+
+export const List = styled.ul``;
+
+export const Items = styled.li``;
 
 export const BoxContent = styled(Box).attrs({
   sx: {
     width: 300,
     height: 160,
     backgroundColor: "#2e353b",
-    borderRadius: 5,
   },
-})``;
+})`
+  margin: 2rem;
+`;
 
 export const Title = styled(Typography).attrs({
   variant: "h6",

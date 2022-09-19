@@ -7,6 +7,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import { listNodes } from "services/resources/nodes/nodes";
 
 interface IMenuItem {
   name: string;

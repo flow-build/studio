@@ -10,6 +10,15 @@ const api = axios.create({
   baseURL: baseUrl ?? process.env.REACT_APP_BASE_URL,
 });
 
+// nodes url
+// nodes url
+// const nodesUrl = process.env.REACT_APP_NODES_URL;
+const apiNodes = axios.create({
+  baseURL: process.env.REACT_APP_NODES_URL,
+});
+// nodes
+// nodes url
+
 type TToken = {
   exp: number;
 };
@@ -59,4 +68,40 @@ function setBaseUrl(url: string) {
   api.defaults.baseURL = url;
 }
 
-export { api, setBaseUrl };
+// API NODES
+
+apiNodes.interceptors.request.use(
+  async (config) => {
+    const token = getStorageItem("TOKEN");
+
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    console.error(`Interceptors Request -> ${error.name}: ${error.message}`);
+  }
+);
+
+apiNodes.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error: any) => {
+    let token = getStorageItem("TOKEN");
+
+    if (token && isTokenExpired(token)) {
+      token = await getAnonymousToken();
+      setStorageItem("TOKEN", token);
+
+      error.config.headers["Authorization"] = "Bearer " + token;
+      return apiNodes.request(error.config);
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export { api, setBaseUrl, apiNodes };

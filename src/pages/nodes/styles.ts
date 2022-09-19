@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Grid from "@mui/material/Grid";
 import { DialogTitle } from "@mui/material";
 
+import { Box } from "@mui/material";
+import Typography from "@mui/material/Typography";
+
 export const Wrapper = styled(Grid).attrs({
   container: true,
   spacing: 2,
@@ -22,3 +25,6 @@ export const HeaderContainer = styled.div`
 
 export const Title = styled(DialogTitle)``;
 
+export const List = styled.ul``;
+
+export const Items = styled.li``;
