@@ -5,7 +5,7 @@ import _debounce from "lodash/debounce";
 import { ModeView } from "constants/mode-view";
 
 import { BreadcrumbsNavigation } from "shared/components/breadcrumbs";
-import { TButtonModeView } from "shared/components/content-header/components/toggle-container/types/TButtonModeView"
+import { TButtonModeView } from "shared/components/content-header/components/toggle-container/types/TButtonModeView";
 import { ToggleContainer } from "shared/components/content-header/components/toggle-container";
 
 import * as S from "./styles";
@@ -46,14 +46,13 @@ export const ContentHeader: React.FC<Props> = ({
   showToggle = true,
   buttons = [],
 }) => {
-
   const navigate = useNavigate();
   const GO_BACK = -1;
 
   return (
     <S.Wrapper>
       <BreadcrumbsNavigation />
-        {hasBackButton && <S.BackButton onClick={() => navigate(GO_BACK)} />}
+      {hasBackButton && <S.BackButton onClick={() => navigate(GO_BACK)} />}
       <S.Row>
         <S.InfoContent>
           <S.Title>{title}</S.Title>
@@ -78,7 +77,11 @@ export const ContentHeader: React.FC<Props> = ({
             onChange={_debounce(onChangeInput, 500)}
           />
         )}
-        <ToggleContainer showToggle={showToggle} initialModeView={initialModeView} onChangeModeView={onChangeModeView} />
+        <ToggleContainer
+          showToggle={showToggle}
+          initialModeView={initialModeView}
+          onChangeModeView={onChangeModeView}
+        />
       </S.Row>
     </S.Wrapper>
   );

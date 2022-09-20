@@ -18,7 +18,6 @@ import { ContentHeader } from "shared/components/content-header";
 import { RootState } from "store";
 
 import * as S from "./styles";
-import { ContentPasteOffSharp } from "@mui/icons-material";
 
 export const History: React.FC<{}> = () => {
   const params = useParams();
@@ -55,8 +54,16 @@ export const History: React.FC<{}> = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  const buttonBack = {
+    title: "Back",
+    onClick: () => {
+      navigate(GO_BACK);
+    },
+    variant: "outlined",
+  };
+
   const buttonUpdate = {
-    title: "Atualizar",
+    title: "Refresh",
     onClick: () => {
       request()
     },
@@ -70,13 +77,6 @@ export const History: React.FC<{}> = () => {
     },
   };
 
-  const buttonBack = {
-    title: "Back",
-    onClick: () => {
-      navigate(GO_BACK);
-    },
-    variant: "outlined",
-  };
 
   return (
     <S.Wrapper>
@@ -86,7 +86,7 @@ export const History: React.FC<{}> = () => {
           subtitle={`Process id: ${processId}`}
           hasInput={false}
           hasBackButton={false}
-          buttons={[buttonUpdate, buttonNavigate, buttonBack]}
+          buttons={[buttonBack, buttonUpdate, buttonNavigate]}
           showToggle={false}
         />
       </S.HeaderContainer>
