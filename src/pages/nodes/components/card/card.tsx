@@ -1,19 +1,17 @@
 import * as S from "./styles";
 
 interface PropsCategory {
-  category: string;
+  title: string;
   nodes: string;
+  nodeType: string;
 }
 
-export const Card: React.FC<PropsCategory> = ({ category, nodes }) => {
+export const Card: React.FC<PropsCategory> = ({ title, nodes, nodeType }) => {
   return (
     <S.BoxContent>
-      <S.Title>{category}</S.Title>
-      <S.Text>{nodes}</S.Text>
-      <S.BoxText>
-        <S.Percentage>14%</S.Percentage>
-        <S.Period>Since last week</S.Period>
-      </S.BoxText>
+      <S.Title>{title}</S.Title>
+      <S.Text>Nodes: {nodes}</S.Text>
+      <S.Text>{nodeType}</S.Text>
     </S.BoxContent>
   );
 };

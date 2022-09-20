@@ -1,9 +1,8 @@
-import { apiNodes } from "services/api";
+import { api } from "services/api";
 
 export async function listNodes() {
   try {
-    const data = await apiNodes.get(`/cockpit/nodes`);
-    // console.log("data", data);
+    const data = await api.get(`/cockpit/nodes`);
     return data;
   } catch (error) {
     throw new Error("Erro ao encontrar os nodes");

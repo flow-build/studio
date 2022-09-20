@@ -14,7 +14,6 @@ export const Nodes: React.FC<{}> = () => {
   async function getListNodes() {
     const response = await listNodes();
     setPayload(response?.data);
-    console.log("response", response?.data);
   }
 
   useEffect(() => {
@@ -25,20 +24,22 @@ export const Nodes: React.FC<{}> = () => {
     <S.Wrapper>
       <ContentHeader
         title="Nodes"
-        // subtitle={`Process id: ${processId}`}
-        // hasInput={false}
-        // buttonTitle="Atualizar"
-        // onButtonClick={request}
-        // showToggle={false}
+        hasInput={false}
+        showToggle={false}
+        hasButton={false}
       />
-
-      <S.List>
-        <S.Items>
-          {payload?.categories?.map(({ category, nodes }) => (
-            <Card category={category} nodes={nodes} />
-          ))}
-        </S.Items>
-      </S.List>
+      <S.ContentList>
+        <S.List>
+          <S.Items>
+            {payload?.categories?.map(({ category, nodes }) => (
+              <Card title={category} nodes={nodes} nodeType={"Categories"} />
+            ))}
+            {payload?.types?.map(({ type, nodes }) => (
+              <Card title={type} nodes={nodes} nodeType={"Types"} />
+            ))}
+          </S.Items>
+        </S.List>
+      </S.ContentList>
     </S.Wrapper>
   );
 };

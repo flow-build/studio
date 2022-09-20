@@ -15,13 +15,7 @@ export const Wrapper = styled(Grid).attrs({
   height: calc(100% - 64px);
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  /* justify-content: center; */
 `;
-
-export const List = styled.ul``;
-
-export const Items = styled.li``;
 
 export const BoxContent = styled(Box).attrs({
   sx: {
@@ -42,27 +36,8 @@ export const Title = styled(Typography).attrs({
 
 export const Text = styled.p`
   color: #fff;
-  margin-top: 1.3rem;
+  margin-top: 0.5rem;
   padding-left: 1rem;
-  font-size: x-large;
-`;
-
-export const BoxText = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-export const Percentage = styled.p`
-  color: #fff;
-  padding-left: 1rem;
-  font-size: medium;
-`;
-
-export const Period = styled.p`
-  color: #fff;
-  padding-left: 1rem;
-  font-size: medium;
+  font-size: large;
 `;
 
