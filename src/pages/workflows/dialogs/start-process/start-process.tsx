@@ -94,3 +94,4 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     </S.Wrapper>
   );
 };
+
