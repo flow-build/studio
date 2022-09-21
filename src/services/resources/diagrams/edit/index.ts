@@ -1,4 +1,4 @@
-import { api } from "services/api/diagrams";
+import { api } from "../../../api/diagrams/index";
 
 export interface IParams {
   id: string;

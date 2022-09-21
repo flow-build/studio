@@ -1,4 +1,4 @@
-import { api } from "services/api/diagrams/index";
+import { api } from "../../../api/diagrams/index";
 
 export async function listById(id: string) {
   try {

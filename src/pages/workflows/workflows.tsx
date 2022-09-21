@@ -12,6 +12,8 @@ import { useTable } from "pages/workflows/hooks/useTable";
 
 import { listWorkflows } from "services/resources/workflows/list";
 
+import { list } from "services/resources/diagrams/list";
+
 import { ContentHeader } from "shared/components/content-header";
 
 import { RootState } from "store";
@@ -60,6 +62,18 @@ export const Workflows: React.FC = () => {
       dispatch(resetFilter());
     };
   }, [dispatch]);
+
+
+
+
+  useEffect(() => {
+    const request = async () => {
+      const diagrams = await list();
+      console.log(diagrams, "diagrams");
+    };
+
+    request();
+  });
 
   return (
     <>
