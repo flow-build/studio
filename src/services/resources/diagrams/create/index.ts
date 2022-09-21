@@ -4,7 +4,7 @@ export interface ICreateDiagram {
   name: string;
   workflowId: string;
   userId: string;
-  xml: any;
+  xml: string;
 }
 
 export async function create(createDiagram: ICreateDiagram) {
