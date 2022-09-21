@@ -1,11 +1,16 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
-import { ICreateDiagram } from "pages/diagram/dialogs/save-diagram/types/ICreateDiagram";
+import { getStorageItem } from "shared/utils/storage";
+import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
+import { create } from "services/resources/diagrams/create";
+import { useDiagram } from "pages/diagram/hooks/useDiagram";
+
+import { useSnackbar } from "notistack";
+
+import jwt_decode from "jwt-decode";
 
 import * as S from "./styles";
-import { create } from "services/resources/diagrams/create";
-import { useSnackbar } from "notistack";
-import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
 type Props = {
   isOpen: boolean;
@@ -16,20 +21,21 @@ type Props = {
 export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
   const { enqueueSnackbar } = useSnackbar();
   const diagram = useDiagram();
-  
-  
-  const [update, setUpdate] = useState<ICreateDiagram>({
+  const { workflowId } = useParams();
+
+  function getUserInfo() {
+    const token = getStorageItem("TOKEN");
+    const decoded = jwt_decode(token);
+    console.log(decoded, "decoded");
+    return decoded;
+  }
+
+  const [payload, setPayload] = useState<IPayload>({
     name: "",
-    workflowId: "5dbe5ef7-1158-44ea-a148-6ad5b2d78cb1",
-    userId: "e9f53410-35e4-11ed-983d-9315e6682be4",
-    xml: diagram.initialElements,
   });
 
-  const onChangeDiagramName = (
-    valor: string,
-    campo: "name" | "workflowId" | "userId" | "xml"
-  ) => {
-    setUpdate((prev) => ({ ...prev, [campo]: valor }));
+  const onChangeDiagramName = (valor: string, campo: "name") => {
+    setPayload((prev) => ({ ...prev, [campo]: valor }));
   };
 
   function createDiagramSuccess(message: string) {
@@ -40,15 +46,17 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   async function handleClickDiagramName() {
-    console.log(update);
-    const diagramName = update?.name;
-    const response = await create({
-      name: update.name,
-      workflowId: update.workflowId,
-      userId: update.userId,
-      xml: update.xml,
-    });
+    console.log(payload);
+    const info = getUserInfo();
+    console.log(info);
+    const diagramName = payload?.name;
 
+    const response = await create({
+      name: payload.name,
+      workflowId: workflowId as string,
+      userId: info.actor_id,
+      xml: diagram,
+    });
     createDiagramSuccess(diagramName);
     console.log(response, "response");
 
@@ -63,7 +71,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose }) => {
       </S.DiagramTitle>
       <S.DiagramContent>
         <S.DiagramInput
-          value={update?.name}
+          value={payload?.name}
           onChange={(event) => {
             onChangeDiagramName(event.target.value, "name");
           }}
