@@ -36,14 +36,12 @@ export const SignIn = () => {
       setStorageItem("TOKEN", token);
       setStorageItem("TOKEN_DIAGRAM", diagramToken);
       navigate("/dashboard");
+      return;
     }
 
     navigate("dashboard/settings");
     const message = "Erro. Insira URL e porta válida para a aplicação";
-    enqueueSnackbar(message, {
-      autoHideDuration: 4000,
-      variant: "error",
-    });
+    enqueueSnackbar(message, { autoHideDuration: 4000, variant: "error" });
   }, [navigate, enqueueSnackbar]);
 
   return (
