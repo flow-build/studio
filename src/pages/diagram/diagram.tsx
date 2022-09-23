@@ -44,7 +44,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
-  const [xml, setXml] = useState({});
+  const [xml, setXml] = useState("");
 
   const actions = getActions();
 

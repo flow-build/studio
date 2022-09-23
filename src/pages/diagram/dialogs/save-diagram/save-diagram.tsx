@@ -15,7 +15,7 @@ type Props = {
   isOpen: boolean;
   onClose?: () => void;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  xml: any;
+  xml: string;
 };
 
 export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
@@ -32,7 +32,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     name: "",
   });
 
-  const onChangeDiagramName = (valor: string, campo: "name") => {
+  const onChangeDiagramName = (valor: string, campo: keyof IPayload) => {
     setPayload((prev) => ({ ...prev, [campo]: valor }));
   };
 
@@ -48,15 +48,14 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
     const diagramName = payload?.name;
 
-    const response = await create({
+    await create({
       name: payload.name,
       workflowId: workflowId as string,
       userId: info.actor_id,
-      xml: xml,
+      xml,
     });
-    createDiagramSuccess(diagramName);
 
-    return;
+    createDiagramSuccess(diagramName);
   }
 
   return (
@@ -66,23 +65,26 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
           Salvar Diagrama
           <S.CloseDiagramButton onClick={onClose} />
         </S.DiagramTitle>
+
         <S.DiagramContent>
           <S.DiagramInput
             value={payload?.name}
-            onChange={(event) => {
-              onChangeDiagramName(event.target.value, "name");
-            }}
+            onChange={(event) =>
+              onChangeDiagramName(event.target.value, "name")
+            }
           />
         </S.DiagramContent>
+
         <S.DiagramDivider />
+
         <S.ButtonWrapper>
           <S.CancelDiagramButton onClick={onClose}>
-            {" "}
-            Cancelar{" "}
+            Cancelar
           </S.CancelDiagramButton>
+
           <S.ButtonDivider />
+
           <S.SaveDiagramButton onClick={handleClickDiagramName}>
-            {" "}
             Salvar
           </S.SaveDiagramButton>
         </S.ButtonWrapper>
