@@ -59,7 +59,6 @@ export function useDiagram() {
   async function downloadXML(modeler: any) {
     try {
       const response = await modeler.saveXML({ format: true });
-      console.log(response, 'response')
       const file = new Blob([response.xml], { type: "text/xml" });
       const canvas = modeler.get("canvas");
 
