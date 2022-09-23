@@ -5,6 +5,7 @@ import ListIcon from "@mui/icons-material/ListOutlined";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
+import SaveIcon from "@mui/icons-material/Save";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -42,6 +43,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [xml, setXml] = useState("");
 
   const actions = getActions();
 
@@ -51,6 +54,15 @@ export const DiagramRefactored: React.FC<Props> = () => {
         icon: <ListIcon />,
         tooltip: "Listar processos",
         onClick: () => setIsOpen(true),
+      },
+      {
+        icon: <SaveIcon />,
+        tooltip: "Salvar Diagrama",
+        onClick: async () => {
+          setSaveDialogOpen(true);
+          const { xml } = await diagram.modeler.saveXML();
+          setXml(xml);
+        },
       },
       {
         icon: <FileDownloadIcon />,
@@ -146,6 +158,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onSelectItem={onSelectItem}
+      />
+      <S.SaveDiagramDialog
+        isOpen={isSaveDialogOpen}
+        onClose={() => setSaveDialogOpen(false)}
+        xml={xml}
       />
 
       {diagramPageState.propertiesDialog.isVisible && (
