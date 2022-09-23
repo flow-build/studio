@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import MuiTooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-
 export const Wrapper = styled(Box).attrs({
   sx: {
     background: (theme) => theme.palette.background.paper,
@@ -14,7 +13,7 @@ export const Wrapper = styled(Box).attrs({
   height: 48px;
   display: flex;
   align-items: center;
-  flex: 0.70;
+  flex: 0.7;
   padding: 5px;
   border-radius: 15px;
 `;
@@ -29,20 +28,16 @@ export const TitleContent = styled.div`
 
 export const Title = styled(Typography).attrs({
   variant: "h6",
-})`
-`;
+})``;
 
 export const Tooltip = styled(MuiTooltip)``;
 
-
-export const Status = styled(Box).attrs({
-})`
- display: flex;
- justify-content: space-between;
- width: 30px;
- height: 30px;
- opacity: 70%;
- margin-right: 24px;
-`
-
+export const Status = styled(Box).attrs({})`
+  display: flex;
+  justify-content: space-between;
+  width: 30px;
+  height: 30px;
+  opacity: 70%;
+  margin-right: 24px;
+`;
 
