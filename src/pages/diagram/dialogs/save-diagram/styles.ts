@@ -11,12 +11,14 @@ import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
 
 export const DiagramWrapper = styled(Dialog).attrs({
-  "aria-labelledby": "Save diagram",
-  "aria-describedby": "Save diagram",
-  scroll: "paper",
   fullWidth: true,
   maxWidth: "sm",
+  scroll: "paper",
 })``;
+
+export const DiagramBackground = styled.div`
+  background-color: #161826;
+`;
 
 export const DiagramTitle = styled(DialogTitle)`
   display: flex;
@@ -62,7 +64,7 @@ export const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
-export const DiagramDivider = styled(Divider).attrs({})``;
+export const DiagramDivider = styled(Divider)``;
 export const ButtonDivider = styled(Divider).attrs({
   orientation: "vertical",
   flexItem: true,
