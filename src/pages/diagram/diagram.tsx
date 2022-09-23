@@ -44,6 +44,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [xml, setXml] = useState({});
 
   const actions = getActions();
 
@@ -57,9 +58,10 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <SaveIcon />,
         tooltip: "Salvar Diagrama",
-        onClick: () => {
+        onClick: async () => {
           setSaveDialogOpen(true);
-          diagram.modeler.saveXML().then(({ xml }) => console.log(xml));
+          const { xml } = await diagram.modeler.saveXML();
+          setXml(xml);
         },
       },
       {
@@ -160,6 +162,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
       <S.SaveDiagramDialog
         isOpen={isSaveDialogOpen}
         onClose={() => setSaveDialogOpen(false)}
+        xml={xml}
       />
 
       {diagramPageState.propertiesDialog.isVisible && (
