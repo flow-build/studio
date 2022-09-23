@@ -25,6 +25,9 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     (state: RootState) => state.workflowPage
   );
 
+  const workflowId = workflowPageState.startProcessDialog.data.workflowId;
+  const processName = workflowPageState.startProcessDialog.data.processName;
+
   const [inputSchema, setInputSchema] = useState();
   const [payload, setPayload] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,29 +49,23 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   async function onConfirm() {
-    if (!isValidJSONString(payload)) {
-      setIsLoading(false);
-      return;
-    }
     setIsLoading(true);
-    const processName = workflowPageState.startProcessDialog.data.processName;
-    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-    const response = await createProcessByName(
-      processName,
-      JSON.parse(payload ?? "{}")
-    );
+
+    const parsedPayload = JSON.parse(payload ?? "{}");
+    const response = await createProcessByName(processName, parsedPayload);
+
     showNotification(processName);
-    setTimeout(() => {
-      navigate(`${workflowId}/processes/${response.process_id}/history`);
-    }, 2000);
+
+    navigate(`${workflowId}/processes/${response.process_id}/history`);
+
     if (onClose) {
       onClose();
     }
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
-    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-
     if (workflowId) {
       const request = async () => {
         const workflow = await listWorkflowById(workflowId);
@@ -81,7 +78,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
       request();
     }
-  }, [workflowPageState.startProcessDialog.data.workflowId]);
+  }, [workflowId]);
 
   return (
     <S.Wrapper open={isOpen} onClose={onClose}>
@@ -106,7 +103,9 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
         <S.CancelButton onClick={onClose}>Cancelar</S.CancelButton>
 
         <S.OkButton disabled={!isValidJSONString(payload)} onClick={onConfirm}>
-          {isLoading ? <S.Loading /> : <S.TextOkButton>Iniciar</S.TextOkButton>}
+          {isLoading && <S.Loading />}
+
+          {!isLoading && <S.TextOkButton>Iniciar</S.TextOkButton>}
         </S.OkButton>
       </S.ActionsContainer>
     </S.Wrapper>
