@@ -5,7 +5,7 @@ import { Card } from "./components/card";
 import { useEffect, useState } from "react";
 import { listNodes } from "services/resources/nodes/nodes";
 
-export const Nodes: React.FC<{}> = () => {
+export const Nodes: React.FC = () => {
   const [payload, setPayload] = useState({
     categories: [],
     types: [],
@@ -31,11 +31,22 @@ export const Nodes: React.FC<{}> = () => {
       <S.ContentList>
         <S.List>
           <S.Items>
-            {payload?.categories?.map(({ category, nodes }) => (
-              <Card title={category} nodes={nodes} nodeType={"Categories"} />
+            {payload?.categories?.map(({ category, nodes }, index) => (
+              <Card
+                key={index.toString()}
+                title={category}
+                nodes={nodes}
+                nodeType={"Categories"}
+              />
             ))}
-            {payload?.types?.map(({ type, nodes }) => (
-              <Card title={type} nodes={nodes} nodeType={"Types"} />
+
+            {payload?.types?.map(({ type, nodes }, index) => (
+              <Card
+                key={index.toString()}
+                title={type}
+                nodes={nodes}
+                nodeType={"Types"}
+              />
             ))}
           </S.Items>
         </S.List>
@@ -43,4 +54,3 @@ export const Nodes: React.FC<{}> = () => {
     </S.Wrapper>
   );
 };
-
