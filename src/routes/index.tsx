@@ -10,6 +10,7 @@ import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
 import { Metabase } from "pages/metabase";
+import { Nodes } from "pages/nodes";
 import { Settings } from "pages/settings";
 
 import { getStorageItem } from "shared/utils/storage";
@@ -45,6 +46,7 @@ export const AppRoutes = () => {
             element={<DiagramRefactored />}
           />
           <Route path="compare-json" element={<CompareJson />} />
+          <Route path="nodes" element={<Nodes />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
