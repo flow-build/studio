@@ -116,8 +116,8 @@ export const Loading = styled(CircularProgress).attrs({
   color: "inherit",
 })``;
 
-export const TextOkButton = styled(DialogContentText)`
+export const TextOkButton = styled.p`
   font-weight: bold;
-  font-size: small;
+  font-size: 0.8rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;

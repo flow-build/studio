@@ -169,7 +169,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
               >
                 {isLoading && <S.Loading />}
 
-                {!isLoading && <S.TextOkButton>Start</S.TextOkButton>}
+                {!isLoading && <S.TextOkButton>Iniciar</S.TextOkButton>}
               </S.OkButton>
               <S.SeeSchema
                 onClick={() => setShowElementInputSchema((prev: any) => !prev)}
