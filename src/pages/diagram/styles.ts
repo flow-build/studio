@@ -9,6 +9,7 @@ import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
 
 import { Header as BaseHeader } from "pages/diagram/components/header";
+import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -20,6 +21,8 @@ export const Wrapper = styled(Grid).attrs({
 export const Header = styled(BaseHeader)``;
 
 export const ListProcessesDialog = styled(ListProcesses)``;
+
+export const SaveDiagramDialog = styled(SaveDiagram)``;
 
 export const PropertiesDialog = styled(Properties)``;
 
