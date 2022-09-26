@@ -10,6 +10,7 @@ import { setStorageItem } from "shared/utils/storage";
 import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
+import { getToken } from "services/resources/diagrams/token";
 
 export const SignIn = () => {
   const navigate = useNavigate();
@@ -29,19 +30,19 @@ export const SignIn = () => {
 
   const onLogin = useCallback(async () => {
     const token = await getAnonymousToken();
+    const diagramToken = await getToken();
 
     if (token) {
       setStorageItem("TOKEN", token);
+      setStorageItem("TOKEN_DIAGRAM", diagramToken);
       navigate("/dashboard");
-    } else {
-      navigate("dashboard/settings");
-      const message = "Erro. Insira URL e porta válida para a aplicação";
-      enqueueSnackbar(message, {
-        autoHideDuration: 4000,
-        variant: "error",
-      });
+      return;
     }
-  }, [navigate]);
+
+    navigate("dashboard/settings");
+    const message = "Erro. Insira URL e porta válida para a aplicação";
+    enqueueSnackbar(message, { autoHideDuration: 4000, variant: "error" });
+  }, [navigate, enqueueSnackbar]);
 
   return (
     <S.Wrapper>
