@@ -14,6 +14,8 @@ import { IconButton } from "shared/components/icon-button";
 import { JsonEditor } from "shared/components/json-editor";
 import { InputText } from "shared/components/input-text";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 import Form from "@rjsf/core";
 
 export const Wrapper = styled(Dialog).attrs({
@@ -66,7 +68,9 @@ export const OkButton = styled(Button).attrs({
   autoFocus: true,
   variant: "contained",
   size: "small",
-})``;
+})`
+  height: 2rem;
+`;
 
 export const BoxMessage = styled(Box)`
   display: flex;
@@ -107,3 +111,13 @@ export const SeeSchema = styled(Button).attrs({
   variant: "contained",
   size: "small",
 })``;
+
+export const Loading = styled(CircularProgress).attrs({
+  color: "inherit",
+})``;
+
+export const TextOkButton = styled(DialogContentText)`
+  font-weight: bold;
+  font-size: small;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+`;

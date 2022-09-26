@@ -3,8 +3,11 @@ import { useMemo, useState } from "react";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
-import DashboardIcon from '@mui/icons-material/Dashboard'
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import { listNodes } from "services/resources/nodes/nodes";
 
 interface IMenuItem {
   name: string;
@@ -55,6 +58,20 @@ export function useSidebar() {
         icon: <SearchIcon />,
         type: TypeMenuItem.OPEN_DIALOG,
         tooltip: "Buscar",
+      },
+      {
+        name: "Nodes",
+        pathname: "nodes",
+        icon: <AccountTreeIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Configurações",
+      },
+      {
+        name: "Configurações",
+        pathname: "settings",
+        icon: <SettingsIcon />,
+        type: TypeMenuItem.NAVIGATION,
+        tooltip: "Configurações",
       },
     ] as IMenuItem[];
   }, []);

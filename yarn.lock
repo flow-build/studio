@@ -1959,9 +1959,9 @@
   integrity sha512-YhRvxkvyoG+jBtrUZXX+4CRVhi7l0n+h9DqDpPw1CFEEym0jMW5FVwg76bL5gZscEIdNuW/5wo6TJPNeqkwkVQ==
 
 "@rjsf/utils@*":
-  version "5.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@rjsf/utils/-/utils-5.0.0-beta.5.tgz#7578bd3a435f96c808c1fcb5f1f54c9f91d0d7e1"
-  integrity sha512-dICEsbB4VeCe3pSCwvrR7rhq3Pzvd87v67barZZrjkhHG+iUJpffRJWCxouVPl5ro2dPeY/ODE7UuN69t67VdQ==
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@rjsf/utils/-/utils-5.0.0-beta.9.tgz#5824016a1819b9ecb3f250b48e74c2b6b3b8e7cf"
+  integrity sha512-4E1onsvcS1sCKyO6YM5+0GqRw/o+g3N6HDYbHoFoeCq/V1ZE+tNUB7EhhtwoX586EUBEBC4PkjabbZ1cbylz0g==
   dependencies:
     json-schema-merge-allof "^0.8.1"
     jsonpointer "^5.0.1"
@@ -1970,9 +1970,9 @@
     react-is "^18.2.0"
 
 "@rjsf/validator-ajv6@*":
-  version "5.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@rjsf/validator-ajv6/-/validator-ajv6-5.0.0-beta.5.tgz#a9669081ca15faf8faf28f663394c1b40485a16f"
-  integrity sha512-gfw/hsyUZW2AiOlLOntnKY4eJbRm7fhr7u+deiM3O/SNKP2r5vgDUzC47SqNhCAFxn5luHqwD3JE/gLvU0ClVg==
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@rjsf/validator-ajv6/-/validator-ajv6-5.0.0-beta.9.tgz#335665ae9dc276d269abccbdf034688245547420"
+  integrity sha512-CdNY/SMZr65xkkC12wQ670WhkjWh1hXNn8sOmdvDlNVASdtoSPZba2RLUolzsyvcmNoxsn0N8aWLS68ArtIYzg==
   dependencies:
     ajv "^6.7.0"
     lodash "^4.17.15"

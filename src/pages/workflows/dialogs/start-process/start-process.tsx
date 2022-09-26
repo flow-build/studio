@@ -43,6 +43,10 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const [inputSchema, setInputSchema] = useState<JSONSchema7>();
   const [payload, setPayload] = useState<string>();
+  const workflowId = workflowPageState.startProcessDialog.data.workflowId;
+  const processName = workflowPageState.startProcessDialog.data.processName;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   function showNotification(message: string) {
     enqueueSnackbar(`Processo ${message} criado!`, {
@@ -51,15 +55,25 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
     });
   }
 
+  function isValidJSONString(str: any) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
   async function onConfirm() {
-    const processName = workflowPageState.startProcessDialog.data.processName;
-    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-    const response = await createProcessByName(
-      processName,
-      JSON.parse(payload ?? "{}")
-    );
+    showNotification(processName);
+
+    setIsLoading(true);
+
+    const parsedPayload = JSON.parse(payload ?? "{}");
+    const response = await createProcessByName(processName, parsedPayload);
 
     showNotification(processName);
+
     navigate(`${workflowId}/processes/${response.process_id}/history`);
 
     if (onClose) {
@@ -68,8 +82,6 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   useEffect(() => {
-    const workflowId = workflowPageState.startProcessDialog.data.workflowId;
-
     if (workflowId) {
       const request = async () => {
         const workflow = await listWorkflowById(workflowId);
@@ -81,7 +93,7 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
 
       request();
     }
-  }, [workflowPageState.startProcessDialog.data.workflowId]);
+  }, [workflowId]);
 
   function onClick() {
     setShowElementEditInputSchema((prev) => !prev);
@@ -151,7 +163,14 @@ export const StartProcess: React.FC<Props> = ({ isOpen, onClose }) => {
                   Set Manually
                 </S.SetManually>
               )}
-              <S.OkButton onClick={onConfirm}>Start</S.OkButton>
+              <S.OkButton
+                disabled={!isValidJSONString(payload)}
+                onClick={onConfirm}
+              >
+                {isLoading && <S.Loading />}
+
+                {!isLoading && <S.TextOkButton>Start</S.TextOkButton>}
+              </S.OkButton>
               <S.SeeSchema
                 onClick={() => setShowElementInputSchema((prev: any) => !prev)}
               >
