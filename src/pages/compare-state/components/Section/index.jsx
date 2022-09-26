@@ -149,7 +149,7 @@ export const Section = ({
 
           <IconButton
             aria-label="search a state"
-            onClick={onSearchPayload(payload)}
+            onClick={()=> onSearchPayload(payload)}
           >
             <SearchIcon />
           </IconButton>
