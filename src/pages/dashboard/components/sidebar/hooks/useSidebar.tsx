@@ -64,7 +64,7 @@ export function useSidebar() {
         pathname: "nodes",
         icon: <Icon src="nodes" icon={Nodes} />,
         type: TypeMenuItem.NAVIGATION,
-        tooltip: "Configurações",
+        tooltip: "Nodes",
       },
       {
         name: "Configurações",
