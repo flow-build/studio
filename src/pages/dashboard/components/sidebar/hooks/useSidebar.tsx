@@ -6,8 +6,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import { listNodes } from "services/resources/nodes/nodes";
+import Icon from "shared/components/icon/icon";
+import Nodes from "assets/icons/nodes.svg";
 
 interface IMenuItem {
   name: string;
@@ -62,7 +62,7 @@ export function useSidebar() {
       {
         name: "Nodes",
         pathname: "nodes",
-        icon: <AccountTreeIcon />,
+        icon: <Icon src="nodes" icon={Nodes} />,
         type: TypeMenuItem.NAVIGATION,
         tooltip: "Configurações",
       },
