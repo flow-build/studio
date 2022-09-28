@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import ListIcon from "@mui/icons-material/ListOutlined";
+import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
@@ -36,13 +37,15 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
+  const { id } = useParams();
+
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
   const diagram = useDiagram();
   const paint = usePaint();
-
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isListDiagram, setListDiagram] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
 
@@ -54,6 +57,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         icon: <ListIcon />,
         tooltip: "Listar processos",
         onClick: () => setIsOpen(true),
+      },
+      {
+        icon: <ExtensionOutlined />,
+        tooltip: "Listar diagramas",
+        onClick: () => setListDiagram(true),
       },
       {
         icon: <SaveIcon />,
@@ -159,6 +167,13 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onClose={() => setIsOpen(false)}
         onSelectItem={onSelectItem}
       />
+
+      <S.ListDiagramsDialog
+        isOpen={isListDiagram}
+        onClose={() => setListDiagram(false)}
+        id={id ?? ""}
+      />
+
       <S.SaveDiagramDialog
         isOpen={isSaveDialogOpen}
         onClose={() => setSaveDialogOpen(false)}
