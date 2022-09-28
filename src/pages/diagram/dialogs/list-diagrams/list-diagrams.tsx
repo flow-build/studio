@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getLongFormatByDate } from "shared/utils/date";
+import { getShortFormatByDate } from "shared/utils/date";
 
 import { TUser } from "models/user";
 import { listById } from "services/resources/diagrams/list-by-id";
@@ -11,14 +11,14 @@ type Props = {
   isOpen: boolean;
   onClose?: () => void;
   id: string;
-  onSelectItem?: (diagram: TUser) => void;
+  onSelectDiagram?: (diagram: TUser) => void;
 };
 
 export const ListDiagrams: React.FC<Props> = ({
   isOpen,
   onClose,
   id,
-  onSelectItem,
+  onSelectDiagram,
 }) => {
   const [listDiagram, setListDiagram] = useState<TUser[]>([]);
 
@@ -26,14 +26,14 @@ export const ListDiagrams: React.FC<Props> = ({
     if (onClose) {
       onClose();
     }
-    if (onSelectItem) {
-      onSelectItem(diagram);
+    if (onSelectDiagram) {
+      onSelectDiagram(diagram);
     }
   }
 
   function getSubtitle(diagram: TUser) {
-    const createdAt = getLongFormatByDate(diagram.created_at);
-    const updatedAt = getLongFormatByDate(diagram.updated_at);
+    const createdAt = getShortFormatByDate(diagram.created_at);
+    const updatedAt = getShortFormatByDate(diagram.updated_at);
     return `criado em: ${createdAt} - atualizado em: ${updatedAt}`;
   }
 
