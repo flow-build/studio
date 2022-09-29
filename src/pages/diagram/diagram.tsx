@@ -29,9 +29,16 @@ import {
   setShowProcessInfoDialog,
   setShowPropertiesDialog,
 } from "store/slices/diagram";
+
+import {
+  setShowDiagramInfoDialog,
+  setDiagramSelected,
+} from "store/slices/dialog";
+
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
+import { TUser } from "models/user";
 
 type Props = {};
 
@@ -40,12 +47,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const { id } = useParams();
 
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
   const diagram = useDiagram();
   const paint = usePaint();
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isListDiagram, setListDiagram] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
 
@@ -61,7 +68,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <ExtensionOutlined />,
         tooltip: "Listar diagramas",
-        onClick: () => setListDiagram(true),
+        onClick: () => dispatch(setShowDiagramInfoDialog({ isVisible: true })),
       },
       {
         icon: <SaveIcon />,
@@ -107,6 +114,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
   async function onSelectItem(process: TProcess) {
     resetColor();
     dispatch(setProcessSelected(process));
+  }
+
+  async function onSelectDiagram(diagram: TUser) {
+    resetColor();
+    dispatch(setDiagramSelected(diagram));
   }
 
   useEffect(() => {
@@ -168,11 +180,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onSelectItem={onSelectItem}
       />
 
-      <S.ListDiagramsDialog
-        isOpen={isListDiagram}
-        onClose={() => setListDiagram(false)}
-        id={id ?? ""}
-      />
+      {dialogPageState.diagramInfoDialog.isVisible && (
+        <S.ListDiagramsDialog
+          isOpen={dialogPageState.diagramInfoDialog.isVisible}
+          id={id ?? ""}
+          onClose={() =>
+            dispatch(setShowDiagramInfoDialog({ isVisible: false }))
+          }
+          onSelectDiagram={onSelectDiagram}
+        />
+      )}
 
       <S.SaveDiagramDialog
         isOpen={isSaveDialogOpen}

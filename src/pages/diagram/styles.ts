@@ -5,11 +5,10 @@ import Grid from "@mui/material/Grid";
 import { Header as BaseHeader } from "pages/diagram/components/header";
 import { Confirmation } from "pages/diagram/dialogs/confirmation";
 import { ListProcesses } from "pages/diagram/dialogs/list-processes";
-import { ListDiagrams } from "./dialogs/list-diagrams";
+import { ListDiagrams } from "../../dialogs/list-diagrams/list-diagrams";
 import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
-
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
