@@ -10,11 +10,17 @@ import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
 import { TWorkflow } from "models/workflow";
 
 import { getDateTimeFormatByDate } from "shared/utils/date";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProcessSelected } from "store/slices/diagram";
+import {
+  setDiagramSelected,
+  setShowDiagramInfoDialog,
+} from "store/slices/dialog";
+import { RootState } from "store";
 
 export function useTable(workflows: TWorkflow[]) {
   const dispatch = useDispatch();
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
   const workflowPage = useWorkflowPage();
 
   const columnData = useMemo(() => {
@@ -54,6 +60,10 @@ export function useTable(workflows: TWorkflow[]) {
           icon: ExtensionOutlined,
           tooltip: "Ver diagrama",
           onClick: () => {
+            dispatch(setShowDiagramInfoDialog({ isVisible: true }));
+            dispatch(setDiagramSelected(undefined));
+            dialogPageState.diagramInfoDialog.data({ workflow });
+            
             dispatch(setProcessSelected(undefined));
             workflowPage.navigateToDiagram(workflow.workflow_id);
           },
@@ -62,11 +72,10 @@ export function useTable(workflows: TWorkflow[]) {
 
       return { items, actions };
     });
-  }, [dispatch, workflowPage, workflows]);
+  }, [dispatch, workflowPage, workflows, dialogPageState]);
 
   return {
     rows,
     columnData,
   };
 }
-
