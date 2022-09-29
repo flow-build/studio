@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
 import diagramReducer from "store/slices/diagram";
+import dialogReducer from "store/slices/dialog"
 import filterReducer from "store/slices/filter";
 import comparePageReducer from "store/slices/compare-page";
 import workflowPageReducer from "store/slices/workflow-page";
@@ -14,6 +15,7 @@ export const store = configureStore({
     workflowPage: workflowPageReducer,
     comparePage: comparePageReducer,
     diagramPage: diagramReducer,
+    dialogPage: dialogReducer,
     processHistory: historyReducer,
     processId: processIdReducer,
   },

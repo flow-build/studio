@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import ptBRLocale from "date-fns/locale/pt-BR";
 
 export function getDateTimeFormatByDate(text: string) {
   try {
@@ -23,7 +22,7 @@ export function getLongFormatByDate(text: string) {
 export function getShortFormatByDate(text: string) {
   try {
     const date = new Date(text);
-    const maskDate = format(date, "dd/MMM/yyyy", { locale: ptBRLocale });
+    const maskDate = format(date, "dd/MMM/yyyy");
     return maskDate;
   } catch (error) {
     throw new Error("Erro ao retornar data formatada");
