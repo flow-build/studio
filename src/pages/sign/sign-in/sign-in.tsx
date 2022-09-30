@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import flowbuildLogo from "assets/images/flowbuild-studio/default.svg";
@@ -8,13 +8,19 @@ import { getAnonymousToken } from "services/resources/token";
 import { setStorageItem } from "shared/utils/storage";
 
 import { useSnackbar } from "notistack";
-
+import object from "../../../../package.json";
 import * as S from "./styles";
 import { getToken } from "services/resources/diagrams/token";
 
 export const SignIn = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const [version, setVersion] = useState<string>();
+  const data = object.version;
+
+  useEffect(() => {
+    setVersion(data as string);
+  }, [version]);
 
   const [payload, setPayload] = useState({
     email: "",
@@ -45,6 +51,7 @@ export const SignIn = () => {
 
   return (
     <S.Wrapper>
+      <div style={{display:"flex", flex:"1", alignItems: "center", justifyContent: "center",}}>
       <S.LoginContainer>
         <S.LogoContainer>
           <img src={flowbuildLogo} alt="Logo" />
@@ -74,6 +81,10 @@ export const SignIn = () => {
           <S.PrimaryButton title="Login" fullWidth onClick={onLogin} />
         </S.Form>
       </S.LoginContainer>
+      </div>
+      <S.VersionContainer>
+        <S.Text>{version}</S.Text>
+      </S.VersionContainer>
     </S.Wrapper>
   );
 };
