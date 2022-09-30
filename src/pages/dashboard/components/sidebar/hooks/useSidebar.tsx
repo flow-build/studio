@@ -7,7 +7,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { TypeMenuItem } from "constants/type-menu-item";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import { listNodes } from "services/resources/nodes/nodes";
 
 interface IMenuItem {
   name: string;
@@ -46,11 +45,11 @@ export function useSidebar() {
         tooltip: "Workflows",
       },
       {
-        name: "Comparar States",
-        pathname: "compare-json",
+        name: "CompareState",
+        pathname: "compare-state",
         icon: <CompareArrowsIcon />,
         type: TypeMenuItem.NAVIGATION,
-        tooltip: "Comparar States",
+        tooltip: "CompareState",
       },
       {
         name: "Buscar",
