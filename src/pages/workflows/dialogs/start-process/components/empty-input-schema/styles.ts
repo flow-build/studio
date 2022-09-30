@@ -5,8 +5,9 @@ import Box from "@mui/material/Box";
 
 import { JsonEditor } from "shared/components/json-editor";
 
-import { DialogActions, DialogContentText } from "@mui/material";
-import { DialogContent } from "@material-ui/core";
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 
 export const Text = styled(DialogContentText)`
   width: 26rem;

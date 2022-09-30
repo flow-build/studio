@@ -10,7 +10,8 @@ import { IconButton } from "shared/components/icon-button";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import Form from "@rjsf/core";
-import { DialogActions, DialogContent } from "@material-ui/core";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import { Box } from "@mui/material";
 import { JsonEditor } from "shared/components/json-editor";
 import Button from "@mui/material/Button";
