@@ -17,6 +17,8 @@ import { JsonEditor } from "shared/components/json-editor";
 import Button from "@mui/material/Button";
 import { InputText } from "shared/components/input-text";
 
+import validator from "@rjsf/validator-ajv6";
+
 export const Wrapper = styled(Dialog).attrs({
   "aria-labelledby": "Confirmation",
   "aria-describedby": "Confirm action",
@@ -78,6 +80,7 @@ export const BoxMessage = styled(Box)`
 `;
 
 export const FormSchema = styled(Form).attrs({
+  validator,
   uiSchema: {
     "ui:submitButtonOptions": {
       norender: true,

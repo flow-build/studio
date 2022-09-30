@@ -10,6 +10,7 @@ import { JsonEditor } from "shared/components/json-editor";
 import { InputText } from "shared/components/input-text";
 
 import Form from "@rjsf/core";
+import validator from "@rjsf/validator-ajv6";
 
 export const Text = styled(DialogContentText)`
   width: 26rem;
@@ -41,6 +42,7 @@ export const OkButton = styled(Button).attrs({
 })``;
 
 export const FormSchema = styled(Form).attrs({
+  validator,
   uiSchema: {
     "ui:submitButtonOptions": {
       norender: true,
