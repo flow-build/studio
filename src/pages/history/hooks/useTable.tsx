@@ -1,6 +1,5 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LooksOne, LooksTwo, CheckBox } from "@mui/icons-material";
 
 import _isEqual from "lodash/isEqual";
 import _isEmpty from "lodash/isEmpty";
@@ -12,26 +11,88 @@ import { CollapseContent } from "pages/history/components/collapse-content";
 import { getDateTimeFormatByDate } from "shared/utils/date";
 
 import { RootState } from "store";
-import comparePage, { setNewJson, setOldJson } from "store/slices/compare-page";
+import { setNewJson, setOldJson } from "store/slices/compare-page";
+import { Button } from "shared/components/button";
+
+enum SIDE {
+  LEFT,
+  RIGHT,
+}
 
 export function useTable(states: TState[]) {
   const dispatch = useDispatch();
   const comparePageState = useSelector((store: RootState) => store.comparePage);
-  console.log(comparePageState);
 
-  function handleIconClick(
-    json: string | undefined,
-    state: TState,
-    fn: (param?: string) => any
-  ) {
-    const parsedJson = json && (JSON.parse(json) as TState);
-
-    if (parsedJson && _isEqual(state.id, parsedJson.id)) {
-      dispatch(fn(undefined));
-    } else {
-      dispatch(fn(JSON.stringify(state)));
+  function parseJson<T>(jsonStringfied?: string) {
+    if (_isEmpty(jsonStringfied)) {
+      return undefined;
     }
+
+    return JSON.parse(jsonStringfied as string) as T;
   }
+
+  function getIfJsonIsAlreadySaved(state: TState, otherState?: TState) {
+    return _isEqual(otherState?.id, state.id);
+  }
+
+  const clearCompare = useCallback(
+    (side: SIDE) => {
+      if (_isEqual(side, SIDE.LEFT)) {
+        return dispatch(setOldJson(undefined));
+      }
+      return dispatch(setNewJson(undefined));
+    },
+    [dispatch]
+  );
+
+  const handleIconClick = useCallback(
+    (side: SIDE, state: TState) => {
+      const compareLeft = parseJson<TState>(comparePageState.oldJson);
+      const compareRight = parseJson<TState>(comparePageState.newJson);
+
+      let isLeftEmpty = _isEmpty(compareLeft);
+      let isRightEmpty = _isEmpty(compareRight);
+
+      if (_isEqual(side, SIDE.LEFT)) {
+        const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
+
+        if (isSavedOnLeft) {
+          isLeftEmpty = true;
+          return clearCompare(SIDE.LEFT);
+        }
+
+        const isSavedOnRight = getIfJsonIsAlreadySaved(state, compareRight);
+
+        if (isSavedOnRight) {
+          isRightEmpty = true;
+          clearCompare(SIDE.RIGHT);
+        }
+
+        isLeftEmpty = false;
+        dispatch(setOldJson(JSON.stringify(state)));
+      }
+
+      if (_isEqual(side, SIDE.RIGHT)) {
+        const isSavedOnRight = getIfJsonIsAlreadySaved(state, compareRight);
+
+        if (isSavedOnRight) {
+          isRightEmpty = true;
+          return clearCompare(SIDE.RIGHT);
+        }
+
+        const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
+
+        if (isSavedOnLeft) {
+          isLeftEmpty = true;
+          clearCompare(SIDE.LEFT);
+        }
+
+        isRightEmpty = false;
+        dispatch(setNewJson(JSON.stringify(state)));
+      }
+    },
+    [clearCompare, comparePageState.newJson, comparePageState.oldJson, dispatch]
+  );
 
   function handleIcon(json: string | undefined, state: TState) {
     if (!_isEmpty(json)) {
@@ -62,23 +123,24 @@ export function useTable(states: TState[]) {
         state.status,
         getDateTimeFormatByDate(state.created_at),
       ];
+
       const actions = [
         {
           icon: handleIcon(comparePageState.oldJson, state)
-            ? CheckBox
-            : LooksOne,
+            ? () => <Button title="Left" variant="contained" />
+            : () => <Button title="Left" variant="outlined" />,
           tooltip: "selecionar processo",
           onClick: () => {
-            handleIconClick(comparePageState.oldJson, state, setOldJson);
+            handleIconClick(SIDE.LEFT, state);
           },
         },
         {
           icon: handleIcon(comparePageState.newJson, state)
-            ? CheckBox
-            : LooksTwo,
+            ? () => <Button title="Right" variant="contained" />
+            : () => <Button title="Right" variant="outlined" />,
           tooltip: "selecionar processo",
           onClick: () => {
-            handleIconClick(comparePageState.newJson, state, setNewJson);
+            handleIconClick(SIDE.RIGHT, state);
           },
         },
       ];
@@ -87,8 +149,12 @@ export function useTable(states: TState[]) {
 
       return { items, collapseContent, actions };
     });
-  }, [states, comparePageState.oldJson, comparePageState.newJson]);
+  }, [
+    states,
+    comparePageState.oldJson,
+    comparePageState.newJson,
+    handleIconClick,
+  ]);
 
   return { columnData, rows };
 }
-

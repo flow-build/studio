@@ -46,11 +46,11 @@ export function useSidebar() {
         tooltip: "Workflows",
       },
       {
-        name: "Comparar States",
-        pathname: "compare-json",
+        name: "Compare State",
+        pathname: "compare-state",
         icon: <CompareArrowsIcon />,
         type: TypeMenuItem.NAVIGATION,
-        tooltip: "Comparar States",
+        tooltip: "Compare State",
       },
       {
         name: "Buscar",
@@ -78,3 +78,4 @@ export function useSidebar() {
 
   return { menuItems, isOpenDialog, onCloseDialog };
 }
+

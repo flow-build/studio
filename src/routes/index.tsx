@@ -5,7 +5,7 @@ import _isEmpty from "lodash/isEmpty";
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
 import { Workflows } from "pages/workflows";
-import { CompareJson } from "pages/compare-json";
+import { CompareState } from "pages/compare-state";
 import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
@@ -45,7 +45,7 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-          <Route path="compare-json" element={<CompareJson />} />
+          <Route path="compare-state" element={<CompareState />} />
           <Route path="nodes" element={<Nodes />} />
           <Route path="settings" element={<Settings />} />
         </Route>
