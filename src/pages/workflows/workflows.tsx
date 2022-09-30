@@ -82,10 +82,13 @@ export const Workflows: React.FC = () => {
         )}
       </S.Wrapper>
 
-      <S.StartProcessDialog
-        isOpen={workflowPageState.startProcessDialog.isVisible}
-        onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
-      />
+      {workflowPageState.startProcessDialog.isVisible && (
+        <S.StartProcessDialog
+          isOpen={workflowPageState.startProcessDialog.isVisible}
+          onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
+        />
+      )}
     </>
   );
 };
+
