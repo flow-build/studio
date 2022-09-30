@@ -26,7 +26,7 @@ export const Nodes: React.FC = () => {
         title="Nodes"
         hasInput={false}
         showToggle={false}
-        hasButton={false}
+        buttons={[]}
       />
       <S.ContentList>
         <S.List>
