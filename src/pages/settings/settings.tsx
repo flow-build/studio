@@ -15,7 +15,7 @@ export const Settings: React.FC = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const isDisabled = _isEmpty(server) || _isEmpty(mqtt);
+  const isDisabled = _isEmpty(server);
 
   function setServerSetting(payload?: IPayloadForm) {
     setServer(payload);
@@ -45,13 +45,33 @@ export const Settings: React.FC = () => {
     }
   }
 
+  // TESTE das portas e url logado
+
+  const urlServe = process.env.REACT_APP_URL_BASE;
+  console.log("urlServe", urlServe);
+
+  const portServer = process.env.REACT_APP_URL_PORT;
+  console.log("portServer", portServer);
+
+  // TESTE das portas e url logado
+
   return (
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
 
-      <S.Form
+      {/* <S.Form
         labelPort="Porta do servidor"
         labelUrl="URL do servidor do flowbuild"
+        setSetting={setServerSetting}
+      /> */}
+
+      <S.Form
+        // labelUrl={urlServe}
+        // labelPort={portServer}
+        labelPort="Porta do servidor"
+        labelUrl="URL do servidor do flowbuild"
+        valueUrl={urlServe}
+        valuePort={portServer}
         setSetting={setServerSetting}
       />
 

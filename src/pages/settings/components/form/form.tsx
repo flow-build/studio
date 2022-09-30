@@ -15,9 +15,11 @@ interface IStatusConnection {
 }
 
 type Props = {
-  labelUrl: string;
-  labelPort: string;
+  labelUrl: string | undefined;
+  labelPort: string | undefined;
   setSetting?: (payload?: IPayloadForm) => void;
+  valueUrl?: string;
+  valuePort?: string;
 };
 
 export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
