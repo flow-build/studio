@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -51,4 +52,13 @@ export const OkButton = styled(Button).attrs({
   autoFocus: true,
   variant: "contained",
   size: "small",
+})``;
+
+export const TextOkButton = styled.p`
+  color: #fff;
+`;
+
+export const Loading = styled(CircularProgress).attrs({
+  color: "inherit",
+  size: "1.3rem",
 })``;
