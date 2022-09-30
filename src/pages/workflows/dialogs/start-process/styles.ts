@@ -1,23 +1,22 @@
 import styled from "styled-components";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton } from "shared/components/icon-button";
-
-import CircularProgress from "@mui/material/CircularProgress";
 
 import Form from "@rjsf/core";
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import { Box } from "@mui/material";
-import { JsonEditor } from "shared/components/json-editor";
-import Button from "@mui/material/Button";
-import { InputText } from "shared/components/input-text";
-
 import validator from "@rjsf/validator-ajv6";
+
+import { IconButton } from "shared/components/icon-button";
+import { InputText } from "shared/components/input-text";
+import { JsonEditor } from "shared/components/json-editor";
 
 export const Wrapper = styled(Dialog).attrs({
   "aria-labelledby": "Confirmation",
@@ -45,12 +44,24 @@ export const Text = styled(DialogContentText)`
 export const Content = styled(DialogContent)`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+
+  flex: 1;
+
+  min-height: 80vh;
+  max-height: 80vh;
 `;
 
-export const BoxContent = styled(Box).attrs({})`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+export const BoxContent = styled(Box)`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+`;
+
+export const Row = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
 `;
 
 export const Editor = styled(JsonEditor)``;
@@ -82,24 +93,30 @@ export const BoxMessage = styled(Box)`
 export const FormSchema = styled(Form).attrs({
   validator,
   uiSchema: {
+    "ui:displayLabel": false,
     "ui:submitButtonOptions": {
       norender: true,
     },
   },
 })`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-around;
-  width: 26rem;
-  height: 100%;
+  /* margin-top: 14px; */
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .control-label {
+    display: block;
+    margin-top: 5px;
+    font-family: sans-serif;
+  }
 `;
 
-export const SmiteInput = styled(InputText)`
-  width: 25rem;
-  margin-bottom: 1.5rem;
-  margin-top: 1rem;
-  margin-left: -2.9rem;
+export const SmiteInput = styled(InputText).attrs({})`
+  margin: 20px 0;
+  width: calc(100% - 10px);
 `;
 
 export const SetManually = styled(Button).attrs({
@@ -115,6 +132,7 @@ export const SeeSchema = styled(Button).attrs({
 })``;
 
 export const Loading = styled(CircularProgress).attrs({
+  size: 20,
   color: "inherit",
 })``;
 
