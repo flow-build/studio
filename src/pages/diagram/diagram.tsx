@@ -68,7 +68,10 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <ExtensionOutlined />,
         tooltip: "Listar diagramas",
-        onClick: () => dispatch(setShowDiagramInfoDialog({ isVisible: true })),
+        onClick: () =>
+          dispatch(
+            setShowDiagramInfoDialog({ isVisible: true})
+          ),
       },
       {
         icon: <SaveIcon />,
@@ -185,7 +188,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
           isOpen={dialogPageState.diagramInfoDialog.isVisible}
           id={id ?? ""}
           onClose={() =>
-            dispatch(setShowDiagramInfoDialog({ isVisible: false }))
+            dispatch(setShowDiagramInfoDialog({ isVisible: false}))
           }
           onSelectDiagram={onSelectDiagram}
         />
