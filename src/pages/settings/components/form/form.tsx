@@ -19,7 +19,8 @@ type Props = {
   labelPort: string | undefined;
   setSetting?: (payload?: IPayloadForm) => void;
   valueUrl?: string;
-  valuePort?: string;
+  // valuePort?: string;
+  value?: string | undefined;
 };
 
 export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
@@ -48,6 +49,24 @@ export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
       }
     }
   }
+
+  // TESTE das portas e url logado
+
+  // const urlServe = process.env.REACT_APP_URL_BASE;
+  // console.log("urlServe", urlServe);
+
+  // const portServer = process.env.REACT_APP_URL_PORT;
+  // console.log("portServer", portServer);
+
+  function setUrl() {
+    const urlServe = process.env.REACT_APP_URL_BASE;
+  }
+
+  // const [teste, setTest] = useState({
+  //   urlBase: urlServe,
+  //   portBase: portServer,
+  // });
+  // TESTE das portas e url logado
 
   return (
     <S.Wrapper>
