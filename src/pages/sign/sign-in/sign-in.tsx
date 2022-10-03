@@ -36,7 +36,7 @@ export const SignIn = () => {
 
   const onLogin = useCallback(async () => {
     const token = await getAnonymousToken();
-    const diagramToken = await getToken();
+    const diagramToken = await getToken(payload?.email);
 
     if (token) {
       setStorageItem("TOKEN", token);
@@ -44,11 +44,10 @@ export const SignIn = () => {
       navigate("/dashboard");
       return;
     }
-
     navigate("dashboard/settings");
     const message = "Erro. Insira URL e porta válida para a aplicação";
     enqueueSnackbar(message, { autoHideDuration: 4000, variant: "error" });
-  }, [navigate, enqueueSnackbar]);
+  }, [navigate, enqueueSnackbar, payload]);
 
   return (
     <S.Wrapper>

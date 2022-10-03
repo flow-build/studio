@@ -47,11 +47,12 @@ jobs:
     steps:
       - name: Check Environment Name
         run: echo "Using environment ${{ needs.build.outputs.env_name }}"
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
       - name: Create .env file
         run: |
           echo REACT_APP_BASE_URL=$REACT_APP_BASE_URL >> .env
@@ -73,15 +74,10 @@ jobs:
           envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
           directory: './'
           file_name: '.env.production'
-      - name: clean npm cache
-        run: |
-          npm cache clean --force
-      - name: Npm Install
-        run: |
-          npm install
+      - name: Yarn Install
+        run: yarn --prefer-offline
       - name: Staging Build
-        run: |
-          npm run build
+        run: yarn build
         env:
           CI: false
       - name: Deploy to S3

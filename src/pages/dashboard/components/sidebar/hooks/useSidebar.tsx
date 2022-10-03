@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import SchemaIcon from "@mui/icons-material/Schema";
 import SearchIcon from "@mui/icons-material/Search";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { CompareArrows } from "@mui/icons-material";
 import { TypeMenuItem } from "constants/type-menu-item";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import { listNodes } from "services/resources/nodes/nodes";
+import Icon from "shared/components/icon/icon";
+import Nodes from "assets/icons/nodes.svg";
 
 interface IMenuItem {
   name: string;
@@ -46,11 +46,11 @@ export function useSidebar() {
         tooltip: "Workflows",
       },
       {
-        name: "CompareState",
+        name: "Compare State",
         pathname: "compare-state",
-        icon: <CompareArrows/>,
+        icon: <CompareArrowsIcon />,
         type: TypeMenuItem.NAVIGATION,
-        tooltip: "CompareState",
+        tooltip: "Compare State",
       },
       {
         name: "Buscar",
@@ -62,9 +62,9 @@ export function useSidebar() {
       {
         name: "Nodes",
         pathname: "nodes",
-        icon: <AccountTreeIcon />,
+        icon: <Icon src="nodes" icon={Nodes} />,
         type: TypeMenuItem.NAVIGATION,
-        tooltip: "Configurações",
+        tooltip: "Nodes",
       },
       {
         name: "Configurações",
@@ -78,3 +78,4 @@ export function useSidebar() {
 
   return { menuItems, isOpenDialog, onCloseDialog };
 }
+
