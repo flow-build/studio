@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
@@ -15,19 +15,39 @@ interface IStatusConnection {
 }
 
 type Props = {
-  labelUrl: string | undefined;
-  labelPort: string | undefined;
+  labelUrl?: string | undefined;
+  labelPort?: string | undefined;
   setSetting?: (payload?: IPayloadForm) => void;
   valueUrl?: string;
-  // valuePort?: string;
-  value?: string | undefined;
+  valuePort?: string;
 };
 
-export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
-  const [payload, setPayload] = useState<IPayloadForm>({ url: "", port: "" });
+export const Form: React.FC<Props> = ({
+  labelUrl,
+  labelPort,
+  setSetting,
+  valueUrl,
+  valuePort,
+}) => {
+  const [payload, setPayload] = useState<IPayloadForm>({
+    url: valueUrl || "",
+    port: valuePort || "",
+  });
   const [statusConnection, setStatusConnection] = useState<IStatusConnection>();
 
-  const isDisabled = _isEmpty(payload.url) || _isEmpty(payload.port);
+  const [isEnabled, setIsEnabled] = useState(true);
+
+  useEffect(() => {
+    if (
+      !payload.url ||
+      !payload.port ||
+      (payload.url === valueUrl && payload.port === valuePort)
+    ) {
+      setIsEnabled(false);
+    } else {
+      setIsEnabled(true);
+    }
+  }, [payload, valuePort, valueUrl]);
 
   function onChangePayload(value: string, field: keyof IPayloadForm) {
     setPayload((state) => ({ ...state, [field]: value }));
@@ -50,24 +70,6 @@ export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
     }
   }
 
-  // TESTE das portas e url logado
-
-  // const urlServe = process.env.REACT_APP_URL_BASE;
-  // console.log("urlServe", urlServe);
-
-  // const portServer = process.env.REACT_APP_URL_PORT;
-  // console.log("portServer", portServer);
-
-  function setUrl() {
-    const urlServe = process.env.REACT_APP_URL_BASE;
-  }
-
-  // const [teste, setTest] = useState({
-  //   urlBase: urlServe,
-  //   portBase: portServer,
-  // });
-  // TESTE das portas e url logado
-
   return (
     <S.Wrapper>
       <S.Input
@@ -83,7 +85,11 @@ export const Form: React.FC<Props> = ({ labelUrl, labelPort, setSetting }) => {
         onChange={(event) => onChangePayload(event.target.value, "port")}
       />
 
-      <S.Button title="Enviar" disabled={isDisabled} onClick={onSubmit} />
+      <S.Button
+        title="Enviar"
+        disabled={!isEnabled}
+        onClick={() => onSubmit()}
+      />
 
       {!_isUndefined(statusConnection) && (
         <S.StatusConnection
