@@ -8,6 +8,10 @@ import { getShortFormatByDate } from "shared/utils/date";
 import * as S from "./styles";
 import { useParams } from "react-router-dom";
 
+import _isEmpty from "lodash/isEmpty";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
@@ -21,7 +25,10 @@ export const ListDiagrams: React.FC<Props> = ({
   id,
   onSelectDiagram,
 }) => {
-  const { workflowId } = useParams();
+  const data = useSelector(
+    (state: RootState) => state.dialogPage.diagramInfoDialog.data
+  );
+  console.log(data);
   const [listDiagram, setListDiagram] = useState<TUser[]>([]);
 
   function onClickListDiagram(diagram: TUser) {
@@ -42,14 +49,16 @@ export const ListDiagrams: React.FC<Props> = ({
   const getDiagrams = useCallback(async () => {
     const response = await listById(id);
 
-    // const result = response.map(listDiagram, workflow_id);
+    const result = response.filter((diagram: any) => {
+      return diagram.workflow_id.includes(data);
+    });
 
-    // console.log(result, "result");
+    console.log(result, "result");
 
     console.log(response, "filterDiagram");
 
-    setListDiagram(response);
-  }, [id]);
+    setListDiagram(result);
+  }, [id, data]);
 
   useEffect(() => {
     if (isOpen) {
