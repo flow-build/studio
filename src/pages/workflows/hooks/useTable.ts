@@ -11,9 +11,10 @@ import { TWorkflow } from "models/workflow";
 
 import { getDateTimeFormatByDate } from "shared/utils/date";
 import { useDispatch, useSelector } from "react-redux";
-import { setProcessSelected } from "store/slices/diagram";
+import {setProcessSelected } from "store/slices/diagram";
 import {
   setDiagramSelected,
+  setDiagramElement,
   setShowDiagramInfoDialog,
 } from "store/slices/dialog";
 import { RootState } from "store";
@@ -60,10 +61,15 @@ export function useTable(workflows: TWorkflow[]) {
           icon: ExtensionOutlined,
           tooltip: "Ver diagrama",
           onClick: () => {
-            dispatch(setShowDiagramInfoDialog({ isVisible: true }));
+            dispatch(
+              setShowDiagramInfoDialog({
+                isVisible: true,
+                data: workflow.workflow_id,
+              })
+            );
             dispatch(setDiagramSelected(undefined));
-            dialogPageState.diagramInfoDialog.data({ workflow });
-            
+            dialogPageState.diagramInfoDialog.data();
+
             dispatch(setProcessSelected(undefined));
             workflowPage.navigateToDiagram(workflow.workflow_id);
           },
