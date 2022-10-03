@@ -104,7 +104,7 @@ export const Workflows: React.FC = () => {
       <S.ListDiagramsDialog
         isOpen={dialogPageState.diagramInfoDialog.isVisible}
         id={id ?? ""}
-        onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
+        onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false, data: id ?? "" }))}
         onSelectDiagram={onSelectDiagram}
       />
     </>
