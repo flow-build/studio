@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { TUser } from "models/user";
 import { listById } from "services/resources/diagrams/list-by-id";
@@ -6,8 +6,7 @@ import { listById } from "services/resources/diagrams/list-by-id";
 import { getShortFormatByDate } from "shared/utils/date";
 
 import * as S from "./styles";
-import { setDiagramSelected } from "store/slices/dialog";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
@@ -22,7 +21,7 @@ export const ListDiagrams: React.FC<Props> = ({
   id,
   onSelectDiagram,
 }) => {
-  const dispatch = useDispatch();
+  const { workflowId } = useParams();
   const [listDiagram, setListDiagram] = useState<TUser[]>([]);
 
   function onClickListDiagram(diagram: TUser) {
@@ -40,17 +39,23 @@ export const ListDiagrams: React.FC<Props> = ({
     return `criado em: ${createdAt} - atualizado em: ${updatedAt}`;
   }
 
-  useEffect(() => {
-    const request = async () => {
-      const response = await listById(id);
-      console.log(response, "diagrams");
+  const getDiagrams = useCallback(async () => {
+    const response = await listById(id);
 
-      setListDiagram(response);
-    };
+    // const result = response.map(listDiagram, workflow_id);
+
+    // console.log(result, "result");
+
+    console.log(response, "filterDiagram");
+
+    setListDiagram(response);
+  }, [id]);
+
+  useEffect(() => {
     if (isOpen) {
-      request();
+      getDiagrams();
     }
-  }, [isOpen, id]);
+  }, [isOpen, getDiagrams]);
 
   return (
     <S.ListDiagramsWrapper open={isOpen} onClose={onClose}>
@@ -65,6 +70,7 @@ export const ListDiagrams: React.FC<Props> = ({
             <S.ItemDiagram disablePadding>
               <S.ItemButton onClick={() => onClickListDiagram(diagram)}>
                 <S.TextDiagram
+                  key={diagram.id}
                   primary={diagram.name}
                   secondary={getSubtitle(diagram)}
                 />
