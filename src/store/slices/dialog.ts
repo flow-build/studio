@@ -48,7 +48,7 @@ export const dialogSlice = createSlice({
       state.diagramSelected = action.payload ?? ({} as TUser);
     },
 
-    setElement: (
+    setDiagramElement: (
       state,
       action: PayloadAction<{ category: string; id: string } | undefined>
     ) => {
@@ -82,7 +82,7 @@ export const {
   setConfirmationDialog,
   setPropertiesDialog,
   setDiagramSelected,
-  setElement,
+  setDiagramElement,
 } = dialogSlice.actions;
 
 export default dialogSlice.reducer;
