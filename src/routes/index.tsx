@@ -17,14 +17,9 @@ import { getStorageItem } from "shared/utils/storage";
 
 export const AppRoutes = () => {
   function handleSignIn() {
-    // const hasEnv = !_isEmpty(process.env.REACT_APP_BASE_URL);
-
     const hasEnv = !_isEmpty(
       `${process.env.REACT_APP_URL_BASE}${":"}${process.env.REACT_APP_URL_PORT}`
     );
-
-    // console.log("hasEnv", hasEnv);
-    // console.log("env endereço", process.env.REACT_APP_BASE_URL);
 
     const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
 
