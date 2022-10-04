@@ -32,7 +32,7 @@ export const Settings: React.FC = () => {
   async function onSubmit() {
     if (server && mqtt) {
       setStorageItem("SERVER_URL", `${server.url}:${server?.port}`);
-      setStorageItem("MQTT_URL", `${mqtt.url}:${mqtt?.port}`);
+      setStorageItem("MQTT_URL", `${mqtt?.url}:${mqtt?.port}`);
       setBaseUrl(`${server.url}:${server?.port}`);
 
       const token = await getAnonymousToken();

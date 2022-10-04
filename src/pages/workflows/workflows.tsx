@@ -67,7 +67,6 @@ export const Workflows: React.FC = () => {
         <ContentHeader
           title="Workflows"
           inputLabel="Nome / ID"
-          buttonTitle="Novo"
           onChangeModeView={onChangeModeView}
           onChangeInput={onFilter}
         />
@@ -83,10 +82,13 @@ export const Workflows: React.FC = () => {
         )}
       </S.Wrapper>
 
-      <S.StartProcessDialog
-        isOpen={workflowPageState.startProcessDialog.isVisible}
-        onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
-      />
+      {workflowPageState.startProcessDialog.isVisible && (
+        <S.StartProcessDialog
+          isOpen={workflowPageState.startProcessDialog.isVisible}
+          onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
+        />
+      )}
     </>
   );
 };
+

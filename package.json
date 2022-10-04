@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.6.0",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@mui/styled-engine-sc": "^5.10.6",
+    "@mui/system": "^5.10.7",
     "@mui/x-data-grid": "^5.15.1",
-    "@mui/x-date-pickers": "^5.0.0-beta.4",
+    "@mui/x-date-pickers": "^5.0.3",
     "@reduxjs/toolkit": "^1.8.1",
+    "@rjsf/core": "^5.0.0-beta.10",
+    "@rjsf/material-ui": "^5.0.0-beta.5",
+    "@rjsf/utils": "^5.0.0-beta.10",
+    "@rjsf/validator-ajv6": "^5.0.0-beta.10",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
@@ -22,6 +27,7 @@
     "axios": "^0.26.1",
     "bpmn-js": "^9.0.3",
     "date-fns": "^2.29.1",
+    "history": "^5.3.0",
     "jwt-decode": "^3.1.2",
     "jwt-encode": "^1.0.1",
     "lodash": "^4.17.21",
@@ -34,7 +40,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "redux": "^4.1.2",
-    "styled-components": "^5.3.5",
+    "styled-components": "^5.3.6",
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
@@ -71,6 +77,7 @@
   },
   "resolutions": {
     "@types/react": "17.0.2",
-    "@types/react-dom": "17.0.2"
+    "@types/react-dom": "17.0.2",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   }
 }

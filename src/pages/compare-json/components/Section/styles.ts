@@ -14,10 +14,8 @@ export const FowardProcessButton = styled(IconButton).attrs({
   tooltip: "próximo processo",
 })``;
 
-export const Container = styled("div")`
+export const Container = styled.div`
   background-color: #1a2027;
-  position: fixed;
-  width: 56rem;
   z-index: 300;
   margin-left: -1rem;
 `;

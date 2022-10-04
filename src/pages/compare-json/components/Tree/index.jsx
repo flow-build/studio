@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 import { ComplexTree } from "pages/compare-json/components/Tree/components/ComplexTree";
@@ -26,3 +25,4 @@ Tree.propTypes = {
   lastLineType: PropTypes.oneOf(["add", "del", "none"]),
   lastLine: PropTypes.number,
 };
+
