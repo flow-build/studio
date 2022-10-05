@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
-import { StatusConnection as BaseStatusConnection } from "pages/settings/components/form/components/status-connection";
-
-import { Button as BaseButton } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
+import { Button, CircularProgress } from "@mui/material";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -16,9 +14,14 @@ export const Input = styled(InputText)<{ small?: boolean }>`
   width: ${({ small }) => (small ? 250 : 550)}px;
 `;
 
-export const Button = styled(BaseButton)`
+export const SubmitButton = styled(Button)`
   width: 6rem;
   height: 3.5rem;
 `;
 
-export const StatusConnection = styled(BaseStatusConnection)``;
+export const Loading = styled(CircularProgress).attrs({
+  color: "inherit",
+  size: "1.3rem",
+})``;
+
+export const TextSubmitButton = styled.p``;
