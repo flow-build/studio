@@ -1,5 +1,9 @@
+import { useState } from "react";
+
+import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
+
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -25,19 +29,15 @@ export const Form: React.FC<Props> = ({
     port: valuePort || "",
   });
 
-  const [isEnabled, setIsEnabled] = useState(true);
+  const isSubmitEnabled = isFormFilled() && !isDefaultValue();
 
-  useEffect(() => {
-    if (
-      !payload.url ||
-      !payload.port ||
-      (payload.url === valueUrl && payload.port === valuePort)
-    ) {
-      setIsEnabled(false);
-    } else {
-      setIsEnabled(true);
-    }
-  }, [payload, valuePort, valueUrl]);
+  function isFormFilled() {
+    return !_isEmpty(payload.url) && !_isEmpty(payload.port);
+  }
+
+  function isDefaultValue() {
+    return _isEqual(payload.url, valueUrl) && _isEqual(payload.port, valuePort);
+  }
 
   function onChangePayload(value: string, field: keyof IPayloadForm) {
     setPayload((state) => ({ ...state, [field]: value }));
@@ -58,8 +58,12 @@ export const Form: React.FC<Props> = ({
         onChange={(event) => onChangePayload(event.target.value, "port")}
       />
 
-      <S.SubmitButton disabled={!isEnabled} onClick={() => onSubmit(payload)}>
+      <S.SubmitButton
+        disabled={!isSubmitEnabled}
+        onClick={() => onSubmit(payload)}
+      >
         {isLoading && <S.Loading />}
+
         {!isLoading && <S.TextSubmitButton>Enviar</S.TextSubmitButton>}
       </S.SubmitButton>
     </S.Wrapper>
