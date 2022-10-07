@@ -3,9 +3,6 @@ import { useState } from "react";
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
 
-import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
-
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { setStorageItem } from "shared/utils/storage";
 import { setBaseUrl } from "services/api";
