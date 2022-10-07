@@ -21,10 +21,6 @@ export const Settings: React.FC = () => {
   const urlServe = process.env.REACT_APP_URL_BASE;
   const portServer = process.env.REACT_APP_URL_PORT;
 
-  function setServerSetting(payload?: IPayloadForm) {
-    setServer(payload);
-  }
-
   async function onHandleToken() {
     const token = await getAnonymousToken();
     if (!token) {
