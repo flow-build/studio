@@ -24,7 +24,6 @@ export default class NextProcess {
   static $inject = ["contextPad"];
 
   constructor(contextPad: { [key: string]: any }) {
-    console.log(contextPad);
     contextPad.registerProvider(this);
   }
 

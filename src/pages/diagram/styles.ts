@@ -9,6 +9,7 @@ import { ListDiagrams } from "../../dialogs/list-diagrams/list-diagrams";
 import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
+import { ShowDataChannel } from "./dialogs/show-data-channel";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -26,6 +27,8 @@ export const ListDiagramsDialog = styled(ListDiagrams)``;
 export const SaveDiagramDialog = styled(SaveDiagram)``;
 
 export const PropertiesDialog = styled(Properties)``;
+
+export const ShowDataChannelDialog = styled(ShowDataChannel)``;
 
 export const ConfirmationDialog = styled(Confirmation)``;
 
