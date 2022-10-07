@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import { Form as BaseForm } from "pages/settings/components/form";
+
 import { Button as BaseButton } from "shared/components/button";
+
+import { Form as BaseForm } from "pages/settings/components/form";
+
 import Box from "@mui/material/Box";
 
 export const Wrapper = styled(Box).attrs({

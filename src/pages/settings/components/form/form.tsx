@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
-
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-
-import { healthcheck } from "services/resources/settings";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
-interface IStatusConnection {
-  success: boolean;
-  message: string;
-}
-
 type Props = {
-  labelUrl?: string | undefined;
-  labelPort?: string | undefined;
+  labelUrl?: string;
+  labelPort?: string;
+  onSubmit: (payload: IPayloadForm) => void;
+  isLoading: boolean;
   setSetting?: (payload?: IPayloadForm) => void;
   valueUrl?: string;
   valuePort?: string;
@@ -25,7 +19,8 @@ type Props = {
 export const Form: React.FC<Props> = ({
   labelUrl,
   labelPort,
-  setSetting,
+  onSubmit,
+  isLoading,
   valueUrl,
   valuePort,
 }) => {
@@ -33,7 +28,6 @@ export const Form: React.FC<Props> = ({
     url: valueUrl || "",
     port: valuePort || "",
   });
-  const [statusConnection, setStatusConnection] = useState<IStatusConnection>();
 
   const [isEnabled, setIsEnabled] = useState(true);
 
@@ -53,23 +47,6 @@ export const Form: React.FC<Props> = ({
     setPayload((state) => ({ ...state, [field]: value }));
   }
 
-  async function onSubmit() {
-    try {
-      await healthcheck(payload.url, payload.port);
-      setStatusConnection({ success: true, message: "Sucesso ao conectar" });
-
-      if (setSetting) {
-        setSetting(payload);
-      }
-    } catch (error: any) {
-      setStatusConnection({ success: false, message: "Erro ao conectar" });
-
-      if (setSetting) {
-        setSetting();
-      }
-    }
-  }
-
   return (
     <S.Wrapper>
       <S.Input
@@ -85,18 +62,10 @@ export const Form: React.FC<Props> = ({
         onChange={(event) => onChangePayload(event.target.value, "port")}
       />
 
-      <S.Button
-        title="Enviar"
-        disabled={!isEnabled}
-        onClick={() => onSubmit()}
-      />
-
-      {!_isUndefined(statusConnection) && (
-        <S.StatusConnection
-          success={Boolean(statusConnection?.success)}
-          message={statusConnection?.message ?? ""}
-        />
-      )}
+      <S.SubmitButton disabled={!isEnabled} onClick={() => onSubmit(payload)}>
+        {isLoading && <S.Loading />}
+        {!isLoading && <S.TextSubmitButton>Enviar</S.TextSubmitButton>}
+      </S.SubmitButton>
     </S.Wrapper>
   );
 };
