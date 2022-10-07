@@ -105,7 +105,6 @@ export const Settings: React.FC = () => {
         labelUrl={"" || "URL do servidor do flowbuild"}
         valueUrl={urlServe || ""}
         valuePort={portServer || ""}
-        setSetting={setServerSetting}
         onSubmit={onSubmitServer}
         isLoading={isLoadingServer}
       />

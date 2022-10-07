@@ -8,7 +8,6 @@ type Props = {
   labelPort?: string;
   onSubmit: (payload: IPayloadForm) => void;
   isLoading: boolean;
-  setSetting?: (payload?: IPayloadForm) => void;
   valueUrl?: string;
   valuePort?: string;
 };
