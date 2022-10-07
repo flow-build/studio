@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 
 type Props = {
-  labelUrl?: string;
-  labelPort?: string;
+  labelUrl: string;
+  labelPort: string;
   onSubmit: (payload: IPayloadForm) => void;
   isLoading: boolean;
   valueUrl?: string;
