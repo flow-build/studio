@@ -48,6 +48,10 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+  const data = useSelector(
+    (state: RootState) => state.dialogPage.diagramInfoDialog.data
+  );
+  console.log(data);
   const diagram = useDiagram();
   const paint = usePaint();
   const dispatch = useDispatch();
@@ -68,10 +72,15 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <ExtensionOutlined />,
         tooltip: "Listar diagramas",
-        onClick: () =>
+        onClick: () => {
           dispatch(
-            setShowDiagramInfoDialog({ isVisible: true})
-          ),
+            setShowDiagramInfoDialog({
+              isVisible: true,
+              data: data,
+            })
+          );
+          dispatch(setDiagramSelected(data));
+        },
       },
       {
         icon: <SaveIcon />,
@@ -186,9 +195,9 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {dialogPageState.diagramInfoDialog.isVisible && (
         <S.ListDiagramsDialog
           isOpen={dialogPageState.diagramInfoDialog.isVisible}
-          id={id ?? ""}
+          // id={workflowId as string}
           onClose={() =>
-            dispatch(setShowDiagramInfoDialog({ isVisible: false}))
+            dispatch(setShowDiagramInfoDialog({ isVisible: false }))
           }
           onSelectDiagram={onSelectDiagram}
         />
@@ -202,7 +211,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
-          workflowId={workflowId ?? ""}
+          workflowId={id ?? ""}
           isOpen={diagramPageState.propertiesDialog.isVisible}
           onClose={() =>
             dispatch(setShowPropertiesDialog({ isVisible: false }))
