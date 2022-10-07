@@ -17,8 +17,7 @@ export const Settings: React.FC = () => {
   const [isLoadingServer, setIsLoadingServer] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [server, setServer] = useState<IPayloadForm>();
-  const urlServe = process.env.REACT_APP_URL_BASE;
+  const urlServe = process.env.REACT_APP_BASE_URL;
   const portServer = process.env.REACT_APP_URL_PORT;
 
   async function onHandleToken() {
