@@ -27,12 +27,9 @@ import {
 } from "store/slices/dialog";
 
 import * as S from "./styles";
-import { useParams } from "react-router-dom";
 
 export const Workflows: React.FC = () => {
   const dispatch = useDispatch();
-  const { workflowId } = useParams();
-  const { id } = useParams();
 
   const workflowPageState = useSelector(
     (state: RootState) => state.workflowPage
@@ -103,7 +100,6 @@ export const Workflows: React.FC = () => {
 
       <S.ListDiagramsDialog
         isOpen={dialogPageState.diagramInfoDialog.isVisible}
-        // id={data ?? ""}
         onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
         onSelectDiagram={onSelectDiagram}
       />
