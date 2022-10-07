@@ -1,4 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   AddOutlined,
   ExtensionOutlined,
@@ -10,19 +13,23 @@ import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
 import { TWorkflow } from "models/workflow";
 
 import { getDateTimeFormatByDate } from "shared/utils/date";
-import { useDispatch, useSelector } from "react-redux";
-import {setProcessSelected } from "store/slices/diagram";
+import { setProcessSelected } from "store/slices/diagram";
 import {
   setDiagramSelected,
-  setDiagramElement,
   setShowDiagramInfoDialog,
 } from "store/slices/dialog";
+import _isEmpty from "lodash/isEmpty";
 import { RootState } from "store";
+import { listById } from "services/resources/diagrams/list-by-id";
+import { TUser } from "models/user";
+import { listByWorkflow } from "services/resources/diagrams/list-by-workflow";
 
 export function useTable(workflows: TWorkflow[]) {
   const dispatch = useDispatch();
-  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
   const workflowPage = useWorkflowPage();
+
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+  
 
   const columnData = useMemo(() => {
     return [
@@ -60,25 +67,37 @@ export function useTable(workflows: TWorkflow[]) {
         {
           icon: ExtensionOutlined,
           tooltip: "Ver diagrama",
-          onClick: () => {
-            dispatch(
-              setShowDiagramInfoDialog({
-                isVisible: true,
-                data: workflow.workflow_id,
-              })
-            );
-            dispatch(setDiagramSelected(undefined));
-            dialogPageState.diagramInfoDialog.data();
+          onClick: async () => {
+            const response = await listByWorkflow(workflow.workflow_id);
+            console.log(response, "response");
+            dispatch(setDiagramSelected((response)));
+
+            if (!_isEmpty(response)) {
+              dispatch(
+                setShowDiagramInfoDialog({
+                  isVisible: true,
+                  data: response,
+                })
+              );
+              dialogPageState.confirmationDialog.data(response);
+              dispatch(setDiagramSelected(undefined));
+              return;
+            }
 
             dispatch(setProcessSelected(undefined));
             workflowPage.navigateToDiagram(workflow.workflow_id);
+
+            //pegar os dados
+            //verificar se tem o dado ou não
+            //se tiver o dado dar o dispatch
+            //se não tiver fazer o navigate
           },
         },
       ];
 
       return { items, actions };
     });
-  }, [dispatch, workflowPage, workflows, dialogPageState]);
+  }, [dispatch, workflowPage, workflows]);
 
   return {
     rows,
