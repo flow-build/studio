@@ -12,8 +12,8 @@ type Props = {
   labelPort: string;
   onSubmit: (payload: IPayloadForm) => void;
   isLoading: boolean;
-  valueUrl?: string;
-  valuePort?: string;
+  defaultUrl?: string;
+  defaultPort?: string;
 };
 
 export const Form: React.FC<Props> = ({
@@ -21,12 +21,12 @@ export const Form: React.FC<Props> = ({
   labelPort,
   onSubmit,
   isLoading,
-  valueUrl,
-  valuePort,
+  defaultUrl,
+  defaultPort,
 }) => {
   const [payload, setPayload] = useState<IPayloadForm>({
-    url: valueUrl || "",
-    port: valuePort || "",
+    url: defaultUrl || "",
+    port: defaultPort || "",
   });
 
   const isSubmitEnabled = isFormFilled() && !isDefaultValue();
@@ -36,7 +36,9 @@ export const Form: React.FC<Props> = ({
   }
 
   function isDefaultValue() {
-    return _isEqual(payload.url, valueUrl) && _isEqual(payload.port, valuePort);
+    return (
+      _isEqual(payload.url, defaultUrl) && _isEqual(payload.port, defaultPort)
+    );
   }
 
   function onChangePayload(value: string, field: keyof IPayloadForm) {

@@ -100,8 +100,8 @@ export const Settings: React.FC = () => {
       <S.Form
         labelPort="Porta do servidor"
         labelUrl="URL do servidor do flowbuild"
-        valueUrl={urlServe || ""}
-        valuePort={portServer || ""}
+        defaultUrl={urlServe}
+        defaultPort={portServer}
         onSubmit={onSubmitServer}
         isLoading={isLoadingServer}
       />
