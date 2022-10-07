@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import _isEqual from "lodash/isEqual";
-import _isEmpty from "lodash/isEmpty";
 
 import { ModeView } from "constants/mode-view";
 
@@ -32,6 +31,7 @@ import { useParams } from "react-router-dom";
 
 export const Workflows: React.FC = () => {
   const dispatch = useDispatch();
+  const { workflowId } = useParams();
   const { id } = useParams();
 
   const workflowPageState = useSelector(
@@ -103,8 +103,8 @@ export const Workflows: React.FC = () => {
 
       <S.ListDiagramsDialog
         isOpen={dialogPageState.diagramInfoDialog.isVisible}
-        id={id ?? ""}
-        onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false, data: id ?? "" }))}
+        // id={data ?? ""}
+        onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
         onSelectDiagram={onSelectDiagram}
       />
     </>
