@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import _isEmpty from "lodash/isEmpty";
+import _isEqual from "lodash/isEqual";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 
@@ -11,6 +12,8 @@ type Props = {
   labelPort: string;
   onSubmit: (payload: IPayloadForm) => void;
   isLoading: boolean;
+  defaultUrl?: string;
+  defaultPort?: string;
 };
 
 export const Form: React.FC<Props> = ({
@@ -18,10 +21,25 @@ export const Form: React.FC<Props> = ({
   labelPort,
   onSubmit,
   isLoading,
+  defaultUrl,
+  defaultPort,
 }) => {
-  const [payload, setPayload] = useState<IPayloadForm>({ url: "", port: "" });
+  const [payload, setPayload] = useState<IPayloadForm>({
+    url: defaultUrl || "",
+    port: defaultPort || "",
+  });
 
-  const isDisabled = _isEmpty(payload.url) || _isEmpty(payload.port);
+  const isSubmitEnabled = isFormFilled() && !isDefaultValue();
+
+  function isFormFilled() {
+    return !_isEmpty(payload.url) && !_isEmpty(payload.port);
+  }
+
+  function isDefaultValue() {
+    return (
+      _isEqual(payload.url, defaultUrl) && _isEqual(payload.port, defaultPort)
+    );
+  }
 
   function onChangePayload(value: string, field: keyof IPayloadForm) {
     setPayload((state) => ({ ...state, [field]: value }));
@@ -42,8 +60,12 @@ export const Form: React.FC<Props> = ({
         onChange={(event) => onChangePayload(event.target.value, "port")}
       />
 
-      <S.SubmitButton disabled={isDisabled} onClick={() => onSubmit(payload)}>
+      <S.SubmitButton
+        disabled={!isSubmitEnabled}
+        onClick={() => onSubmit(payload)}
+      >
         {isLoading && <S.Loading />}
+
         {!isLoading && <S.TextSubmitButton>Enviar</S.TextSubmitButton>}
       </S.SubmitButton>
     </S.Wrapper>

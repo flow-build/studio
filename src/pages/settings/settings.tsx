@@ -7,45 +7,54 @@ import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { setStorageItem } from "shared/utils/storage";
 import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
-import { useSnackbar } from "notistack";
-
+import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
 
 import * as S from "./styles";
 
 export const Settings: React.FC = () => {
-  const { enqueueSnackbar } = useSnackbar();
-
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
   const [isLoadingServer, setIsLoadingServer] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const urlServe = process.env.REACT_APP_BASE_URL;
+  const portServer = process.env.REACT_APP_URL_PORT;
+
+  function showNotification(message: string, variant: VariantType) {
+    enqueueSnackbar(message, {
+      autoHideDuration: 4000,
+      variant,
+    });
+  }
 
   async function onHandleToken() {
     const token = await getAnonymousToken();
+
     if (!token) {
       const message = "Erro no retorno do Token. Por favor tentar novamente!";
-      enqueueSnackbar(message, {
-        autoHideDuration: 4000,
-        variant: "error",
-      });
+      showNotification(message, "error");
       return;
     }
+
     setStorageItem("TOKEN", token);
   }
 
   async function onSubmitServer(payload: IPayloadForm) {
-    setIsLoadingServer(true);
     try {
+      setIsLoadingServer(true);
       await healthcheck(payload.url, payload.port);
+
       setStorageItem("SERVER_URL", `${payload?.url}:${payload.port}`);
       setBaseUrl(`${payload.url}:${payload.port}`);
       onHandleToken();
+
+      const message = "Sucesso ao conectar com o servidor";
+      showNotification(message, "success");
     } catch (erro: any) {
-      enqueueSnackbar(erro.message, {
-        autoHideDuration: 4000,
-        variant: "error",
-      });
+      showNotification(erro.message, "error");
+    } finally {
+      setIsLoadingServer(false);
     }
-    setIsLoadingServer(false);
   }
 
   function onSubmitMqtt(payload: IPayloadForm) {
@@ -69,13 +78,14 @@ export const Settings: React.FC = () => {
       onSuccess: () => {
         setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
         onHandleToken();
+
+        const message = "Sucesso ao conectar com o servidor";
+        showNotification(message, "success");
+        setIsLoadingMqtt(false);
       },
       onFailure: () => {
-        enqueueSnackbar("Erro ao conectar com o servidor", {
-          autoHideDuration: 4000,
-          variant: "error",
-        });
-
+        const message = "Erro ao conectar com o servidor";
+        showNotification(message, "error");
         setIsLoadingMqtt(false);
       },
     });
@@ -90,6 +100,8 @@ export const Settings: React.FC = () => {
       <S.Form
         labelPort="Porta do servidor"
         labelUrl="URL do servidor do flowbuild"
+        defaultUrl={urlServe}
+        defaultPort={portServer}
         onSubmit={onSubmitServer}
         isLoading={isLoadingServer}
       />

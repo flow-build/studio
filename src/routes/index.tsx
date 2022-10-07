@@ -5,7 +5,7 @@ import _isEmpty from "lodash/isEmpty";
 import { Dashboard } from "pages/dashboard";
 import { SignIn } from "pages/sign/sign-in";
 import { Workflows } from "pages/workflows";
-import { CompareState } from "pages/compare-state";
+import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
 import { History } from "pages/history";
 import { DiagramRefactored } from "pages/diagram";
@@ -18,7 +18,10 @@ import { getStorageItem } from "shared/utils/storage";
 
 export const AppRoutes = () => {
   function handleSignIn() {
-    const hasEnv = !_isEmpty(process.env.REACT_APP_BASE_URL);
+    const hasEnv = !_isEmpty(
+      `${process.env.REACT_APP_BASE_URL}${":"}${process.env.REACT_APP_URL_PORT}`
+    );
+
     const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
 
     if (hasEnv || hasLocalStorage) {
@@ -46,7 +49,7 @@ export const AppRoutes = () => {
             path="workflows/:workflowId/diagram"
             element={<DiagramRefactored />}
           />
-          <Route path="compare-state" element={<CompareState />}/>
+          <Route path="compare-json" element={<CompareJson />} />
           <Route path="nodes" element={<Nodes />} />
           <Route path="settings" element={<Settings />} />
         </Route>

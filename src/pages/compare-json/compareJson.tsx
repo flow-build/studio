@@ -3,17 +3,17 @@ import React, { useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-import { useCompare } from "pages/compare-state/hooks/useCompare";
+import { useCompare } from "pages/compare-json/hooks/useCompare";
 
 import "./json.css";
 import { useDispatch } from "react-redux";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
 
-import { Section } from "pages/compare-state/components/Section/index";
+import { Section } from "pages/compare-json/components/Section/index";
 
 import { Action, createBrowserHistory } from "history";
 
-export const CompareState = () => {
+export const CompareJson = () => {
   const history = createBrowserHistory();
   const dispatch = useDispatch();
   const compareHook = useCompare();
@@ -60,3 +60,4 @@ export const CompareState = () => {
     </Box>
   );
 };
+
