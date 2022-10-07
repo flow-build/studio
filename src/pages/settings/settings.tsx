@@ -73,17 +73,25 @@ export const Settings: React.FC = () => {
     setIsLoadingMqtt(true);
 
     client.connect({
-      onSuccess: () => (
-        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`),
-        onHandleToken()
-      ),
-      onFailure: () => (
+      onSuccess: () => {
+        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
+        onHandleToken();
+
+        const message = "Sucesso ao conectar com o servidor";
+        enqueueSnackbar(message, {
+          autoHideDuration: 4000,
+          variant: "success",
+        });
+
+        setIsLoadingMqtt(false);
+      },
+      onFailure: () => {
         enqueueSnackbar("Erro ao conectar com o servidor", {
           autoHideDuration: 4000,
           variant: "error",
-        }),
-        setIsLoadingMqtt(false)
-      ),
+        });
+        setIsLoadingMqtt(false);
+      },
     });
 
     client.disconnect();
