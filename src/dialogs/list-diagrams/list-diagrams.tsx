@@ -1,35 +1,48 @@
 import { useEffect, useState, useCallback } from "react";
 
 import { TUser } from "models/user";
-import { listById } from "services/resources/diagrams/list-by-id";
+import { listByWorkflow } from "services/resources/diagrams/list-by-workflow";
 
 import { getShortFormatByDate } from "shared/utils/date";
+import _isEmpty from "lodash/isEmpty";
 
 import * as S from "./styles";
-import { useParams } from "react-router-dom";
-
-import _isEmpty from "lodash/isEmpty";
-import { useSelector } from "react-redux";
+import { setDiagramSelected } from "store/slices/dialog";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
-  id: string;
+  // id: string;
   onSelectDiagram?: (diagram: TUser) => void;
 };
 
 export const ListDiagrams: React.FC<Props> = ({
   isOpen,
   onClose,
-  id,
+  // id,
   onSelectDiagram,
 }) => {
-  const data = useSelector(
+  //const [listDiagram, setListDiagram] = useState<TUser[]>([]);
+  // console.log(listDiagram, "listDiagram");
+
+  const dispatch = useDispatch();
+
+  const data:TUser[] = useSelector(
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
   );
-  console.log(data);
-  const [listDiagram, setListDiagram] = useState<TUser[]>([]);
+  console.log(data, "data");
+
+  // function getResponse() {
+  //   const response = data;
+  //   return response;
+  // }
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //   }
+  // });
 
   function onClickListDiagram(diagram: TUser) {
     if (onClose) {
@@ -46,26 +59,6 @@ export const ListDiagrams: React.FC<Props> = ({
     return `criado em: ${createdAt} - atualizado em: ${updatedAt}`;
   }
 
-  const getDiagrams = useCallback(async () => {
-    const response = await listById(id);
-
-    const result = response.filter((diagram: any) => {
-      return diagram.workflow_id.includes(data);
-    });
-
-    console.log(result, "result");
-
-    console.log(response, "filterDiagram");
-
-    setListDiagram(result);
-  }, [id, data]);
-
-  useEffect(() => {
-    if (isOpen) {
-      getDiagrams();
-    }
-  }, [isOpen, getDiagrams]);
-
   return (
     <S.ListDiagramsWrapper open={isOpen} onClose={onClose}>
       <S.ListTitle>
@@ -75,7 +68,7 @@ export const ListDiagrams: React.FC<Props> = ({
 
       <S.Content dividers>
         <S.ListDiagram>
-          {listDiagram.map((diagram) => (
+          {data.map((diagram: any) => (
             <S.ItemDiagram disablePadding>
               <S.ItemButton onClick={() => onClickListDiagram(diagram)}>
                 <S.TextDiagram
