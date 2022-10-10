@@ -44,14 +44,12 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
-  const { id } = useParams();
 
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
   const data = useSelector(
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
   );
-  console.log(data);
   const diagram = useDiagram();
   const paint = usePaint();
   const dispatch = useDispatch();
@@ -210,7 +208,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
-          workflowId={id ?? ""}
+          workflowId={workflowId ?? ""}
           isOpen={diagramPageState.propertiesDialog.isVisible}
           onClose={() =>
             dispatch(setShowPropertiesDialog({ isVisible: false }))
