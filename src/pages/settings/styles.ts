@@ -4,6 +4,8 @@ import { Button as BaseButton } from "shared/components/button";
 
 import { Form as BaseForm } from "pages/settings/components/form";
 
+import { DashboardForm as FormDashboard } from "./components/dashboard-form";
+
 import Box from "@mui/material/Box";
 
 export const Wrapper = styled(Box).attrs({
@@ -25,6 +27,8 @@ export const Title = styled.h1`
 `;
 
 export const Form = styled(BaseForm)``;
+
+export const DashboardForm = styled(FormDashboard)``;
 
 export const Button = styled(BaseButton)`
   width: 6rem;

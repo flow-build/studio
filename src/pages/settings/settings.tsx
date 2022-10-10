@@ -4,8 +4,9 @@ import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
+import { IPayloadDashboardForm } from "./types/IPayloadDashboardForm";
 import { setStorageItem } from "shared/utils/storage";
-import { setBaseUrl } from "services/api";
+import { setBaseUrl, setDashboardUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
@@ -15,6 +16,7 @@ import * as S from "./styles";
 export const Settings: React.FC = () => {
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
   const [isLoadingServer, setIsLoadingServer] = useState(false);
+  const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const urlServe = process.env.REACT_APP_BASE_URL;
@@ -93,6 +95,36 @@ export const Settings: React.FC = () => {
     client.disconnect();
   }
 
+  // async
+  function onSubmitDashboard(payload: IPayloadDashboardForm) {
+    try {
+      setIsLoadingDashboard(true);
+      // await healthcheck(payload.url, payload.port);
+
+      setStorageItem(
+        "DASHBOARD",
+        `${payload?.metabaseSiteUrl}:
+        ${payload?.metabaseSecretKey}:
+        ${payload?.dashboardNumber}
+        `
+      );
+      setDashboardUrl(
+        `${payload.metabaseSiteUrl}:
+          ${payload.metabaseSecretKey}:
+          ${payload.dashboardNumber}:
+          `
+      );
+      onHandleToken();
+
+      const message = "Sucesso ao conectar com o servidor";
+      showNotification(message, "success");
+    } catch (erro: any) {
+      showNotification(erro.message, "error");
+    } finally {
+      setIsLoadingServer(false);
+    }
+  }
+
   return (
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
@@ -112,6 +144,15 @@ export const Settings: React.FC = () => {
         onSubmit={onSubmitMqtt}
         isLoading={isLoadingMqtt}
       />
+
+      <S.DashboardForm
+        onSubmit={onSubmitDashboard}
+        isLoading={isLoadingDashboard}
+        labelmetabaseSiteUrl="URL Metabase Site"
+        labelmetabaseSecretKey="Metabase SecretKey"
+        labeldashboardNumber="Dashboard Number"
+      />
     </S.Wrapper>
   );
 };
+

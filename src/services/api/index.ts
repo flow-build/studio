@@ -9,8 +9,17 @@ const env = `${process.env.REACT_APP_BASE_URL}${":"}${
   process.env.REACT_APP_URL_PORT
 }`;
 
+const dashboardUrl = getStorageItem("DASHBOARD");
+const envDashboard = `${process.env.METABASE_SITE_URL}${process.env.METABASE_SECRET_KEY}${process.env.DASHBOARD_NUMBER}`;
+
+// const api = axios.create({
+//   baseURL: baseUrl ?? env,
+// });
+
 const api = axios.create({
   baseURL: baseUrl ?? env,
+  url: dashboardUrl ?? envDashboard,
+  // dashboardURL: dashboardURL ?? envDashboard,
 });
 
 type TToken = {
@@ -62,4 +71,8 @@ function setBaseUrl(url: string) {
   api.defaults.baseURL = url;
 }
 
-export { api, setBaseUrl };
+function setDashboardUrl(url: string) {
+  api.defaults.url = url;
+}
+
+export { api, setBaseUrl, setDashboardUrl };
