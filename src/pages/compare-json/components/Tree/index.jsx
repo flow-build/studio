@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 
-import { ComplexTree } from "pages/compare-state/components/Tree/components/ComplexTree";
-import { NormalTree } from "pages/compare-state/components/Tree/components/NormalTree";
+import { ComplexTree } from "pages/compare-json/components/Tree/components/ComplexTree";
+import { NormalTree } from "pages/compare-json/components/Tree/components/NormalTree";
 
-import { needFormat } from "pages/compare-state/utils";
+import { needFormat } from "pages/compare-json/utils";
 
 export const Tree = (props) => {
   let { type } = props;
@@ -25,3 +25,4 @@ Tree.propTypes = {
   lastLineType: PropTypes.oneOf(["add", "del", "none"]),
   lastLine: PropTypes.number,
 };
+

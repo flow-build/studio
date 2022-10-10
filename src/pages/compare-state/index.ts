@@ -1,1 +1,0 @@
-export {CompareState} from "./compareState"
