@@ -25,7 +25,7 @@ import { RemoveElement } from "pages/diagram/components/context-pad/remove-eleme
 import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
 import { ReceiveData } from "../components/context-pad/receive-data";
 
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listByWorkflowId } from "services/resources/workflows/list-by-workflow-id";
 import { useDispatch, useSelector } from "react-redux";
 import { setElement } from "store/slices/diagram";
 
