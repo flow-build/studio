@@ -56,6 +56,10 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     });
 
     createDiagramSuccess(diagramName);
+
+    if (onClose) {
+      onClose();
+    }
   }
 
   return (
@@ -92,3 +96,4 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     </S.DiagramWrapper>
   );
 };
+

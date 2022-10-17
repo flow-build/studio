@@ -1,15 +1,16 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
 import MuiDrawer from "@mui/material/Drawer";
 
 import { TypeMenuItem } from "constants/type-menu-item";
 
 import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
 import { ProcessIdSearch } from "pages/dashboard/components/sidebar/dialogs/process-id-search";
+import object from "../../../../../package.json";
 
 import * as S from "./styles";
 
@@ -66,36 +67,47 @@ type Props = {
 
 export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   const sidebar = useSidebar();
+  const [version, setVersion] = useState<string>();
+  const data = object.version;
+
+  useEffect(() => {
+    setVersion(data as string);
+  }, [version]);
 
   return (
     <>
       <Drawer variant="permanent" open={isOpen}>
         <DrawerHeader />
         <Divider />
-        <List>
-          {sidebar.menuItems.map((menuItem, index) =>
-            menuItem.type === TypeMenuItem.NAVIGATION ? (
-              <Link key={index.toString()} to={menuItem.pathname}>
+        <S.CustomList>
+          <div>
+            {sidebar.menuItems.map((menuItem, index) =>
+              menuItem.type === TypeMenuItem.NAVIGATION ? (
+                <Link key={index.toString()} to={menuItem.pathname}>
+                  <S.MenuItem
+                    isOpen={isOpen}
+                    icon={menuItem.icon}
+                    name={menuItem.name}
+                    tooltip={menuItem.tooltip}
+                  />
+                </Link>
+              ) : (
                 <S.MenuItem
+                  key={index.toString()}
+                  onClick={menuItem.onClick}
                   isOpen={isOpen}
                   icon={menuItem.icon}
                   name={menuItem.name}
                   tooltip={menuItem.tooltip}
                 />
-              </Link>
-            ) : (
-              <S.MenuItem
-                key={index.toString()}
-                onClick={menuItem.onClick}
-                isOpen={isOpen}
-                icon={menuItem.icon}
-                name={menuItem.name}
-                tooltip={menuItem.tooltip}
-              />
-            )
-          )}
+              )
+            )}
+          </div>
+          <S.VersionContainer>
+            <S.Text>{version}</S.Text>
+          </S.VersionContainer>
           {/* CONFIGURAÇÕES AQUI */}
-        </List>
+        </S.CustomList>
       </Drawer>
 
       {sidebar.isOpenDialog && (
@@ -107,4 +119,3 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     </>
   );
 };
-

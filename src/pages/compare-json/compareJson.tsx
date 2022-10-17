@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -9,20 +9,35 @@ import "./json.css";
 import { useDispatch } from "react-redux";
 import { setNewJson, setOldJson } from "store/slices/compare-page";
 
-import { Section } from 'pages/compare-json/components/Section';
+import { Section } from "pages/compare-json/components/Section/index";
 
+import { Action, createBrowserHistory } from "history";
 
 export const CompareJson = () => {
+  const history = createBrowserHistory();
   const dispatch = useDispatch();
   const compareHook = useCompare();
 
   const { current, previous } = compareHook.jsonDiff;
 
-  const {getOldJson, getNewJson} = compareHook;
+  const { getOldJson, getNewJson } = compareHook;
 
-  const clearJson = (callbackFn) => {
-    dispatch(callbackFn(undefined));
-  };
+  const clearJson = useCallback(
+    (callbackFn: any) => {
+      dispatch(callbackFn(undefined));
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    const unlisten = history.listen(({ location, action }) => {
+      if (action === Action.Pop) {
+        clearJson(setOldJson);
+        clearJson(setNewJson);
+        unlisten();
+      }
+    });
+  }, [clearJson, history]);
 
   return (
     <Box sx={{ flexGrow: 1 }} height="100%">
@@ -32,16 +47,17 @@ export const CompareJson = () => {
           onClear={() => clearJson(setOldJson)}
           data={previous}
           state={getOldJson}
-          onSearch={(json) => dispatch(setOldJson(json))}
+          onSearch={(json?: any) => dispatch(setOldJson(json))}
         />
         <Section
           label="2"
           onClear={() => clearJson(setNewJson)}
           data={current}
           state={getNewJson}
-          onSearch={(json) => dispatch(setNewJson(json))}
+          onSearch={(json?: any) => dispatch(setNewJson(json))}
         />
       </Grid>
     </Box>
   );
 };
+

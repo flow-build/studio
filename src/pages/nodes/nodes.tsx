@@ -22,12 +22,7 @@ export const Nodes: React.FC = () => {
 
   return (
     <S.Wrapper>
-      <ContentHeader
-        title="Nodes"
-        hasInput={false}
-        showToggle={false}
-        hasButton={false}
-      />
+      <ContentHeader title="Nodes" hasInput={false} showToggle={false} />
       <S.ContentList>
         <S.List>
           <S.Items>
