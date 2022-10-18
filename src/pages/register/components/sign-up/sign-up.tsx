@@ -119,10 +119,7 @@ export const SignUpForm = () => {
       <S.SubmitContainer>
         <S.SubmitButton
           disabled={state.submittingSignUp}
-          type="submit"
-          className="btn btn-primary"
         >
-          Cadastrar
         </S.SubmitButton>
       </S.SubmitContainer>
     </S.Form>

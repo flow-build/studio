@@ -48,5 +48,11 @@ export const VersionContainer = styled(Box).attrs({
 })``;
 
 export const RegisterButton = styled(Button).attrs({
-  variant:"text"
+  variant: "text",
 })``;
+
+export const RegisterButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

@@ -3,14 +3,10 @@ import { useState } from "react";
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
 
-import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
-
-import { IPayloadForm } from "pages/settings/components/types/IPayloadForm";
+import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { setStorageItem } from "shared/utils/storage";
 import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 import { healthcheck } from "services/resources/settings";
@@ -18,10 +14,10 @@ import { healthcheck } from "services/resources/settings";
 import * as S from "./styles";
 
 export const Settings: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
   const [isLoadingServer, setIsLoadingServer] = useState(false);
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
 
   async function onHandleToken() {
     const token = await getAnonymousToken();
@@ -34,13 +30,12 @@ export const Settings: React.FC = () => {
       return;
     }
     setStorageItem("TOKEN", token);
-    navigate("/dashboard/workflows");
   }
 
   async function onSubmitServer(payload: IPayloadForm) {
     setIsLoadingServer(true);
     try {
-      const response = await healthcheck(payload.url, payload.port);
+      await healthcheck(payload.url, payload.port);
       setStorageItem("SERVER_URL", `${payload?.url}:${payload.port}`);
       setBaseUrl(`${payload.url}:${payload.port}`);
       onHandleToken();
@@ -71,17 +66,18 @@ export const Settings: React.FC = () => {
     setIsLoadingMqtt(true);
 
     client.connect({
-      onSuccess: () => (
-        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`),
-        onHandleToken()
-      ),
-      onFailure: () => (
+      onSuccess: () => {
+        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
+        onHandleToken();
+      },
+      onFailure: () => {
         enqueueSnackbar("Erro ao conectar com o servidor", {
           autoHideDuration: 4000,
           variant: "error",
-        }),
-        setIsLoadingMqtt(false)
-      ),
+        });
+
+        setIsLoadingMqtt(false);
+      },
     });
 
     client.disconnect();
@@ -107,4 +103,3 @@ export const Settings: React.FC = () => {
     </S.Wrapper>
   );
 };
-

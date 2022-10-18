@@ -24,6 +24,4 @@ export const Loading = styled(CircularProgress).attrs({
   size: "1.3rem",
 })``;
 
-export const TextSubmitButton = styled('p')`
-
-`;
+export const TextSubmitButton = styled.p``;

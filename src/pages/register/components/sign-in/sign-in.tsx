@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
 
 import * as S from "./styles";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
+  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -71,6 +71,7 @@ export const SignInForm = () => {
         placeholder="Type your e-mail"
         onChange={handleChange}
       />
+
       <S.Input
         label="Password"
         name="password"
@@ -79,13 +80,13 @@ export const SignInForm = () => {
         value={state.password}
         onChange={handleChange}
       />
-      <FormControlLabel
-        label="Remember me"
+
+      <S.FormControl
         control={
           <S.CheckBox onChange={changeAuthStorageConfiguration}
         />}
-      ></FormControlLabel>
-      <S.ForgotPasswordButton onClick={()=>console.log("navegou")}/>
+      ></S.FormControl>
+
       <S.SubmitButton disabled={state.isSigningIn}/>
     </S.Form>
   );

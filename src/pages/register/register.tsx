@@ -37,13 +37,16 @@ export const Register = () => {
             <img src={flowbuildLogo} alt="Logo" />
           </S.LogoContainer>
           {state.signUpIsActive ? <SignUpForm /> : <SignInForm />}
-          <S.RegisterButton
-          title={state.signUpIsActive
-            ? "Already a member? Log in"
-            : "No account? Sign up"}
-            onClick={toggleActivePage}
-          >
-          </S.RegisterButton>
+          <S.RegisterButtonContainer>
+            <S.RegisterButton
+              title={
+                state.signUpIsActive
+                  ? "Already a member? Log in"
+                  : "No account? Sign up"
+              }
+              onClick={toggleActivePage}
+            ></S.RegisterButton>
+          </S.RegisterButtonContainer>
         </S.LoginContainer>
       </S.Container>
       <S.VersionContainer>
