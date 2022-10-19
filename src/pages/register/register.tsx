@@ -17,7 +17,8 @@ export const Register = () => {
   const [state, setState] = useState({
     signUpIsActive: false,
   });
-  const data = object.version;
+  const version = useVersion();
+  const registerTitle = getButtonTitle(state.signUpIsActive);
 
   useEffect(() => {
     setVersion(data as string);
