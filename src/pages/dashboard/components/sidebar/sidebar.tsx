@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
@@ -9,8 +8,8 @@ import MuiDrawer from "@mui/material/Drawer";
 import { TypeMenuItem } from "constants/type-menu-item";
 
 import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
+import { useVersion } from "shared/hooks/version/useVersion";
 import { ProcessIdSearch } from "pages/dashboard/components/sidebar/dialogs/process-id-search";
-import object from "../../../../../package.json";
 
 import * as S from "./styles";
 
@@ -67,12 +66,7 @@ type Props = {
 
 export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   const sidebar = useSidebar();
-  const [version, setVersion] = useState<string>();
-  const data = object.version;
-
-  useEffect(() => {
-    setVersion(data as string);
-  }, [version]);
+  const version = useVersion();
 
   return (
     <>
