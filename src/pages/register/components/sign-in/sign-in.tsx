@@ -19,23 +19,22 @@ export const SignInForm = () => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: any) {
-    e.preventDefault();
-    const { signedIn, email, password } = state;
+  async function handleSubmit(e: any) {
+    try {
+      e.preventDefault();
+      const { signedIn, email, password } = state;
 
-    if (!signedIn) {
-      setState((prev) => ({ ...prev, isSigningIn: true }));
-      Auth.signIn({
-        username: email,
-        password: password,
-      })
-        .then(() => {
-          navigate("/dashboard");
-        })
-        .catch((err) => {
-          setState((prev) => ({ ...prev, isSigningIn: false }));
-          console.log(err);
+      if (!signedIn) {
+        setState((prev) => ({ ...prev, isSigningIn: true }));
+        await Auth.signIn({
+          username: email,
+          password: password,
         });
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      setState((prev) => ({ ...prev, isSigningIn: false }));
+      console.log(error);
     }
   }
 
