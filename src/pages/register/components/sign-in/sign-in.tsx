@@ -49,17 +49,20 @@ export const SignInForm = () => {
       Auth.configure({
         storage: localStorageCache,
       });
-    } else {
-      const sessionStorageCache = Cache.createInstance({
-        keyPrefix: "sessionAuthCache",
-        storage: window.sessionStorage,
-      });
 
-      Auth.configure({
-        storage: sessionStorageCache,
-      });
+      return;
     }
+
+    const sessionStorageCache = Cache.createInstance({
+      keyPrefix: "sessionAuthCache",
+      storage: window.sessionStorage,
+    });
+
+    Auth.configure({
+      storage: sessionStorageCache,
+    });
   }
+
   return (
     <S.Form onSubmit={handleSubmit}>
       <S.Input
