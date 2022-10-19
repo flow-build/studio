@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import flowbuildLogo from "assets/images/flowbuild-studio/default.svg";
 
@@ -10,6 +9,7 @@ import { SignUpForm } from "pages/register/components/sign-up";
 import { SignInForm } from "pages/register/components/sign-in";
 
 import * as S from "./styles";
+import { useVersion } from "shared/hooks/version/useVersion";
 
 Amplify.configure(amplifyConfig);
 
@@ -20,9 +20,13 @@ export const Register = () => {
   const version = useVersion();
   const registerTitle = getButtonTitle(state.signUpIsActive);
 
-  useEffect(() => {
-    setVersion(data as string);
-  }, [version]);
+  function getButtonTitle(isActive: boolean){
+    if(isActive) {
+      return 'Already a member? Log in'
+    }
+  
+    return 'No account? Sign up'
+  }
 
   function toggleActivePage() {
     setState({ signUpIsActive: !state.signUpIsActive });
@@ -35,19 +39,18 @@ export const Register = () => {
           <S.LogoContainer>
             <img src={flowbuildLogo} alt="Logo" />
           </S.LogoContainer>
+
           {state.signUpIsActive ? <SignUpForm /> : <SignInForm />}
+
           <S.RegisterButtonContainer>
             <S.RegisterButton
-              title={
-                state.signUpIsActive
-                  ? "Already a member? Log in"
-                  : "No account? Sign up"
-              }
+              title={registerTitle}
               onClick={toggleActivePage}
             ></S.RegisterButton>
           </S.RegisterButtonContainer>
         </S.LoginContainer>
       </S.Container>
+
       <S.VersionContainer>
         <S.Text>{version}</S.Text>
       </S.VersionContainer>
