@@ -21,53 +21,52 @@ export const SignUpForm = () => {
     }));
   }
 
-  function handleSubmitSignUp(e: any) {
-    e.preventDefault(e);
-    const { confirmed, signedUp } = state;
+  async function handleSubmitSignUp(e: any) {
+    try {
+      e.preventDefault(e);
+      const { confirmed, signedUp } = state;
 
-    if (!confirmed && !signedUp) {
-      setState((prev) => ({ ...prev, submittingSignUp: true }));
+      if (!confirmed && !signedUp) {
+        setState((prev) => ({ ...prev, submittingSignUp: true }));
 
-      Auth.signUp({
-        username: state.email,
-        password: state.password,
-      })
-        .then(() =>
-          setState((prev) => ({
-            ...prev,
-            signedUp: true,
-            submittingSignUp: false,
-          }))
-        )
-        .catch((err) => {
-          setState((prev) => ({ ...prev, submittingSignUp: false }));
-          console.log(err);
+        await Auth.signUp({
+          username: state.email,
+          password: state.password,
         });
+
+        setState((prev) => ({
+          ...prev,
+          signedUp: true,
+          submittingSignUp: false,
+        }));
+      }
+    } catch (error) {
+      setState((prev) => ({ ...prev, submittingSignUp: false }));
+      console.log(error);
     }
   }
 
-  function handleSubmitConfirmationSignUp(e: any) {
-    e.preventDefault(e);
-    const { confirmed, signedUp, email, confirmationCode } = state;
+  async function handleSubmitConfirmationSignUp(e: any) {
+    try {
+      e.preventDefault(e);
+      const { confirmed, signedUp, email, confirmationCode } = state;
 
-    if (!confirmed && signedUp) {
-      setState((prev) => ({ ...prev, submittingConfirmation: true }));
+      if (!confirmed && signedUp) {
+        setState((prev) => ({ ...prev, submittingConfirmation: true }));
 
-      Auth.confirmSignUp(email, confirmationCode)
-        .then(() =>
-          setState((prev) => ({
-            ...prev,
-            submittingConfirmation: false,
-            confirmed: true,
-          }))
-        )
-        .catch((err) => {
-          console.log(err);
-          setState((prev) => ({ ...prev, submittingConfirmation: false }));
-        });
+        await Auth.confirmSignUp(email, confirmationCode);
+        setState((prev) => ({
+          ...prev,
+          submittingConfirmation: false,
+          confirmed: true,
+        }));
+      }
+    } catch (error) {
+      setState((prev) => ({ ...prev, submittingConfirmation: false }));
+      console.log(error);
     }
   }
-  
+
   if (state.confirmed) {
     return <div></div>;
   }
@@ -93,8 +92,7 @@ export const SignUpForm = () => {
 
         <S.SubmitButton
           disabled={state.submittingConfirmation}
-        >
-        </S.SubmitButton>
+        ></S.SubmitButton>
       </S.Form>
     );
   }
@@ -117,10 +115,7 @@ export const SignUpForm = () => {
         onChange={handleChange}
       />
       <S.SubmitContainer>
-        <S.SubmitButton
-          disabled={state.submittingSignUp}
-        >
-        </S.SubmitButton>
+        <S.SubmitButton disabled={state.submittingSignUp}></S.SubmitButton>
       </S.SubmitContainer>
     </S.Form>
   );
