@@ -7,7 +7,6 @@ import * as S from "./styles";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const [state, setState] = useState({
     email: "",
     password: "",
