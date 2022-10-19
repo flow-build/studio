@@ -8,14 +8,12 @@ import amplifyConfig from "amplify-config";
 
 import { SignUpForm } from "pages/register/components/sign-up";
 import { SignInForm } from "pages/register/components/sign-in";
-import object from "../../../package.json";
 
 import * as S from "./styles";
 
 Amplify.configure(amplifyConfig);
 
 export const Register = () => {
-  const [version, setVersion] = useState<string>();
   const [state, setState] = useState({
     signUpIsActive: false,
   });
