@@ -23,7 +23,7 @@ export const SignUpForm = () => {
 
   function handleSubmitSignUp(e: any) {
     e.preventDefault(e);
-    const { confirmed, signedUp, email, password } = state;
+    const { confirmed, signedUp } = state;
 
     if (!confirmed && !signedUp) {
       setState((prev) => ({ ...prev, submittingSignUp: true }));
