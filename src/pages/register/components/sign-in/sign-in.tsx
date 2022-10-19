@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
 
-
 import * as S from "./styles";
 
 export const SignInForm = () => {
@@ -83,12 +82,9 @@ export const SignInForm = () => {
       />
 
       <S.FormControl
-        control={
-          <S.CheckBox onChange={changeAuthStorageConfiguration}
-        />}
-      ></S.FormControl>
-
-      <S.SubmitButton disabled={state.isSigningIn}/>
+        control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
+      />
+      <S.SubmitButton disabled={state.isSigningIn} />
     </S.Form>
   );
 };
