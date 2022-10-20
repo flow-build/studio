@@ -47,7 +47,7 @@ export function useSidebar() {
       },
       {
         name: "Compare State",
-        pathname: "compare-state",
+        pathname: "compare-json",
         icon: <CompareArrowsIcon />,
         type: TypeMenuItem.NAVIGATION,
         tooltip: "Compare State",

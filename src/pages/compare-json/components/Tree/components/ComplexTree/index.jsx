@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { Tree } from "pages/compare-state/components/Tree";
+import { Tree } from "pages/compare-json/components/Tree";
 
-import { getIndent, isArray } from "pages/compare-state/utils";
+import { getIndent, isArray } from "pages/compare-json/utils";
 
 export const ComplexTree = (props) => {
   let {
@@ -83,3 +83,4 @@ ComplexTree.propTypes = {
   lastLineType: PropTypes.oneOf(["add", "del", "none"]),
   lastLine: PropTypes.number,
 };
+

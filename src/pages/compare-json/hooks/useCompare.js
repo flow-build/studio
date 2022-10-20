@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
-import { isObject, isArray, getType } from "pages/compare-state/utils";
+import { isObject, isArray, getType } from "pages/compare-json/utils";
 
 export function useCompare() {
   const compare = useSelector((state) => state.comparePage);
@@ -243,8 +243,9 @@ export function useCompare() {
     return { previous, current };
   }, [mergeData, compare?.oldJson, compare?.newJson]);
 
-  const getOldJson = compare?.oldJson && JSON.parse(compare?.oldJson)
-  const getNewJson = compare?.newJson && JSON.parse(compare?.newJson)
+  const getOldJson = compare?.oldJson && JSON.parse(compare?.oldJson);
+  const getNewJson = compare?.newJson && JSON.parse(compare?.newJson);
 
   return { jsonDiff, getOldJson, getNewJson };
 }
+
