@@ -64,6 +64,7 @@ export function useTable(workflows: TWorkflow[]) {
         },
         {
           icon: ExtensionOutlined,
+          badge: {variant: 'dot'},
           tooltip: "Ver diagrama",
           onClick: async () => {
             const response = await listByWorkflowId(workflow.workflow_id);
