@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
 
+import { ForgotPassword } from "./components/forgot-password";
+
 import * as S from "./styles";
 
 export const SignInForm = () => {
@@ -12,6 +14,7 @@ export const SignInForm = () => {
     signedIn: false,
     isSigningIn: false,
     isSigningOut: false,
+    resetPassword: false,
   });
 
   function handleChange(e: any) {
@@ -62,29 +65,42 @@ export const SignInForm = () => {
     });
   }
 
+  if(state.resetPassword){
+    return(
+      <ForgotPassword/>
+    )
+  }
   return (
-    <S.Form onSubmit={handleSubmit}>
-      <S.Input
-        label="E-mail"
-        type="text"
-        name="email"
-        placeholder="Type your e-mail"
-        onChange={handleChange}
-      />
+    <>
+      <S.Form onSubmit={handleSubmit}>
+        <S.Input
+          label="E-mail"
+          type="text"
+          name="email"
+          placeholder="Type your e-mail"
+          onChange={handleChange}
+        />
 
-      <S.Input
-        label="Password"
-        name="password"
-        placeholder="Type your password"
-        type="password"
-        value={state.password}
-        onChange={handleChange}
-      />
+        <S.Input
+          label="Password"
+          name="password"
+          placeholder="Type your password"
+          type="password"
+          value={state.password}
+          onChange={handleChange}
+        />
 
-      <S.FormControl
-        control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
-      />
-      <S.SubmitButton disabled={state.isSigningIn} />
-    </S.Form>
+        <S.FormControl
+          control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
+        />
+        <S.SubmitButton disabled={state.isSigningIn} />
+      </S.Form>
+
+      <S.Container>
+        <S.ForgotPasswordButton
+          onClick={() => setState((prev) => ({ ...prev, resetPassword: true }))}
+        />
+      </S.Container>
+    </>
   );
 };
