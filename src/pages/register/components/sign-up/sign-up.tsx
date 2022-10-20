@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import * as S from "./styles";
 
 export const SignUpForm = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState({
     signedUp: false,
     confirmed: false,
@@ -39,6 +41,7 @@ export const SignUpForm = () => {
           signedUp: true,
           submittingSignUp: false,
         }));
+        navigate("/dashboard");
       }
     } catch (error) {
       setState((prev) => ({ ...prev, submittingSignUp: false }));
