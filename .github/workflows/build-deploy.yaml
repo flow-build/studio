@@ -7,6 +7,7 @@ on:
       - developer
 env:
   REACT_APP_BASE_URL: ${{secrets.REACT_APP_BASE_URL}}
+  REACT_APP_URL_PORT: ${{secrets.REACT_APP_URL_PORT}}
   REACT_APP_MQTT_HOST: ${{secrets.REACT_APP_MQTT_HOST}}
   REACT_APP_MQTT_PORT: ${{secrets.REACT_APP_MQTT_PORT}}
 
@@ -61,6 +62,7 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
           envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
           envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
           directory: './'
@@ -70,6 +72,7 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
           envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
           envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
           directory: './'
