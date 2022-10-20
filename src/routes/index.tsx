@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import _isEmpty from "lodash/isEmpty";
 
 import { Dashboard } from "pages/dashboard";
-import { SignIn } from "pages/sign/sign-in";
+import { Register } from "pages/register/register";
 import { Workflows } from "pages/workflows";
 import { CompareJson } from "pages/compare-json";
 import { Processes } from "pages/processes";
@@ -25,7 +25,7 @@ export const AppRoutes = () => {
     const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
 
     if (hasEnv || hasLocalStorage) {
-      return <SignIn />;
+      return <Register />;
     }
 
     return <Navigate to="settings" replace />;
