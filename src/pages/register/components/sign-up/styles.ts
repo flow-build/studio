@@ -31,6 +31,6 @@ export const SubmitButton = styled(Button).attrs({
 export const SubmitContainer = styled.div`
   display: flex,
   flex: 1,
-  alignItems: center,
-  justifyContent: center,
+  align-items: center,
+  justify-content: center,
 `;
