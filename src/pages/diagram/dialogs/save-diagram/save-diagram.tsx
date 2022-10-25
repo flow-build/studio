@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getStorageItem } from "shared/utils/storage";
+import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
 import { create } from "services/resources/diagrams/create";
 
@@ -25,6 +25,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   function getUserInfo() {
     const token = getStorageItem("TOKEN");
     const decoded = jwt_decode(token) as TUser;
+    setStorageItem("TOKEN", token);
     return decoded;
   }
 
