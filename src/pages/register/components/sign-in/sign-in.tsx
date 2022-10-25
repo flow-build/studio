@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
+import jwt_decode from "jwt-decode";
 
 import * as S from "./styles";
+import { getAnonymousToken } from "services/resources/token";
+import { setStorageItem } from "shared/utils/storage";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
@@ -25,10 +28,15 @@ export const SignInForm = () => {
 
       if (!signedIn) {
         setState((prev) => ({ ...prev, isSigningIn: true }));
-        await Auth.signIn({
+        const response = await Auth.signIn({
           username: email,
           password: password,
         });
+        const token = await getAnonymousToken(response.username);
+        setStorageItem('TOKEN', token);
+        const decoded = jwt_decode(token);
+        console.log(decoded)
+
         navigate("/dashboard");
       }
     } catch (error) {
@@ -88,3 +96,4 @@ export const SignInForm = () => {
     </S.Form>
   );
 };
+

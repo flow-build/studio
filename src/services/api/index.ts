@@ -47,7 +47,8 @@ api.interceptors.response.use(
     let token = getStorageItem("TOKEN");
 
     if (token && isTokenExpired(token)) {
-      token = await getAnonymousToken();
+      const decoded = jwt_decode(token) as string;
+      token = await getAnonymousToken(decoded);
       setStorageItem("TOKEN", token);
 
       error.config.headers["Authorization"] = "Bearer " + token;

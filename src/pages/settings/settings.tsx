@@ -2,9 +2,10 @@ import { useState } from "react";
 
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
+import jwt_decode from "jwt-decode";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-import { setStorageItem } from "shared/utils/storage";
+import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
@@ -27,8 +28,17 @@ export const Settings: React.FC = () => {
     });
   }
 
+  function getUserId() {
+    const token = getStorageItem("TOKEN");
+    const decoded = jwt_decode(token);
+    setStorageItem("TOKEN", token);
+    return decoded;
+  }
+
+  
   async function onHandleToken() {
-    const token = await getAnonymousToken();
+    const userId = getUserId() as string;
+    const token = await getAnonymousToken(userId);
 
     if (!token) {
       const message = "Erro no retorno do Token. Por favor tentar novamente!";
@@ -115,3 +125,4 @@ export const Settings: React.FC = () => {
     </S.Wrapper>
   );
 };
+
