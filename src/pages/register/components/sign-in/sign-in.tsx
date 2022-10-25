@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
 
-import { ForgotPassword } from "./components/forgot-password";
+import { getAnonymousToken } from "services/resources/token";
+import { setStorageItem } from "shared/utils/storage";
+import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 
 import * as S from "./styles";
 
@@ -28,12 +30,15 @@ export const SignInForm = () => {
 
       if (!signedIn) {
         setState((prev) => ({ ...prev, isSigningIn: true }));
-        await Auth.signIn({
+        const response = await Auth.signIn({
           username: email,
           password: password,
         });
+        const token = await getAnonymousToken(response.username);
+        setStorageItem("TOKEN", token);
         navigate("/dashboard");
       }
+
     } catch (error) {
       setState((prev) => ({ ...prev, isSigningIn: false }));
       console.log(error);
