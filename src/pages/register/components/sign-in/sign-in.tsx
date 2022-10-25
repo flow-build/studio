@@ -17,10 +17,17 @@ export const SignInForm = () => {
     isSigningIn: false,
     isSigningOut: false,
     resetPassword: false,
+    inputError: false,
+    tokenId: "",
+    refreshToken: "",
   });
 
   function handleChange(e: any) {
-    setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setState((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+      inputError: false,
+    }));
   }
 
   async function handleSubmit(e: any) {
@@ -42,6 +49,10 @@ export const SignInForm = () => {
     } catch (error) {
       setState((prev) => ({ ...prev, isSigningIn: false }));
       console.log(error);
+      setState((prev) => ({
+        ...prev,
+        inputError: true,
+      }));
     }
   }
 
@@ -70,11 +81,10 @@ export const SignInForm = () => {
     });
   }
 
-  if(state.resetPassword){
-    return(
-      <ForgotPassword/>
-    )
+  if (state.resetPassword) {
+    return <ForgotPassword />;
   }
+
   return (
     <>
       <S.Form onSubmit={handleSubmit}>
@@ -84,6 +94,7 @@ export const SignInForm = () => {
           name="email"
           placeholder="Type your e-mail"
           onChange={handleChange}
+          error={state.inputError}
         />
 
         <S.Input
@@ -93,6 +104,7 @@ export const SignInForm = () => {
           type="password"
           value={state.password}
           onChange={handleChange}
+          error={state.inputError}
         />
 
         <S.FormControl
