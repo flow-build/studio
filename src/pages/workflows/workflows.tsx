@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import _isEqual from "lodash/isEqual";
-import _isEmpty from "lodash/isEmpty";
-import Badge from '@mui/material/Badge';
+
 import { ModeView } from "constants/mode-view";
 
 import { TWorkflow } from "models/workflow";
@@ -14,7 +13,7 @@ import { useTable } from "pages/workflows/hooks/useTable";
 
 import { listWorkflows } from "services/resources/workflows/list";
 
-import { list } from "services/resources/diagrams/list";
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { ContentHeader } from "shared/components/content-header";
 
@@ -30,6 +29,7 @@ import {
 } from "store/slices/dialog";
 
 import * as S from "./styles";
+import { list } from "services/resources/diagrams/list";
 
 export const Workflows: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,6 +38,11 @@ export const Workflows: React.FC = () => {
     (state: RootState) => state.workflowPage
   );
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+
+  const data = useSelector(
+    (state: RootState) => state.dialogPage.diagramInfoDialog.data
+  );
+  console.log(data.length, "DATA");
 
   const [workflows, setWorkflows] = useState<TWorkflow[]>([]);
   const [modeView, setModeView] = useState(ModeView.LIST);
@@ -57,29 +62,27 @@ export const Workflows: React.FC = () => {
 
   const getAllWorkflows = useCallback(async () => {
     const response = await listWorkflows({ search: workflowPageState.filter });
-    setWorkflows(response.reverse());
-  }, [workflowPageState.filter]);
-
-  const hasListDiagram = useCallback(async () => {
-    const workflow = await listWorkflows({ search: workflowPageState.filter });
 
     const diagrams = await list();
+    console.log(diagrams, "diagrams");
 
     const listDiagram = diagrams.map((diagram: any) => diagram.workflow_id);
+    console.log(listDiagram, "list diagram");
 
-    const workflowsWithDiagrams = workflows.map((workflow) => {
+    const workflowsWithDiagrams = response.map((workflow) => {
       if (listDiagram.includes(workflow.workflow_id) && diagrams.length > 0) {
-        return { ...workflow, hasDiagram: true };
+        return { ...workflow, totalDiagrams: diagrams.length };
       }
-      return { ...workflow, hasDiagram: false };
+      return { ...workflow, totalDiagrams: undefined };
     });
     console.log(workflowsWithDiagrams, "WORKFLOW COM DIAGRAMA");
-  }, [workflows, workflowPageState.filter]);
+
+    setWorkflows(workflowsWithDiagrams.reverse());
+  }, [workflowPageState.filter]);
 
   useEffect(() => {
     getAllWorkflows();
-    hasListDiagram();
-  }, [getAllWorkflows, hasListDiagram]);
+  }, [getAllWorkflows]);
 
   useEffect(() => {
     return () => {
@@ -118,9 +121,6 @@ export const Workflows: React.FC = () => {
           onClose={() => dispatch(setStartProcessDialog({ isVisible: false }))}
         />
       )}
-      <Badge>
-
-      </Badge>
 
       <S.ListDiagramsDialog
         isOpen={dialogPageState.diagramInfoDialog.isVisible}
