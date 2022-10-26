@@ -35,7 +35,6 @@ export const ForgotPassword = () => {
     try {
       e.preventDefault(e);
       const { email, password, code } = state;
-      console.log(email, password, code);
       await Auth.forgotPasswordSubmit(email, code, password);
       navigate("/");
     } catch (error) {
