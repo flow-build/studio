@@ -14,13 +14,13 @@ export const ForgotPassword = () => {
     resetPassword: false,
   });
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
-      e.preventDefault(e);
+      e.preventDefault();
       const { email } = state;
 
       await Auth.forgotPassword(email);
@@ -31,9 +31,9 @@ export const ForgotPassword = () => {
     }
   }
 
-  async function handleSubmitConfirmation(e: any) {
+  async function handleSubmitConfirmation(e: React.FormEvent<HTMLDivElement> ) {
     try {
-      e.preventDefault(e);
+      e.preventDefault();
       const { email, password, code } = state;
       await Auth.forgotPasswordSubmit(email, code, password);
       navigate("/");
@@ -72,7 +72,7 @@ export const ForgotPassword = () => {
   }
 
   return (
-    <S.Form onSubmit={handleSubmit}>
+    <S.Form onSubmit={(evento)=>handleSubmit(evento)}>
       <S.Input
         label="E-mail"
         type="text"

@@ -22,7 +22,7 @@ export const SignInForm = () => {
     refreshToken: "",
   });
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setState((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -30,7 +30,7 @@ export const SignInForm = () => {
     }));
   }
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
       e.preventDefault();
       const { signedIn, email, password } = state;
@@ -56,7 +56,7 @@ export const SignInForm = () => {
     }
   }
 
-  function changeAuthStorageConfiguration(e: any) {
+  function changeAuthStorageConfiguration(e: React.ChangeEvent<HTMLInputElement>) {
     const shouldRememberUser = e.target.checked;
     if (shouldRememberUser) {
       const localStorageCache = Cache.createInstance({
@@ -103,7 +103,7 @@ export const SignInForm = () => {
           placeholder="Type your password"
           type="password"
           value={state.password}
-          onChange={handleChange}
+          onChange={(evento)=>handleChange(evento)}
           error={state.inputError}
         />
 

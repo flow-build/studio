@@ -16,16 +16,16 @@ export const SignUpForm = () => {
     submittingConfirmation: false,
   });
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setState((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   }
 
-  async function handleSubmitSignUp(e: any) {
+  async function handleSubmitSignUp(e: React.FormEvent<HTMLDivElement>) {
     try {
-      e.preventDefault(e);
+      e.preventDefault();
       const { confirmed, signedUp } = state;
 
       if (!confirmed && !signedUp) {
@@ -49,9 +49,9 @@ export const SignUpForm = () => {
     }
   }
 
-  async function handleSubmitConfirmationSignUp(e: any) {
+  async function handleSubmitConfirmationSignUp(e: React.FormEvent<HTMLDivElement>) {
     try {
-      e.preventDefault(e);
+      e.preventDefault();
       const { confirmed, signedUp, email, confirmationCode } = state;
 
       if (!confirmed && signedUp) {
