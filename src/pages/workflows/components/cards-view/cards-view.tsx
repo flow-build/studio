@@ -21,20 +21,17 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
     return [
       {
         icon: VisibilityOutlined,
-        badge: { variant: "dot" },
         tooltip: "Ver processos",
         onClick: () => workflowPage.navigateToProcess(workflow.workflow_id),
       },
       {
         icon: AddOutlined,
-        badge: { variant: "dot" },
         tooltip: "Novo processo",
         onClick: () =>
           workflowPage.createProcess(workflow.name, workflow.workflow_id),
       },
       {
         icon: ExtensionOutlined,
-        badge: { variant: "dot" },
         tooltip: "Ver diagrama",
         onClick: () => workflowPage.navigateToDiagram(workflow.workflow_id),
       },
