@@ -48,6 +48,7 @@ export const CollapseTableBody: React.FC<Props> = ({ data, isCollapse }) => {
                 icon={action.icon}
                 tooltip={action.tooltip}
                 onClick={action.onClick}
+                badge={action.badge}
               />
             ))}
           </S.TableCell>
