@@ -49,7 +49,6 @@ export function useTable(workflows: TWorkflow[]) {
         workflow.version,
         getDateTimeFormatByDate(workflow.created_at),
       ];
-
       const actions = [
         {
           icon: VisibilityOutlined,
@@ -64,8 +63,8 @@ export function useTable(workflows: TWorkflow[]) {
         },
         {
           icon: ExtensionOutlined,
-          badge: {variant: 'dot'},
           tooltip: "Ver diagrama",
+          badge: workflow.totalDiagrams,
           onClick: async () => {
             const response = await listByWorkflowId(workflow.workflow_id);
             dispatch(setDiagramSelected(response));
