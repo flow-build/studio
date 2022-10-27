@@ -46,7 +46,7 @@ export const Register = () => {
             <S.RegisterButton
               title={registerTitle}
               onClick={toggleActivePage}
-            ></S.RegisterButton>
+            />
           </S.RegisterButtonContainer>
         </S.LoginContainer>
       </S.Container>

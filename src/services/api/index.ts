@@ -5,9 +5,8 @@ import { getAnonymousToken } from "services/resources/token";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
 const baseUrl = getStorageItem("SERVER_URL");
-const env = `${process.env.REACT_APP_BASE_URL}${":"}${
-  process.env.REACT_APP_URL_PORT
-}`;
+const env = `${process.env.REACT_APP_BASE_URL}${":"}${process.env.REACT_APP_URL_PORT
+  }`;
 
 const api = axios.create({
   baseURL: baseUrl ?? env,
@@ -47,7 +46,8 @@ api.interceptors.response.use(
     let token = getStorageItem("TOKEN");
 
     if (token && isTokenExpired(token)) {
-      token = await getAnonymousToken();
+      const decoded = jwt_decode(token) as string;
+      token = await getAnonymousToken(decoded);
       setStorageItem("TOKEN", token);
 
       error.config.headers["Authorization"] = "Bearer " + token;
