@@ -45,5 +45,12 @@ export const FormControl = styled(FormControlLabel).attrs({
 export const ForgotPasswordButton = styled(Button).attrs({
   type: "button",
   variant: "text",
-  title: "Forgot password?",
+  title: "Forgot your password?",
 })``;
+
+export const Container = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;

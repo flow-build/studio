@@ -5,9 +5,8 @@ import { getAnonymousToken } from "services/resources/token";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
 const baseUrl = getStorageItem("SERVER_URL");
-const env = `${process.env.REACT_APP_BASE_URL}${":"}${
-  process.env.REACT_APP_URL_PORT
-}`;
+const env = `${process.env.REACT_APP_BASE_URL}${":"}${process.env.REACT_APP_URL_PORT
+  }`;
 
 const api = axios.create({
   baseURL: baseUrl ?? env,

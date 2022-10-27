@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getStorageItem } from "shared/utils/storage";
 
-
 export const api = axios.create({
   baseURL: "http://diagrams.flowbuild.com.br:3000",
 });
