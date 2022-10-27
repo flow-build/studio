@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
-import jwt_decode from "jwt-decode";
 
 import { getAnonymousToken } from "services/resources/token";
 import { setStorageItem } from "shared/utils/storage";
 import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 
 import * as S from "./styles";
-import { getAnonymousToken } from "services/resources/token";
-import { setStorageItem } from "shared/utils/storage";
 
 export const SignInForm = () => {
   const navigate = useNavigate();

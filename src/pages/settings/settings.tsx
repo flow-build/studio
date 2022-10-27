@@ -11,8 +11,6 @@ import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
 
-import jwt_decode from "jwt-decode";
-
 import * as S from "./styles";
 
 export const Settings: React.FC = () => {
