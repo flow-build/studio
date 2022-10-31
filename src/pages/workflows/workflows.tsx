@@ -13,8 +13,6 @@ import { useTable } from "pages/workflows/hooks/useTable";
 
 import { listWorkflows } from "services/resources/workflows/list";
 
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
-
 import { ContentHeader } from "shared/components/content-header";
 
 import { RootState } from "store";
@@ -39,11 +37,6 @@ export const Workflows: React.FC = () => {
   );
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
-  const data = useSelector(
-    (state: RootState) => state.dialogPage.diagramInfoDialog.data
-  );
-  console.log(data.length, "DATA");
-
   const [workflows, setWorkflows] = useState<TWorkflow[]>([]);
   const [modeView, setModeView] = useState(ModeView.LIST);
 
@@ -64,18 +57,17 @@ export const Workflows: React.FC = () => {
     const response = await listWorkflows({ search: workflowPageState.filter });
 
     const diagrams = await list();
-    console.log(diagrams, "diagrams");
 
-    const listDiagram = diagrams.map((diagram: any) => diagram.workflow_id);
-    console.log(listDiagram, "list diagram");
+    const diagramWorkflowId = diagrams.map((diagram: any) => diagram.workflow_id);
 
     const workflowsWithDiagrams = response.map((workflow) => {
-      if (listDiagram.includes(workflow.workflow_id) && diagrams.length > 0) {
-        return { ...workflow, totalDiagrams: diagrams.length };
+      const filtered = diagramWorkflowId.filter((diagramList: string) => diagramList === workflow.workflow_id)
+
+      if (diagramWorkflowId.includes(workflow.workflow_id) && diagrams.length > 0) {
+        return { ...workflow, totalDiagrams: filtered.length };
       }
       return { ...workflow, totalDiagrams: undefined };
     });
-    console.log(workflowsWithDiagrams, "WORKFLOW COM DIAGRAMA");
 
     setWorkflows(workflowsWithDiagrams.reverse());
   }, [workflowPageState.filter]);
