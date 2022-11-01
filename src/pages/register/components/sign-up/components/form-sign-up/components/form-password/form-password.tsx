@@ -1,6 +1,14 @@
 import { useState } from "react";
 
+import _isEqual from "lodash/isEqual";
+
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import * as S from "./styles";
+import { InputLabel } from "@mui/material";
 
 type Props = {
   onClick: (password: string) => void;
@@ -17,29 +25,46 @@ export const FormPassword: React.FC<Props> = ({
     showPassword: false,
     hasNumber: false,
     hasUppercase: false,
+    hasLowercase: false,
     hasSpecialCharacters: false,
     hasMinimumCharacters: false,
   });
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
+  function getIsDisabled() {
+    const isEqual = _isEqual(payload.password, payload.confirmPassword);
+    return (
+      !payload.hasSpecialCharacters ||
+      !payload.hasUppercase ||
+      !payload.hasNumber ||
+      !payload.hasMinimumCharacters ||
+      !isEqual
+    );
+  }
+
+  function handlePassword(name: string, value: string) {
+    const password = value;
+    const isSpecialCharacters = new RegExp("[@!#$%^&*()/]").test(password);
+    const isUppercase = new RegExp("[A-Z]").test(password);
+    const isLowercase = new RegExp("[a-z]").test(password);
+    const isNumber = new RegExp("[0-9]").test(password);
+    const haveMinimumCharacters = new RegExp("^.{8,256}$").test(password);
+
     setPayload((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
+      hasSpecialCharacters: isSpecialCharacters,
+      hasUppercase: isUppercase,
+      hasLowercase: isLowercase,
+      hasNumber: isNumber,
+      hasMinimumCharacters: haveMinimumCharacters,
     }));
   }
 
-  function handleDisable() {
-    if (
-      payload.hasSpecialCharacters &&
-      payload.hasUppercase &&
-      payload.hasNumber &&
-      payload.hasMinimumCharacters
-    ) {
-      return false;
-    }
-    return true;
+  function handleChange(name: string, value: string) {
+    setPayload((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
 
   function handleClickShowPassword() {
@@ -83,27 +108,30 @@ export const FormPassword: React.FC<Props> = ({
         placeholder="Confirm your password"
         type="password"
         value={payload.confirmPassword}
-        onChange={handleChange}
+        onChange={({ target }) => handleChange(target.name, target.value)}
       />
       <S.PasswordContainer>
         <S.PasswordItens isDisabled={payload.hasMinimumCharacters}>
-          <S.Text>at least 8 characters</S.Text>
+          <S.Text> Length between 8 and 256</S.Text>
         </S.PasswordItens>
         <S.PasswordItens isDisabled={payload.hasUppercase}>
-          <S.Text> uppercase letter</S.Text>
+          <S.Text> Uppercase letter</S.Text>
+        </S.PasswordItens>
+        <S.PasswordItens isDisabled={payload.hasLowercase}>
+          <S.Text> Lowercase letter</S.Text>
         </S.PasswordItens>
         <S.PasswordItens isDisabled={payload.hasNumber}>
-          <S.Text>number</S.Text>
+          <S.Text> Has number </S.Text>
         </S.PasswordItens>
         <S.PasswordItens isDisabled={payload.hasSpecialCharacters}>
-          <S.Text> especial character</S.Text>
+          <S.Text> Special character</S.Text>
         </S.PasswordItens>
       </S.PasswordContainer>
 
       <S.SubmitContainer>
         <S.BackButton onClick={handleBackButton}></S.BackButton>{" "}
         <S.SubmitButton
-          disabled={handleDisable()}
+          disabled={getIsDisabled()}
           onClick={() => onClick(payload.password)}
         ></S.SubmitButton>
       </S.SubmitContainer>

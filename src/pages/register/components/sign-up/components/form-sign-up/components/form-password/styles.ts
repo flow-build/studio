@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 import DialogContentText from "@mui/material/DialogContentText";
-// import { ArrowBack } from "@mui/icons-material";
 
 import { Button } from "shared/components/button";
 import { OutlinedInput } from "@mui/material";
@@ -17,7 +16,9 @@ export const SubmitContainer = styled.div`
   flex: 1;
   align-items: center;
   justify-content: center;
-  gap:5px;
+  gap: 5px;
+
+  margin: 40px 0 20px;
 `;
 
 export const SubmitButton = styled(Button).attrs({
@@ -27,18 +28,30 @@ export const SubmitButton = styled(Button).attrs({
     fullWidth: true,
 })`
     height: 3.5rem;
+`;
+
+export const BackButton = styled(Button).attrs({
+    type:"button",
+    title: "Back",
+    variant: "outlined",
+    fullWidth: true,
+})`
+    height: 3.5rem;
   `;
 
 export const Text = styled(DialogContentText)`
+    font-size:12px;
 `;
 
 export const PasswordItens = styled.div<{ isDisabled: boolean }>`
-    background-color: ${({ isDisabled }) => (isDisabled ? "#1E4F9F" : "#252A41")};
-    padding:5px;
-    gap:5px;
-    border-radius: 100px;
-    display: flex;
-    align-items: center
+  background-color: ${({ isDisabled }) => (isDisabled ? "#1E4F9F" : "#252A41")};
+  padding: 5px 10px;
+  gap: 5px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+
+  transition: 0.2s background-color;
 `;
 
 export const PasswordContainer = styled.div`
@@ -49,18 +62,3 @@ export const PasswordContainer = styled.div`
     gap: 5px;
     padding-bottom: 15px;
 `;
-
-// export const BackButton = styled(ArrowBack).attrs({
-//     sx: { color: "#2D77EF", fontSize: 30 }
-// })`
-// padding: 5px;
-// `;
-
-export const BackButton = styled(Button).attrs({
-    type: "submit",
-    title: "Back",
-    variant: "outlined",
-    fullWidth: true,
-})`
-    height: 3.5rem;
-  `;
