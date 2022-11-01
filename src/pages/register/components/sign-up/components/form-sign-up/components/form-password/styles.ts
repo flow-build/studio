@@ -4,9 +4,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 // import { ArrowBack } from "@mui/icons-material";
 
 import { Button } from "shared/components/button";
-import { InputText } from "shared/components/input-text";
+import { OutlinedInput } from "@mui/material";
 
-export const Input = styled(InputText).attrs({
+export const Input = styled(OutlinedInput).attrs({
     fullWidth: true,
     required: true,
     sx: { mb: 2 },
