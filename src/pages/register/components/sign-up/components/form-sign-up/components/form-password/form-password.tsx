@@ -41,41 +41,39 @@ export const FormPassword: React.FC<Props> = ({
     return true;
   }
 
-  function handlePassword(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    const isSpecialCharacters = new RegExp("[@!#$%^&*()/]").test(
-      payload.password
-    );
-    const isUppercase = new RegExp("[A-Z]").test(payload.password);
-    const isNumber = new RegExp("[0-9]").test(payload.password);
-    const haveMinimumCharacters = new RegExp(".{7,20}").test(payload.password);
-
-    console.log("Special Character:", isSpecialCharacters);
-    console.log("Uppercase:", isUppercase);
-    console.log("Number:", isNumber);
-    console.log("Have 8 letters:", haveMinimumCharacters);
-
+  function handleClickShowPassword() {
     setPayload((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
-      hasSpecialCharacters: isSpecialCharacters,
-      hasUppercase: isUppercase,
-      hasNumber: isNumber,
-      hasMinimumCharacters: haveMinimumCharacters,
+      showPassword: !payload.showPassword,
     }));
+  }
+
+  function handleMouseDownPassword(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
   }
 
   return (
     <>
-      {/* <S.BackButton onClick={handleBackButton}></S.BackButton> */}
+    <InputLabel>Password</InputLabel>
       <S.Input
         label="Password"
         name="password"
         placeholder="Type your password"
-        type="password"
+        type={payload.showPassword ? "text" : "password"}
         value={payload.password}
-        onChange={handlePassword}
+        onChange={({ target }) => handlePassword(target.name, target.value)}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              edge="end"
+              onMouseDown={handleMouseDownPassword}
+            >
+              {payload.showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
       />
 
       <S.Input
