@@ -14,6 +14,7 @@ export const FormPassword: React.FC<Props> = ({
   const [payload, setPayload] = useState({
     password: "",
     confirmPassword: "",
+    showPassword: false,
     hasNumber: false,
     hasUppercase: false,
     hasSpecialCharacters: false,
