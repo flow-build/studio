@@ -2,11 +2,19 @@ import { useEffect, useState } from "react";
 
 import { TWorkflow } from "models/workflow";
 
+import { TUser } from "models/user";
+
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
+
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
+import { RootState } from "store";
+import { useDispatch, useSelector } from "react-redux";
+import { setDiagramSelected } from "store/slices/dialog";
+import { ContactsOutlined } from "@mui/icons-material";
 
 type Props = {
   workflowId: string;
@@ -14,6 +22,12 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ workflowId }) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
+
+  const [diagram, setDiagram] = useState<TUser | undefined>();
+
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const request = async () => {
@@ -24,7 +38,23 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
     request();
   }, [workflowId]);
 
+  useEffect(() => {
+    const requestDiagram = async () => {
+      const responseDiagram = await listByWorkflowId(workflowId);
+     
+      dispatch(setDiagram(dialogPageState.diagramSelected));
+
+      console.log(responseDiagram, "RESPONSE");
+    };
+
+    requestDiagram();
+  }, [workflowId, dialogPageState.diagramSelected, dispatch]);
+
   if (!workflow) {
+    return null;
+  }
+
+  if (!diagram) {
     return null;
   }
 
@@ -50,6 +80,18 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
             <img src={statusWarning} alt="StatusWarning" />
           </S.Status>
         </S.Tooltip>
+      )}
+
+      {diagram?.name && (
+        <S.TitleContent>
+          <S.Title>Diagram: {diagram?.name}</S.Title>
+        </S.TitleContent>
+      )}
+
+      {!diagram?.name && (
+        <S.TitleContent>
+          <S.Title>Diagram: diagrama não salvo</S.Title>
+        </S.TitleContent>
       )}
     </S.Wrapper>
   );
