@@ -12,6 +12,7 @@ export const ForgotPassword = () => {
     password: "",
     code: "",
     resetPassword: false,
+    inputError: false,
   });
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
@@ -39,6 +40,7 @@ export const ForgotPassword = () => {
       navigate("/");
     } catch (error) {
       console.log(error);
+      setState((prev) => ({ ...prev, inputError: true }));
     }
   }
 
@@ -51,6 +53,7 @@ export const ForgotPassword = () => {
           name="email"
           placeholder="Type your email"
           onChange={handleChange}
+          error={state.inputError}
         />
         <S.Input
           label="Code"
@@ -58,6 +61,7 @@ export const ForgotPassword = () => {
           name="code"
           placeholder="Type confirmation code"
           onChange={handleChange}
+          error={state.inputError}
         />
         <S.Input
           label="Password"
@@ -65,6 +69,7 @@ export const ForgotPassword = () => {
           name="password"
           placeholder="Type your new password"
           onChange={handleChange}
+          error={state.inputError}
         />
         <S.SubmitButton title="Reset Password" />
       </S.Form>
