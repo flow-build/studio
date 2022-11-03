@@ -2,14 +2,10 @@ import { useState } from "react";
 
 import _isEqual from "lodash/isEqual";
 
+import { EyeIcon } from "pages/register/components/eye-icon";
 import { InputLabel } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import * as S from "./styles";
-
 
 type Props = {
   onClick: (password: string) => void;
@@ -24,6 +20,7 @@ export const FormPassword: React.FC<Props> = ({
     password: "",
     confirmPassword: "",
     showPassword: false,
+    showConfirmPassword: false,
     hasNumber: false,
     hasUppercase: false,
     hasLowercase: false,
@@ -68,51 +65,46 @@ export const FormPassword: React.FC<Props> = ({
     }));
   }
 
-  function handleClickShowPassword() {
-    setPayload((prev) => ({
-      ...prev,
-      showPassword: !payload.showPassword,
-    }));
-  }
-
-  function handleMouseDownPassword(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
+  function handleEyeIcon(name: string, evento: boolean) {
+    setPayload((prev) => ({ ...prev, [name]: evento }));
   }
 
   return (
     <>
-    <S.FormControlIcon>
-      <InputLabel>Password</InputLabel>
-      <S.InputPassword
-        label="Password"
-        name="password"
-        placeholder="Type your password"
-        type={payload.showPassword ? "text" : "password"}
-        value={payload.password}
-        onChange={({ target }) => handlePassword(target.name, target.value)}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              edge="end"
-              onMouseDown={handleMouseDownPassword}
-            >
-              {payload.showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
+      <S.FormControlIcon>
+        <InputLabel>Password</InputLabel>
+        <S.InputPassword
+          label="Password"
+          name="password"
+          placeholder="Type your password"
+          type={payload.showPassword ? "text" : "password"}
+          value={payload.password}
+          onChange={({ target }) => handlePassword(target.name, target.value)}
+          endAdornment={
+            <EyeIcon
+              onClick={(evento) => handleEyeIcon("showPassword", evento)}
+            />
+          }
+        />
       </S.FormControlIcon>
 
-      <S.Input
-        label="Confirm Password"
-        name="confirmPassword"
-        placeholder="Confirm your password"
-        type="password"
-        value={payload.confirmPassword}
-        onChange={({ target }) => handleChange(target.name, target.value)}
-      />
+      <S.FormControlIcon>
+        <InputLabel>Confirm Password</InputLabel>
+        <S.InputPassword
+          label="Confirm Password"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          type={payload.showConfirmPassword ? "text" : "password"}
+          value={payload.confirmPassword}
+          onChange={({ target }) => handleChange(target.name, target.value)}
+          endAdornment={
+            <EyeIcon
+              onClick={(evento) => handleEyeIcon("showConfirmPassword", evento)}
+            />
+          }
+        />
+      </S.FormControlIcon>
+
       <S.PasswordContainer>
         <S.PasswordItens isDisabled={payload.hasMinimumCharacters}>
           <S.Text> Length between 8 and 256</S.Text>

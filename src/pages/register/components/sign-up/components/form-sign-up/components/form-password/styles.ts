@@ -1,10 +1,12 @@
 import styled from "styled-components";
 
 import DialogContentText from "@mui/material/DialogContentText";
-import { Button } from "shared/components/button";
-import { FormControl, OutlinedInput } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
+import { FormControl, IconButton, OutlinedInput } from "@mui/material";
 
+import { Button } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
+
 
 export const InputPassword = styled(OutlinedInput).attrs({
     fullWidth: true,
@@ -21,6 +23,11 @@ export const Input = styled(InputText).attrs({
 })`
     height: 3.5rem;
 `;
+
+
+export const InputIcon = styled(InputAdornment).attrs({
+    position: "end",
+})``;
 
 export const FormControlIcon = styled(FormControl).attrs({
     fullWidth: true,
@@ -58,6 +65,9 @@ export const Text = styled(DialogContentText)`
     font-size:12px;
 `;
 
+export const Icon = styled(IconButton).attrs({
+    edge: "end",
+})``;
 export const PasswordItens = styled.div<{ isDisabled: boolean }>`
   background-color: ${({ isDisabled }) => (isDisabled ? "#1E4F9F" : "#252A41")};
   padding: 5px 10px;

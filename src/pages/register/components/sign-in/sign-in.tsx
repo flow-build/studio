@@ -7,9 +7,8 @@ import { setStorageItem } from "shared/utils/storage";
 import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 
 import * as S from "./styles";
-import { IconButton, InputAdornment, InputLabel } from "@mui/material";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
+import { InputLabel } from "@mui/material";
+import { EyeIcon } from "../eye-icon";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
@@ -85,16 +84,6 @@ export const SignInForm = () => {
       storage: sessionStorageCache,
     });
   }
-  function handleClickShowPassword() {
-    setState((prev) => ({
-      ...prev,
-      showPassword: !state.showPassword,
-    }));
-  }
-
-  function handleMouseDownPassword(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-  }
 
   if (state.resetPassword) {
     return <ForgotPassword />;
@@ -122,16 +111,11 @@ export const SignInForm = () => {
             value={state.password}
             onChange={({ target }) => handleChange(target.name, target.value)}
             endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  edge="end"
-                  onMouseDown={handleMouseDownPassword}
-                >
-                  {state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
+              <EyeIcon
+                onClick={(evento) =>
+                  setState((prev) => ({ ...prev, showPassword: evento }))
+                }
+              />
             }
           />
         </S.FormControlIcon>
