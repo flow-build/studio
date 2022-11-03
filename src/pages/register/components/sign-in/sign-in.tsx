@@ -49,12 +49,8 @@ export const SignInForm = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-      setState((prev) => ({ ...prev, isSigningIn: false }));
       console.log(error);
-      setState((prev) => ({
-        ...prev,
-        inputError: true,
-      }));
+      setState((prev) => ({ ...prev, isSigningIn: false, inputError: true }));
     }
   }
 
