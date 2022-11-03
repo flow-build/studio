@@ -28,13 +28,13 @@ export const FormEmail: React.FC<Props> = ({ onClick }) => {
         value={payload.email}
         onChange={(evento) => handleChange(evento.target.value)}
       />
-      <S.IconContainer>
+      <S.SubmitContainer>
         <S.SubmitButton
           disabled={disabled}
           title={"Next"}
           onClick={() => onClick(payload.email)}
         ></S.SubmitButton>
-      </S.IconContainer>
+      </S.SubmitContainer>
     </>
   );
 };
