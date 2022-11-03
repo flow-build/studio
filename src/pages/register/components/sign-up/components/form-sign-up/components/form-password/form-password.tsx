@@ -2,13 +2,14 @@ import { useState } from "react";
 
 import _isEqual from "lodash/isEqual";
 
+import { InputLabel } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import * as S from "./styles";
-import { InputLabel } from "@mui/material";
+
 
 type Props = {
   onClick: (password: string) => void;
@@ -80,8 +81,9 @@ export const FormPassword: React.FC<Props> = ({
 
   return (
     <>
-    <InputLabel>Password</InputLabel>
-      <S.Input
+    <S.FormControlIcon>
+      <InputLabel>Password</InputLabel>
+      <S.InputPassword
         label="Password"
         name="password"
         placeholder="Type your password"
@@ -101,6 +103,7 @@ export const FormPassword: React.FC<Props> = ({
           </InputAdornment>
         }
       />
+      </S.FormControlIcon>
 
       <S.Input
         label="Confirm Password"

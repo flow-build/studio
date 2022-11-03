@@ -1,14 +1,29 @@
 import styled from "styled-components";
 
 import DialogContentText from "@mui/material/DialogContentText";
-
 import { Button } from "shared/components/button";
-import { OutlinedInput } from "@mui/material";
+import { FormControl, OutlinedInput } from "@mui/material";
 
-export const Input = styled(OutlinedInput).attrs({
+import { InputText } from "shared/components/input-text";
+
+export const InputPassword = styled(OutlinedInput).attrs({
     fullWidth: true,
     required: true,
     sx: { mb: 2 },
+})`
+    width: 100%;
+`;
+
+export const Input = styled(InputText).attrs({
+    fullWidth: true,
+    required: true,
+    sx: { mb: 2 },
+})`
+    height: 3.5rem;
+`;
+
+export const FormControlIcon = styled(FormControl).attrs({
+    fullWidth: true,
 })``;
 
 export const SubmitContainer = styled.div`
@@ -31,7 +46,7 @@ export const SubmitButton = styled(Button).attrs({
 `;
 
 export const BackButton = styled(Button).attrs({
-    type:"button",
+    type: "button",
     title: "Back",
     variant: "outlined",
     fullWidth: true,

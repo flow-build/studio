@@ -7,12 +7,16 @@ import { setStorageItem } from "shared/utils/storage";
 import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 
 import * as S from "./styles";
+import { IconButton, InputAdornment, InputLabel } from "@mui/material";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     email: "",
     password: "",
+    showPassword: false,
     signedIn: false,
     isSigningIn: false,
     isSigningOut: false,
@@ -22,10 +26,10 @@ export const SignInForm = () => {
     refreshToken: "",
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  function handleChange(name: string, value: string) {
     setState((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
       inputError: false,
     }));
   }
@@ -45,7 +49,6 @@ export const SignInForm = () => {
         setStorageItem("TOKEN", token);
         navigate("/dashboard");
       }
-
     } catch (error) {
       setState((prev) => ({ ...prev, isSigningIn: false }));
       console.log(error);
@@ -56,7 +59,9 @@ export const SignInForm = () => {
     }
   }
 
-  function changeAuthStorageConfiguration(e: React.ChangeEvent<HTMLInputElement>) {
+  function changeAuthStorageConfiguration(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
     const shouldRememberUser = e.target.checked;
     if (shouldRememberUser) {
       const localStorageCache = Cache.createInstance({
@@ -80,6 +85,16 @@ export const SignInForm = () => {
       storage: sessionStorageCache,
     });
   }
+  function handleClickShowPassword() {
+    setState((prev) => ({
+      ...prev,
+      showPassword: !state.showPassword,
+    }));
+  }
+
+  function handleMouseDownPassword(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+  }
 
   if (state.resetPassword) {
     return <ForgotPassword />;
@@ -93,21 +108,35 @@ export const SignInForm = () => {
           type="text"
           name="email"
           placeholder="Type your e-mail"
-          onChange={handleChange}
+          onChange={({ target }) => handleChange(target.name, target.value)}
           error={state.inputError}
         />
 
-        <S.Input
-          label="Password"
-          name="password"
-          placeholder="Type your password"
-          type="password"
-          value={state.password}
-          onChange={(evento)=>handleChange(evento)}
-          error={state.inputError}
-        />
+        <S.FormControlIcon>
+          <InputLabel>Password</InputLabel>
+          <S.InputPassword
+            label="Password"
+            name="password"
+            placeholder="Type your password"
+            type={state.showPassword ? "text" : "password"}
+            value={state.password}
+            onChange={({ target }) => handleChange(target.name, target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {state.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </S.FormControlIcon>
 
-        <S.FormControl
+        <S.Control
           control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
         />
         <S.SubmitButton disabled={state.isSigningIn} />
