@@ -13,8 +13,7 @@ import statusWarning from "assets/images/latest-version-button/status-warning.sv
 import * as S from "./styles";
 import { RootState } from "store";
 import { useDispatch, useSelector } from "react-redux";
-import { setDiagramSelected } from "store/slices/dialog";
-import { ContactsOutlined } from "@mui/icons-material";
+
 
 type Props = {
   workflowId: string;
