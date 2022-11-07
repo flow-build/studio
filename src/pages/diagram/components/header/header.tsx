@@ -12,7 +12,7 @@ import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
 import { RootState } from "store";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 
 type Props = {
@@ -26,8 +26,6 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
 
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     const request = async () => {
       const response = await listWorkflowById(workflowId);
@@ -35,19 +33,15 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
     };
 
     request();
-  }, [workflowId]);
 
-  useEffect(() => {
     const requestDiagram = async () => {
       const responseDiagram = await listByWorkflowId(workflowId);
-     
-      dispatch(setDiagram(dialogPageState.diagramSelected));
-
-      console.log(responseDiagram, "RESPONSE");
+      setDiagram(dialogPageState.diagramSelected);
     };
 
     requestDiagram();
-  }, [workflowId, dialogPageState.diagramSelected, dispatch]);
+
+  }, [workflowId, dialogPageState.diagramSelected]);
 
   if (!workflow) {
     return null;
