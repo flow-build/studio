@@ -14,10 +14,6 @@ export const EyeIcon: React.FC<Props> = ({ onClick }) => {
     showPassword: false,
   });
 
-  function handleMouseDownPassword(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-  }
-
   function handleClickShowPassword() {
     const newShowPassword = !state.showPassword;
     setState((prev) => ({
@@ -33,7 +29,6 @@ export const EyeIcon: React.FC<Props> = ({ onClick }) => {
       <S.Icon
         aria-label="toggle password visibility"
         onClick={() => handleClickShowPassword()}
-        onMouseDown={handleMouseDownPassword}
       >
         {state.showPassword ? <VisibilityOff /> : <Visibility />}
       </S.Icon>
