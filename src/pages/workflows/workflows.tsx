@@ -114,11 +114,13 @@ export const Workflows: React.FC = () => {
         />
       )}
 
-      <S.ListDiagramsDialog
-        isOpen={dialogPageState.diagramInfoDialog.isVisible}
-        onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
-        onSelectDiagram={onSelectDiagram}
-      />
+      {dialogPageState.diagramInfoDialog.isVisible && (
+        <S.ListDiagramsDialog
+          isOpen={dialogPageState.diagramInfoDialog.isVisible}
+          onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
+          onSelectDiagram={onSelectDiagram}
+        />
+      )}  
     </>
   );
 };
