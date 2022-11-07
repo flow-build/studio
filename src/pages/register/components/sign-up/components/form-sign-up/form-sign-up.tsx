@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 import { FormEmail } from "pages/register/components/sign-up/components/form-sign-up/components/form-email";
@@ -12,7 +11,6 @@ type Props = {
 };
 
 export const FormSignUp: React.FC<Props> = ({ handleFormSignUp }) => {
-  const navigate = useNavigate();
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -22,26 +20,26 @@ export const FormSignUp: React.FC<Props> = ({ handleFormSignUp }) => {
   });
 
   async function handleSubmitSignUp(e: React.FormEvent<HTMLDivElement>) {
-    try {
-      e.preventDefault();
-      const { signedUp } = state;
-
-      if (!signedUp) {
-        await Auth.signUp({
-          username: state.email,
-          password: state.password,
-        });
-
-        handleFormSignUp();
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   e.preventDefault();
+    //   if (!state.signedUp) {
+    //     await Auth.signUp({
+    //       username: state.email,
+    //       password: state.password,
+    //     });
+    //     handleFormSignUp();
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   function handleFormEmail(email: string) {
     setState((prev) => ({ ...prev, emailStatus: true, email: email }));
+  }
+
+  function handleCodeIsMissingError(){
+    handleFormSignUp();
   }
 
   function handleFormPassword(password: string) {
@@ -60,9 +58,9 @@ export const FormSignUp: React.FC<Props> = ({ handleFormSignUp }) => {
       {state.emailStatus && (
         <>
           <FormPassword
-            onClick={(password) => handleFormPassword(password)} 
+            onClick={(password) => handleFormPassword(password)}
             handleBackButton={handleBackButton}
-          ></FormPassword>
+          />
         </>
       )}
     </S.Form>

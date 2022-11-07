@@ -124,7 +124,7 @@ export const FormPassword: React.FC<Props> = ({
       </S.PasswordContainer>
 
       <S.SubmitContainer>
-        <S.BackButton onClick={handleBackButton}></S.BackButton>{" "}
+        <S.BackButton onClick={handleBackButton}/>
         <S.SubmitButton
           disabled={getIsDisabled()}
           onClick={() => onClick(payload.password)}
