@@ -14,7 +14,7 @@ export const FormConfirmationCode: React.FC<Props> = ({signedUp}) => {
     email: "",
   });
 
-  const disabled = _isEmpty(state.email) && _isEmpty(state.confirmationCode);
+  const disabled = _isEmpty(state.email && state.confirmationCode)
 
   function handleChange(
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
