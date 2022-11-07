@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import ListIcon from "@mui/icons-material/ListOutlined";
 import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
@@ -39,24 +39,61 @@ import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
 import { TUser } from "models/user";
+import { TWorkflow } from "models/workflow";
+import { listWorkflows } from "services/resources/workflows/list";
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+
 
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
-  const data = useSelector(
-    (state: RootState) => state.dialogPage.diagramInfoDialog.data
+  const workflowPageState = useSelector(
+    (state: RootState) => state.workflowPage
   );
+
   const diagram = useDiagram();
   const paint = usePaint();
-  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
+  const [workflow, setWorkflow] = useState<TWorkflow[]>();
+
+  const getAllDiagrams = useCallback(async () => {
+    const response = await listWorkflows({ search: workflowPageState.filter });
+
+    const diagramsId = await listByWorkflowId(workflowId as string);
+    dispatch(setDiagramSelected(diagramsId));
+
+    const workflowsWithDiagrams = response.map((workflow) => {
+      if (
+        diagramsId.includes(workflow.workflow_id) &&
+        diagramsId.length > 0
+      ) {
+        return { ...workflow, totalDiagrams: diagramsId.length };
+      }
+      return { ...workflow, totalDiagrams: undefined };
+    });
+
+    dispatch(
+      setShowDiagramInfoDialog({
+        isVisible: true,
+        data: diagramsId,
+      })
+    );
+    dialogPageState?.confirmationDialog?.data(diagramsId);
+    dispatch(setDiagramSelected(undefined));
+
+    setWorkflow(workflowsWithDiagrams.reverse());
+  }, [workflowPageState.filter, workflowId, dispatch, dialogPageState?.confirmationDialog]);
+
 
   const actions = getActions();
 
@@ -70,14 +107,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <ExtensionOutlined />,
         tooltip: "Listar diagramas",
-        onClick: () => {
-          dispatch(
-            setShowDiagramInfoDialog({
-              isVisible: true,
-              data: data,
-            })
-          );
-          dispatch(setDiagramSelected(data));
+        onClick: async () => {
+          getAllDiagrams();
         },
       },
       {
@@ -129,6 +160,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
   async function onSelectDiagram(diagram: TUser) {
     resetColor();
     dispatch(setDiagramSelected(diagram));
+    navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
   }
 
   useEffect(() => {
