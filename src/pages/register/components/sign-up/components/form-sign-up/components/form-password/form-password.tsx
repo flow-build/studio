@@ -128,7 +128,7 @@ export const FormPassword: React.FC<Props> = ({
         <S.SubmitButton
           disabled={getIsDisabled()}
           onClick={() => onClick(payload.password)}
-        ></S.SubmitButton>
+        />
       </S.SubmitContainer>
     </>
   );

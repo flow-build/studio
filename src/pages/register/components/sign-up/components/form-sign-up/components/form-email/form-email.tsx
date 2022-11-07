@@ -32,8 +32,8 @@ export const FormEmail: React.FC<Props> = ({ onClick }) => {
         <S.SubmitButton
           disabled={disabled}
           title={"Next"}
-          onClick={() => onClick(payload.email)}
-        ></S.SubmitButton>
+          onClick={handleSubmit}
+        />
       </S.SubmitContainer>
     </>
   );
