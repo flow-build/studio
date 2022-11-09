@@ -5,5 +5,5 @@ export type TAction = {
   badge?: number;
   icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
   tooltip?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };

@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 type Props = {
   tooltip?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   icon: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
   badge?: number;
 };
