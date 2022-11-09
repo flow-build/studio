@@ -7,6 +7,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -43,7 +44,6 @@ import { TWorkflow } from "models/workflow";
 import { listWorkflows } from "services/resources/workflows/list";
 import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
-
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
@@ -65,6 +65,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
   const [workflow, setWorkflow] = useState<TWorkflow[]>();
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
   const getAllDiagrams = useCallback(async () => {
     const response = await listWorkflows({ search: workflowPageState.filter });
@@ -73,10 +74,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
     dispatch(setDiagramSelected(diagramsId));
 
     const workflowsWithDiagrams = response.map((workflow) => {
-      if (
-        diagramsId.includes(workflow.workflow_id) &&
-        diagramsId.length > 0
-      ) {
+      if (diagramsId.includes(workflow.workflow_id) && diagramsId.length > 0) {
         return { ...workflow, totalDiagrams: diagramsId.length };
       }
       return { ...workflow, totalDiagrams: undefined };
@@ -92,8 +90,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
     dispatch(setDiagramSelected(undefined));
 
     setWorkflow(workflowsWithDiagrams.reverse());
-  }, [workflowPageState.filter, workflowId, dispatch, dialogPageState?.confirmationDialog]);
-
+  }, [
+    workflowPageState.filter,
+    workflowId,
+    dispatch,
+    dialogPageState?.confirmationDialog,
+  ]);
 
   const actions = getActions();
 
@@ -118,6 +120,17 @@ export const DiagramRefactored: React.FC<Props> = () => {
           setSaveDialogOpen(true);
           const { xml } = await diagram.modeler.saveXML();
           setXml(xml);
+          console.log(xml)
+        },
+      },
+      {
+        icon: <EditOutlinedIcon />,
+        tooltip: "Editar Diagrama",
+        onClick: async () => {
+          setEditDialogOpen(true);
+          const { xml } = await diagram.modeler.saveXML();
+          setXml(xml);
+          
         },
       },
       {
@@ -235,6 +248,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
       <S.SaveDiagramDialog
         isOpen={isSaveDialogOpen}
         onClose={() => setSaveDialogOpen(false)}
+        xml={xml}
+      />
+
+      <S.EditDiagramDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
         xml={xml}
       />
 
