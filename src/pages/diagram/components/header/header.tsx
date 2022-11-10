@@ -35,7 +35,7 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
     request();
 
     const requestDiagram = async () => {
-      const responseDiagram = await listByWorkflowId(workflowId);
+      await listByWorkflowId(workflowId);
       setDiagram(dialogPageState.diagramSelected);
     };
 

@@ -12,11 +12,13 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import _isEmpty from "lodash/isEmpty";
 
 import { TProcess } from "models/process";
+import { TUser } from "models/user";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 import { usePaint } from "pages/diagram/hooks/usePaint";
 
 import { getHistoryByProcessId } from "services/resources/processes/history";
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { Fab } from "shared/components/fab";
 
@@ -39,10 +41,6 @@ import {
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
-import { TUser } from "models/user";
-import { TWorkflow } from "models/workflow";
-import { listWorkflows } from "services/resources/workflows/list";
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 type Props = {};
 
@@ -54,9 +52,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
-  const workflowPageState = useSelector(
-    (state: RootState) => state.workflowPage
-  );
 
   const diagram = useDiagram();
   const paint = usePaint();
@@ -64,21 +59,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
-  const [workflow, setWorkflow] = useState<TWorkflow[]>();
-  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
   const getAllDiagrams = useCallback(async () => {
-    const response = await listWorkflows({ search: workflowPageState.filter });
 
     const diagramsId = await listByWorkflowId(workflowId as string);
     dispatch(setDiagramSelected(diagramsId));
-
-    const workflowsWithDiagrams = response.map((workflow) => {
-      if (diagramsId.includes(workflow.workflow_id) && diagramsId.length > 0) {
-        return { ...workflow, totalDiagrams: diagramsId.length };
-      }
-      return { ...workflow, totalDiagrams: undefined };
-    });
 
     dispatch(
       setShowDiagramInfoDialog({
@@ -89,13 +74,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
     dialogPageState?.confirmationDialog?.data(diagramsId);
     dispatch(setDiagramSelected(undefined));
 
-    setWorkflow(workflowsWithDiagrams.reverse());
-  }, [
-    workflowPageState.filter,
-    workflowId,
-    dispatch,
-    dialogPageState?.confirmationDialog,
-  ]);
+  }, [workflowId, dispatch, dialogPageState?.confirmationDialog]);
+
 
   const actions = getActions();
 
