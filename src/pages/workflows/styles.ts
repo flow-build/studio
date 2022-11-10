@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid";
 import { StartProcess } from "pages/workflows/dialogs/start-process";
 
 import { Table as SharedTable } from "shared/components/table";
+import { ListDiagrams } from "dialogs/list-diagrams";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -25,3 +26,5 @@ export const TableContainer = styled(Grid).attrs({
 export const Table = styled(SharedTable)``;
 
 export const StartProcessDialog = styled(StartProcess)``;
+
+export const ListDiagramsDialog = styled(ListDiagrams)``;

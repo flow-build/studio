@@ -1,21 +1,33 @@
 import { useMemo } from "react";
-import {
-  AddOutlined,
-  ExtensionOutlined,
-  VisibilityOutlined,
-} from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+
+import _isEmpty from "lodash/isEmpty";
+
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
 
 import { TWorkflow } from "models/workflow";
 
 import { getDateTimeFormatByDate } from "shared/utils/date";
-import { useDispatch } from "react-redux";
 import { setProcessSelected } from "store/slices/diagram";
+import {
+  setDiagramSelected,
+  setShowDiagramInfoDialog,
+} from "store/slices/dialog";
+import { RootState } from "store";
+
+import {
+  AddOutlined,
+  ExtensionOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 
 export function useTable(workflows: TWorkflow[]) {
   const dispatch = useDispatch();
   const workflowPage = useWorkflowPage();
+
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
   const columnData = useMemo(() => {
     return [
@@ -37,7 +49,6 @@ export function useTable(workflows: TWorkflow[]) {
         workflow.version,
         getDateTimeFormatByDate(workflow.created_at),
       ];
-
       const actions = [
         {
           icon: VisibilityOutlined,
@@ -53,7 +64,23 @@ export function useTable(workflows: TWorkflow[]) {
         {
           icon: ExtensionOutlined,
           tooltip: "Ver diagrama",
-          onClick: () => {
+          badge: workflow.totalDiagrams,
+          onClick: async () => {
+            const response = await listByWorkflowId(workflow.workflow_id);
+            dispatch(setDiagramSelected(response));
+
+            if (!_isEmpty(response)) {
+              dispatch(
+                setShowDiagramInfoDialog({
+                  isVisible: true,
+                  data: response,
+                })
+              );
+              dialogPageState?.confirmationDialog?.data(response);
+              dispatch(setDiagramSelected(undefined));
+              return;
+            }
+
             dispatch(setProcessSelected(undefined));
             workflowPage.navigateToDiagram(workflow.workflow_id);
           },
@@ -62,11 +89,10 @@ export function useTable(workflows: TWorkflow[]) {
 
       return { items, actions };
     });
-  }, [dispatch, workflowPage, workflows]);
+  }, [dispatch, workflowPage, workflows, dialogPageState?.confirmationDialog]);
 
   return {
     rows,
     columnData,
   };
 }
-

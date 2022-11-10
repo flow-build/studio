@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
+import jwt_decode from "jwt-decode";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
@@ -9,8 +10,6 @@ import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
-
-import jwt_decode from "jwt-decode";
 
 import * as S from "./styles";
 
@@ -124,3 +123,4 @@ export const Settings: React.FC = () => {
     </S.Wrapper>
   );
 };
+
