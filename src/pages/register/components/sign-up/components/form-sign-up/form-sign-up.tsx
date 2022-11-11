@@ -20,26 +20,22 @@ export const FormSignUp: React.FC<Props> = ({ handleFormSignUp }) => {
   });
 
   async function handleSubmitSignUp(e: React.FormEvent<HTMLDivElement>) {
-    // try {
-    //   e.preventDefault();
-    //   if (!state.signedUp) {
-    //     await Auth.signUp({
-    //       username: state.email,
-    //       password: state.password,
-    //     });
-    //     handleFormSignUp();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      e.preventDefault();
+      if (!state.signedUp) {
+        await Auth.signUp({
+          username: state.email,
+          password: state.password,
+        });
+        handleFormSignUp();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function handleFormEmail(email: string) {
     setState((prev) => ({ ...prev, emailStatus: true, email: email }));
-  }
-
-  function handleCodeIsMissingError(){
-    handleFormSignUp();
   }
 
   function handleFormPassword(password: string) {
