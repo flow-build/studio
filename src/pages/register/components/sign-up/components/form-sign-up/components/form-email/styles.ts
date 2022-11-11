@@ -11,7 +11,7 @@ export const Input = styled(InputText).attrs({
 })``;
 
 export const SubmitButton = styled(Button).attrs({
-  type: "submit",
+  type: "button",
   variant: "contained",
   fullWidth: true,
 })`
