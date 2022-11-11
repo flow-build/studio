@@ -6,15 +6,10 @@ import { FormSignUp } from "pages/register/components/sign-up/components/form-si
 export const SignUpForm = () => {
   const [state, setState] = useState({
     signedUp: false,
-    confirmed: false,
   });
 
   function handleFormSignUp() {
-    setState((prev) => ({ ...prev, emailStatus: true, signedUp: true }));
-  }
-
-  if (state.confirmed) {
-    return <div></div>;
+    setState((prev) => ({ ...prev, signedUp: true }));
   }
 
   if (state.signedUp) {
