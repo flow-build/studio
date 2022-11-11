@@ -5,7 +5,11 @@ import { Auth } from "aws-amplify";
 
 import * as S from "./styles";
 
-export const ForgotPassword = () => {
+type Props = {
+  handleBackButton: () => void;
+};
+
+export const ForgotPassword: React.FC<Props> = ({ handleBackButton }) => {
   const navigate = useNavigate();
   const [state, setState] = useState({
     email: "",
@@ -15,8 +19,10 @@ export const ForgotPassword = () => {
     inputError: false,
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  function handleChange(
+    name: string, value: string
+  ) {
+    setState((prev) => ({ ...prev, [name]: value, }));
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
@@ -32,7 +38,7 @@ export const ForgotPassword = () => {
     }
   }
 
-  async function handleSubmitConfirmation(e: React.FormEvent<HTMLDivElement> ) {
+  async function handleSubmitConfirmation(e: React.FormEvent<HTMLDivElement>) {
     try {
       e.preventDefault();
       const { email, password, code } = state;
@@ -52,7 +58,7 @@ export const ForgotPassword = () => {
           type="text"
           name="email"
           placeholder="Type your email"
-          onChange={handleChange}
+          onChange={({ target }) => handleChange(target.name, target.value)}
           error={state.inputError}
         />
         <S.Input
@@ -60,7 +66,7 @@ export const ForgotPassword = () => {
           type="text"
           name="code"
           placeholder="Type confirmation code"
-          onChange={handleChange}
+          onChange={({ target }) => handleChange(target.name, target.value)}
           error={state.inputError}
         />
         <S.Input
@@ -68,25 +74,31 @@ export const ForgotPassword = () => {
           type="text"
           name="password"
           placeholder="Type your new password"
-          onChange={handleChange}
+          onChange={({ target }) => handleChange(target.name, target.value)}
           error={state.inputError}
         />
         <S.SubmitButton title="Reset Password" />
+        <S.ResendCodeButton
+          title={"resendCode"}
+          onClick={() => Auth.resendSignUp(state.email)}
+        />
       </S.Form>
     );
   }
 
   return (
-    <S.Form onSubmit={(evento)=>handleSubmit(evento)}>
+    <S.Form onSubmit={(evento) => handleSubmit(evento)}>
       <S.Input
         label="E-mail"
         type="text"
         name="email"
         placeholder="Type your e-mail"
-        onChange={handleChange}
+        onChange={({ target }) => handleChange(target.name, target.value)}
       />
-
-      <S.SubmitButton title="get code" />
+      <S.SubmitContainer>
+        <S.BackButton onClick={handleBackButton} />
+        <S.SubmitButton title="get code" />
+      </S.SubmitContainer>
     </S.Form>
   );
 };
