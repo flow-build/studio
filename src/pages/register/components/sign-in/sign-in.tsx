@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth, Cache } from "aws-amplify";
 
+import { InputLabel } from "@mui/material";
+
+import { EyeIcon } from "pages/register/components/eye-icon";
+import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 import { getAnonymousToken } from "services/resources/token";
 import { setStorageItem } from "shared/utils/storage";
 import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
@@ -81,8 +85,12 @@ export const SignInForm = () => {
     });
   }
 
+  function handleBackButton() {
+    setState((prev) => ({ ...prev, resetPassword: false }));
+  }
+
   if (state.resetPassword) {
-    return <ForgotPassword />;
+    return <ForgotPassword handleBackButton={handleBackButton} />;
   }
 
   return (
