@@ -15,7 +15,6 @@ import { Settings } from "pages/settings";
 
 import { getStorageItem } from "shared/utils/storage";
 
-
 export const AppRoutes = () => {
   function handleSignIn() {
     const hasEnv = !_isEmpty(
