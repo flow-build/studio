@@ -7,15 +7,30 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 
 import { Button } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
+import { FormControl, OutlinedInput } from "@mui/material";
 
 export const Form = styled(Box).attrs({
   component: "form",
 })``;
 
+export const InputPassword = styled(OutlinedInput).attrs({
+  fullWidth: true,
+  required: true,
+  sx: { mb: 2 },
+})`
+    width: 100%;
+`;
+
 export const Input = styled(InputText).attrs({
   fullWidth: true,
   required: true,
   sx: { mb: 2 },
+})`
+    height: 3.5rem;
+`;
+
+export const FormControlIcon = styled(FormControl).attrs({
+  fullWidth: true,
 })``;
 
 export const CheckBox = styled(Checkbox).attrs({
@@ -33,7 +48,7 @@ export const SubmitButton = styled(Button).attrs({
   height: 3.5rem;
 `;
 
-export const FormControl = styled(FormControlLabel).attrs({
+export const Control = styled(FormControlLabel).attrs({
   label: "Remember me",
   sx: {
     '& .MuiSvgIcon-root': { fontSize: 20 },
