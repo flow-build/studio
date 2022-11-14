@@ -58,10 +58,10 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
 
   const getAllDiagrams = useCallback(async () => {
-
     const diagramsId = await listByWorkflowId(workflowId as string);
     dispatch(setDiagramSelected(diagramsId));
 
@@ -73,9 +73,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
     );
     dialogPageState?.confirmationDialog?.data(diagramsId);
     dispatch(setDiagramSelected(undefined));
-
   }, [workflowId, dispatch, dialogPageState?.confirmationDialog]);
-
 
   const actions = getActions();
 
@@ -100,7 +98,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
           setSaveDialogOpen(true);
           const { xml } = await diagram.modeler.saveXML();
           setXml(xml);
-          console.log(xml)
+          console.log(xml);
         },
       },
       {
@@ -109,8 +107,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onClick: async () => {
           setEditDialogOpen(true);
           const { xml } = await diagram.modeler.saveXML();
+          console.log({ xml });
           setXml(xml);
-          
         },
       },
       {
@@ -225,17 +223,22 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      <S.SaveDiagramDialog
-        isOpen={isSaveDialogOpen}
-        onClose={() => setSaveDialogOpen(false)}
-        xml={xml}
-      />
+      {!_isEmpty(dialogPageState.diagramSelected) && (
+        <S.SaveDiagramDialog
+          isOpen={isSaveDialogOpen}
+          onClose={() => setSaveDialogOpen(false)}
+          xml={xml}
+        />
+      )}
 
-      <S.EditDiagramDialog
-        isOpen={isEditDialogOpen}
-        onClose={() => setEditDialogOpen(false)}
-        xml={xml}
-      />
+      {!_isEmpty(dialogPageState.diagramSelected) && (
+        <S.EditDiagramDialog
+          isOpen={isEditDialogOpen}
+          onClose={() => setEditDialogOpen(false)}
+          xml={xml}
+        />
+      )}
+
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog

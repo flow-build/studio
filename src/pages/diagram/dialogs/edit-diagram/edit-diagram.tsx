@@ -11,6 +11,11 @@ import { IEdit } from "./types/IEdit";
 import { edit } from "services/resources/diagrams/edit";
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 import { TUser } from "models/user";
+import { list } from "services/resources/diagrams/list";
+import { listById } from "services/resources/diagrams/list-by-id";
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { setDiagramSelected } from "store/slices/dialog";
+import { useDispatch } from "react-redux";
 
 type Props = {
   isOpen: boolean;
@@ -25,6 +30,7 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
   const diagram = useDiagram();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   function getUserInfo() {
     const token = getStorageItem("TOKEN");
@@ -34,11 +40,12 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   }
 
   const [payload, setPayload] = useState<IEdit>({
+    id: "",
     name: "",
     xml: "",
   });
 
-  console.log(payload, 'payload');
+  console.log(payload, "payload");
 
   const onChangeDiagram = async (valor: string, campo: keyof IEdit) => {
     setPayload((prev) => ({ ...prev, [campo]: valor }));
@@ -53,17 +60,30 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
   async function handleClickDiagramUpdate() {
     const info = getUserInfo();
-    console.log(info);
+    console.log(info, "info");
 
     const diagramName = payload?.name;
 
+    const responseDiagramId = await list();
+    console.log(responseDiagramId, "responsediagramid");
+
+    const diagramId = responseDiagramId.map((diagram: any) => diagram.id);
+    console.log(diagramId, "DIAGRAM ID");
+
+    const diagramById = await listById(diagramId)
+    console.log(diagramById, 'DIAGRAM BY ID LIST')
+
+    const responseWorkflow = await listByWorkflowId(workflowId as string);
+    console.log(responseWorkflow, 'responseWorkflow')
+    
     const response = await edit({
       name: payload.name,
-      id: info.id,
+      id: diagramById,
       xml,
     });
-
+    
     console.log(response, "RESPONSE");
+    dispatch(setDiagramSelected(response));
 
     updateDiagramSuccess(diagramName);
 
