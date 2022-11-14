@@ -8,11 +8,8 @@ import { EyeIcon } from "pages/register/components/eye-icon";
 import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 import { getAnonymousToken } from "services/resources/token";
 import { setStorageItem } from "shared/utils/storage";
-import { ForgotPassword } from "pages/register/components/sign-in/components/forgot-password";
 
 import * as S from "./styles";
-import { InputLabel } from "@mui/material";
-import { EyeIcon } from "../eye-icon";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
