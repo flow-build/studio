@@ -46,7 +46,7 @@ export const AppRoutes = () => {
             element={<History />}
           />
           <Route
-            path="workflows/:workflowId/diagram"
+            path="workflows/:workflowId/diagram/:id"
             element={<DiagramRefactored />}
           />
           <Route path="compare-json" element={<CompareJson />} />
