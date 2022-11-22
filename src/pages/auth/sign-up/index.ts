@@ -1,1 +1,1 @@
-export * from "./sign-up"
+export { SignUp } from "./sign-up"
