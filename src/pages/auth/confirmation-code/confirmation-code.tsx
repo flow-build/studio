@@ -5,16 +5,23 @@ import { Auth } from "aws-amplify";
 import _isEmpty from "lodash/isEmpty";
 
 import { Logo } from "pages/auth/components/logo";
+import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
 
 export const ConfirmationCode = () => {
   const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const [payload, setPayload] = useState({
     email: "",
     confirmationCode: "",
   });
+
+  const [inputError, setInputError] = useState(false);
+
   const disabled = _isEmpty(payload.email && payload.confirmationCode);
 
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
@@ -22,8 +29,13 @@ export const ConfirmationCode = () => {
       e.preventDefault();
       await Auth.confirmSignUp(payload.email, payload.confirmationCode);
       navigate("./dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      setInputError(true);
+      enqueueSnackbar(error.message, {
+        autoHideDuration: 2000,
+        variant: "error",
+      });
     }
   }
 
@@ -32,6 +44,7 @@ export const ConfirmationCode = () => {
       ...prev,
       [name]: value,
     }));
+    setInputError(false);
   }
 
   return (
@@ -46,6 +59,7 @@ export const ConfirmationCode = () => {
               name="email"
               placeholder="Type your e-mail"
               onChange={({ target }) => handleChange(target.name, target.value)}
+              error={inputError}
             />
             <S.Input
               label="Confirmation Code"
@@ -53,6 +67,7 @@ export const ConfirmationCode = () => {
               name="confirmationCode"
               placeholder="Type your confirmation code"
               onChange={({ target }) => handleChange(target.name, target.value)}
+              error={inputError}
             />
             <S.SubmitContainer>
               <S.SubmitButton title={"Submit"} disabled={disabled} />
