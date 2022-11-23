@@ -4,14 +4,18 @@ import { Auth } from "aws-amplify";
 
 import _isEqual from "lodash/isEqual";
 
+import { AwsError } from "constants/aws-error";
 import { EyeIcon } from "pages/auth/components/eye-icon";
 import { Logo } from "pages/auth/components/logo";
+import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
 
 export const SignUp = () => {
   const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [payload, setPayload] = useState({
     email: "",
@@ -41,10 +45,17 @@ export const SignUp = () => {
         username: payload.email,
         password: payload.password,
       });
-      navigate("confirm-password")
-    } catch (error) {
+      navigate("confirm-password");
+    } catch (error: any) {
+      if(error.code === AwsError.EMAIL_ALREADY_EXIST ){
+        navigate("/error")
+      }
       console.log(error);
       setInputError(true);
+      enqueueSnackbar(error.message, {
+        autoHideDuration: 2000,
+        variant: "error",
+      });
     }
   }
 
