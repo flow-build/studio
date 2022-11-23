@@ -18,6 +18,8 @@ export const ForgotPassword = () => {
 
   const [resetPassword, setResetPassword] = useState(false);
 
+  const [inputError, setInputError] = useState(false);
+
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
       e.preventDefault();
@@ -26,6 +28,7 @@ export const ForgotPassword = () => {
       await Auth.forgotPassword(email);
       setResetPassword(true);
     } catch (error) {
+      setInputError(true)
       setResetPassword(false);
       console.log(error);
     }
@@ -33,6 +36,7 @@ export const ForgotPassword = () => {
 
   function handleChange(name: string, value: string) {
     setPayload((prev) => ({ ...prev, [name]: value }));
+    setInputError(false)
   }
 
   return (
@@ -48,6 +52,7 @@ export const ForgotPassword = () => {
                 onChange={({ target }) =>
                   handleChange(target.name, target.value)
                 }
+                error={inputError}
               />
               <S.SubmitContainer>
                 <S.BackButton onClick={() => navigate("/")} />
