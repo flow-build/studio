@@ -38,6 +38,9 @@ export const SignIn = () => {
       setStorageItem("TOKEN", token);
       navigate("/dashboard");
     } catch (error: any) {
+      if (error.code === AwsError.USER_NOT_CONFIRMED) {
+        navigate("/confirmation-code")
+      }
       console.log(error);
       setInputError(true);
       enqueueSnackbar(error.message, {
