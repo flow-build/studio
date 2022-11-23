@@ -28,7 +28,7 @@ export const ConfirmationCode = () => {
     try {
       e.preventDefault();
       await Auth.confirmSignUp(payload.email, payload.confirmationCode);
-      navigate("./dashboard");
+      navigate("/dashboard");
     } catch (error: any) {
       console.log(error);
       setInputError(true);
