@@ -32,6 +32,8 @@ export const SignUp = () => {
     confirmPassword: false,
   });
 
+  const [inputError, setInputError] = useState(false);
+
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
       e.preventDefault();
@@ -42,6 +44,7 @@ export const SignUp = () => {
       navigate("confirm-password")
     } catch (error) {
       console.log(error);
+      setInputError(true);
     }
   }
 
@@ -50,6 +53,7 @@ export const SignUp = () => {
       ...prev,
       [name]: value,
     }));
+    setInputError(false);
   }
 
   function getIsDisabled() {
@@ -103,6 +107,7 @@ export const SignUp = () => {
             <S.Input
               value={payload.email}
               onChange={({ target }) => handleChange(target.name, target.value)}
+              error={inputError}
             />
             <S.FormControlIcon>
               <S.Label>Password</S.Label>
@@ -112,6 +117,7 @@ export const SignUp = () => {
                 placeholder="Type your password"
                 type={showSecurityText.password ? "text" : "password"}
                 value={payload.password}
+                error={inputError}
                 onChange={({ target }) =>
                   handlePassword(target.name, target.value)
                 }
@@ -131,6 +137,7 @@ export const SignUp = () => {
                 placeholder="Confirm your password"
                 type={showSecurityText.confirmPassword ? "text" : "password"}
                 value={payload.confirmPassword}
+                error={inputError}
                 onChange={({ target }) =>
                   handleChange(target.name, target.value)
                 }

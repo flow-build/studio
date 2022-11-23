@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Auth, Cache } from "aws-amplify";
+import { Amplify, Auth, Cache } from "aws-amplify";
+import amplifyConfig from "amplify-config";
 
+import { AwsError } from "constants/aws-error";
 import { EyeIcon } from "pages/auth/components/eye-icon";
 import { getAnonymousToken } from "services/resources/token";
 import { Logo } from "pages/auth/components/logo";
 import { setStorageItem } from "shared/utils/storage";
+import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
+
+Amplify.configure(amplifyConfig);
 
 export const SignIn = () => {
   const [payload, setPayload] = useState({
@@ -20,19 +25,25 @@ export const SignIn = () => {
 
   const navigate = useNavigate();
 
-  async function handleSubmit() {
+  const { enqueueSnackbar } = useSnackbar();
+
+  async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
+      e.preventDefault();
       const response = await Auth.signIn({
         username: payload.email,
         password: payload.password,
       });
-
       const token = await getAnonymousToken(response.username);
       setStorageItem("TOKEN", token);
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setInputError(true);
+      enqueueSnackbar(error.message, {
+        autoHideDuration: 2000,
+        variant: "error",
+      });
     }
   }
 
@@ -98,6 +109,7 @@ export const SignIn = () => {
                 onChange={({ target }) =>
                   handleChange(target.name, target.value)
                 }
+                error={inputError}
                 endAdornment={
                   <EyeIcon onClick={(evento) => setShowPassword(evento)} />
                 }
@@ -115,9 +127,7 @@ export const SignIn = () => {
             <S.ForgotPasswordButton
               onClick={() => navigate("/forgot-password")}
             />
-            <S.RegisterButton
-              onClick={() => navigate("/sign-up")}
-            />
+            <S.RegisterButton onClick={() => navigate("/sign-up")} />
           </S.ButtonsContainer>
         </S.LoginContainer>
       </S.Container>
