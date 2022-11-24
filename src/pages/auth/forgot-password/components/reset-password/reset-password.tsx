@@ -20,9 +20,8 @@ export const ResetPassword = () => {
     setInputError(false);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+  async function handleSubmit() {
     try {
-      e.preventDefault();
       const { email, password, code } = payload;
       await Auth.forgotPasswordSubmit(email, code, password);
       navigate("/");
@@ -33,7 +32,7 @@ export const ResetPassword = () => {
   }
 
   return (
-    <S.Form onSubmit={handleSubmit}>
+    <>
       <S.Input
         label="Email"
         type="text"
@@ -59,11 +58,9 @@ export const ResetPassword = () => {
         error={inputError}
       />
       <S.SubmitContainer>
-        <S.ResendCodeButton
-          onClick={() => Auth.resendSignUp(payload.email)}
-        />
-        <S.SubmitButton title="Reset Password" />
+        <S.ResendCodeButton onClick={() => Auth.resendSignUp(payload.email)} />
+        <S.SubmitButton title="Reset Password" onClick={handleSubmit} />
       </S.SubmitContainer>
-    </S.Form>
+    </>
   );
 };

@@ -1,68 +1,46 @@
 import styled from "styled-components";
 
-import Box from "@mui/material/Box";
 import DialogContentText from "@mui/material/DialogContentText";
-import Grid from "@mui/material/Grid";
 import { FormControl, OutlinedInput, InputLabel } from "@mui/material";
+
+import { GridWrapper } from "pages/auth/components/grid-wrapper";
 
 import { Button } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
 
-export const Wrapper = styled(Grid).attrs({
-    container: true,
-    flexDirection: "column",
-    sx: {
-        height: "100vh",
-        background: (theme) => theme.palette.background.default,
-    },
-})``;
-
-export const Container = styled.div`
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-  `;
-
-export const LoginContainer = styled(Box).attrs({
-    sx: { width: 320 },
-})``;
-
-export const Form = styled(Box).attrs({
-    component: "form",
-})``;
+export const Wrapper = styled(GridWrapper)``;
 
 export const Input = styled(InputText).attrs({
-    label: "E-mail",
-    type: "text",
-    name: "email",
-    placeholder: "Type your e-mail",
-    fullWidth: true,
-    required: true,
-    sx: { mb: 2 },
+  label: "E-mail",
+  type: "text",
+  name: "email",
+  placeholder: "Type your e-mail",
+  fullWidth: true,
+  required: true,
+  sx: { mb: 2 },
 })``;
 
 export const FormControlIcon = styled(FormControl).attrs({
-    fullWidth: true,
+  fullWidth: true,
 })``;
 
 export const Label = styled(InputLabel)``;
 
 export const InputPassword = styled(OutlinedInput).attrs({
-    fullWidth: true,
-    required: true,
-    sx: { mb: 2 },
+  fullWidth: true,
+  required: true,
+  sx: { mb: 2 },
 })`
-    width: 100%;
+  width: 100%;
 `;
 
 export const PasswordContainer = styled.div`
-    display:flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 5px;
-    padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 5px;
+  padding-bottom: 15px;
 `;
 
 export const PasswordItens = styled.div<{ isDisabled: boolean }>`
@@ -77,7 +55,7 @@ export const PasswordItens = styled.div<{ isDisabled: boolean }>`
 `;
 
 export const Text = styled(DialogContentText)`
-    font-size:12px;
+  font-size: 12px;
 `;
 
 export const SubmitContainer = styled.div`
@@ -91,19 +69,19 @@ export const SubmitContainer = styled.div`
 `;
 
 export const SubmitButton = styled(Button).attrs({
-    type: "submit",
-    title: "Submit",
-    variant: "contained",
-    fullWidth: true,
+  type: "submit",
+  title: "Submit",
+  variant: "contained",
+  fullWidth: true,
 })`
-    height: 3.5rem;
+  height: 3.5rem;
 `;
 
 export const BackButton = styled(Button).attrs({
-    type: "button",
-    title: "Back",
-    variant: "outlined",
-    fullWidth: true,
+  type: "button",
+  title: "Back",
+  variant: "outlined",
+  fullWidth: true,
 })`
-    height: 3.5rem;
-  `;
+  height: 3.5rem;
+`;
