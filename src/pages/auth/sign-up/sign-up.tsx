@@ -6,9 +6,7 @@ import _isEqual from "lodash/isEqual";
 
 import { AwsError } from "constants/aws-error";
 import { EyeIcon } from "pages/auth/components/eye-icon";
-import { Logo } from "pages/auth/components/logo";
 import { useSnackbar } from "notistack";
-import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
 
@@ -47,8 +45,8 @@ export const SignUp = () => {
       });
       navigate("confirm-password");
     } catch (error: any) {
-      if(error.code === AwsError.EMAIL_ALREADY_EXIST ){
-        navigate("/error")
+      if (error.code === AwsError.EMAIL_ALREADY_EXIST) {
+        navigate("/error");
       }
       console.log(error);
       setInputError(true);
@@ -110,88 +108,72 @@ export const SignUp = () => {
   }
 
   return (
-    <S.Wrapper>
-      <S.Container>
-        <S.LoginContainer>
-          <Logo />
-          <S.Form onSubmit={handleSubmit}>
-            <S.Input
-              value={payload.email}
-              onChange={({ target }) => handleChange(target.name, target.value)}
-              error={inputError}
+    <S.Wrapper onSubmit={handleSubmit}>
+      <S.Input
+        value={payload.email}
+        onChange={({ target }) => handleChange(target.name, target.value)}
+        error={inputError}
+      />
+      <S.FormControlIcon>
+        <S.Label>Password</S.Label>
+        <S.InputPassword
+          label="Password"
+          name="password"
+          placeholder="Type your password"
+          type={showSecurityText.password ? "text" : "password"}
+          value={payload.password}
+          error={inputError}
+          onChange={({ target }) => handlePassword(target.name, target.value)}
+          endAdornment={
+            <EyeIcon
+              onClick={(evento) => handleSecurityText("password", evento)}
             />
-            <S.FormControlIcon>
-              <S.Label>Password</S.Label>
-              <S.InputPassword
-                label="Password"
-                name="password"
-                placeholder="Type your password"
-                type={showSecurityText.password ? "text" : "password"}
-                value={payload.password}
-                error={inputError}
-                onChange={({ target }) =>
-                  handlePassword(target.name, target.value)
-                }
-                endAdornment={
-                  <EyeIcon
-                    onClick={(evento) => handleSecurityText("password", evento)}
-                  />
-                }
-              />
-            </S.FormControlIcon>
+          }
+        />
+      </S.FormControlIcon>
 
-            <S.FormControlIcon>
-              <S.Label>Confirm Password</S.Label>
-              <S.InputPassword
-                label="Confirm Password"
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                type={showSecurityText.confirmPassword ? "text" : "password"}
-                value={payload.confirmPassword}
-                error={inputError}
-                onChange={({ target }) =>
-                  handleChange(target.name, target.value)
-                }
-                endAdornment={
-                  <EyeIcon
-                    onClick={(evento) =>
-                      handleSecurityText("confirmPassword", evento)
-                    }
-                  />
-                }
-              />
-            </S.FormControlIcon>
+      <S.FormControlIcon>
+        <S.Label>Confirm Password</S.Label>
+        <S.InputPassword
+          label="Confirm Password"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          type={showSecurityText.confirmPassword ? "text" : "password"}
+          value={payload.confirmPassword}
+          error={inputError}
+          onChange={({ target }) => handleChange(target.name, target.value)}
+          endAdornment={
+            <EyeIcon
+              onClick={(evento) =>
+                handleSecurityText("confirmPassword", evento)
+              }
+            />
+          }
+        />
+      </S.FormControlIcon>
 
-            <S.PasswordContainer>
-              <S.PasswordItens
-                isDisabled={passwordAttributes.hasMinimumCharacters}
-              >
-                <S.Text> Length between 8 and 256</S.Text>
-              </S.PasswordItens>
-              <S.PasswordItens isDisabled={passwordAttributes.hasUppercase}>
-                <S.Text> Uppercase letter</S.Text>
-              </S.PasswordItens>
-              <S.PasswordItens isDisabled={passwordAttributes.hasLowercase}>
-                <S.Text> Lowercase letter</S.Text>
-              </S.PasswordItens>
-              <S.PasswordItens isDisabled={passwordAttributes.hasNumber}>
-                <S.Text> Has number </S.Text>
-              </S.PasswordItens>
-              <S.PasswordItens
-                isDisabled={passwordAttributes.hasSpecialCharacters}
-              >
-                <S.Text> Special character</S.Text>
-              </S.PasswordItens>
-            </S.PasswordContainer>
+      <S.PasswordContainer>
+        <S.PasswordItens isDisabled={passwordAttributes.hasMinimumCharacters}>
+          <S.Text> Length between 8 and 256</S.Text>
+        </S.PasswordItens>
+        <S.PasswordItens isDisabled={passwordAttributes.hasUppercase}>
+          <S.Text> Uppercase letter</S.Text>
+        </S.PasswordItens>
+        <S.PasswordItens isDisabled={passwordAttributes.hasLowercase}>
+          <S.Text> Lowercase letter</S.Text>
+        </S.PasswordItens>
+        <S.PasswordItens isDisabled={passwordAttributes.hasNumber}>
+          <S.Text> Has number </S.Text>
+        </S.PasswordItens>
+        <S.PasswordItens isDisabled={passwordAttributes.hasSpecialCharacters}>
+          <S.Text> Special character</S.Text>
+        </S.PasswordItens>
+      </S.PasswordContainer>
 
-            <S.SubmitContainer>
-              <S.BackButton onClick={() => navigate("/")} />
-              <S.SubmitButton disabled={getIsDisabled()} />
-            </S.SubmitContainer>
-          </S.Form>
-        </S.LoginContainer>
-      </S.Container>
-      <Version />
+      <S.SubmitContainer>
+        <S.BackButton onClick={() => navigate("/")} />
+        <S.SubmitButton disabled={getIsDisabled()} />
+      </S.SubmitContainer>
     </S.Wrapper>
   );
 };
