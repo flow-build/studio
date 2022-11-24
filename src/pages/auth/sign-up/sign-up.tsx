@@ -43,7 +43,7 @@ export const SignUp = () => {
         username: payload.email,
         password: payload.password,
       });
-      navigate("confirm-password");
+      navigate("/confirmation-code");
     } catch (error: any) {
       if (error.code === AwsError.EMAIL_ALREADY_EXIST) {
         navigate("/error");
