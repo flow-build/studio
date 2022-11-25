@@ -18,7 +18,7 @@ import { useDiagram } from "pages/diagram/hooks/useDiagram";
 import { usePaint } from "pages/diagram/hooks/usePaint";
 
 import { getHistoryByProcessId } from "services/resources/processes/history";
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { Fab } from "shared/components/fab";
 
@@ -41,11 +41,13 @@ import {
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
+import { IEdit } from "./dialogs/edit-diagram/types/IEdit";
 
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
+  const { id } = useParams();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,7 +64,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const [xml, setXml] = useState("");
 
   const getAllDiagrams = useCallback(async () => {
-    const diagramsId = await listByWorkflowId(workflowId as string);
+    const diagramsId = await listDiagramByWorkflowId(workflowId as string);
     dispatch(setDiagramSelected(diagramsId));
 
     dispatch(
@@ -98,7 +100,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
           setSaveDialogOpen(true);
           const { xml } = await diagram.modeler.saveXML();
           setXml(xml);
-          console.log(xml);
         },
       },
       {
@@ -106,9 +107,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
         tooltip: "Editar Diagrama",
         onClick: async () => {
           setEditDialogOpen(true);
-          const { xml } = await diagram.modeler.saveXML();
-          console.log({ xml });
-          setXml(xml);
         },
       },
       {
@@ -151,14 +149,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
   async function onSelectDiagram(diagram: TUser) {
     resetColor();
     dispatch(setDiagramSelected(diagram));
-    navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
+    navigate(
+      `/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`
+    );
   }
 
   useEffect(() => {
-    if (!_isEmpty(workflowId)) {
-      diagram.loadDiagram(workflowId ?? "");
+    if (!_isEmpty(workflowId || id)) {
+      diagram.loadDiagram((workflowId || id) ?? "");
     }
-  }, [diagram, workflowId]);
+  }, [diagram, workflowId, id]);
 
   useEffect(() => {
     const paintElementsByProcessId = async () => {
@@ -235,10 +235,9 @@ export const DiagramRefactored: React.FC<Props> = () => {
         <S.EditDiagramDialog
           isOpen={isEditDialogOpen}
           onClose={() => setEditDialogOpen(false)}
-          xml={xml}
+          id={id as string}
         />
       )}
-
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
