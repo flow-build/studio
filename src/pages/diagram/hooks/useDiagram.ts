@@ -26,10 +26,13 @@ import { ConnectElement } from "pages/diagram/components/context-pad/connect-ele
 import { ReceiveData } from "../components/context-pad/receive-data";
 
 import { listByWorkflowId } from "services/resources/workflows/list-by-workflow-id";
+import { listById } from "services/resources/diagrams/list-by-id";
 import { useDispatch, useSelector } from "react-redux";
 import { setElement } from "store/slices/diagram";
 
 import { RootState } from "store";
+import { useParams } from "react-router-dom";
+import { setDiagramSelected } from "store/slices/dialog";
 
 interface IColor {
   backgroundColor?: string;
@@ -50,6 +53,8 @@ export function useDiagram() {
   const theme = useTheme();
 
   const diagramBPMN = useRef();
+
+  const { id } = useParams();
 
   const [initialElements, setInitialElements] = useState<IElement[]>([]);
   const [diagramXML, setDiagramXML] = useState<any>();
@@ -81,10 +86,18 @@ export function useDiagram() {
     }
   }
 
-  const loadDiagram = useCallback(async (id: string) => {
-    const response = await listByWorkflowId(id);
-    setDiagramXML(response);
-  }, []);
+  const loadDiagram = useCallback(
+    async (workflowId: string) => {
+      const response = await listByWorkflowId(workflowId);
+      await listById(id as string);
+      if (!_isEmpty(response)) {
+        dispatch(setDiagramSelected(response));
+        setDiagramXML(response);
+      }
+      return;
+    },
+    [dispatch, id]
+  );
 
   const createModeler = useCallback(() => {
     const editIcons = [
@@ -258,3 +271,4 @@ export function useDiagram() {
     initialElements,
   };
 }
+
