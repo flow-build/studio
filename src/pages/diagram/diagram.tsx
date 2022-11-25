@@ -41,7 +41,7 @@ import {
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
-import { IEdit } from "./dialogs/edit-diagram/types/IEdit";
+
 
 type Props = {};
 

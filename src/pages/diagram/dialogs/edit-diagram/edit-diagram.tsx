@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { IEdit } from "./types/IEdit";
 import { edit } from "services/resources/diagrams/edit";
@@ -7,10 +7,7 @@ import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
-import { useDispatch, useSelector } from "react-redux";
-import { setDiagramElement, setDiagramSelected } from "store/slices/dialog";
-import { RootState } from "store";
-import { useParams } from "react-router-dom";
+
 
 type Props = {
   isOpen: boolean;
@@ -23,9 +20,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const diagram = useDiagram();
-  const dispatch = useDispatch();
-
-  const {workflowId} = useParams();
 
   const [payload, setPayload] = useState<IEdit>({
     id,
@@ -58,7 +52,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
       xml: xml,
     });
 
-    diagram.modeler.importXML(response)
     setPayload(response)
 
     console.log("RESPONSE", response);
