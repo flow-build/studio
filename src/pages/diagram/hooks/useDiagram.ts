@@ -32,7 +32,6 @@ import { setElement } from "store/slices/diagram";
 
 import { RootState } from "store";
 import { useParams } from "react-router-dom";
-import { setDiagramSelected } from "store/slices/dialog";
 
 interface IColor {
   backgroundColor?: string;
@@ -89,14 +88,13 @@ export function useDiagram() {
   const loadDiagram = useCallback(
     async (workflowId: string) => {
       const response = await listByWorkflowId(workflowId);
-      await listById(id as string);
+      const xml = await listById(id as string);
       if (!_isEmpty(response)) {
-        dispatch(setDiagramSelected(response));
-        setDiagramXML(response);
+        setDiagramXML(xml);
       }
-      return;
+      return setDiagramXML(xml || response);
     },
-    [dispatch, id]
+    [id]
   );
 
   const createModeler = useCallback(() => {
