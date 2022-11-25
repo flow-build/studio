@@ -1,51 +1,39 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 
-import { getStorageItem, setStorageItem } from "shared/utils/storage";
-
-import { useSnackbar } from "notistack";
-import jwt_decode from "jwt-decode";
-
-import * as S from "./styles";
 import { IEdit } from "./types/IEdit";
 import { edit } from "services/resources/diagrams/edit";
+
+import { useSnackbar } from "notistack";
+
+import * as S from "./styles";
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
-import { TUser } from "models/user";
-import { list } from "services/resources/diagrams/list";
-import { listById } from "services/resources/diagrams/list-by-id";
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
-import { setDiagramSelected } from "store/slices/dialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setDiagramElement, setDiagramSelected } from "store/slices/dialog";
+import { RootState } from "store";
+import { useParams } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  xml: string;
+  id: string;
 };
 
-export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
+export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { workflowId } = useParams();
 
   const diagram = useDiagram();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function getUserInfo() {
-    const token = getStorageItem("TOKEN");
-    const decoded = jwt_decode(token) as TUser;
-    setStorageItem("TOKEN", token);
-    return decoded;
-  }
+  const {workflowId} = useParams();
 
   const [payload, setPayload] = useState<IEdit>({
-    id: "",
+    id,
     name: "",
     xml: "",
   });
 
-  console.log(payload, "payload");
+  console.log("payload", payload);
 
   const onChangeDiagram = async (valor: string, campo: keyof IEdit) => {
     setPayload((prev) => ({ ...prev, [campo]: valor }));
@@ -59,31 +47,21 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   }
 
   async function handleClickDiagramUpdate() {
-    const info = getUserInfo();
-    console.log(info, "info");
-
     const diagramName = payload?.name;
 
-    const responseDiagramId = await list();
-    console.log(responseDiagramId, "responsediagramid");
+    const { xml } = await diagram.modeler.saveXML();
+    console.log("xml", { xml });
 
-    const diagramId = responseDiagramId.map((diagram: any) => diagram.id);
-    console.log(diagramId, "DIAGRAM ID");
-
-    const diagramById = await listById(diagramId)
-    console.log(diagramById, 'DIAGRAM BY ID LIST')
-
-    const responseWorkflow = await listByWorkflowId(workflowId as string);
-    console.log(responseWorkflow, 'responseWorkflow')
-    
     const response = await edit({
       name: payload.name,
-      id: diagramById,
-      xml,
+      id,
+      xml: xml,
     });
-    
-    console.log(response, "RESPONSE");
-    dispatch(setDiagramSelected(response));
+
+    diagram.modeler.importXML(response)
+    setPayload(response)
+
+    console.log("RESPONSE", response);
 
     updateDiagramSuccess(diagramName);
 
@@ -105,9 +83,10 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
             value={payload?.name}
             onChange={(event) => onChangeDiagram(event.target.value, "name")}
           />
-          <S.DiagramInputXml
-            value={payload?.xml}
-            onChange={(event) => onChangeDiagram(event.target.value, "xml")}
+
+          <S.DiagramInputId
+            value={payload?.id}
+            onChange={(event) => onChangeDiagram(event.target.value, "id")}
           />
         </S.DiagramContent>
 

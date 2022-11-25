@@ -51,6 +51,15 @@ export const DiagramInputXml = styled(Input).attrs({
   variant: "outlined",
   label: "xml",
   sx: {
+    mr: 5,
+    width: "50ch",
+  },
+})``;
+
+export const DiagramInputId = styled(Input).attrs({
+  variant: "outlined",
+  label: "id",
+  sx: {
     width: "50ch",
   },
 })``;
