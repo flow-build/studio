@@ -22,12 +22,16 @@ export const SignIn = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [inputError, setInputError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
+    if (isLoading) {
+      return;
+    }
     try {
       e.preventDefault();
       const response = await Auth.signIn({
@@ -39,7 +43,7 @@ export const SignIn = () => {
       navigate("/dashboard");
     } catch (error: any) {
       if (error.code === AwsError.USER_NOT_CONFIRMED) {
-        navigate("/confirmation-code")
+        navigate("/confirmation-code");
       }
       console.log(error);
       setInputError(true);
@@ -123,7 +127,8 @@ export const SignIn = () => {
               control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
             />
 
-            <S.SubmitButton />
+            <S.SubmitButton></S.SubmitButton>
+            <S.Loading />
           </S.Form>
 
           <S.ButtonsContainer>
