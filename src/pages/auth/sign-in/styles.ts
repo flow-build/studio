@@ -4,8 +4,7 @@ import Box from "@mui/material/Box";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import { InputLabel } from "@mui/material";
-import { FormControl, OutlinedInput } from "@mui/material";
+import { FormControl, OutlinedInput, InputLabel, CircularProgress } from "@mui/material";
 
 import { Button } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
@@ -92,7 +91,14 @@ export const SubmitButton = styled(Button).attrs({
   fullWidth: true,
 })`
   height: 3.5rem;
+  postion: relattive;
 `;
+
+export const Loading = styled(CircularProgress).attrs({
+  color: "inherit",
+  size: "1.3rem",
+})`
+position: absolute;`;
 
 export const ButtonsContainer = styled.div`
   display: flex;
