@@ -47,23 +47,6 @@ export const DiagramInputName = styled(Input).attrs({
   },
 })``;
 
-export const DiagramInputXml = styled(Input).attrs({
-  variant: "outlined",
-  label: "xml",
-  sx: {
-    mr: 5,
-    width: "50ch",
-  },
-})``;
-
-export const DiagramInputId = styled(Input).attrs({
-  variant: "outlined",
-  label: "id",
-  sx: {
-    width: "50ch",
-  },
-})``;
-
 export const SaveDiagramButton = styled(Button).attrs({
   title: "salvar",
   variant: "text",

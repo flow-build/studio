@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-import { IEdit } from "./types/IEdit";
 import { edit } from "services/resources/diagrams/edit";
+import { IEdit } from "./types/IEdit";
+
+import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
 import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
-import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
 
 type Props = {
@@ -27,8 +28,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     xml: "",
   });
 
-  console.log("payload", payload);
-
   const onChangeDiagram = async (valor: string, campo: keyof IEdit) => {
     setPayload((prev) => ({ ...prev, [campo]: valor }));
   };
@@ -44,7 +43,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     const diagramName = payload?.name;
 
     const { xml } = await diagram.modeler.saveXML();
-    console.log("xml", { xml });
 
     const response = await edit({
       name: payload.name,
@@ -53,8 +51,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     });
 
     setPayload(response)
-
-    console.log("RESPONSE", response);
 
     updateDiagramSuccess(diagramName);
 
@@ -75,11 +71,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
           <S.DiagramInputName
             value={payload?.name}
             onChange={(event) => onChangeDiagram(event.target.value, "name")}
-          />
-
-          <S.DiagramInputId
-            value={payload?.id}
-            onChange={(event) => onChangeDiagram(event.target.value, "id")}
           />
         </S.DiagramContent>
 
