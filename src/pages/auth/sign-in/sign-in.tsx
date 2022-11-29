@@ -29,11 +29,12 @@ export const SignIn = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
-    if (isLoading) {
-      return;
-    }
     try {
       e.preventDefault();
+      if (isLoading) {
+        return;
+      }
+      setIsLoading(true);
       const response = await Auth.signIn({
         username: payload.email,
         password: payload.password,
@@ -41,12 +42,14 @@ export const SignIn = () => {
       const token = await getAnonymousToken(response.username);
       setStorageItem("TOKEN", token);
       navigate("/dashboard");
+      setIsLoading(false);
     } catch (error: any) {
       if (error.code === AwsError.USER_NOT_CONFIRMED) {
         navigate("/confirmation-code");
       }
       console.log(error);
       setInputError(true);
+      setIsLoading(false);
       enqueueSnackbar(error.message, {
         autoHideDuration: 2000,
         variant: "error",
@@ -127,8 +130,7 @@ export const SignIn = () => {
               control={<S.CheckBox onChange={changeAuthStorageConfiguration} />}
             />
 
-            <S.SubmitButton></S.SubmitButton>
-            <S.Loading />
+            <S.SubmitButton isLoading={isLoading} />
           </S.Form>
 
           <S.ButtonsContainer>
