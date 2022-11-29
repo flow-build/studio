@@ -53,8 +53,8 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
   async function handleClose() {
     try {
       await Auth.signOut();
+      navigate("/");
       setAnchor(null);
-      navigate("/")
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +83,11 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
           onClick={handleClick}
         />
 
-        <S.MenuList anchorEl={anchor} open={open} onClose={handleClose}>
+        <S.MenuList
+          anchorEl={anchor}
+          open={open}
+          onClose={() => setAnchor(null)}
+        >
           <S.MenuItemList onClick={handleClose}>Logout</S.MenuItemList>
         </S.MenuList>
       </Toolbar>
