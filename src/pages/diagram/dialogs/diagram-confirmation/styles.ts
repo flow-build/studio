@@ -6,68 +6,57 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { IconButton } from "shared/components/icon-button";
-import { Input } from "shared/components/content-header/styles";
 import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
 
-export const DiagramWrapper = styled(Dialog).attrs({
+export const Wrapper = styled(Dialog).attrs({
   fullWidth: true,
   maxWidth: "sm",
   scroll: "paper",
 })``;
 
-export const DiagramBackground = styled.div`
+export const ConfirmationBackground = styled.div`
   background-color: #161826;
 `;
 
-export const DiagramTitle = styled(DialogTitle)`
+export const ConfirmationTitle = styled(DialogTitle)`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-export const CloseDiagramButton = styled(IconButton).attrs({
+export const CloseConfirmationButton = styled(IconButton).attrs({
   icon: CloseIcon,
   ariaLabel: "close",
 })``;
 
-export const DiagramContent = styled(DialogContent)`
+export const ConfirmationContent = styled(DialogContent)`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 `;
 
-export const DiagramInput = styled(Input).attrs({
-  variant: "outlined",
-  label: "Nome do diagrama",
-  sx: {
-    mt: 5,
-    width: "50ch",
-  },
-})``;
-
-export const SaveDiagramButton = styled(Button).attrs({
+export const EditDiagramButton = styled(Button).attrs({
   title: "salvar",
   variant: "text",
 })``;
 
-export const CancelDiagramButton = styled(Button).attrs({
+export const SaveNewDiagramButton = styled(Button).attrs({
   title: "cancelar",
   variant: "text",
 })``;
 
-export const ButtonWrapper = styled.div`
+export const ButtonWrapperConfirmation = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
 `;
 
-export const DiagramDivider = styled(Divider)`
+export const ConfirmationDivider = styled(Divider)``;
 
-`;
-export const ButtonDivider = styled(Divider).attrs({
+export const ButtonConfirmationDivider = styled(Divider).attrs({
   orientation: "vertical",
   flexItem: true,
 })``;

@@ -37,27 +37,27 @@ export const DiagramConfirmation: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   return (
-    <S.DiagramWrapper open={isOpen} onClose={onClose}>
-      <S.DiagramBackground>
-        <S.DiagramTitle>
+    <S.Wrapper open={isOpen} onClose={onClose}>
+      <S.ConfirmationBackground>
+        <S.ConfirmationTitle>
           Salvar Diagrama
-          <S.CloseDiagramButton onClick={onClose} />
-        </S.DiagramTitle>
+          <S.CloseConfirmationButton onClick={onClose} />
+        </S.ConfirmationTitle>
 
-        <S.DiagramDivider />
+        <S.ConfirmationDivider />
 
-        <S.ButtonWrapper>
-          <S.CancelDiagramButton onClick={onSaveNewDiagram}>
+        <S.ButtonWrapperConfirmation>
+          <S.SaveNewDiagramButton onClick={onSaveNewDiagram}>
             Salvar Novo Diagrama
-          </S.CancelDiagramButton>
+          </S.SaveNewDiagramButton>
 
-          <S.ButtonDivider />
+          <S.ButtonConfirmationDivider />
 
-          <S.SaveDiagramButton onClick={onSubscribeDiagram}>
+          <S.EditDiagramButton onClick={onSubscribeDiagram}>
             Sobrescrever Diagrama
-          </S.SaveDiagramButton>
-        </S.ButtonWrapper>
-      </S.DiagramBackground>
-    </S.DiagramWrapper>
+          </S.EditDiagramButton>
+        </S.ButtonWrapperConfirmation>
+      </S.ConfirmationBackground>
+    </S.Wrapper>
   );
 };
