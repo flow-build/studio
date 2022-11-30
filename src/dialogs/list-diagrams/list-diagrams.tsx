@@ -21,7 +21,6 @@ export const ListDiagrams: React.FC<Props> = ({
   onSelectDiagram,
 }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const data = useSelector(
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
