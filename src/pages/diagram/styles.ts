@@ -10,6 +10,8 @@ import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
+import { DeleteDiagram } from "./dialogs/delete-diagram";
+import { ConfirmationDelete } from "./dialogs/confirmation-delete";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -25,6 +27,10 @@ export const ListProcessesDialog = styled(ListProcesses)``;
 export const ListDiagramsDialog = styled(ListDiagrams)``;
 
 export const SaveDiagramDialog = styled(SaveDiagram)``;
+
+export const DeleteDiagramDialog = styled(DeleteDiagram)``;
+
+export const DeleteConfirmation = styled(ConfirmationDelete)``;
 
 export const PropertiesDialog = styled(Properties)``;
 
