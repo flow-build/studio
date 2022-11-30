@@ -137,11 +137,12 @@ export const diagramSlice = createSlice({
         data: action.payload.data ?? {},
       };
     },
+
     setDeleteConfirmationDialog: (
       state,
       action: PayloadAction<{ isVisible: boolean; data?: any }>
     ) => {
-      state.deleteDialog = {
+      state.deleteConfirmationDialog = {
         isVisible: action.payload.isVisible,
         data: action.payload.data ?? {},
       };
