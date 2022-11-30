@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
 import { TUser } from "models/user";
-import { IDelete } from "./types/IDelete";
 import { deleteDiagram } from "services/resources/diagrams/delete";
+import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
 
 type Props = {
   isOpen: boolean;
@@ -18,10 +20,11 @@ type Props = {
 export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [payload, setPayload] = useState<IDelete>({
-    name: "",
-    id,
-  });
+  const { workflowId } = useParams();
+
+  const [diagram, setDiagram] = useState<TUser | undefined>();
+  
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
   function deleteDiagramMessage(message: string) {
     enqueueSnackbar(`Diagrama ${message} deletado!`, {
@@ -30,12 +33,22 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     });
   }
 
+  useEffect(() => {
+    const requestDiagram = async () => {
+      await listByWorkflowId(workflowId as string);
+      setDiagram(dialogPageState.diagramSelected);
+    };
+
+    requestDiagram();
+
+  }, [dialogPageState.diagramSelected, workflowId]);
+
   async function handleDeleteDiagram() {
-    const diagramName = payload?.name;
+    const diagramName = diagram?.name;
 
     await deleteDiagram(id);
 
-    deleteDiagramMessage(diagramName);
+    deleteDiagramMessage(diagramName as string);
 
     if (onClose) {
       onClose();
@@ -46,7 +59,7 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     <S.DeleteWrapper open={isOpen} onClose={onClose}>
       <S.DiagramDeleteBackground>
         <S.DiagramDeleteTitle>
-          Deletar Diagrama
+          Deletar diagrama {diagram?.name}?
           <S.CloseDiagram onClick={onClose} />
         </S.DiagramDeleteTitle>
 
@@ -58,7 +71,7 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
           <S.DeleteButtonDivider />
 
           <S.DeleteDiagramButton onClick={handleDeleteDiagram}>
-                Apagar
+            Apagar
           </S.DeleteDiagramButton>
         </S.Wrapper>
       </S.DiagramDeleteBackground>
