@@ -7,6 +7,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -26,6 +27,8 @@ import { RootState } from "store";
 import { IAction } from "shared/components/fab/types/IAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setDeleteConfirmationDialog,
+  setDeleteDialog,
   setProcessSelected,
   setShowConfirmationDialog,
   setShowProcessInfoDialog,
@@ -46,6 +49,8 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
+  const { id } = useParams();
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -112,6 +117,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         tooltip: "Resetar cor",
         onClick: resetColor,
       },
+      {
+        icon: <DeleteIcon />,
+        tooltip: "Excluir diagrama",
+        onClick: () => dispatch(setDeleteConfirmationDialog({isVisible: true})),
+      },
     ];
 
     if (!_isEmpty(diagramPageState.processSelected)) {
@@ -142,7 +152,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
   async function onSelectDiagram(diagram: TUser) {
     resetColor();
     dispatch(setDiagramSelected(diagram));
-    navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
+    navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`);
   }
 
   useEffect(() => {
@@ -218,6 +228,19 @@ export const DiagramRefactored: React.FC<Props> = () => {
         isOpen={isSaveDialogOpen}
         onClose={() => setSaveDialogOpen(false)}
         xml={xml}
+      />
+
+      {(!_isEmpty(dialogPageState.diagramSelected)) && (
+        <S.DeleteDiagramDialog
+          isOpen={diagramPageState.deleteDialog.isVisible}
+          onClose={() => dispatch(setDeleteDialog({ isVisible: false }))}
+          id={id as string}
+        />
+      )}
+
+      <S.DeleteConfirmation 
+        isOpen={diagramPageState.deleteConfirmationDialog.isVisible}
+        onClose={() => dispatch(setDeleteConfirmationDialog({ isVisible: false }))}
       />
 
       {diagramPageState.propertiesDialog.isVisible && (
