@@ -6,7 +6,7 @@ import { RootState } from "store";
 import { getShortFormatByDate } from "shared/utils/date";
 
 import * as S from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
@@ -21,6 +21,7 @@ export const ListDiagrams: React.FC<Props> = ({
   onSelectDiagram,
 }) => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const data = useSelector(
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
@@ -33,7 +34,7 @@ export const ListDiagrams: React.FC<Props> = ({
     }
     if (onSelectDiagram) {
       onSelectDiagram(diagram);
-      navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
+      navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`);
     }
   }
 
