@@ -25,13 +25,13 @@ export const Logo = styled.img.attrs({
 })`
   width: 180px;
   cursor: pointer;
-`
+`;
 
-export const Avatar = styled(MuiAvatar)``
+export const Avatar = styled(MuiAvatar)`
+cursor: pointer;
+`;
 
-export const MenuList = styled(Menu).attrs({
-
-})``;
+export const MenuList = styled(Menu)``;
 
 export const MenuItemList = styled(MenuItem).attrs({
   anchorOrigin: {
@@ -41,5 +41,6 @@ export const MenuItemList = styled(MenuItem).attrs({
   transformOrigin: {
     vertical: 'top',
     horizontal: 'left',
-  }
+  },
+  textOverflow: 'ellipsis'
 })``;
