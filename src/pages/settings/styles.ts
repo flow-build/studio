@@ -5,6 +5,7 @@ import { Button as BaseButton } from "shared/components/button";
 import { Form as BaseForm } from "pages/settings/components/form";
 
 import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 export const Wrapper = styled(Box).attrs({
   sx: {
@@ -15,12 +16,12 @@ export const Wrapper = styled(Box).attrs({
     background: (theme) => theme.palette.background.default,
   },
 })`
-  width: "100vw";
-  height: "100vh";
+height: calc(100% - 64px);
 `;
 
-export const Title = styled.h1`
-  color: #fff;
+export const Title = styled(Typography).attrs({
+  variant: "h3",
+})`
   margin: 2rem 1rem;
 `;
 

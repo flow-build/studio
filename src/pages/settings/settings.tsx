@@ -10,6 +10,12 @@ import { setBaseUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
+import {
+  removeProtocolHttps,
+  removeProtocolWs,
+  urlHasProtocolHttp,
+  urlHasProtocolWs,
+} from "./utils/string";
 
 import * as S from "./styles";
 
@@ -48,59 +54,84 @@ export const Settings: React.FC = () => {
     setStorageItem("TOKEN", token);
   }
   async function onSubmitServer(payload: IPayloadForm) {
-    try {
-      setIsLoadingServer(true);
-      await healthcheck(payload.url, payload.port);
+    let url = payload.url;
 
-      setStorageItem("SERVER_URL", `${payload?.url}:${payload.port}`);
-      setBaseUrl(`${payload.url}:${payload.port}`);
+    try {
+      if (urlHasProtocolHttp(url)) {
+        url = removeProtocolHttps(url);
+      }
+
+      setIsLoadingServer(true);
+      await healthcheck(`http://${url}`, payload.port);
+
+      setStorageItem("SERVER_URL", `http://${url}:${payload.port}`);
+      setBaseUrl(`http://${url}:${payload.port}`);
       onHandleToken();
 
       const message = "Sucesso ao conectar com o servidor";
       showNotification(message, "success");
     } catch (erro: any) {
       showNotification(erro.message, "error");
+      console.log(erro);
     } finally {
       setIsLoadingServer(false);
     }
   }
 
-  function onSubmitMqtt(payload: IPayloadForm) {
+  async function onSubmitMqtt(payload: IPayloadForm) {
     const id = uuidv4();
+    let url = payload.url;
 
-    const mqttConfig = {
-      host: payload.url,
-      port: Number(payload?.port),
-      clientId: id,
-    };
-
-    const client = new Client(
-      mqttConfig.host,
-      mqttConfig.port,
-      mqttConfig.clientId
-    );
-
-    setIsLoadingMqtt(true);
-
-    client.connect({
-      onSuccess: () => {
-        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
-        onHandleToken();
-
-        const message = "Sucesso ao conectar com o servidor";
-        showNotification(message, "success");
-        setIsLoadingMqtt(false);
-      },
-      onFailure: () => {
-        const message = "Erro ao conectar com o servidor";
+    try {
+      if (urlHasProtocolHttp(url)) {
+        const message = "Protocolo incorreto";
         showNotification(message, "error");
+        return;
+      }
+
+      if (urlHasProtocolWs(url)) {
+        url = removeProtocolWs(url);
+      }
+
+      const mqttConfig = {
+        host: url,
+        port: Number(payload?.port),
+        clientId: id,
+      };
+
+      const client = new Client(
+        mqttConfig.host,
+        mqttConfig.port,
+        mqttConfig.clientId
+      );
+
+      setIsLoadingMqtt(true);
+
+      client.connect({
+        timeout: 2,
+        onSuccess: () => {
+          setStorageItem("MQTT_URL", `${url}:${payload.port}`);
+          onHandleToken();
+
+          const message = "Sucesso ao conectar com o servidor";
+          showNotification(message, "success");
+          setIsLoadingMqtt(false);
+        },
+        onFailure: () => {
+          const message = "Erro ao conectar com o servidor";
+          showNotification(message, "error");
+          setIsLoadingMqtt(false);
+        },
+      });
+
+      client.disconnect();
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
         setIsLoadingMqtt(false);
-      },
-    });
-
-    client.disconnect();
+      }, 5000);
+    }
   }
-
   return (
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
@@ -123,4 +154,3 @@ export const Settings: React.FC = () => {
     </S.Wrapper>
   );
 };
-
