@@ -12,6 +12,8 @@ import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
 import { DeleteDiagram } from "./dialogs/delete-diagram";
 import { ConfirmationDelete } from "./dialogs/confirmation-delete";
+import { EditDiagram } from "./dialogs/edit-diagram";
+import { DiagramConfirmation } from "./dialogs/diagram-confirmation";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -31,6 +33,9 @@ export const SaveDiagramDialog = styled(SaveDiagram)``;
 export const DeleteDiagramDialog = styled(DeleteDiagram)``;
 
 export const DeleteConfirmation = styled(ConfirmationDelete)``;
+export const EditDiagramDialog = styled(EditDiagram)``;
+
+export const DiagramConfirmationDialog = styled(DiagramConfirmation)``;
 
 export const PropertiesDialog = styled(Properties)``;
 

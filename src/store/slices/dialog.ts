@@ -5,6 +5,7 @@ interface IInitialState {
   propertiesDialog: { isVisible: boolean; data?: any };
   confirmationDialog: { isVisible: boolean; data?: any };
   diagramInfoDialog: { isVisible: boolean; data?: any };
+  editDialog: { isVisible: boolean; data?: any };
   diagramSelected?: TUser;
   element?: { category: string; id: string };
 }
@@ -21,6 +22,11 @@ const initialState: IInitialState = {
   },
 
   diagramInfoDialog: {
+    isVisible: false,
+    data: {},
+  },
+
+  editDialog: {
     isVisible: false,
     data: {},
   },
@@ -74,6 +80,16 @@ export const dialogSlice = createSlice({
         data: action.payload.data ?? {},
       };
     },
+
+    setEditDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.editDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
   },
 });
 
@@ -81,8 +97,10 @@ export const {
   setShowDiagramInfoDialog,
   setConfirmationDialog,
   setPropertiesDialog,
+  setEditDialog,
   setDiagramSelected,
   setDiagramElement,
 } = dialogSlice.actions;
 
 export default dialogSlice.reducer;
+
