@@ -33,7 +33,7 @@ export const ListDiagrams: React.FC<Props> = ({
     }
     if (onSelectDiagram) {
       onSelectDiagram(diagram);
-      navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
+      navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`);
     }
   }
 
