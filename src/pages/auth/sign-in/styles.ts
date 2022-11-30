@@ -4,8 +4,9 @@ import Box from "@mui/material/Box";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import { InputLabel } from "@mui/material";
-import { FormControl, OutlinedInput } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
 
 import { Button } from "shared/components/button";
 import { InputText } from "shared/components/input-text";
