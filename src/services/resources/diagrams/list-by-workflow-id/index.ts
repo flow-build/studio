@@ -1,6 +1,6 @@
 import { api } from "services/api/diagrams";
 
-export async function listByWorkflowId(workflowId: string) {
+export async function listDiagramByWorkflowId(workflowId: string) {
   try {
     const { data } = await api.get(`/diagrams/workflow/${workflowId}`);
     return data;
