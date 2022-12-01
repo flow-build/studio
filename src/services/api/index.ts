@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
 
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
@@ -12,15 +12,11 @@ const api = axios.create({
   baseURL: baseUrl ?? env,
 });
 
-type TToken = {
-  exp: number;
-};
+async function refreshToken(token: string) {
+  const refreshedToken = await createToken(token);
+  setStorageItem("TOKEN", refreshedToken);
 
-function isTokenExpired(token: string) {
-  const { exp } = jwt_decode<TToken>(token);
-  const expireDate = new Date(exp * 1000).getTime();
-
-  return Date.now() > expireDate;
+  return refreshedToken
 }
 
 api.interceptors.request.use(
@@ -45,9 +41,9 @@ api.interceptors.response.use(
   async (error: any) => {
     let token = getStorageItem("TOKEN");
 
-    if (token && isTokenExpired(token)) {
+    if (token && await refreshToken(token)) {
       const decoded = jwt_decode(token) as string;
-      token = await getAnonymousToken(decoded);
+      token = await createToken(decoded);
       setStorageItem("TOKEN", token);
 
       error.config.headers["Authorization"] = "Bearer " + token;
