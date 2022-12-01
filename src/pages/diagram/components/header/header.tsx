@@ -6,14 +6,13 @@ import { TUser } from "models/user";
 
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
 import { RootState } from "store";
 import { useSelector } from "react-redux";
-
 
 type Props = {
   workflowId: string;
@@ -35,12 +34,11 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
     request();
 
     const requestDiagram = async () => {
-      await listByWorkflowId(workflowId);
+      await listDiagramByWorkflowId(workflowId);
       setDiagram(dialogPageState.diagramSelected);
     };
 
     requestDiagram();
-
   }, [workflowId, dialogPageState.diagramSelected]);
 
   if (!workflow) {

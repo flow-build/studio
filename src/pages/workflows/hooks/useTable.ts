@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { useWorkflowPage } from "pages/workflows/hooks/useWorkflowPage";
 
@@ -66,7 +66,9 @@ export function useTable(workflows: TWorkflow[]) {
           tooltip: "Ver diagrama",
           badge: workflow.totalDiagrams,
           onClick: async () => {
-            const response = await listByWorkflowId(workflow.workflow_id);
+            const response = await listDiagramByWorkflowId(
+              workflow.workflow_id
+            );
             dispatch(setDiagramSelected(response));
 
             if (!_isEmpty(response)) {

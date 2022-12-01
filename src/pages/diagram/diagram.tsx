@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import ListIcon from "@mui/icons-material/ListOutlined";
 import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
@@ -8,25 +9,28 @@ import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
 
+
 import _isEmpty from "lodash/isEmpty";
 
 import { TProcess } from "models/process";
 import { TUser } from "models/user";
 
+import { getHistoryByProcessId } from "services/resources/processes/history";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 import { usePaint } from "pages/diagram/hooks/usePaint";
 
-import { getHistoryByProcessId } from "services/resources/processes/history";
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
-
 import { Fab } from "shared/components/fab";
+
+import { IAction } from "shared/components/fab/types/IAction";
 
 import { RootState } from "store";
 
-import { IAction } from "shared/components/fab/types/IAction";
-import { useDispatch, useSelector } from "react-redux";
 import {
   setProcessSelected,
+  setSaveConfirmationDialog,
+  setSaveDialog,
   setShowConfirmationDialog,
   setShowProcessInfoDialog,
   setShowPropertiesDialog,
@@ -35,17 +39,18 @@ import {
 import {
   setShowDiagramInfoDialog,
   setDiagramSelected,
+  setEditDialog,
 } from "store/slices/dialog";
 
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
 
-
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
+  const { id } = useParams();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -57,12 +62,10 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const paint = usePaint();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
 
   const getAllDiagrams = useCallback(async () => {
-
-    const diagramsId = await listByWorkflowId(workflowId as string);
+    const diagramsId = await listDiagramByWorkflowId(workflowId as string);
     dispatch(setDiagramSelected(diagramsId));
 
     dispatch(
@@ -71,11 +74,9 @@ export const DiagramRefactored: React.FC<Props> = () => {
         data: diagramsId,
       })
     );
-    dialogPageState?.confirmationDialog?.data(diagramsId);
+    dialogPageState?.diagramInfoDialog?.data(diagramsId);
     dispatch(setDiagramSelected(undefined));
-
-  }, [workflowId, dispatch, dialogPageState?.confirmationDialog]);
-
+  }, [workflowId, dispatch, dialogPageState?.diagramInfoDialog]);
 
   const actions = getActions();
 
@@ -97,7 +98,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
         icon: <SaveIcon />,
         tooltip: "Salvar Diagrama",
         onClick: async () => {
-          setSaveDialogOpen(true);
+          if (!_isEmpty(dialogPageState.diagramSelected)) {
+            dispatch(setSaveConfirmationDialog({ isVisible: true }));
+          }
+          if (_isEmpty(dialogPageState.diagramSelected)) {
+            dispatch(setSaveDialog({ isVisible: true }));
+          }
           const { xml } = await diagram.modeler.saveXML();
           setXml(xml);
         },
@@ -142,14 +148,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
   async function onSelectDiagram(diagram: TUser) {
     resetColor();
     dispatch(setDiagramSelected(diagram));
-    navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram`);
+    navigate(
+      `/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`
+    );
   }
 
   useEffect(() => {
-    if (!_isEmpty(workflowId)) {
-      diagram.loadDiagram(workflowId ?? "");
+    if (!_isEmpty(workflowId || id)) {
+      diagram.loadDiagram((workflowId || id) ?? "");
     }
-  }, [diagram, workflowId]);
+  }, [diagram, workflowId, id]);
 
   useEffect(() => {
     const paintElementsByProcessId = async () => {
@@ -214,11 +222,32 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      <S.SaveDiagramDialog
-        isOpen={isSaveDialogOpen}
-        onClose={() => setSaveDialogOpen(false)}
-        xml={xml}
-      />
+      {diagramPageState.saveDialog.isVisible && (
+        <S.SaveDiagramDialog
+          isOpen={diagramPageState.saveDialog.isVisible}
+          onClose={() =>
+            dispatch(setSaveDialog({ isVisible: false }))
+          }
+          xml={xml}
+        />
+      )}
+
+      {dialogPageState.editDialog.isVisible && (
+        <S.EditDiagramDialog
+          isOpen={dialogPageState.editDialog.isVisible}
+          onClose={() => dispatch(setEditDialog({ isVisible: false }))}
+          id={id as string}
+        />
+      )}
+
+      {diagramPageState.saveConfirmationDialog.isVisible && (
+        <S.DiagramConfirmationDialog
+          isOpen={diagramPageState.saveConfirmationDialog.isVisible}
+          onClose={() =>
+            dispatch(setSaveConfirmationDialog({ isVisible: false }))
+          }
+        />
+      )}
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog

@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { setStartProcessDialog } from "store/slices/workflow-page";
@@ -7,6 +7,8 @@ import { setStartProcessDialog } from "store/slices/workflow-page";
 export function useWorkflowPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { id } = useParams();
 
   const navigateToProcess = useCallback(
     (workflowId: string) => {
@@ -33,9 +35,9 @@ export function useWorkflowPage() {
 
   const navigateToDiagram = useCallback(
     (workflowId: string) => {
-      navigate(`${workflowId}/diagram`);
+      navigate(`${workflowId}/diagram/${id}`);
     },
-    [navigate]
+    [id, navigate]
   );
 
   return {

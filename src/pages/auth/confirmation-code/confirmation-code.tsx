@@ -4,9 +4,7 @@ import { Auth } from "aws-amplify";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { Logo } from "pages/auth/components/logo";
 import { useSnackbar } from "notistack";
-import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
 
@@ -48,38 +46,30 @@ export const ConfirmationCode = () => {
   }
 
   return (
-    <S.Wrapper>
-      <S.Container>
-        <S.LoginContainer>
-          <Logo />
-          <S.Form onSubmit={handleSubmit}>
-            <S.Input
-              label="E-mail"
-              type="text"
-              name="email"
-              placeholder="Type your e-mail"
-              onChange={({ target }) => handleChange(target.name, target.value)}
-              error={inputError}
-            />
-            <S.Input
-              label="Confirmation Code"
-              type="text"
-              name="confirmationCode"
-              placeholder="Type your confirmation code"
-              onChange={({ target }) => handleChange(target.name, target.value)}
-              error={inputError}
-            />
-            <S.SubmitContainer>
-              <S.SubmitButton title={"Submit"} disabled={disabled} />
-              <S.ResendCodeButton
-                title={"Resend code"}
-                onClick={() => Auth.resendSignUp(payload.email)}
-              />
-            </S.SubmitContainer>
-          </S.Form>
-        </S.LoginContainer>
-      </S.Container>
-      <Version />
+    <S.Wrapper onSubmit={handleSubmit}>
+      <S.Input
+        label="E-mail"
+        type="text"
+        name="email"
+        placeholder="Type your e-mail"
+        onChange={({ target }) => handleChange(target.name, target.value)}
+        error={inputError}
+      />
+      <S.Input
+        label="Confirmation Code"
+        type="text"
+        name="confirmationCode"
+        placeholder="Type your confirmation code"
+        onChange={({ target }) => handleChange(target.name, target.value)}
+        error={inputError}
+      />
+      <S.SubmitContainer>
+        <S.SubmitButton title={"Submit"} disabled={disabled} />
+        <S.ResendCodeButton
+          title={"Resend code"}
+          onClick={() => Auth.resendSignUp(payload.email)}
+        />
+      </S.SubmitContainer>
     </S.Wrapper>
   );
 };
