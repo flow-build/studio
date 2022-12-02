@@ -5,7 +5,7 @@ import amplifyConfig from "amplify-config";
 
 import { AwsError } from "constants/aws-error";
 import { EyeIcon } from "pages/auth/components/eye-icon";
-import { createToken } from "services/resources/token";
+import { getAnonymousToken } from "services/resources/token";
 import { Logo } from "pages/auth/components/logo";
 import { setStorageItem } from "shared/utils/storage";
 import { useSnackbar } from "notistack";
@@ -39,7 +39,7 @@ export const SignIn = () => {
         username: payload.email,
         password: payload.password,
       });
-      const token = await createToken(response.username);
+      const token = await getAnonymousToken(response.username);
       setStorageItem("TOKEN", token);
       navigate("/dashboard");
       setIsLoading(false);
