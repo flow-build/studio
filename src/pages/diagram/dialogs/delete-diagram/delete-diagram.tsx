@@ -6,7 +6,7 @@ import { useSnackbar } from "notistack";
 import * as S from "./styles";
 import { TUser } from "models/user";
 import { deleteDiagram } from "services/resources/diagrams/delete";
-import { listByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 
@@ -35,7 +35,7 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
 
   useEffect(() => {
     const requestDiagram = async () => {
-      await listByWorkflowId(workflowId as string);
+      await listDiagramByWorkflowId(workflowId as string);
       setDiagram(dialogPageState.diagramSelected);
     };
 
