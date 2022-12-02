@@ -1,1 +1,1 @@
-export * from './getAnonymous'
+export * from './createToken'
