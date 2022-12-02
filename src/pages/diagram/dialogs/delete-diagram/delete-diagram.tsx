@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useSnackbar } from "notistack";
@@ -23,7 +23,7 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { workflowId } = useParams();
 
   const [diagram, setDiagram] = useState<TUser | undefined>();
-  
+
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
   function deleteDiagramMessage(message: string) {
@@ -33,15 +33,14 @@ export const DeleteDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     });
   }
 
-  useEffect(() => {
-    const requestDiagram = async () => {
-      await listDiagramByWorkflowId(workflowId as string);
-      setDiagram(dialogPageState.diagramSelected);
-    };
-
-    requestDiagram();
-
+  const requestDiagram = useCallback(async () => {
+    await listDiagramByWorkflowId(workflowId as string);
+    setDiagram(dialogPageState.diagramSelected);
   }, [dialogPageState.diagramSelected, workflowId]);
+
+  useEffect(() => {
+    requestDiagram();
+  }, [requestDiagram]);
 
   async function handleDeleteDiagram() {
     const diagramName = diagram?.name;
