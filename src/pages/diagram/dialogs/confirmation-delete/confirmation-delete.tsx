@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
+
+import { Button, Divider } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "shared/components/icon-button";
+
 import { setDeleteDialog } from "store/slices/diagram";
 
 import * as S from "./styles";
@@ -31,17 +36,17 @@ export const ConfirmationDelete: React.FC<Props> = ({ isOpen, onClose }) => {
       <S.Background>
         <S.Title>
           Deseja deletar o diagrama selecionado?
-          <S.CloseButton onClick={onClose} />
+          <IconButton icon={CloseIcon} onClick={onClose} />
         </S.Title>
 
-        <S.ConfirmationDeleteDivider/>
+        <Divider/>
 
         <S.Container>
-          <S.CancelDelete onClick={onClose}>Cancelar</S.CancelDelete>
-          <S.DividerButton />
-          <S.ConfirmDeleteButton onClick={onConfirmDelete}>
+          <Button onClick={onClose}>Cancelar</Button>
+          <Divider orientation="vertical" flexItem />
+          <Button onClick={onConfirmDelete}>
             Confirmar
-          </S.ConfirmDeleteButton>
+          </Button>
         </S.Container>
       </S.Background>
     </S.ConfirmationDeleteWrapper>
