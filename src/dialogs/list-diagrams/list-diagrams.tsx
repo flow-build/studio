@@ -6,7 +6,7 @@ import { RootState } from "store";
 import { getShortFormatByDate } from "shared/utils/date";
 
 import * as S from "./styles";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
