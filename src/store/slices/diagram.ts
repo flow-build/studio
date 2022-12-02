@@ -7,7 +7,7 @@ interface IInitialState {
   saveConfirmationDialog: { isVisible: boolean; data?: any };
   processInfoDialog: { isVisible: boolean; data?: any };
   showDataChannelDialog: { isVisible: boolean; data?: any };
-  deleteDialog: { isVisible: boolean; data?: any };
+  deleteDialog: { isVisible: boolean; data?: Record<string, unknown> };
   deleteConfirmationDialog: { isVisible: boolean; data?: any };
   saveDialog: { isVisible: boolean; data?: any };
   processSelected?: TProcess;
