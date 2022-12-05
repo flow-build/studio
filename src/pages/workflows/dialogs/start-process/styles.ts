@@ -93,7 +93,9 @@ export const BoxMessage = styled(Box)`
 export const FormSchema = styled(Form).attrs({
   validator,
   uiSchema: {
-    "ui:displayLabel": false,
+    'ui:options': {
+      label: false,
+    },
     "ui:submitButtonOptions": {
       norender: true,
     },
