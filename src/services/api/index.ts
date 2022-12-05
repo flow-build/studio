@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
 
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
@@ -30,7 +30,6 @@ async function refreshToken() {
   const decoded = jwt_decode(token) as string;
 
   token = await createToken(decoded);
-
   return token
 }
 
@@ -52,19 +51,16 @@ api.interceptors.request.use(
 api.interceptors.request.use(
   async (config) => {
     let token = getStorageItem("TOKEN");
-    console.log(" token is not expired");
+
     if (token && isTokenExpired(token) && config.url !== '/token') {
-      console.log(" token is expired");
       const refresehdToken = await refreshToken();
 
       setStorageItem("TOKEN", refresehdToken);
-      
+
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
-
     }
-
     return config;
   }
 );
