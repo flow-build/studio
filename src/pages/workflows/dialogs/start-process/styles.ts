@@ -108,7 +108,7 @@ export const FormSchema = styled(Form).attrs({
   }
 
   .control-label {
-    display: block;
+    display: inline-block;
     margin-top: 5px;
     font-family: sans-serif;
   }
