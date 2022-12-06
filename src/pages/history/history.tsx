@@ -73,7 +73,7 @@ export const History: React.FC<{}> = () => {
     title: "Navigate",
     disabled: disable,
     onClick: () => {
-      navigate("/dashboard/compare-state");
+      navigate("/dashboard/compare-json");
     },
   };
 
