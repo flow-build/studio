@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
 
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
@@ -16,11 +16,21 @@ type TToken = {
   exp: number;
 };
 
+
+
 function isTokenExpired(token: string) {
   const { exp } = jwt_decode<TToken>(token);
   const expireDate = new Date(exp * 1000).getTime();
 
   return Date.now() > expireDate;
+}
+
+async function refreshToken() {
+  let token = getStorageItem("TOKEN");
+  const decoded = jwt_decode(token) as string;
+
+  token = await createToken(decoded);
+  return token
 }
 
 api.interceptors.request.use(
@@ -38,23 +48,20 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error: any) => {
+api.interceptors.request.use(
+  async (config) => {
     let token = getStorageItem("TOKEN");
 
-    if (token && isTokenExpired(token)) {
-      const decoded = jwt_decode(token) as string;
-      token = await getAnonymousToken(decoded);
-      setStorageItem("TOKEN", token);
+    if (token && isTokenExpired(token) && config.url !== '/token') {
+      const refresehdToken = await refreshToken();
 
-      error.config.headers["Authorization"] = "Bearer " + token;
-      return api.request(error.config);
+      setStorageItem("TOKEN", refresehdToken);
+
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
-
-    return Promise.reject(error);
+    return config;
   }
 );
 
