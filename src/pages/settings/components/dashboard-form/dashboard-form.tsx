@@ -10,9 +10,9 @@ import * as S from "./styles";
 type Props = {
   onSubmit: (payload: IPayloadDashboardForm) => void;
   isLoading: boolean;
-  metabaseSiteUrl: string;
-  metabaseSecretKey: string;
-  dashboardNumber: string;
+  metabaseSiteUrl?: string;
+  metabaseSecretKey?: string;
+  dashboardNumber?: string;
   labelmetabaseSiteUrl: string;
   labelmetabaseSecretKey: string;
   labeldashboardNumber: string;
