@@ -26,7 +26,7 @@ const CustomTextarea = (props: any) => {
     props.onChange(e.target.value); // this is the Form's onChange prop
   };
 
-  return <S.SmiteInput onChange={handleChange} value={props.value} />;
+  return <S.SmiteInput onChange={handleChange} value={props.value} label={`${props.label}`}/>;
 };
 
 const widgets = {
