@@ -1,10 +1,10 @@
-import { api } from "services/api"
+import { api } from "services/api/diagrams";
 
-export async function listByWorkflowId(workflowId: string) {
+export async function listDiagramByWorkflowId(workflowId: string) {
   try {
-    const { data } = await api.post('/workflows/diagram', { workflow_id: workflowId })
+    const { data } = await api.get(`/diagrams/workflow/${workflowId}`);
     return data;
   } catch (error) {
-    throw new Error('Erro ao listar diagrama pelo workflow id')
+    console.error("Erro ao listar os diagramas por workflow id", error);
   }
 }

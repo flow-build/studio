@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { SnackbarProvider } from "notistack";
 

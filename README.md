@@ -5,10 +5,11 @@ Faça um clone do repositório e execute o comando `yarn install` para instalar 
 Com as dependencias instaladas, crie um arquivo `.env` e insira nele as variáveis de ambiente listadas abaixo com seu respectivos valores:
 
 - REACT_APP_BASE_URL
+- REACT_APP_URL_PORT
 - REACT_APP_MQTT_HOST
 - REACT_APP_MQTT_PORT
 
-Execute o comando `yarn start` e se tudo estiver correto a aplicação irá iniciar, carregando a lista de workflows disponíveis na barra lateral.
+Execute o comando `yarn start` e se tudo estiver correto a aplicação irá iniciar, exibindo a tela de login. Caso não seja configurado um .env, será exibida uma tela de configuração para inserir os dados necessários.
 
 ## Atualização de SSL
 

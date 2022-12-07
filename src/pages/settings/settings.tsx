@@ -2,14 +2,21 @@ import { useState } from "react";
 
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
+import jwt_decode from "jwt-decode";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { IPayloadDashboardForm } from "./types/IPayloadDashboardForm";
-import { setStorageItem } from "shared/utils/storage";
+import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { setBaseUrl, setDashboardUrl } from "services/api";
 import { getAnonymousToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
+import {
+  removeProtocolHttps,
+  removeProtocolWs,
+  urlHasProtocolHttp,
+  urlHasProtocolWs,
+} from "./utils/string";
 
 import * as S from "./styles";
 
@@ -22,6 +29,10 @@ export const Settings: React.FC = () => {
   const urlServe = process.env.REACT_APP_BASE_URL;
   const portServer = process.env.REACT_APP_URL_PORT;
 
+  // const urlMetabase = process.env.REACT_APP_METABASE_SITE_URL as string;
+  // const secretKeyMetabase = process.env.REACT_APP_METABASE_SECRET_KEY as string;
+  // const dashboardMetabaseNumber = process.env.REACT_APP_METABASE_DASHBOARD_NUMBER as string;
+
   function showNotification(message: string, variant: VariantType) {
     enqueueSnackbar(message, {
       autoHideDuration: 4000,
@@ -29,8 +40,16 @@ export const Settings: React.FC = () => {
     });
   }
 
+  function getUserId() {
+    const token = getStorageItem("TOKEN");
+    const decoded = jwt_decode(token);
+    setStorageItem("TOKEN", token);
+    return decoded;
+  }
+
   async function onHandleToken() {
-    const token = await getAnonymousToken();
+    const userId = getUserId() as string;
+    const token = await getAnonymousToken(userId);
 
     if (!token) {
       const message = "Erro no retorno do Token. Por favor tentar novamente!";
@@ -40,59 +59,84 @@ export const Settings: React.FC = () => {
 
     setStorageItem("TOKEN", token);
   }
-
   async function onSubmitServer(payload: IPayloadForm) {
-    try {
-      setIsLoadingServer(true);
-      await healthcheck(payload.url, payload.port);
+    let url = payload.url;
 
-      setStorageItem("SERVER_URL", `${payload?.url}:${payload.port}`);
-      setBaseUrl(`${payload.url}:${payload.port}`);
+    try {
+      if (urlHasProtocolHttp(url)) {
+        url = removeProtocolHttps(url);
+      }
+
+      setIsLoadingServer(true);
+      await healthcheck(`http://${url}`, payload.port);
+
+      setStorageItem("SERVER_URL", `http://${url}:${payload.port}`);
+      setBaseUrl(`http://${url}:${payload.port}`);
       onHandleToken();
 
       const message = "Sucesso ao conectar com o servidor";
       showNotification(message, "success");
     } catch (erro: any) {
       showNotification(erro.message, "error");
+      console.log(erro);
     } finally {
       setIsLoadingServer(false);
     }
   }
 
-  function onSubmitMqtt(payload: IPayloadForm) {
+  async function onSubmitMqtt(payload: IPayloadForm) {
     const id = uuidv4();
+    let url = payload.url;
 
-    const mqttConfig = {
-      host: payload.url,
-      port: Number(payload?.port),
-      clientId: id,
-    };
-
-    const client = new Client(
-      mqttConfig.host,
-      mqttConfig.port,
-      mqttConfig.clientId
-    );
-
-    setIsLoadingMqtt(true);
-
-    client.connect({
-      onSuccess: () => {
-        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
-        onHandleToken();
-
-        const message = "Sucesso ao conectar com o servidor";
-        showNotification(message, "success");
-        setIsLoadingMqtt(false);
-      },
-      onFailure: () => {
-        const message = "Erro ao conectar com o servidor";
+    try {
+      if (urlHasProtocolHttp(url)) {
+        const message = "Protocolo incorreto";
         showNotification(message, "error");
-        setIsLoadingMqtt(false);
-      },
-    });
+        return;
+      }
 
-    client.disconnect();
+      if (urlHasProtocolWs(url)) {
+        url = removeProtocolWs(url);
+      }
+
+      const mqttConfig = {
+        host: url,
+        port: Number(payload?.port),
+        clientId: id,
+      };
+
+      const client = new Client(
+        mqttConfig.host,
+        mqttConfig.port,
+        mqttConfig.clientId
+      );
+
+      setIsLoadingMqtt(true);
+
+      client.connect({
+        timeout: 2,
+        onSuccess: () => {
+          setStorageItem("MQTT_URL", `${url}:${payload.port}`);
+          onHandleToken();
+
+          const message = "Sucesso ao conectar com o servidor";
+          showNotification(message, "success");
+          setIsLoadingMqtt(false);
+        },
+        onFailure: () => {
+          const message = "Erro ao conectar com o servidor";
+          showNotification(message, "error");
+          setIsLoadingMqtt(false);
+        },
+      });
+
+      client.disconnect();
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {
+        setIsLoadingMqtt(false);
+      }, 5000);
+    }
   }
 
   // async
@@ -110,9 +154,9 @@ export const Settings: React.FC = () => {
       );
       setDashboardUrl(
         `${payload.metabaseSiteUrl}:
-          ${payload.metabaseSecretKey}:
-          ${payload.dashboardNumber}:
-          `
+        ${payload.metabaseSecretKey}:
+        ${payload.dashboardNumber}:
+        `
       );
       onHandleToken();
 
@@ -149,7 +193,7 @@ export const Settings: React.FC = () => {
         onSubmit={onSubmitDashboard}
         isLoading={isLoadingDashboard}
         labelmetabaseSiteUrl="URL Metabase Site"
-        labelmetabaseSecretKey="Metabase SecretKey"
+        labelmetabaseSecretKey="Metabase Secret Key"
         labeldashboardNumber="Dashboard Number"
       />
     </S.Wrapper>

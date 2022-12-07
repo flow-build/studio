@@ -1,33 +1,47 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import ListIcon from "@mui/icons-material/ListOutlined";
+import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
 
+
 import _isEmpty from "lodash/isEmpty";
 
 import { TProcess } from "models/process";
+import { TUser } from "models/user";
+
+import { getHistoryByProcessId } from "services/resources/processes/history";
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 import { usePaint } from "pages/diagram/hooks/usePaint";
 
-import { getHistoryByProcessId } from "services/resources/processes/history";
-
 import { Fab } from "shared/components/fab";
+
+import { IAction } from "shared/components/fab/types/IAction";
 
 import { RootState } from "store";
 
-import { IAction } from "shared/components/fab/types/IAction";
-import { useDispatch, useSelector } from "react-redux";
 import {
   setProcessSelected,
+  setSaveConfirmationDialog,
+  setSaveDialog,
   setShowConfirmationDialog,
   setShowProcessInfoDialog,
   setShowPropertiesDialog,
 } from "store/slices/diagram";
+
+import {
+  setShowDiagramInfoDialog,
+  setDiagramSelected,
+  setEditDialog,
+} from "store/slices/dialog";
+
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
@@ -36,15 +50,33 @@ type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { workflowId } = useParams();
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
+  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+
   const diagram = useDiagram();
   const paint = usePaint();
 
-  const dispatch = useDispatch();
-
   const [isOpen, setIsOpen] = useState(false);
-  const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
   const [xml, setXml] = useState("");
+
+  const getAllDiagrams = useCallback(async () => {
+    const diagramsId = await listDiagramByWorkflowId(workflowId as string);
+    dispatch(setDiagramSelected(diagramsId));
+
+    dispatch(
+      setShowDiagramInfoDialog({
+        isVisible: true,
+        data: diagramsId,
+      })
+    );
+    dialogPageState?.diagramInfoDialog?.data(diagramsId);
+    dispatch(setDiagramSelected(undefined));
+  }, [workflowId, dispatch, dialogPageState?.diagramInfoDialog]);
 
   const actions = getActions();
 
@@ -56,10 +88,22 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onClick: () => setIsOpen(true),
       },
       {
+        icon: <ExtensionOutlined />,
+        tooltip: "Listar diagramas",
+        onClick: async () => {
+          getAllDiagrams();
+        },
+      },
+      {
         icon: <SaveIcon />,
         tooltip: "Salvar Diagrama",
         onClick: async () => {
-          setSaveDialogOpen(true);
+          if (!_isEmpty(dialogPageState.diagramSelected)) {
+            dispatch(setSaveConfirmationDialog({ isVisible: true }));
+          }
+          if (_isEmpty(dialogPageState.diagramSelected)) {
+            dispatch(setSaveDialog({ isVisible: true }));
+          }
           const { xml } = await diagram.modeler.saveXML();
           setXml(xml);
         },
@@ -101,11 +145,19 @@ export const DiagramRefactored: React.FC<Props> = () => {
     dispatch(setProcessSelected(process));
   }
 
+  async function onSelectDiagram(diagram: TUser) {
+    resetColor();
+    dispatch(setDiagramSelected(diagram));
+    navigate(
+      `/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`
+    );
+  }
+
   useEffect(() => {
-    if (!_isEmpty(workflowId)) {
-      diagram.loadDiagram(workflowId ?? "");
+    if (!_isEmpty(workflowId || id)) {
+      diagram.loadDiagram((workflowId || id) ?? "");
     }
-  }, [diagram, workflowId]);
+  }, [diagram, workflowId, id]);
 
   useEffect(() => {
     const paintElementsByProcessId = async () => {
@@ -159,11 +211,43 @@ export const DiagramRefactored: React.FC<Props> = () => {
         onClose={() => setIsOpen(false)}
         onSelectItem={onSelectItem}
       />
-      <S.SaveDiagramDialog
-        isOpen={isSaveDialogOpen}
-        onClose={() => setSaveDialogOpen(false)}
-        xml={xml}
-      />
+
+      {dialogPageState.diagramInfoDialog.isVisible && (
+        <S.ListDiagramsDialog
+          isOpen={dialogPageState.diagramInfoDialog.isVisible}
+          onClose={() =>
+            dispatch(setShowDiagramInfoDialog({ isVisible: false }))
+          }
+          onSelectDiagram={onSelectDiagram}
+        />
+      )}
+
+      {diagramPageState.saveDialog.isVisible && (
+        <S.SaveDiagramDialog
+          isOpen={diagramPageState.saveDialog.isVisible}
+          onClose={() =>
+            dispatch(setSaveDialog({ isVisible: false }))
+          }
+          xml={xml}
+        />
+      )}
+
+      {dialogPageState.editDialog.isVisible && (
+        <S.EditDiagramDialog
+          isOpen={dialogPageState.editDialog.isVisible}
+          onClose={() => dispatch(setEditDialog({ isVisible: false }))}
+          id={id as string}
+        />
+      )}
+
+      {diagramPageState.saveConfirmationDialog.isVisible && (
+        <S.DiagramConfirmationDialog
+          isOpen={diagramPageState.saveConfirmationDialog.isVisible}
+          onClose={() =>
+            dispatch(setSaveConfirmationDialog({ isVisible: false }))
+          }
+        />
+      )}
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
@@ -196,3 +280,4 @@ export const DiagramRefactored: React.FC<Props> = () => {
     </>
   );
 };
+

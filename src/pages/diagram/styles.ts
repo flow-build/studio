@@ -2,14 +2,16 @@ import styled from "styled-components";
 
 import Grid from "@mui/material/Grid";
 
+import { Header as BaseHeader } from "pages/diagram/components/header";
 import { Confirmation } from "pages/diagram/dialogs/confirmation";
 import { ListProcesses } from "pages/diagram/dialogs/list-processes";
+import { ListDiagrams } from "../../dialogs/list-diagrams/list-diagrams";
+import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
-
-import { Header as BaseHeader } from "pages/diagram/components/header";
-import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
+import { EditDiagram } from "./dialogs/edit-diagram";
+import { DiagramConfirmation } from "./dialogs/diagram-confirmation";
 
 export const Wrapper = styled(Grid).attrs({
   container: true,
@@ -22,7 +24,13 @@ export const Header = styled(BaseHeader)``;
 
 export const ListProcessesDialog = styled(ListProcesses)``;
 
+export const ListDiagramsDialog = styled(ListDiagrams)``;
+
 export const SaveDiagramDialog = styled(SaveDiagram)``;
+
+export const EditDiagramDialog = styled(EditDiagram)``;
+
+export const DiagramConfirmationDialog = styled(DiagramConfirmation)``;
 
 export const PropertiesDialog = styled(Properties)``;
 

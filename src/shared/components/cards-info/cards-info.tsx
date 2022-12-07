@@ -1,8 +1,8 @@
-import _isEmpty from 'lodash/isEmpty'
+import _isEmpty from "lodash/isEmpty";
 
-import { TAction } from 'shared/components/cards-info/types/TAction';
+import { TAction } from "shared/components/cards-info/types/TAction";
 
-import * as S from './styles'
+import * as S from "./styles";
 
 type Props = {
   title: string;
@@ -10,8 +10,8 @@ type Props = {
   description?: string;
   headerTitle: string;
   footerTitle: string;
-  actions?: TAction[]
-}
+  actions?: TAction[];
+};
 
 export const CardsInfo: React.FC<Props> = ({
   title,
@@ -19,9 +19,8 @@ export const CardsInfo: React.FC<Props> = ({
   description,
   footerTitle,
   headerTitle,
-  actions
+  actions,
 }) => {
-
   return (
     <S.Wrapper>
       <S.Card>
@@ -45,6 +44,7 @@ export const CardsInfo: React.FC<Props> = ({
                   icon={action.icon}
                   tooltip={action.tooltip}
                   onClick={action.onClick}
+                  badge={action.badge}
                 />
               ))}
             </div>
@@ -52,5 +52,5 @@ export const CardsInfo: React.FC<Props> = ({
         </S.Actions>
       </S.Card>
     </S.Wrapper>
-  )
-}
+  );
+};
