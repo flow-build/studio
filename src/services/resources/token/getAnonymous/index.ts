@@ -8,4 +8,3 @@ export const createToken = async (user_id: string) => {
     throw new Error(`getWorkflowAnonymousToken -> ${error.error}: ${error.message}`);
   }
 };
-
