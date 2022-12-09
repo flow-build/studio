@@ -10,6 +10,8 @@ import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
+import { DeleteDiagram } from "./dialogs/delete-diagram";
+import { ConfirmationDelete } from "./dialogs/confirmation-delete";
 import { EditDiagram } from "./dialogs/edit-diagram";
 import { DiagramConfirmation } from "./dialogs/diagram-confirmation";
 
@@ -28,6 +30,9 @@ export const ListDiagramsDialog = styled(ListDiagrams)``;
 
 export const SaveDiagramDialog = styled(SaveDiagram)``;
 
+export const DeleteDiagramDialog = styled(DeleteDiagram)``;
+
+export const DeleteConfirmation = styled(ConfirmationDelete)``;
 export const EditDiagramDialog = styled(EditDiagram)``;
 
 export const DiagramConfirmationDialog = styled(DiagramConfirmation)``;

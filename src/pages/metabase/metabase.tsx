@@ -6,14 +6,13 @@ export const Metabase: React.FC = () => {
   const iframeUrl = getIframURL();
 
   function getIframURL() {
-    const METABASE_SITE_URL = "http://44.203.2.237:3001";
-    const METABASE_SECRET_KEY =
-      "050d23827a63357696a418d17a58e5445e6aafba57941014677add39107cbbc7";
+    const METABASE_SITE_URL = process.env.REACT_APP_METABASE_SITE_URL;
+    const METABASE_SECRET_KEY = process.env.REACT_APP_METABASE_SECRET_KEY as string;
 
     const payload = {
-      resource: { dashboard: 3 },
+      resource: { dashboard: 2 },
       params: {},
-      exp: Math.round(Date.now() / 1000) + 10 * 60, // 10 minute expiration
+      exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
     };
 
     const token = sign(payload, METABASE_SECRET_KEY);

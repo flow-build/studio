@@ -8,6 +8,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 import _isEmpty from "lodash/isEmpty";
@@ -28,6 +29,8 @@ import { IAction } from "shared/components/fab/types/IAction";
 import { RootState } from "store";
 
 import {
+  setDeleteConfirmationDialog,
+  setDeleteDialog,
   setProcessSelected,
   setSaveConfirmationDialog,
   setSaveDialog,
@@ -117,6 +120,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         icon: <CleaningServicesIcon />,
         tooltip: "Resetar cor",
         onClick: resetColor,
+      },
+      {
+        icon: <DeleteIcon />,
+        tooltip: "Excluir diagrama",
+        onClick: () => dispatch(setDeleteConfirmationDialog({isVisible: true})),
       },
     ];
 
@@ -248,6 +256,19 @@ export const DiagramRefactored: React.FC<Props> = () => {
           }
         />
       )}
+
+      {(!_isEmpty(dialogPageState.diagramSelected)) && (
+        <S.DeleteDiagramDialog
+          isOpen={diagramPageState.deleteDialog.isVisible}
+          onClose={() => dispatch(setDeleteDialog({ isVisible: false }))}
+          id={id as string}
+        />
+      )}
+
+      <S.DeleteConfirmation 
+        isOpen={diagramPageState.deleteConfirmationDialog.isVisible}
+        onClose={() => dispatch(setDeleteConfirmationDialog({ isVisible: false }))}
+      />
 
       {diagramPageState.propertiesDialog.isVisible && (
         <S.PropertiesDialog
