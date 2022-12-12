@@ -8,9 +8,10 @@ export const Metabase: React.FC = () => {
   function getIframURL() {
     const METABASE_SITE_URL = process.env.REACT_APP_METABASE_SITE_URL;
     const METABASE_SECRET_KEY = process.env.REACT_APP_METABASE_SECRET_KEY as string;
+    const METABASE_DASHBOARD_NUMBER = process.env.REACT_APP_METABASE_DASHBOARD_NUMBER;
 
     const payload = {
-      resource: { dashboard: 2 },
+      resource: { dashboard: Number(METABASE_DASHBOARD_NUMBER)},
       params: {},
       exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
     };
