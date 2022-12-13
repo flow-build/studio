@@ -1,24 +1,21 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+// import sign from "jwt-encode";
 import { getAnonymousToken } from "services/resources/token";
 
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
 const baseUrl = getStorageItem("SERVER_URL");
-const env = `${process.env.REACT_APP_BASE_URL}${":"}${process.env.REACT_APP_URL_PORT
+const env = `${process.env.REACT_APP_BASE_URL}${":"}${
+  process.env.REACT_APP_URL_PORT
 }`;
 
 const dashboardUrl = getStorageItem("DASHBOARD");
-const envDashboard = `${process.env.METABASE_SITE_URL}${process.env.METABASE_SECRET_KEY}${process.env.DASHBOARD_NUMBER}`;
-
-// const api = axios.create({
-//   baseURL: baseUrl ?? env,
-// });
+const envDashboard = `${dashboardUrl}/embed/dashboard/${dashboardUrl}#theme=night&bordered=true&titled=true`;
 
 const api = axios.create({
   baseURL: baseUrl ?? env,
   url: dashboardUrl ?? envDashboard,
-  // dashboardURL: dashboardURL ?? envDashboard,
 });
 
 type TToken = {
