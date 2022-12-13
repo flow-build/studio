@@ -19,6 +19,15 @@ export const SubmitContainer = styled.div`
   margin: 20px 0 20px;
 `;
 
+export const BackButton = styled(Button).attrs({
+  type: "button",
+  title: "Back",
+  variant: "outlined",
+  fullWidth: true,
+})`
+  height: 3.5rem;
+`;
+
 export const SubmitButton = styled(Button).attrs({
   fullWidth: true,
   variant: "contained",

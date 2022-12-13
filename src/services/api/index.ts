@@ -1,7 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-// import sign from "jwt-encode";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
 
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
@@ -53,7 +52,7 @@ api.interceptors.response.use(
 
     if (token && isTokenExpired(token)) {
       const decoded = jwt_decode(token) as string;
-      token = await getAnonymousToken(decoded);
+      token = await createToken(decoded);
       setStorageItem("TOKEN", token);
 
       error.config.headers["Authorization"] = "Bearer " + token;

@@ -58,9 +58,11 @@ export const ResetPassword = () => {
         error={inputError}
       />
       <S.SubmitContainer>
+        <S.BackButton onClick={() => navigate("/")} />
         <S.ResendCodeButton onClick={() => Auth.resendSignUp(payload.email)} />
-        <S.SubmitButton title="Reset Password" onClick={handleSubmit} />
       </S.SubmitContainer>
+      
+      <S.SubmitButton title="Reset Password" onClick={handleSubmit} />
     </>
   );
 };

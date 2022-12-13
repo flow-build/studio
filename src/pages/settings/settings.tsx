@@ -9,7 +9,7 @@ import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { IPayloadDashboardForm } from "./types/IPayloadDashboardForm";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { setBaseUrl, setDashboardUrl } from "services/api";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
 import {
@@ -53,7 +53,7 @@ export const Settings: React.FC = () => {
 
   async function onHandleToken() {
     const userId = getUserId() as string;
-    const token = await getAnonymousToken(userId);
+    const token = await createToken(userId);
 
     if (!token) {
       const message = "Erro no retorno do Token. Por favor tentar novamente!";
