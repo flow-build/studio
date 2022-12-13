@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import _isEmpty from "lodash/isEmpty";
-import _isEqual from "lodash/isEqual";
+import _isEqual from "lodash/isEmpty";
+
 
 import { IPayloadDashboardForm } from "pages/settings/types/IPayloadDashboardForm";
 
@@ -10,9 +11,9 @@ import * as S from "./styles";
 type Props = {
   onSubmit: (payload: IPayloadDashboardForm) => void;
   isLoading: boolean;
-  metabaseSiteUrl?: string;
-  metabaseSecretKey?: string;
-  dashboardNumber?: string;
+  defaultMetabaseUrl?: string;
+  defaultSecretKey?: string;
+  defaultDashboardNumber?: string;
   labelmetabaseSiteUrl: string;
   labelmetabaseSecretKey: string;
   labeldashboardNumber: string;
@@ -21,17 +22,20 @@ type Props = {
 export const DashboardForm: React.FC<Props> = ({
   onSubmit,
   isLoading,
+  defaultMetabaseUrl,
+  defaultSecretKey,
+  defaultDashboardNumber,
   labelmetabaseSiteUrl,
   labelmetabaseSecretKey,
   labeldashboardNumber,
 }) => {
   const [payload, setPayload] = useState<IPayloadDashboardForm>({
-    metabaseSiteUrl: "",
-    metabaseSecretKey: "",
-    dashboardNumber: "",
+    metabaseSiteUrl: defaultMetabaseUrl || "",
+    metabaseSecretKey: defaultSecretKey || "",
+    dashboardNumber: defaultDashboardNumber || "",
   });
 
-  const isSubmitEnabled = isFormFilled();
+  const isSubmitMetabaseEnabled = isFormFilled() && !isDefaultMetabaseValue();
 
   function isFormFilled() {
     return (
@@ -40,6 +44,13 @@ export const DashboardForm: React.FC<Props> = ({
       !_isEmpty(payload.dashboardNumber)
     );
   }
+
+  function isDefaultMetabaseValue() {
+    return (
+      _isEqual(defaultMetabaseUrl) && _isEqual(defaultSecretKey) && _isEqual(defaultDashboardNumber) 
+    );
+  }
+
 
   function onChangePayload(value: string, field: keyof IPayloadDashboardForm) {
     setPayload((state) => ({ ...state, [field]: value }));
@@ -74,7 +85,7 @@ export const DashboardForm: React.FC<Props> = ({
         }
       />
       <S.SubmitButton
-        disabled={!isSubmitEnabled}
+        disabled={!isSubmitMetabaseEnabled}
         onClick={() => onSubmit(payload)}
       >
         {isLoading && <S.Loading />}
