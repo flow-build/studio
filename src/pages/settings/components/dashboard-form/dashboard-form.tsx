@@ -1,8 +1,7 @@
 import { useState } from "react";
 
 import _isEmpty from "lodash/isEmpty";
-import _isEqual from "lodash/isEmpty";
-
+import _isEqual from "lodash/isEqual";
 
 import { IPayloadDashboardForm } from "pages/settings/types/IPayloadDashboardForm";
 
@@ -35,8 +34,6 @@ export const DashboardForm: React.FC<Props> = ({
     dashboardNumber: defaultDashboardNumber || "",
   });
 
-  const isSubmitMetabaseEnabled = isFormFilled() && !isDefaultMetabaseValue();
-
   function isFormFilled() {
     return (
       !_isEmpty(payload.metabaseSiteUrl) &&
@@ -47,14 +44,17 @@ export const DashboardForm: React.FC<Props> = ({
 
   function isDefaultMetabaseValue() {
     return (
-      _isEqual(defaultMetabaseUrl) && _isEqual(defaultSecretKey) && _isEqual(defaultDashboardNumber) 
+      _isEqual(payload.metabaseSiteUrl, defaultMetabaseUrl) &&
+      _isEqual(payload.metabaseSecretKey, defaultSecretKey) &&
+      _isEqual(payload.dashboardNumber, defaultDashboardNumber)
     );
   }
-
 
   function onChangePayload(value: string, field: keyof IPayloadDashboardForm) {
     setPayload((state) => ({ ...state, [field]: value }));
   }
+
+  const isSubmitMetabaseEnabled = isFormFilled() && !isDefaultMetabaseValue();
 
   return (
     <S.Wrapper>
