@@ -67,15 +67,11 @@ export const Settings: React.FC = () => {
     let url = payload.url;
 
     try {
-      if (urlHasProtocolHttp(url)) {
-        url = removeProtocolHttps(url);
-      }
-
       setIsLoadingServer(true);
-      await healthcheck(`http://${url}`, payload.port);
+      await healthcheck(`${url}`, payload.port);
 
-      setStorageItem("SERVER_URL", `http://${url}:${payload.port}`);
-      setBaseUrl(`http://${url}:${payload.port}`);
+      setStorageItem("SERVER_URL", `${url}`);
+      setBaseUrl(`${url}`);
       onHandleToken();
 
       const message = "Sucesso ao conectar com o servidor";
