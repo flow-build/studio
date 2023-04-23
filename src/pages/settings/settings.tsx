@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Client } from "paho-mqtt";
 import { v4 as uuidv4 } from "uuid";
 import jwt_decode from "jwt-decode";
+import sign from "jwt-encode";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
+import { IPayloadDashboardForm } from "./types/IPayloadDashboardForm";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
-import { setBaseUrl } from "services/api";
+import { setBaseUrl, setDashboardUrl } from "services/api";
 import { createToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
@@ -18,14 +20,22 @@ import {
 } from "./utils/string";
 
 import * as S from "./styles";
+import { useNavigate } from "react-router-dom";
 
 export const Settings: React.FC = () => {
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
   const [isLoadingServer, setIsLoadingServer] = useState(false);
+  const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  const navigate = useNavigate();
 
   const urlServe = process.env.REACT_APP_BASE_URL;
   const portServer = process.env.REACT_APP_URL_PORT;
+
+  const urlMetabase = process.env.REACT_APP_METABASE_SITE_URL as string;
+  const secretKeyMetabase = process.env.REACT_APP_METABASE_SECRET_KEY as string;
+  const dashboardMetabaseNumber = process.env.REACT_APP_METABASE_DASHBOARD_NUMBER as string;
 
   function showNotification(message: string, variant: VariantType) {
     enqueueSnackbar(message, {
@@ -57,15 +67,11 @@ export const Settings: React.FC = () => {
     let url = payload.url;
 
     try {
-      if (urlHasProtocolHttp(url)) {
-        url = removeProtocolHttps(url);
-      }
-
       setIsLoadingServer(true);
-      await healthcheck(`https://${url}`, payload.port);
+      await healthcheck(`${url}`, payload.port);
 
-      setStorageItem("SERVER_URL", `https://${url}`);
-      setBaseUrl(`https://${url}`);
+      setStorageItem("SERVER_URL", `${url}`);
+      setBaseUrl(`${url}`);
       onHandleToken();
 
       const message = "Sucesso ao conectar com o servidor";
@@ -132,6 +138,39 @@ export const Settings: React.FC = () => {
       }, 5000);
     }
   }
+
+  function onSubmitDashboard(payload: IPayloadDashboardForm) {
+    try {
+      setIsLoadingDashboard(true);
+
+      const payloadMetabaseUrl = {
+        resource: { dashboard: Number(payload.dashboardNumber) },
+        params: {},
+        exp: Math.round(Date.now() / 1000) + 10 * 60, // 10 minute expiration
+      };
+
+      const token = sign(payloadMetabaseUrl, payload.metabaseSecretKey);
+
+      setStorageItem(
+        "DASHBOARD",
+        `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
+      );
+
+      setDashboardUrl(
+        `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
+      )
+
+      onHandleToken();
+
+      const message = "Sucesso ao conectar com o servidor";
+      showNotification(message, "success");
+      navigate("/dashboard");
+    } catch (erro: any) {
+      showNotification(erro.message, "error");
+    } finally {
+      setIsLoadingServer(false);
+    }
+  }
   return (
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
@@ -151,6 +190,18 @@ export const Settings: React.FC = () => {
         onSubmit={onSubmitMqtt}
         isLoading={isLoadingMqtt}
       />
+
+      <S.DashboardForm
+        onSubmit={onSubmitDashboard}
+        isLoading={isLoadingDashboard}
+        defaultMetabaseUrl={urlMetabase}
+        defaultSecretKey={secretKeyMetabase}
+        defaultDashboardNumber={dashboardMetabaseNumber}
+        labelmetabaseSiteUrl="URL Metabase Site"
+        labelmetabaseSecretKey="Metabase Secret Key"
+        labeldashboardNumber="Dashboard Number"
+      />
     </S.Wrapper>
   );
 };
+

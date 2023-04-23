@@ -7,7 +7,7 @@ export async function healthcheck(
   port: string
 ): Promise<IHealthyCheck> {
   try {
-    const { data } = await axios.get(url + ":" + port + `/healthcheck`);
+    const { data } = await axios.get(url + `/healthcheck`);
 
     return {
       ...data,

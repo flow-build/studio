@@ -5,11 +5,15 @@ import { createToken } from "services/resources/token";
 import { getStorageItem, setStorageItem } from "shared/utils/storage";
 
 const baseUrl = getStorageItem("SERVER_URL");
-const env = `${process.env.REACT_APP_BASE_URL}${":"}${process.env.REACT_APP_URL_PORT
-  }`;
+const env = `${process.env.REACT_APP_BASE_URL}
+}`;
+
+const dashboardUrl = getStorageItem("DASHBOARD");
+const envDashboard = `${dashboardUrl}/embed/dashboard/${dashboardUrl}#theme=night&bordered=true&titled=true`;
 
 const api = axios.create({
   baseURL: baseUrl ?? env,
+  url: dashboardUrl ?? envDashboard,
 });
 
 type TToken = {
@@ -62,4 +66,8 @@ function setBaseUrl(url: string) {
   api.defaults.baseURL = url;
 }
 
-export { api, setBaseUrl };
+function setDashboardUrl(url: string) {
+  api.defaults.url = url;
+}
+
+export { api, setBaseUrl, setDashboardUrl };
