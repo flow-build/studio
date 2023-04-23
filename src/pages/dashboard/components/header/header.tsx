@@ -79,7 +79,7 @@ export const Header: React.FC<Props> = ({ isOpen, onMenuClick }) => {
 
         <S.Avatar
           alt="Brad Gibson"
-          src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
+          src="https://anysigns.ca/wp-content/uploads/Halo-Master-Chief-Helmet-Collection-Video-Game.jpg"
           onClick={handleClick}
         />
 
