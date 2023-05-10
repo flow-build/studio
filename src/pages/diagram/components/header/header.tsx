@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import { TWorkflow } from "models/workflow";
 
 import { TUser } from "models/user";
-
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
@@ -12,13 +12,16 @@ import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
 import { RootState } from "store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IconButton } from "shared/components/icon-button";
+import { refreshDiagram } from "store/slices/diagram";
 
 type Props = {
   workflowId: string;
 };
 
 export const Header: React.FC<Props> = ({ workflowId }) => {
+  const dispatch = useDispatch();
   const [workflow, setWorkflow] = useState<TWorkflow>();
 
   const [diagram, setDiagram] = useState<TUser | undefined>();
@@ -84,6 +87,12 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
           <S.Title>Diagram: diagrama não salvo</S.Title>
         </S.TitleContent>
       )}
+
+      <IconButton
+        onClick={() => dispatch(refreshDiagram())}
+        icon={RefreshIcon}
+        tooltip="Refresh"
+      />
     </S.Wrapper>
   );
 };
