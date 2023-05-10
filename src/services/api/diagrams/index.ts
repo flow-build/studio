@@ -2,7 +2,7 @@ import axios from "axios";
 import { getStorageItem } from "shared/utils/storage";
 
 export const api = axios.create({
-  baseURL: "https://app-diagram-sepuna.bunnyenv.com/",
+  baseURL: process.env.REACT_APP_DIAGRAMS_SERVER_URL,
 });
 
 api.interceptors.request.use(
