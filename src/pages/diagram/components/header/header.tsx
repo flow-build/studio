@@ -11,17 +11,21 @@ import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-wor
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
-import { RootState } from "store";
-import { useDispatch, useSelector } from "react-redux";
+import { RootState, store } from "store";
+import { useSelector } from "react-redux";
 import { IconButton } from "shared/components/icon-button";
-import { refreshDiagram } from "store/slices/diagram";
 
 type Props = {
   workflowId: string;
+  onRefresh?: () => void;
+  hideRefreshButton?: boolean;
 };
 
-export const Header: React.FC<Props> = ({ workflowId }) => {
-  const dispatch = useDispatch();
+export const Header: React.FC<Props> = ({
+  workflowId,
+  hideRefreshButton,
+  onRefresh,
+}) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
 
   const [diagram, setDiagram] = useState<TUser | undefined>();
@@ -51,6 +55,12 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
   if (!diagram) {
     return null;
   }
+
+  console.log({
+    workflow,
+    diagram,
+    teste: store.getState().diagramPage.processSelected,
+  });
 
   return (
     <S.Wrapper>
@@ -88,11 +98,9 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
         </S.TitleContent>
       )}
 
-      <IconButton
-        onClick={() => dispatch(refreshDiagram())}
-        icon={RefreshIcon}
-        tooltip="Refresh"
-      />
+      {!hideRefreshButton && (
+        <IconButton onClick={onRefresh} icon={RefreshIcon} tooltip="Refresh" />
+      )}
     </S.Wrapper>
   );
 };
