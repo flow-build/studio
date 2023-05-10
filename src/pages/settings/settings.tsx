@@ -31,7 +31,7 @@ export const Settings: React.FC = () => {
   const navigate = useNavigate();
 
   const urlServe = process.env.REACT_APP_BASE_URL;
-  const portServer = process.env.REACT_APP_URL_PORT;
+  const portServer = process.env.REACT_APP_URL_PORT || "443";
 
   const urlMetabase = process.env.REACT_APP_METABASE_SITE_URL as string;
   const secretKeyMetabase = process.env.REACT_APP_METABASE_SECRET_KEY as string;

@@ -7,9 +7,12 @@ on:
       - developer
 env:
   REACT_APP_BASE_URL: ${{secrets.REACT_APP_BASE_URL}}
-  REACT_APP_URL_PORT: ${{secrets.REACT_APP_URL_PORT}}
   REACT_APP_MQTT_HOST: ${{secrets.REACT_APP_MQTT_HOST}}
   REACT_APP_MQTT_PORT: ${{secrets.REACT_APP_MQTT_PORT}}
+  REACT_APP_DIAGRAMS_SERVER_URL: ${{ secrets.REACT_APP_DIAGRAMS_SERVER_URL }}
+  REACT_APP_METABASE_SITE_URL: ${{ secrets.REACT_APP_METABASE_SITE_URL }}
+  REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+  REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ secrets.REACT_APP_METABASE_DASHBOARD_NUMBER }}
 
 jobs:
   build: 
@@ -62,9 +65,12 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
           envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
           envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
+          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ secrets.REACT_APP_DIAGRAMS_SERVER_URL }}
+          envkey_REACT_APP_METABASE_SITE_URL: ${{ secrets.REACT_APP_METABASE_SITE_URL }}
+          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ secrets.REACT_APP_METABASE_DASHBOARD_NUMBER }}
           directory: './'
           file_name: '.env'
       - name: Make envfile prod
@@ -72,9 +78,12 @@ jobs:
         with:
           envkey_DEBUG: false
           envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
           envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
           envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
+          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ secrets.REACT_APP_DIAGRAMS_SERVER_URL }}
+          envkey_REACT_APP_METABASE_SITE_URL: ${{ secrets.REACT_APP_METABASE_SITE_URL }}
+          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ secrets.REACT_APP_METABASE_DASHBOARD_NUMBER }}
           directory: './'
           file_name: '.env.production'
       - name: Yarn Install
