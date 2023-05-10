@@ -13,6 +13,9 @@ env:
   REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
   REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
   REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+  REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+  REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+  REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
 
 jobs:
   build: 
@@ -27,7 +30,7 @@ jobs:
           elif [ "${{ github.ref }}" = "refs/heads/developer" ]; then
             echo "env_name=development"  >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
-            echo "env_name=production"  >> $GITHUB_OUTPUT
+            echo "env_name=release"  >> $GITHUB_OUTPUT
           else
              echo "env_name=development"  >> $GITHUB_OUTPUT
           fi         
@@ -71,6 +74,9 @@ jobs:
           envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
           envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
           envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
           directory: './'
           file_name: '.env'
       - name: Make envfile prod
@@ -84,6 +90,9 @@ jobs:
           envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
           envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
           envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
           directory: './'
           file_name: '.env.production'
       - name: Yarn Install
@@ -95,7 +104,7 @@ jobs:
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_S3_BUCKET: ${{ vars.AWS_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
