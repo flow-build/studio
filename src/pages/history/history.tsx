@@ -35,7 +35,9 @@ export const History: React.FC<{}> = () => {
 
   const request = useCallback(async () => {
     const response = await getHistoryByProcessId(processId ?? "");
-    setHistory(response);
+    setHistory(
+      response.sort((a: TState, b: TState) => b.step_number - a.step_number)
+    );
   }, [processId]);
 
   useEffect(() => {
