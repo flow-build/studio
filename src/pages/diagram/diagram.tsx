@@ -8,8 +8,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -124,7 +123,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <DeleteIcon />,
         tooltip: "Excluir diagrama",
-        onClick: () => dispatch(setDeleteConfirmationDialog({isVisible: true})),
+        onClick: () =>
+          dispatch(setDeleteConfirmationDialog({ isVisible: true })),
       },
     ];
 
@@ -201,6 +201,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
     diagramPageState.processSelected,
     paint,
     dispatch,
+    diagramPageState.updatedAt,
   ]);
 
   return (
@@ -233,9 +234,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {diagramPageState.saveDialog.isVisible && (
         <S.SaveDiagramDialog
           isOpen={diagramPageState.saveDialog.isVisible}
-          onClose={() =>
-            dispatch(setSaveDialog({ isVisible: false }))
-          }
+          onClose={() => dispatch(setSaveDialog({ isVisible: false }))}
           xml={xml}
         />
       )}
@@ -257,7 +256,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      {(!_isEmpty(dialogPageState.diagramSelected)) && (
+      {!_isEmpty(dialogPageState.diagramSelected) && (
         <S.DeleteDiagramDialog
           isOpen={diagramPageState.deleteDialog.isVisible}
           onClose={() => dispatch(setDeleteDialog({ isVisible: false }))}
@@ -265,9 +264,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      <S.DeleteConfirmation 
+      <S.DeleteConfirmation
         isOpen={diagramPageState.deleteConfirmationDialog.isVisible}
-        onClose={() => dispatch(setDeleteConfirmationDialog({ isVisible: false }))}
+        onClose={() =>
+          dispatch(setDeleteConfirmationDialog({ isVisible: false }))
+        }
       />
 
       {diagramPageState.propertiesDialog.isVisible && (
@@ -301,4 +302,3 @@ export const DiagramRefactored: React.FC<Props> = () => {
     </>
   );
 };
-
