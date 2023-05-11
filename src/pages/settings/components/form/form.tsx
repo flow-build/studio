@@ -8,25 +8,19 @@ import { IPayloadForm } from "pages/settings/components/types/IPayloadForm";
 import * as S from "./styles";
 
 type Props = {
-  labelUrl: string;
-  labelPort: string;
-  onSubmit: (payload: IPayloadForm) => void;
-  isLoading: boolean;
-  defaultUrl?: string;
-  defaultPort?: string;
+  input: {
+    url: { label: string; defaultValue?: string };
+    port: { label: string; defaultValue?: string };
+  };
+  onChange?: (payload: IPayloadForm) => void;
+  onSubmit?: (payload: IPayloadForm) => Promise<void>;
 };
 
-export const Form: React.FC<Props> = ({
-  labelUrl,
-  labelPort,
-  onSubmit,
-  isLoading,
-  defaultUrl,
-  defaultPort,
-}) => {
+export const Form: React.FC<Props> = ({ input, onChange, onSubmit }) => {
+  const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<IPayloadForm>({
-    url: defaultUrl || "",
-    port: defaultPort || "",
+    url: input.url.defaultValue || "",
+    port: input.port.defaultValue || "",
   });
 
   const isSubmitEnabled = isFormFilled() && !isDefaultValue();
@@ -37,37 +31,63 @@ export const Form: React.FC<Props> = ({
 
   function isDefaultValue() {
     return (
-      _isEqual(payload.url, defaultUrl) && _isEqual(payload.port, defaultPort)
+      _isEqual(payload.url, input.url.defaultValue) &&
+      _isEqual(payload.port, input.port.defaultValue)
     );
   }
 
   function onChangePayload(value: string, field: keyof IPayloadForm) {
-    setPayload((state) => ({ ...state, [field]: value }));
+    const newPayload = { ...payload, [field]: value };
+
+    if (onChange) {
+      onChange(newPayload);
+    }
+
+    setPayload(newPayload);
+  }
+
+  async function onSubmitClick() {
+    try {
+      if (onSubmit && !loading) {
+        setLoading(true);
+
+        await onSubmit(payload);
+
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
   }
 
   return (
     <S.Wrapper>
-      <S.Input
-        label={labelUrl}
-        value={payload.url}
-        onChange={(event) => onChangePayload(event.target.value, "url")}
-      />
+      <S.Row>
+        <S.Input
+          label={input.url.label}
+          value={payload.url}
+          onChange={(event) => onChangePayload(event.target.value, "url")}
+        />
 
-      <S.Input
-        small
-        label={labelPort}
-        value={payload.port}
-        onChange={(event) => onChangePayload(event.target.value, "port")}
-      />
+        <S.Input
+          small
+          label={input.port.label}
+          value={payload.port}
+          onChange={(event) => onChangePayload(event.target.value, "port")}
+        />
+      </S.Row>
 
-      <S.SubmitButton
-        disabled={!isSubmitEnabled}
-        onClick={() => onSubmit(payload)}
-      >
-        {isLoading && <S.Loading />}
+      <S.Row>
+        <S.SubmitButton
+          variant="contained"
+          disabled={!isSubmitEnabled}
+          onClick={onSubmitClick}
+        >
+          {loading && <S.Loading />}
 
-        {!isLoading && <S.TextSubmitButton>Enviar</S.TextSubmitButton>}
-      </S.SubmitButton>
+          {!loading && <S.TextSubmitButton>Salvar</S.TextSubmitButton>}
+        </S.SubmitButton>
+      </S.Row>
     </S.Wrapper>
   );
 };
