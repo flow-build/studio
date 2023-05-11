@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react";
-
-import { TWorkflow } from "models/workflow";
-
-import { TUser } from "models/user";
-
-import { listWorkflowById } from "services/resources/workflows/list-by-id";
-
-import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { useSelector } from "react-redux";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
-import * as S from "./styles";
+
+import { TUser } from "models/user";
+import { TWorkflow } from "models/workflow";
+
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listWorkflowById } from "services/resources/workflows/list-by-id";
+
 import { RootState } from "store";
-import { useSelector } from "react-redux";
+
+import { IconButton } from "shared/components/icon-button";
+
+import * as S from "./styles";
 
 type Props = {
   workflowId: string;
+  onRefresh?: () => void;
+  hideRefreshButton?: boolean;
 };
 
-export const Header: React.FC<Props> = ({ workflowId }) => {
+export const Header: React.FC<Props> = ({
+  workflowId,
+  hideRefreshButton,
+  onRefresh,
+}) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
 
   const [diagram, setDiagram] = useState<TUser | undefined>();
@@ -83,6 +92,10 @@ export const Header: React.FC<Props> = ({ workflowId }) => {
         <S.TitleContent>
           <S.Title>Diagram: diagrama não salvo</S.Title>
         </S.TitleContent>
+      )}
+
+      {!hideRefreshButton && (
+        <IconButton onClick={onRefresh} icon={RefreshIcon} tooltip="Refresh" />
       )}
     </S.Wrapper>
   );

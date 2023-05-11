@@ -9,20 +9,18 @@ import { DashboardForm as FormDashboard } from "./components/dashboard-form";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
-export const Wrapper = styled(Box).attrs({
-  sx: {
-    height: 1000,
-    marginTop: -4,
-    paddingLeft: 2,
-    paddingTop: 2,
-    background: (theme) => theme.palette.background.default,
-  },
-})`
-height: calc(100% - 64px);
+export const Wrapper = styled(Box)`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: ${({ theme }) => theme.palette.background.default};
 `;
 
 export const Title = styled(Typography).attrs({
-  variant: "h3",
+  variant: "h5",
 })`
   margin: 2rem 1rem;
 `;

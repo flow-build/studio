@@ -28,6 +28,7 @@ import { IAction } from "shared/components/fab/types/IAction";
 import { RootState } from "store";
 
 import {
+  refreshDiagram,
   setDeleteConfirmationDialog,
   setDeleteDialog,
   setProcessSelected,
@@ -47,6 +48,7 @@ import {
 import { setHistory } from "store/slices/process-history";
 
 import * as S from "./styles";
+import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
 
 type Props = {};
 
@@ -65,6 +67,16 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [xml, setXml] = useState("");
+
+  const isProcessFinished = getIsProcessFinished(
+    diagramPageState.processSelected?.status ?? ""
+  );
+
+  function getIsProcessFinished(status: string) {
+    const finishStatuses = ["finished", "expired", "error"];
+
+    return finishStatuses.includes(status);
+  }
 
   const getAllDiagrams = useCallback(async () => {
     const diagramsId = await listDiagramByWorkflowId(workflowId as string);
@@ -161,6 +173,20 @@ export const DiagramRefactored: React.FC<Props> = () => {
     );
   }
 
+  async function onRefreshDiagram() {
+    if (workflowId) {
+      const response = await listByWorkflowId(workflowId);
+      const selectedProcess = response.find(
+        (process) => process.id === diagramPageState?.processSelected?.id
+      );
+
+      if (selectedProcess) {
+        await onSelectItem(selectedProcess);
+        dispatch(refreshDiagram());
+      }
+    }
+  }
+
   useEffect(() => {
     if (!_isEmpty(workflowId || id)) {
       diagram.loadDiagram((workflowId || id) ?? "");
@@ -201,13 +227,18 @@ export const DiagramRefactored: React.FC<Props> = () => {
     diagramPageState.processSelected,
     paint,
     dispatch,
+    diagramPageState.updatedAt,
   ]);
 
   return (
     <>
       <S.Wrapper ref={diagram.bpmn as any}>
         {!_isEmpty(diagramPageState.processSelected) && (
-          <S.Header workflowId={workflowId as string} />
+          <S.Header
+            hideRefreshButton={isProcessFinished}
+            workflowId={workflowId as string}
+            onRefresh={onRefreshDiagram}
+          />
         )}
 
         <Fab actions={actions} />
@@ -301,4 +332,3 @@ export const DiagramRefactored: React.FC<Props> = () => {
     </>
   );
 };
-

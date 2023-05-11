@@ -1,22 +1,34 @@
 import styled from "styled-components";
 
 import { InputText } from "shared/components/input-text";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Grid } from "@mui/material";
 
 export const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+`;
+
+export const Row = styled(Grid)`
+  display: flex;
   align-items: center;
   column-gap: 15px;
-  margin-bottom: 1rem;
 `;
 
 export const Input = styled(InputText)<{ small?: boolean }>`
   width: ${({ small }) => (small ? 250 : 550)}px;
 `;
 
+export const CheckButton = styled(Button)`
+  width: 6rem;
+`;
+
 export const SubmitButton = styled(Button)`
   width: 6rem;
-  height: 3.5rem;
+
+  &:not(:disabled) {
+    color: white;
+  }
 `;
 
 export const Loading = styled(CircularProgress).attrs({

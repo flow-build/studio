@@ -12,6 +12,7 @@ interface IInitialState {
   saveDialog: { isVisible: boolean; data?: any };
   processSelected?: TProcess;
   element?: { category: string; id: string };
+  updatedAt?: Date;
 }
 
 const initialState: IInitialState = {
@@ -58,6 +59,8 @@ const initialState: IInitialState = {
   processSelected: undefined,
 
   element: undefined,
+
+  updatedAt: undefined,
 };
 
 export const diagramSlice = createSlice({
@@ -157,6 +160,10 @@ export const diagramSlice = createSlice({
         data: action.payload.data ?? {},
       };
     },
+
+    refreshDiagram: (state) => {
+      state.updatedAt = new Date();
+    },
   },
 });
 
@@ -171,7 +178,7 @@ export const {
   setDeleteConfirmationDialog,
   setSaveDialog,
   setElement,
+  refreshDiagram,
 } = diagramSlice.actions;
 
 export default diagramSlice.reducer;
-

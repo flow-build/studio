@@ -58,33 +58,37 @@ export const DashboardForm: React.FC<Props> = ({
 
   return (
     <S.Wrapper>
-      <S.Input
-        small
-        label={labelmetabaseSiteUrl}
-        value={payload.metabaseSiteUrl}
-        onChange={(event) =>
-          onChangePayload(event.target.value, "metabaseSiteUrl")
-        }
-      />
+      <S.Row>
+        <S.Input
+          small
+          label={labelmetabaseSiteUrl}
+          value={payload.metabaseSiteUrl}
+          onChange={(event) =>
+            onChangePayload(event.target.value, "metabaseSiteUrl")
+          }
+        />
 
-      <S.Input
-        small
-        label={labelmetabaseSecretKey}
-        value={payload.metabaseSecretKey}
-        onChange={(event) =>
-          onChangePayload(event.target.value, "metabaseSecretKey")
-        }
-      />
+        <S.Input
+          small
+          label={labelmetabaseSecretKey}
+          value={payload.metabaseSecretKey}
+          onChange={(event) =>
+            onChangePayload(event.target.value, "metabaseSecretKey")
+          }
+        />
 
-      <S.Input
-        small
-        label={labeldashboardNumber}
-        value={payload.dashboardNumber}
-        onChange={(event) =>
-          onChangePayload(event.target.value, "dashboardNumber")
-        }
-      />
+        <S.Input
+          small
+          label={labeldashboardNumber}
+          value={payload.dashboardNumber}
+          onChange={(event) =>
+            onChangePayload(event.target.value, "dashboardNumber")
+          }
+        />
+      </S.Row>
+
       <S.SubmitButton
+        variant="contained"
         disabled={!isSubmitMetabaseEnabled}
         onClick={() => onSubmit(payload)}
       >
@@ -95,4 +99,3 @@ export const DashboardForm: React.FC<Props> = ({
     </S.Wrapper>
   );
 };
-
