@@ -56,12 +56,6 @@ export const Header: React.FC<Props> = ({
     return null;
   }
 
-  console.log({
-    workflow,
-    diagram,
-    teste: store.getState().diagramPage.processSelected,
-  });
-
   return (
     <S.Wrapper>
       <S.TitleContent>
