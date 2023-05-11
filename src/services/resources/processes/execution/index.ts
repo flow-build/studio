@@ -9,7 +9,7 @@ export async function getExecutionByProcessId(
     const { data } = await api.get(`/cockpit/processes/${processId}/execution`);
     return data;
   } catch (error) {
-    throw new Error("Erro ao tentar listar a execução por processId");
+    throw new Error("Erro ao carregar a execução por processId");
   }
 }
 
