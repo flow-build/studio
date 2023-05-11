@@ -7,11 +7,11 @@ import { AwsError } from "constants/aws-error";
 import { EyeIcon } from "pages/auth/components/eye-icon";
 import { createToken } from "services/resources/token";
 import { Logo } from "pages/auth/components/logo";
-import { setStorageItem } from "shared/utils/storage";
 import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
 import * as S from "./styles";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 Amplify.configure(amplifyConfig);
 
@@ -40,7 +40,7 @@ export const SignIn = () => {
         password: payload.password,
       });
       const token = await createToken(response.username);
-      setStorageItem("TOKEN", token);
+      SessionStorage.getInstance().setValue("TOKEN", token);
       navigate("/dashboard");
       setIsLoading(false);
     } catch (error: any) {

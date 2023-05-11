@@ -7,13 +7,11 @@ import sign from "jwt-encode";
 
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 import { IPayloadDashboardForm } from "./types/IPayloadDashboardForm";
-import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { setBaseUrl, setDashboardUrl } from "services/api";
 import { createToken } from "services/resources/token";
 import { useSnackbar, VariantType } from "notistack";
 import { healthcheck } from "services/resources/settings";
 import {
-  removeProtocolHttps,
   removeProtocolWs,
   urlHasProtocolHttp,
   urlHasProtocolWs,
@@ -21,6 +19,8 @@ import {
 
 import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 export const Settings: React.FC = () => {
   const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
@@ -35,7 +35,8 @@ export const Settings: React.FC = () => {
 
   const urlMetabase = process.env.REACT_APP_METABASE_SITE_URL as string;
   const secretKeyMetabase = process.env.REACT_APP_METABASE_SECRET_KEY as string;
-  const dashboardMetabaseNumber = process.env.REACT_APP_METABASE_DASHBOARD_NUMBER as string;
+  const dashboardMetabaseNumber = process.env
+    .REACT_APP_METABASE_DASHBOARD_NUMBER as string;
 
   function showNotification(message: string, variant: VariantType) {
     enqueueSnackbar(message, {
@@ -45,9 +46,14 @@ export const Settings: React.FC = () => {
   }
 
   function getUserId() {
-    const token = getStorageItem("TOKEN");
+    const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
+
+    if (!token) {
+      return "";
+    }
+
     const decoded = jwt_decode(token);
-    setStorageItem("TOKEN", token);
+    SessionStorage.getInstance().setValue("TOKEN", token);
     return decoded;
   }
 
@@ -61,7 +67,7 @@ export const Settings: React.FC = () => {
       return;
     }
 
-    setStorageItem("TOKEN", token);
+    SessionStorage.getInstance().setValue("TOKEN", token);
   }
   async function onSubmitServer(payload: IPayloadForm) {
     let url = payload.url;
@@ -70,7 +76,7 @@ export const Settings: React.FC = () => {
       setIsLoadingServer(true);
       await healthcheck(`${url}`, payload.port);
 
-      setStorageItem("SERVER_URL", `${url}`);
+      LocalStorage.getInstance().setValue("SERVER_URL", url);
       setBaseUrl(`${url}`);
       onHandleToken();
 
@@ -116,7 +122,9 @@ export const Settings: React.FC = () => {
       client.connect({
         timeout: 2,
         onSuccess: () => {
-          setStorageItem("MQTT_URL", `${url}:${payload.port}`);
+          const mqttUrl = `${url}:${payload.port}`;
+          LocalStorage.getInstance().setValue("MQTT_URL", mqttUrl);
+
           onHandleToken();
 
           const message = "Sucesso ao conectar com o servidor";
@@ -151,14 +159,12 @@ export const Settings: React.FC = () => {
 
       const token = sign(payloadMetabaseUrl, payload.metabaseSecretKey);
 
-      setStorageItem(
-        "DASHBOARD",
-        `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
-      );
+      const dashboardUrl = `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`;
+      LocalStorage.getInstance().setValue("DASHBOARD", dashboardUrl);
 
       setDashboardUrl(
         `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
-      )
+      );
 
       onHandleToken();
 
@@ -204,4 +210,3 @@ export const Settings: React.FC = () => {
     </S.Wrapper>
   );
 };
-

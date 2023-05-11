@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getStorageItem, setStorageItem } from "shared/utils/storage";
 import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
 import { create } from "services/resources/diagrams/create";
 
@@ -10,6 +9,7 @@ import jwt_decode from "jwt-decode";
 
 import * as S from "./styles";
 import { TUser } from "models/user";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 type Props = {
   isOpen: boolean;
@@ -23,9 +23,14 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   const { workflowId } = useParams();
 
   function getUserInfo() {
-    const token = getStorageItem("TOKEN");
+    const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
+
+    if (!token) {
+      return;
+    }
+
     const decoded = jwt_decode(token) as TUser;
-    setStorageItem("TOKEN", token);
+    SessionStorage.getInstance().setValue("TOKEN", token);
     return decoded;
   }
 
@@ -46,6 +51,10 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
   async function handleClickDiagramName() {
     const info = getUserInfo();
+
+    if (!info) {
+      return;
+    }
 
     const diagramName = payload?.name;
 
@@ -97,4 +106,3 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     </S.DiagramWrapper>
   );
 };
-

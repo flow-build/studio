@@ -1,14 +1,15 @@
 import { useMemo } from "react";
-import { getStorageItem } from "shared/utils/storage";
 
 import * as S from "./styles";
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
 
 export const Metabase: React.FC = () => {
   const iframeUrl = useMemo(() => {
-    const metabaseUrlConfig = getStorageItem("DASHBOARD");
+    const metabaseUrlConfig =
+      LocalStorage.getInstance().getValueByKey<string>("DASHBOARD");
 
-    return `${metabaseUrlConfig}/embed/dashboard/${metabaseUrlConfig}#theme=night&bordered=true&titled=true`
-}, []);
+    return `${metabaseUrlConfig}/embed/dashboard/${metabaseUrlConfig}#theme=night&bordered=true&titled=true`;
+  }, []);
 
   return (
     <S.Wrapper>
