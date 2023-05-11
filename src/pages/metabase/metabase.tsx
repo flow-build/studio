@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 
-import * as S from "./styles";
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
+
+import * as S from "./styles";
 
 export const Metabase: React.FC = () => {
   const iframeUrl = useMemo(() => {

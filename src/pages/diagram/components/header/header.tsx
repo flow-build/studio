@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import RefreshIcon from "@mui/icons-material/Refresh";
-
-import { TWorkflow } from "models/workflow";
-
-import { TUser } from "models/user";
-import { listWorkflowById } from "services/resources/workflows/list-by-id";
-
-import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
-import * as S from "./styles";
+
+import { TUser } from "models/user";
+import { TWorkflow } from "models/workflow";
+
+import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
+import { listWorkflowById } from "services/resources/workflows/list-by-id";
+
 import { RootState } from "store";
-import { useSelector } from "react-redux";
+
 import { IconButton } from "shared/components/icon-button";
+
+import * as S from "./styles";
 
 type Props = {
   workflowId: string;

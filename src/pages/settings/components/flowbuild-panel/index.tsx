@@ -1,12 +1,16 @@
-import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-import * as S from "./styles";
 import { VariantType, useSnackbar } from "notistack";
-import { healthcheck } from "services/resources/settings";
-import { LocalStorage } from "shared/utils/base-storage/local-storage";
-import { setBaseUrl } from "services/api";
-import { SessionStorage } from "shared/utils/base-storage/session-storage";
 import jwtDecode from "jwt-decode";
+
+import { IPayloadForm } from "pages/settings/types/IPayloadForm";
+
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
+
 import { createToken } from "services/resources/token";
+import { healthcheck } from "services/resources/settings";
+import { setBaseUrl } from "services/api";
+
+import * as S from "./styles";
 
 export const FlowbuildPanel: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();

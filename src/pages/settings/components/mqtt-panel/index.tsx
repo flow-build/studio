@@ -1,19 +1,21 @@
-import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-import * as S from "./styles";
 import { VariantType, useSnackbar } from "notistack";
-
-import { LocalStorage } from "shared/utils/base-storage/local-storage";
-
-import { SessionStorage } from "shared/utils/base-storage/session-storage";
 import jwtDecode from "jwt-decode";
-import { createToken } from "services/resources/token";
 import { v4 as uuidv4 } from "uuid";
+import { Client } from "paho-mqtt";
+
 import {
   removeProtocolWs,
   urlHasProtocolHttp,
   urlHasProtocolWs,
 } from "pages/settings/utils/string";
-import { Client } from "paho-mqtt";
+import { IPayloadForm } from "pages/settings/types/IPayloadForm";
+
+import { createToken } from "services/resources/token";
+
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
+
+import * as S from "./styles";
 
 export const MqttPanel: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();

@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
-import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
-import { create } from "services/resources/diagrams/create";
-
 import { useSnackbar } from "notistack";
 import jwt_decode from "jwt-decode";
 
-import * as S from "./styles";
+import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
+
 import { TUser } from "models/user";
+
+import { create } from "services/resources/diagrams/create";
+
 import { SessionStorage } from "shared/utils/base-storage/session-storage";
+
+import * as S from "./styles";
 
 type Props = {
   isOpen: boolean;

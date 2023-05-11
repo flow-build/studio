@@ -1,15 +1,18 @@
-import * as S from "./styles";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { VariantType, useSnackbar } from "notistack";
+import sign from "jwt-encode";
+import jwtDecode from "jwt-decode";
+
+import { IPayloadDashboardForm } from "pages/settings/types/IPayloadDashboardForm";
+
+import { createToken } from "services/resources/token";
+import { setDashboardUrl } from "services/api";
 
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
-import { setDashboardUrl } from "services/api";
 import { SessionStorage } from "shared/utils/base-storage/session-storage";
-import jwtDecode from "jwt-decode";
-import { createToken } from "services/resources/token";
-import { useState } from "react";
-import { IPayloadDashboardForm } from "pages/settings/types/IPayloadDashboardForm";
-import sign from "jwt-encode";
-import { useNavigate } from "react-router-dom";
+
+import * as S from "./styles";
 
 export const DashboardPanel: React.FC = () => {
   const navigate = useNavigate();

@@ -4,14 +4,17 @@ import { Amplify, Auth, Cache } from "aws-amplify";
 import amplifyConfig from "amplify-config";
 
 import { AwsError } from "constants/aws-error";
+
 import { EyeIcon } from "pages/auth/components/eye-icon";
-import { createToken } from "services/resources/token";
 import { Logo } from "pages/auth/components/logo";
 import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
-import * as S from "./styles";
+import { createToken } from "services/resources/token";
+
 import { SessionStorage } from "shared/utils/base-storage/session-storage";
+
+import * as S from "./styles";
 
 Amplify.configure(amplifyConfig);
 
