@@ -8,15 +8,14 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import _isEmpty from "lodash/isEmpty";
 
 import { TProcess } from "models/process";
 import { TUser } from "models/user";
 
-import { getHistoryByProcessId } from "services/resources/processes/history";
+import { getExecutionByProcessId } from "services/resources/processes/execution";
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
@@ -124,7 +123,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {
         icon: <DeleteIcon />,
         tooltip: "Excluir diagrama",
-        onClick: () => dispatch(setDeleteConfirmationDialog({isVisible: true})),
+        onClick: () =>
+          dispatch(setDeleteConfirmationDialog({ isVisible: true })),
       },
     ];
 
@@ -170,11 +170,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
   useEffect(() => {
     const paintElementsByProcessId = async () => {
       if (!_isEmpty(diagramPageState.processSelected)) {
-        const history = await getHistoryByProcessId(
+        const executionData = await getExecutionByProcessId(
           diagramPageState.processSelected?.id as string
         );
 
-        const orderedStates = history.slice().reverse();
+        const orderedStates = executionData.execution.slice().reverse();
 
         const modeling = diagram.modeler.get("modeling");
         const elementRegistry = diagram.modeler.get("elementRegistry");
@@ -233,9 +233,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
       {diagramPageState.saveDialog.isVisible && (
         <S.SaveDiagramDialog
           isOpen={diagramPageState.saveDialog.isVisible}
-          onClose={() =>
-            dispatch(setSaveDialog({ isVisible: false }))
-          }
+          onClose={() => dispatch(setSaveDialog({ isVisible: false }))}
           xml={xml}
         />
       )}
@@ -257,7 +255,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      {(!_isEmpty(dialogPageState.diagramSelected)) && (
+      {!_isEmpty(dialogPageState.diagramSelected) && (
         <S.DeleteDiagramDialog
           isOpen={diagramPageState.deleteDialog.isVisible}
           onClose={() => dispatch(setDeleteDialog({ isVisible: false }))}
@@ -265,9 +263,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      <S.DeleteConfirmation 
+      <S.DeleteConfirmation
         isOpen={diagramPageState.deleteConfirmationDialog.isVisible}
-        onClose={() => dispatch(setDeleteConfirmationDialog({ isVisible: false }))}
+        onClose={() =>
+          dispatch(setDeleteConfirmationDialog({ isVisible: false }))
+        }
       />
 
       {diagramPageState.propertiesDialog.isVisible && (

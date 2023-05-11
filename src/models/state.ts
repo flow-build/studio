@@ -15,4 +15,7 @@ export type TState = {
   status: string /* TODO: Rever */;
   step_number: number;
   time_elapsed: string;
+  last_status: string;
+  execution: any;
 };
+
