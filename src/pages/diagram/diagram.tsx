@@ -181,7 +181,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
       );
 
       if (selectedProcess) {
-        onSelectItem(selectedProcess);
+        await onSelectItem(selectedProcess);
         dispatch(refreshDiagram());
       }
     }

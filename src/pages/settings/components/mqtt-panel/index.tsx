@@ -102,12 +102,12 @@ export const MqttPanel: React.FC = () => {
       return new Promise<void>((resolve, reject) => {
         client.connect({
           timeout: 2,
-          onSuccess: () => {
+          onSuccess: async () => {
             const mqttUrl = `${url}:${payload.port}`;
             LocalStorage.getInstance().setValue("MQTT_URL", mqttUrl);
             LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
 
-            onHandleToken();
+            await onHandleToken();
 
             const message = "Sucesso ao conectar com o servidor";
             showNotification(message, "success");

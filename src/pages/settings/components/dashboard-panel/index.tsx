@@ -56,7 +56,7 @@ export const DashboardPanel: React.FC = () => {
     SessionStorage.getInstance().setValue("TOKEN", token);
   }
 
-  function onSubmitDashboard(payload: IPayloadDashboardForm) {
+  async function onSubmitDashboard(payload: IPayloadDashboardForm) {
     try {
       setIsLoadingDashboard(true);
 
@@ -75,7 +75,7 @@ export const DashboardPanel: React.FC = () => {
         `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
       );
 
-      onHandleToken();
+      await onHandleToken();
 
       const message = "Sucesso ao conectar com o servidor";
       showNotification(message, "success");
