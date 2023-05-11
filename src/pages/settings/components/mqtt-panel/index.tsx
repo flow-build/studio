@@ -1,5 +1,3 @@
-import { VariantType, useSnackbar } from "notistack";
-import jwtDecode from "jwt-decode";
 import { v4 as uuidv4 } from "uuid";
 import { Client } from "paho-mqtt";
 
@@ -10,15 +8,13 @@ import {
 } from "pages/settings/utils/string";
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 
-import { createToken } from "services/resources/token";
-
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
-import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 import * as S from "./styles";
+import { useForm } from "pages/settings/hooks/useForm";
 
 export const MqttPanel: React.FC = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  const { onSetToken, showNotification } = useForm();
 
   const defaultValue = {
     url:
@@ -39,38 +35,6 @@ export const MqttPanel: React.FC = () => {
       defaultValue: defaultValue.port,
     },
   };
-
-  function showNotification(message: string, variant: VariantType) {
-    enqueueSnackbar(message, {
-      autoHideDuration: 4000,
-      variant,
-    });
-  }
-
-  function getUserId() {
-    const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
-
-    if (!token) {
-      return "";
-    }
-
-    const decoded = jwtDecode(token);
-    SessionStorage.getInstance().setValue("TOKEN", token);
-    return decoded;
-  }
-
-  async function onHandleToken() {
-    const userId = getUserId() as string;
-    const token = await createToken(userId);
-
-    if (!token) {
-      const message = "Erro no retorno do Token. Por favor tentar novamente!";
-      showNotification(message, "error");
-      return;
-    }
-
-    SessionStorage.getInstance().setValue("TOKEN", token);
-  }
 
   async function onSubmitMqtt(payload: IPayloadForm) {
     const id = uuidv4();
@@ -107,7 +71,7 @@ export const MqttPanel: React.FC = () => {
             LocalStorage.getInstance().setValue("MQTT_URL", mqttUrl);
             LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
 
-            await onHandleToken();
+            await onSetToken();
 
             const message = "Sucesso ao conectar com o servidor";
             showNotification(message, "success");
