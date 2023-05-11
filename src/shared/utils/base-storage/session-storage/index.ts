@@ -5,7 +5,7 @@ export class SessionStorage {
 
   public static getInstance() {
     if (!SessionStorage.instance) {
-      SessionStorage.instance = new BaseStorage();
+      SessionStorage.instance = new BaseStorage("session");
     }
 
     return SessionStorage.instance;

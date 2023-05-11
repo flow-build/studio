@@ -5,7 +5,7 @@ export class LocalStorage {
 
   public static getInstance() {
     if (!LocalStorage.instance) {
-      LocalStorage.instance = new BaseStorage();
+      LocalStorage.instance = new BaseStorage("local");
     }
 
     return LocalStorage.instance;

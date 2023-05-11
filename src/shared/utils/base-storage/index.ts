@@ -2,6 +2,12 @@ import { IStorage } from "./interfaces/IStorage";
 
 export class BaseStorage implements IStorage {
   private readonly APP_KEY = "FLWB";
+  private storage: Storage;
+
+  constructor(type: "local" | "session") {
+    this.storage =
+      type === "local" ? window.localStorage : window.sessionStorage;
+  }
 
   public getValueByKey<T>(key: string): T | null {
     if (typeof window === "undefined") {
@@ -9,7 +15,7 @@ export class BaseStorage implements IStorage {
     }
 
     const concattedKey = `${this.APP_KEY}_${key.toUpperCase()}`;
-    const item = window.localStorage.getItem(concattedKey);
+    const item = this.storage.getItem(concattedKey);
 
     if (item) {
       return JSON.parse(item) as T;
@@ -24,7 +30,7 @@ export class BaseStorage implements IStorage {
     }
 
     const concattedKey = `${this.APP_KEY}_${key.toUpperCase()}`;
-    window.localStorage.setItem(concattedKey, JSON.stringify(value));
+    this.storage.setItem(concattedKey, JSON.stringify(value));
 
     return true;
   }
@@ -35,7 +41,7 @@ export class BaseStorage implements IStorage {
     }
 
     const concattedKey = `${this.APP_KEY}_${key.toUpperCase()}`;
-    window.localStorage.removeItem(concattedKey);
+    this.storage.removeItem(concattedKey);
 
     return true;
   }
@@ -45,7 +51,7 @@ export class BaseStorage implements IStorage {
       return false;
     }
 
-    window.localStorage.clear();
+    this.storage.clear();
 
     return true;
   }
