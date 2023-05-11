@@ -15,7 +15,7 @@ import _isEmpty from "lodash/isEmpty";
 import { TProcess } from "models/process";
 import { TUser } from "models/user";
 
-import { getHistoryByProcessId } from "services/resources/processes/history";
+import { getExecutionByProcessId } from "services/resources/processes/execution";
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
@@ -196,11 +196,11 @@ export const DiagramRefactored: React.FC<Props> = () => {
   useEffect(() => {
     const paintElementsByProcessId = async () => {
       if (!_isEmpty(diagramPageState.processSelected)) {
-        const history = await getHistoryByProcessId(
+        const executionData = await getExecutionByProcessId(
           diagramPageState.processSelected?.id as string
         );
 
-        const orderedStates = history.slice().reverse();
+        const orderedStates = executionData.execution.slice().reverse();
 
         const modeling = diagram.modeler.get("modeling");
         const elementRegistry = diagram.modeler.get("elementRegistry");
