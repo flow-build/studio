@@ -35,7 +35,9 @@ export const History: React.FC<{}> = () => {
 
   const request = useCallback(async () => {
     const response = await getHistoryByProcessId(processId ?? "");
-    setHistory(response.reverse());
+    setHistory(
+      response.sort((a: TState, b: TState) => b.step_number - a.step_number)
+    );
   }, [processId]);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export const History: React.FC<{}> = () => {
   const buttonUpdate = {
     title: "Refresh",
     onClick: () => {
-      request()
+      request();
     },
   };
 
@@ -76,7 +78,6 @@ export const History: React.FC<{}> = () => {
       navigate("/dashboard/compare-json");
     },
   };
-
 
   return (
     <S.Wrapper>
