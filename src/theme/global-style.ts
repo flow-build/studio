@@ -18,6 +18,7 @@ export default createGlobalStyle`
     max-width: 100vw;
     height: 100%;
     width: 100%;
+    background-color: #151521;
 
     overflow: hidden;
   }

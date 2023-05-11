@@ -17,16 +17,20 @@ import { SignUp } from "pages/auth/sign-up";
 import { Error } from "pages/auth/error";
 import { ConfirmationCode } from "pages/auth/confirmation-code";
 
-import { getStorageItem } from "shared/utils/storage";
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
 
 export const AppRoutes = () => {
   function handleSignIn() {
     const hasEnv =
-      !_isEmpty(process.env.REACT_APP_BASE_URL);
+      !_isEmpty(process.env.REACT_APP_BASE_URL) &&
+      !_isEmpty(process.env.REACT_APP_URL_PORT);
 
-    const hasLocalStorage = !_isEmpty(getStorageItem("SERVER_URL"));
+    const storage = LocalStorage.getInstance();
 
-    if (hasEnv || hasLocalStorage) {
+    const serverUrl = storage.getValueByKey<string>("SERVER_URL");
+    const isServerUrlSaved = !_isEmpty(serverUrl);
+
+    if (hasEnv || isServerUrlSaved) {
       return <SignIn />;
     }
 
