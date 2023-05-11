@@ -11,7 +11,7 @@ import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-wor
 import statusOk from "assets/images/latest-version-button/status-ok.svg";
 import statusWarning from "assets/images/latest-version-button/status-warning.svg";
 import * as S from "./styles";
-import { RootState, store } from "store";
+import { RootState } from "store";
 import { useSelector } from "react-redux";
 import { IconButton } from "shared/components/icon-button";
 
