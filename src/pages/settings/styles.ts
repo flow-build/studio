@@ -15,10 +15,10 @@ export const Wrapper = styled(Box).attrs({
     marginTop: -4,
     paddingLeft: 2,
     paddingTop: 2,
-    background: (theme) => theme.palette.background.default,
   },
 })`
-height: calc(100% - 64px);
+  height: calc(100% - 64px);
+  background: ${({ theme }) => theme.palette.background.default};
 `;
 
 export const Title = styled(Typography).attrs({
