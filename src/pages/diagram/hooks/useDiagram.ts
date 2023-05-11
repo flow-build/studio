@@ -47,6 +47,8 @@ interface IElement {
 
 let bpmnViewer: any = null;
 
+let viewboxConfig: any = undefined;
+
 export function useDiagram() {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -172,8 +174,13 @@ export function useDiagram() {
       return;
     }
 
-    bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
-    bpmnViewer.get("canvas").zoom(0.6);
+    if (!viewboxConfig) {
+      bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
+      bpmnViewer.get("canvas").zoom(0.6);
+      // console.log({ teste: bpmnViewer.get("canvas").zoom() });
+    } else {
+      bpmnViewer.get("canvas").viewbox(viewboxConfig);
+    }
 
     const arr: Array<IElement> = [];
     const elements = bpmnViewer.get("elementRegistry").getAll() as Array<any>;
@@ -216,6 +223,12 @@ export function useDiagram() {
       bpmnViewer = createModeler();
 
       bpmnViewer.on("import.done", onImportDone);
+      // console.log({ bpmnViewer });
+      bpmnViewer.on("canvas.viewbox.changed", () => {
+        // console.log("zoom", bpmnViewer.get("canvas").zoom());
+        // console.log("teste", bpmnViewer.get("canvas").viewbox());
+        viewboxConfig = bpmnViewer.get("canvas").viewbox();
+      });
 
       if (!_isEmpty(diagramXML)) {
         bpmnViewer.importXML(diagramXML);
@@ -269,4 +282,3 @@ export function useDiagram() {
     initialElements,
   };
 }
-
