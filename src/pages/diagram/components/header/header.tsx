@@ -61,7 +61,7 @@ export const Header: React.FC<Props> = ({
   }
 
   return (
-    <S.Wrapper noPadding={!!hideHeader}>
+    <S.Wrapper hideHeader={!!hideHeader}>
       {!hideHeader && (
         <>
           <S.TitleContent>

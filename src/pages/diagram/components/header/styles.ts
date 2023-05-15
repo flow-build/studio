@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import MuiTooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
-export const Wrapper = styled(Box)<{ noPadding: boolean }>`
+export const Wrapper = styled(Box)<{ hideHeader: boolean }>`
   margin: 16px 9px 9px 31px;
   height: 48px;
   display: flex;
@@ -14,7 +14,7 @@ export const Wrapper = styled(Box)<{ noPadding: boolean }>`
   border-radius: 15px;
   background: ${({ theme }) => theme.palette.background.paper};
 
-  ${({ noPadding }) => noPadding && { padding: 0 }}
+  ${({ hideHeader }) => hideHeader && { padding: 0, flex: "unset" }}
 `;
 
 export const TitleContent = styled.div`
