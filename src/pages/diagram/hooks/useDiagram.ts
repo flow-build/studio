@@ -150,6 +150,7 @@ export function useDiagram() {
         customReceiveData: ["type", ReceiveData],
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
         paletteProvider: ["type", EmptyPalette], // Menu da esquerda com elementos
+        dragging: ["value", { init: function () {} }],
       },
     ];
 
