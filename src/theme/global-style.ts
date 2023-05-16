@@ -7,6 +7,10 @@ export default createGlobalStyle`
   ${diagramCSS}
   ${bpmnFontCSS}
 
+  .djs-palette {
+    border: unset !important;
+  }
+
   * {
     margin: 0;
     padding: 0;

@@ -7,7 +7,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
+    const token =
+      SessionStorage.getInstance().getValueByKey<string>("DIAGRAM_TOKEN");
 
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
