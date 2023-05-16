@@ -71,7 +71,7 @@ export function useTable(workflows: TWorkflow[]) {
             );
             dispatch(setDiagramSelected(response));
 
-            if (!_isEmpty(response)) {
+            /* if (!_isEmpty(response)) {
               dispatch(
                 setShowDiagramInfoDialog({
                   isVisible: true,
@@ -81,7 +81,7 @@ export function useTable(workflows: TWorkflow[]) {
               dialogPageState?.confirmationDialog?.data(response);
               dispatch(setDiagramSelected(undefined));
               return;
-            }
+            } */
 
             dispatch(setProcessSelected(undefined));
             workflowPage.navigateToDiagram(workflow.workflow_id);
@@ -91,7 +91,7 @@ export function useTable(workflows: TWorkflow[]) {
 
       return { items, actions };
     });
-  }, [dispatch, workflowPage, workflows, dialogPageState?.confirmationDialog]);
+  }, [dispatch, workflowPage, workflows]);
 
   return {
     rows,
