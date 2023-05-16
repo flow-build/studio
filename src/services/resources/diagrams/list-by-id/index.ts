@@ -6,5 +6,6 @@ export async function listById(id: string) {
     return data;
   } catch (error) {
     console.error("Erro ao listar os diagramas por id", error);
+    throw new Error();
   }
 }
