@@ -49,11 +49,10 @@ interface IElement {
 
 let bpmnViewer: any = null;
 
-let viewboxConfig: any = undefined;
-
 export function useDiagram() {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const viewboxRef = useRef();
 
   const diagramBPMN = useRef();
 
@@ -178,12 +177,11 @@ export function useDiagram() {
       return;
     }
 
-    if (!viewboxConfig) {
+    if (!viewboxRef.current) {
       bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
       bpmnViewer.get("canvas").zoom(0.6);
-      // console.log({ teste: bpmnViewer.get("canvas").zoom() });
     } else {
-      bpmnViewer.get("canvas").viewbox(viewboxConfig);
+      bpmnViewer.get("canvas").viewbox(viewboxRef.current);
     }
 
     const arr: Array<IElement> = [];
@@ -219,7 +217,6 @@ export function useDiagram() {
     });
 
     setInitialElements(arr);
-    // setHaha(new Date());
   }, []);
 
   useEffect(() => {
@@ -227,11 +224,8 @@ export function useDiagram() {
       bpmnViewer = createModeler();
 
       bpmnViewer.on("import.done", onImportDone);
-      // console.log({ bpmnViewer });
       bpmnViewer.on("canvas.viewbox.changed", () => {
-        // console.log("zoom", bpmnViewer.get("canvas").zoom());
-        // console.log("teste", bpmnViewer.get("canvas").viewbox());
-        viewboxConfig = bpmnViewer.get("canvas").viewbox();
+        viewboxRef.current = bpmnViewer.get("canvas").viewbox();
       });
 
       if (!_isEmpty(diagramXML)) {
