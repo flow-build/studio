@@ -233,13 +233,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
   return (
     <>
       <S.Wrapper ref={diagram.bpmn as any}>
-        {!_isEmpty(diagramPageState.processSelected) && (
-          <S.Header
-            hideRefreshButton={isProcessFinished}
-            workflowId={workflowId as string}
-            onRefresh={onRefreshDiagram}
-          />
-        )}
+        <S.Header
+          hideHeader={_isEmpty(diagramPageState.processSelected)}
+          hideRefreshButton={isProcessFinished}
+          workflowId={workflowId as string}
+          onRefresh={onRefreshDiagram}
+        />
 
         <Fab actions={actions} />
       </S.Wrapper>

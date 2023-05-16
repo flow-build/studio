@@ -21,12 +21,14 @@ type Props = {
   workflowId: string;
   onRefresh?: () => void;
   hideRefreshButton?: boolean;
+  hideHeader?: boolean;
 };
 
 export const Header: React.FC<Props> = ({
   workflowId,
   hideRefreshButton,
   onRefresh,
+  hideHeader,
 }) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
 
@@ -59,43 +61,51 @@ export const Header: React.FC<Props> = ({
   }
 
   return (
-    <S.Wrapper>
-      <S.TitleContent>
-        <S.Title>Workflow: {workflow?.name}</S.Title>
-        <S.Title>-</S.Title>
-        <S.Title>Version: {workflow?.version}</S.Title>
-      </S.TitleContent>
+    <S.Wrapper hideHeader={!!hideHeader}>
+      {!hideHeader && (
+        <>
+          <S.TitleContent>
+            <S.Title>Workflow: {workflow?.name}</S.Title>
+            <S.Title>-</S.Title>
+            <S.Title>Version: {workflow?.version}</S.Title>
+          </S.TitleContent>
 
-      {workflow.isLatest && (
-        <S.Tooltip title="Ultima versão">
-          <S.Status>
-            <img src={statusOk} alt="StatusOk" />
-          </S.Status>
-        </S.Tooltip>
-      )}
+          {workflow.isLatest && (
+            <S.Tooltip title="Ultima versão">
+              <S.Status>
+                <img src={statusOk} alt="StatusOk" />
+              </S.Status>
+            </S.Tooltip>
+          )}
 
-      {!workflow.isLatest && (
-        <S.Tooltip title="Versão desatualizada">
-          <S.Status>
-            <img src={statusWarning} alt="StatusWarning" />
-          </S.Status>
-        </S.Tooltip>
-      )}
+          {!workflow.isLatest && (
+            <S.Tooltip title="Versão desatualizada">
+              <S.Status>
+                <img src={statusWarning} alt="StatusWarning" />
+              </S.Status>
+            </S.Tooltip>
+          )}
 
-      {diagram?.name && (
-        <S.TitleContent>
-          <S.Title>Diagram: {diagram?.name}</S.Title>
-        </S.TitleContent>
-      )}
+          {diagram?.name && (
+            <S.TitleContent>
+              <S.Title>Diagram: {diagram?.name}</S.Title>
+            </S.TitleContent>
+          )}
 
-      {!diagram?.name && (
-        <S.TitleContent>
-          <S.Title>Diagram: diagrama não salvo</S.Title>
-        </S.TitleContent>
-      )}
+          {!diagram?.name && (
+            <S.TitleContent>
+              <S.Title>Diagram: diagrama não salvo</S.Title>
+            </S.TitleContent>
+          )}
 
-      {!hideRefreshButton && (
-        <IconButton onClick={onRefresh} icon={RefreshIcon} tooltip="Refresh" />
+          {!hideRefreshButton && (
+            <IconButton
+              onClick={onRefresh}
+              icon={RefreshIcon}
+              tooltip="Refresh"
+            />
+          )}
+        </>
       )}
     </S.Wrapper>
   );

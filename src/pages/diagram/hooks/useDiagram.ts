@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSnackbar, OptionsObject } from "notistack";
 import Modeler from "bpmn-js/lib/Modeler";
+import { validate as uuidValidate } from "uuid";
 
 import { useTheme } from "@mui/material/styles";
 
@@ -23,7 +24,8 @@ import { ChangeElement } from "pages/diagram/components/context-pad/change-eleme
 import { Properties } from "pages/diagram/components/context-pad/properties";
 import { RemoveElement } from "pages/diagram/components/context-pad/remove-element";
 import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
-import { ReceiveData } from "../components/context-pad/receive-data";
+import { EmptyPalette } from "pages/diagram/components/empty-palette";
+import { ReceiveData } from "pages/diagram/components/context-pad/receive-data";
 
 import { listByWorkflowId } from "services/resources/workflows/list-by-workflow-id";
 import { listById } from "services/resources/diagrams/list-by-id";
@@ -50,6 +52,7 @@ let bpmnViewer: any = null;
 export function useDiagram() {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const viewboxRef = useRef();
 
   const diagramBPMN = useRef();
 
@@ -88,10 +91,12 @@ export function useDiagram() {
   const loadDiagram = useCallback(
     async (workflowId: string) => {
       const response = await listByWorkflowId(workflowId);
-      const xml = await listById(id as string);
-      if (!_isEmpty(response)) {
-        setDiagramXML(xml);
+
+      if (!id || !uuidValidate(id)) {
+        return setDiagramXML(response);
       }
+
+      const xml = await listById(id as string);
       return setDiagramXML(xml || response);
     },
     [id]
@@ -138,13 +143,14 @@ export function useDiagram() {
           "customPropertiesPad",
           "customNextProcess",
           "customReceiveData",
-          "customPalette",
+          "paletteProvider",
         ],
         contextPadProvider: ["type", ResetPad],
         customNextProcess: ["type", NextProcess],
         customReceiveData: ["type", ReceiveData],
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
-        customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
+        paletteProvider: ["type", EmptyPalette], // Menu da esquerda com elementos
+        dragging: ["value", { init: function () {} }],
       },
     ];
 
@@ -172,8 +178,12 @@ export function useDiagram() {
       return;
     }
 
-    bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
-    bpmnViewer.get("canvas").zoom(0.6);
+    if (!viewboxRef.current) {
+      bpmnViewer.get("canvas").zoom("fit-viewport", "auto");
+      bpmnViewer.get("canvas").zoom(0.6);
+    } else {
+      bpmnViewer.get("canvas").viewbox(viewboxRef.current);
+    }
 
     const arr: Array<IElement> = [];
     const elements = bpmnViewer.get("elementRegistry").getAll() as Array<any>;
@@ -208,7 +218,6 @@ export function useDiagram() {
     });
 
     setInitialElements(arr);
-    // setHaha(new Date());
   }, []);
 
   useEffect(() => {
@@ -216,6 +225,9 @@ export function useDiagram() {
       bpmnViewer = createModeler();
 
       bpmnViewer.on("import.done", onImportDone);
+      bpmnViewer.on("canvas.viewbox.changed", () => {
+        viewboxRef.current = bpmnViewer.get("canvas").viewbox();
+      });
 
       if (!_isEmpty(diagramXML)) {
         bpmnViewer.importXML(diagramXML);
@@ -269,4 +281,3 @@ export function useDiagram() {
     initialElements,
   };
 }
-

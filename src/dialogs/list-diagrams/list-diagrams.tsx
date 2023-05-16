@@ -7,6 +7,7 @@ import { getShortFormatByDate } from "shared/utils/date";
 
 import * as S from "./styles";
 import { useNavigate } from "react-router-dom";
+import { IDiagram } from "models/diagram/diagram";
 
 type Props = {
   isOpen: boolean;
@@ -26,20 +27,21 @@ export const ListDiagrams: React.FC<Props> = ({
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
   );
 
-
   function onClickListDiagram(diagram: TUser) {
     if (onClose) {
       onClose();
     }
     if (onSelectDiagram) {
       onSelectDiagram(diagram);
-      navigate(`/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`);
+      navigate(
+        `/dashboard/workflows/${diagram.workflow_id}/diagram/${diagram.id}`
+      );
     }
   }
 
-  function getSubtitle(diagram: TUser) {
-    const createdAt = getShortFormatByDate(diagram.created_at);
-    const updatedAt = getShortFormatByDate(diagram.updated_at);
+  function getSubtitle(diagram: IDiagram) {
+    const createdAt = getShortFormatByDate(diagram.createdAt);
+    const updatedAt = getShortFormatByDate(diagram.updatedAt);
     return `criado em: ${createdAt} - atualizado em: ${updatedAt}`;
   }
 

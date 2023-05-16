@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import { Version } from "pages/auth/components/version";
 
 import { createToken } from "services/resources/token";
+import { createToken as createDiagramToken } from "services/resources/diagrams/token";
 
 import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
@@ -34,17 +35,26 @@ export const SignIn = () => {
   async function handleSubmit(e: React.FormEvent<HTMLDivElement>) {
     try {
       e.preventDefault();
+
       if (isLoading) {
         return;
       }
+
       setIsLoading(true);
+
       const response = await Auth.signIn({
         username: payload.email,
         password: payload.password,
       });
+
       const token = await createToken(response.username);
+      const diagramToken = await createDiagramToken(response.username);
+
       SessionStorage.getInstance().setValue("TOKEN", token);
+      SessionStorage.getInstance().setValue("DIAGRAM_TOKEN", diagramToken);
+
       navigate("/dashboard");
+
       setIsLoading(false);
     } catch (error: any) {
       if (error.code === AwsError.USER_NOT_CONFIRMED) {
