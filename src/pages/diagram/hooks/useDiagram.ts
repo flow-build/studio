@@ -24,7 +24,8 @@ import { ChangeElement } from "pages/diagram/components/context-pad/change-eleme
 import { Properties } from "pages/diagram/components/context-pad/properties";
 import { RemoveElement } from "pages/diagram/components/context-pad/remove-element";
 import { ConnectElement } from "pages/diagram/components/context-pad/connect-element";
-import { ReceiveData } from "../components/context-pad/receive-data";
+import { EmptyPalette } from "pages/diagram/components/empty-palette";
+import { ReceiveData } from "pages/diagram/components/context-pad/receive-data";
 
 import { listByWorkflowId } from "services/resources/workflows/list-by-workflow-id";
 import { listById } from "services/resources/diagrams/list-by-id";
@@ -143,13 +144,13 @@ export function useDiagram() {
           "customPropertiesPad",
           "customNextProcess",
           "customReceiveData",
-          "customPalette",
+          "paletteProvider",
         ],
         contextPadProvider: ["type", ResetPad],
         customNextProcess: ["type", NextProcess],
         customReceiveData: ["type", ReceiveData],
         customPropertiesPad: ["type", Properties], // Menu que aparece quando clica no shape
-        customPalette: ["type", CustomPalette], // Menu da esquerda com elementos
+        paletteProvider: ["type", EmptyPalette], // Menu da esquerda com elementos
       },
     ];
 
