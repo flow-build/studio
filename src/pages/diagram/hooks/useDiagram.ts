@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSnackbar, OptionsObject } from "notistack";
 import Modeler from "bpmn-js/lib/Modeler";
+import { validate as uuidValidate } from "uuid";
 
 import { useTheme } from "@mui/material/styles";
 
@@ -90,10 +91,12 @@ export function useDiagram() {
   const loadDiagram = useCallback(
     async (workflowId: string) => {
       const response = await listByWorkflowId(workflowId);
-      const xml = await listById(id as string);
-      if (!_isEmpty(response)) {
-        setDiagramXML(xml);
+
+      if (!id || !uuidValidate(id)) {
+        return setDiagramXML(response);
       }
+
+      const xml = await listById(id as string);
       return setDiagramXML(xml || response);
     },
     [id]
