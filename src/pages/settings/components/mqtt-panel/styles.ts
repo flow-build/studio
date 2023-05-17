@@ -1,7 +1,7 @@
-import { Form as BaseForm } from "pages/settings/components/flowbuild-panel/form";
+import { Form } from "pages/settings/components/mqtt-panel/form";
 import { Grid } from "@mui/material";
 import styled from "styled-components";
 
 export const Wrapper = styled(Grid)``;
 
-export const Form = styled(BaseForm)``;
+export const MqttForm = styled(Form)``;
