@@ -1,6 +1,7 @@
 import { useState } from "react";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
+import _cloneDeep from "lodash/cloneDeep";
 
 /* Local - Types */
 import { TPayload } from "pages/settings/components/mqtt-panel/form/types/TPayload";
@@ -55,16 +56,23 @@ export function useForm({ initialPayload }: TProps) {
   }
 
   function onSwitchSslProtocol(checked: boolean) {
-    const resetValue = checked ? "" : undefined;
+    const newPayload = _cloneDeep(form.payload);
+
+    if (!newPayload.namespace) {
+      delete newPayload.namespace;
+    }
+
+    if (!checked) {
+      delete newPayload.username;
+      delete newPayload.password;
+    } else {
+      newPayload.username = "";
+      newPayload.password = "";
+    }
 
     setForm((prev) => ({
       ...prev,
-      payload: {
-        ...prev.payload,
-        isConnectionSecurity: checked,
-        username: resetValue,
-        password: resetValue,
-      },
+      payload: { ...newPayload, isConnectionSecurity: checked },
     }));
   }
 
