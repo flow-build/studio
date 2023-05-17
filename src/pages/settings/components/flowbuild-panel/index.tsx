@@ -1,15 +1,18 @@
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-
-import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { useForm } from "pages/settings/components/flowbuild-panel/form/hooks/useForm";
 
 import { healthcheck } from "services/resources/settings";
 import { setBaseUrl } from "services/api";
 
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+
+import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
+
 import * as S from "./styles";
-import { useForm } from "pages/settings/hooks/useForm";
 
 export const FlowbuildPanel: React.FC = () => {
-  const { onSetToken, showNotification } = useForm();
+  const { onSetToken } = useForm();
+  const snackbar = useSnackbar();
 
   const defaultValue = {
     url:
@@ -43,9 +46,9 @@ export const FlowbuildPanel: React.FC = () => {
       await onSetToken();
 
       const message = "Sucesso ao salvar o servidor";
-      showNotification(message, "success");
+      snackbar.success(message);
     } catch (erro: any) {
-      showNotification(erro.message, "error");
+      snackbar.error(erro.message);
     }
   }
 
