@@ -77,38 +77,35 @@ export function useForm({ initialPayload }: TProps) {
   }
 
   async function onSubmit(payload: TPayload) {
-    if (form.loading) {
-      return;
+    try {
+      if (form.loading) {
+        return;
+      }
+
+      setForm((prev) => ({ ...prev, loading: true }));
+
+      const connectOptions: TConnectOptions = {
+        username: payload.username,
+        password: payload.password,
+
+        onSuccess: () => {
+          LocalStorage.getInstance().setValue("MQTT_URL", payload.url);
+          LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
+
+          snackbar.success("Sucesso ao conectar com o servidor");
+        },
+      };
+
+      await pahoMqtt.validateConnection(
+        payload.url,
+        Number(payload.port),
+        connectOptions
+      );
+    } catch (error) {
+      snackbar.error("Falha de conexão com MQTT");
+    } finally {
+      setForm((prev) => ({ ...prev, loading: false }));
     }
-
-    setForm((prev) => ({ ...prev, loading: true }));
-
-    const connectOptions: TConnectOptions = {
-      username: payload.username,
-      password: payload.password,
-
-      onSuccess: () => {
-        const mqttUrl = `${payload.url}:${payload.port}`;
-
-        LocalStorage.getInstance().setValue("MQTT_URL", mqttUrl);
-        LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
-
-        snackbar.success("Sucesso ao conectar com o servidor");
-      },
-
-      onFailure: () => {
-        setForm((prev) => ({ ...prev, loading: false }));
-        snackbar.error("Falha de conexão com MQTT");
-      },
-    };
-
-    await pahoMqtt.validateConnection(
-      payload.url,
-      Number(payload.port),
-      connectOptions
-    );
-
-    setForm((prev) => ({ ...prev, loading: false }));
   }
 
   return {
