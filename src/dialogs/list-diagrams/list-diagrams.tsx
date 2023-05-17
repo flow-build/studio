@@ -27,6 +27,13 @@ export const ListDiagrams: React.FC<Props> = ({
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
   );
 
+  const orderData: any[] = [];
+  const dataNoDefault =
+    data.filter((item: IDiagram) => item.isDefault !== true) ?? [];
+  const dataDefault =
+    data.find((item: IDiagram) => item.isDefault === true) ?? [];
+  orderData.push(...dataDefault, ...dataNoDefault);
+
   function onClickListDiagram(diagram: TUser) {
     if (onClose) {
       onClose();
@@ -42,7 +49,15 @@ export const ListDiagrams: React.FC<Props> = ({
   function getSubtitle(diagram: IDiagram) {
     const createdAt = getShortFormatByDate(diagram.createdAt);
     const updatedAt = getShortFormatByDate(diagram.updatedAt);
-    return `criado em: ${createdAt} - atualizado em: ${updatedAt}`;
+    return `Criado em: ${createdAt} - Última atualização: ${updatedAt}`;
+  }
+
+  function getType(diagram: IDiagram) {
+    return `Tipo de diagrama: ${diagram.type}`;
+  }
+
+  function checkIsDefault(diagram: IDiagram) {
+    return `${diagram.name} ${diagram.isDefault ? `- Padrão` : new String()}`;
   }
 
   return (
@@ -54,14 +69,19 @@ export const ListDiagrams: React.FC<Props> = ({
 
       <S.Content dividers>
         <S.ListDiagram>
-          {data.length > 0 &&
-            data?.map((diagram: any) => (
+          {orderData.length > 0 &&
+            orderData.map((diagram: any) => (
               <S.ItemDiagram disablePadding>
                 <S.ItemButton onClick={() => onClickListDiagram(diagram)}>
                   <S.TextDiagram
                     key={diagram.id}
-                    primary={diagram.name}
-                    secondary={getSubtitle(diagram)}
+                    primary={checkIsDefault(diagram)}
+                    secondary={
+                      <>
+                        <S.ItemText>{getType(diagram)}</S.ItemText>
+                        <S.ItemText>{getSubtitle(diagram)}</S.ItemText>
+                      </>
+                    }
                   />
                   <S.RightArrowList />
                 </S.ItemButton>

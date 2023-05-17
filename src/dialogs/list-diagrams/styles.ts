@@ -41,3 +41,8 @@ export const ItemButton = styled(ListItemButton)``;
 export const TextDiagram = styled(ListItemText)``;
 
 export const RightArrowList = styled(ArrowForwardIosIcon)``;
+
+export const ItemText = styled.div`
+  font-weight: normal;
+`;
+
