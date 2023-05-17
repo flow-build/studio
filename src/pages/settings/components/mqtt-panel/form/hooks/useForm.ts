@@ -2,6 +2,9 @@ import { useState } from "react";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
+/* Local - Types */
+import { TPayload } from "pages/settings/components/mqtt-panel/form/types/TPayload";
+
 /* Shared - Hooks */
 import { TConnectOptions } from "shared/hooks/paho-mqtt/types/TConnectOptions";
 import { usePahoMqtt } from "shared/hooks/paho-mqtt/usePahoMqtt";
@@ -9,15 +12,6 @@ import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
 
 /* Shared - Utils */
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
-
-type TPayload = {
-  namespace?: string;
-  url: string;
-  port: string;
-  isConnectionSecurity: boolean;
-  username?: string;
-  password?: string;
-};
 
 type TProps = {
   initialPayload: TPayload;

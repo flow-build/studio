@@ -1,19 +1,11 @@
 import { Switch } from "@mui/material";
 
 import { useForm } from "pages/settings/components/mqtt-panel/form/hooks/useForm";
+import { TPayload } from "pages/settings/components/mqtt-panel/form/types/TPayload";
 
 import * as S from "./styles";
 
 type Props = {};
-
-type TPayload = {
-  namespace?: string;
-  url: string;
-  port: string;
-  isConnectionSecurity: boolean;
-  username?: string;
-  password?: string;
-};
 
 const initialPayload: TPayload = {
   url: "",
