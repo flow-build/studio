@@ -84,7 +84,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
 
   const getAllDiagrams = useCallback(async () => {
     const diagramsId = await listDiagramByWorkflowId(workflowId as string);
-    console.log(diagramsId);
     dispatch(setDiagramSelected(diagramsId));
 
     if (!diagramsId) {
