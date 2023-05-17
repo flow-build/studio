@@ -3,18 +3,32 @@ import { Switch } from "@mui/material";
 import { useForm } from "pages/settings/components/mqtt-panel/form/hooks/useForm";
 import { TPayload } from "pages/settings/components/mqtt-panel/form/types/TPayload";
 
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+
 import * as S from "./styles";
 
 type Props = {};
 
-const initialPayload: TPayload = {
-  url: "",
-  port: "",
-  isConnectionSecurity: false,
-};
-
 export const Form: React.FC<Props> = () => {
+  const initialPayload: TPayload = getInitialPayload();
+
   const form = useForm({ initialPayload });
+
+  function getInitialPayload(): TPayload {
+    const localStorageInstance = LocalStorage.getInstance();
+
+    const localUrl = localStorageInstance.getValueByKey<string>("MQTT_URL");
+    const localPort = localStorageInstance.getValueByKey<string>("MQTT_PORT");
+
+    const envUrl = process.env.REACT_APP_MQTT_HOST ?? "";
+    const envPort = process.env.REACT_APP_MQTT_PORT ?? "";
+
+    return {
+      url: localUrl ?? envUrl,
+      port: localPort ?? envPort,
+      isConnectionSecurity: false,
+    };
+  }
 
   return (
     <S.Wrapper>
