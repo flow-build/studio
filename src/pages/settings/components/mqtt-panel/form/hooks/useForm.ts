@@ -69,6 +69,10 @@ export function useForm({ initialPayload }: TProps) {
   }
 
   async function onSubmit(payload: TPayload) {
+    if (form.loading) {
+      return;
+    }
+
     setForm((prev) => ({ ...prev, loading: true }));
 
     const connectOptions: TConnectOptions = {
