@@ -9,10 +9,13 @@ import { LocalStorage } from "shared/utils/base-storage/local-storage";
 import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
 
 import * as S from "./styles";
+import { useDispatch } from "react-redux";
+import { updateMqtt } from "store/slices/settings";
 
 export const FlowbuildPanel: React.FC = () => {
   const { onSetToken } = useForm();
   const snackbar = useSnackbar();
+  const dispatch = useDispatch();
 
   const defaultValue = {
     url:
@@ -45,6 +48,7 @@ export const FlowbuildPanel: React.FC = () => {
       setBaseUrl(url);
       await onSetToken();
 
+      dispatch(updateMqtt());
       const message = "Sucesso ao salvar o servidor";
       snackbar.success(message);
     } catch (erro: any) {

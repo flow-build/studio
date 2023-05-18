@@ -13,12 +13,15 @@ import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
 
 /* Shared - Utils */
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { useDispatch } from "react-redux";
+import { updateMqtt } from "store/slices/settings";
 
 type TProps = {
   initialPayload: TPayload;
 };
 
 export function useForm({ initialPayload }: TProps) {
+  const dispatch = useDispatch();
   const pahoMqtt = usePahoMqtt();
   const snackbar = useSnackbar();
 
@@ -103,8 +106,12 @@ export function useForm({ initialPayload }: TProps) {
               "MQTT_PASSWORD",
               payload.password
             );
+          } else {
+            LocalStorage.getInstance().removeValueByKey("MQTT_USERNAME");
+            LocalStorage.getInstance().removeValueByKey("MQTT_PASSWORD");
           }
 
+          dispatch(updateMqtt());
           snackbar.success("Sucesso ao conectar com o servidor");
         },
       };

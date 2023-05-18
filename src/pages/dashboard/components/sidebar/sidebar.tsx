@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
@@ -21,6 +21,8 @@ import jwtDecode from "jwt-decode";
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
 import { TUser } from "models/user";
 import { healthcheckMqtt } from "services/resources/engine-mqtt";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
 
 const drawerWidth = 240;
 
@@ -86,96 +88,109 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     StatusConnection.ERROR
   );
 
+  const lastMqttUpdate = useSelector(
+    (state: RootState) => state.settings.mqtt.lastUpdate
+  );
+
   const clientRef = useRef<Client>();
+  const lastMqttUpdateRef = useRef<Date>();
 
-  useEffect(() => {
-    const connectToMqtt = async () => {
-      const localInstance = LocalStorage.getInstance();
+  const connectToMqtt = useCallback(async () => {
+    const localInstance = LocalStorage.getInstance();
 
-      const hostMqtt = localInstance.getValueByKey<string>("MQTT_URL");
-      const portMqtt = localInstance.getValueByKey<string>("MQTT_PORT");
+    const hostMqtt = localInstance.getValueByKey<string>("MQTT_URL");
+    const portMqtt = localInstance.getValueByKey<string>("MQTT_PORT");
 
-      if (!hostMqtt || !portMqtt) {
-        return;
-      }
+    if (!hostMqtt || !portMqtt) {
+      return;
+    }
 
-      const id = uuidv4();
+    const id = uuidv4();
 
-      const mqttConfig = {
-        host: hostMqtt,
-        port: Number(portMqtt),
-        clientId: id,
-      };
+    const mqttConfig = {
+      host: hostMqtt,
+      port: Number(portMqtt),
+      clientId: id,
+    };
 
-      const clientMqtt = new Client(
-        mqttConfig.host,
-        mqttConfig.port,
-        mqttConfig.clientId
-      );
+    const clientMqtt = new Client(
+      mqttConfig.host,
+      mqttConfig.port,
+      mqttConfig.clientId
+    );
 
-      const usernameMqtt = localInstance.getValueByKey<string>("MQTT_USERNAME");
-      const passwordMqtt = localInstance.getValueByKey<string>("MQTT_PASSWORD");
+    const usernameMqtt = localInstance.getValueByKey<string>("MQTT_USERNAME");
+    const passwordMqtt = localInstance.getValueByKey<string>("MQTT_PASSWORD");
 
-      const securityOptions: { [key: string]: string | boolean } = {};
+    const securityOptions: { [key: string]: string | boolean } = {};
 
-      if (usernameMqtt && passwordMqtt) {
-        securityOptions.userName = usernameMqtt;
-        securityOptions.password = passwordMqtt;
-        securityOptions.useSSL = true;
-      }
+    if (usernameMqtt && passwordMqtt) {
+      securityOptions.userName = usernameMqtt;
+      securityOptions.password = passwordMqtt;
+      securityOptions.useSSL = true;
+    }
 
-      clientMqtt.connect({
-        ...securityOptions,
-        timeout: 2,
-        onSuccess: async () => {
-          clientRef.current = clientMqtt;
-          setStatusConnection(StatusConnection.WARNING);
+    clientMqtt.connect({
+      ...securityOptions,
+      timeout: 2,
+      onSuccess: async () => {
+        clientRef.current = clientMqtt;
+        setStatusConnection(StatusConnection.WARNING);
 
-          const token =
-            SessionStorage.getInstance().getValueByKey<string>("TOKEN");
-
-          if (!token) {
-            return;
-          }
-
-          const decoded = jwtDecode(token) as TUser;
-
-          const namespace =
-            localInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
-
-          const topic = `${namespace}/beacon/${decoded.actor_id}`;
-          clientMqtt.subscribe(topic);
-
-          /* TODO: Verificar se existe salvo no local os dados do flowbuild server e do mqtt server */
-          /* TODO: Caso tenha as configurações ja definidas, fazer a request para {{REACT_APP_BASE_URL}}/cockpit/connection/beacon */
-          // Requisição citada no TODO acima (já tem o service implementado): healthcheckMqtt
-          await healthcheckMqtt({ token });
-        },
-        onFailure: () => {
-          setStatusConnection(StatusConnection.ERROR);
-        },
-      });
-
-      clientMqtt.onMessageArrived = (message: Message) => {
         const token =
           SessionStorage.getInstance().getValueByKey<string>("TOKEN");
 
-        const payload = JSON.parse(message.payloadString);
-
-        if (_isEqual(token, payload?.token)) {
-          setStatusConnection(StatusConnection.SUCCESS);
+        if (!token) {
+          return;
         }
-      };
-    };
 
+        const decoded = jwtDecode(token) as TUser;
+
+        const namespace =
+          localInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
+
+        const topic = `${namespace}/beacon/${decoded.actor_id}`;
+        clientMqtt.subscribe(topic);
+
+        /* TODO: Verificar se existe salvo no local os dados do flowbuild server e do mqtt server */
+        /* TODO: Caso tenha as configurações ja definidas, fazer a request para {{REACT_APP_BASE_URL}}/cockpit/connection/beacon */
+        // Requisição citada no TODO acima (já tem o service implementado): healthcheckMqtt
+        await healthcheckMqtt({ token });
+      },
+      onFailure: () => {
+        setStatusConnection(StatusConnection.ERROR);
+      },
+    });
+
+    clientMqtt.onMessageArrived = (message: Message) => {
+      const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
+
+      const payload = JSON.parse(message.payloadString);
+
+      if (_isEqual(token, payload?.token)) {
+        setStatusConnection(StatusConnection.SUCCESS);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!clientRef?.current?.isConnected()) {
       connectToMqtt();
     }
-  }, []);
+  }, [connectToMqtt]);
+
+  useEffect(() => {
+    if (!_isEqual(lastMqttUpdate, lastMqttUpdateRef.current)) {
+      clientRef.current?.disconnect();
+      connectToMqtt();
+      lastMqttUpdateRef.current = lastMqttUpdate;
+    }
+  }, [lastMqttUpdate, connectToMqtt]);
 
   useEffect(() => {
     return () => {
       if (clientRef.current?.isConnected()) {
+        console.log("disconnect");
         clientRef.current?.disconnect();
       }
     };
