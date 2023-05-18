@@ -98,8 +98,14 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   const connectToMqtt = useCallback(async () => {
     const localInstance = LocalStorage.getInstance();
 
-    const hostMqtt = localInstance.getValueByKey<string>("MQTT_URL");
-    const portMqtt = localInstance.getValueByKey<string>("MQTT_PORT");
+    const envHost = process.env.REACT_APP_MQTT_HOST ?? "";
+    const envPort = process.env.REACT_APP_MQTT_PORT ?? "";
+
+    const localHost = localInstance.getValueByKey<string>("MQTT_URL");
+    const localPort = localInstance.getValueByKey<string>("MQTT_PORT");
+
+    const hostMqtt = localHost ?? envHost;
+    const portMqtt = localPort ?? envPort;
 
     if (!hostMqtt || !portMqtt) {
       return;
