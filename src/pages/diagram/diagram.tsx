@@ -15,6 +15,8 @@ import _isEmpty from "lodash/isEmpty";
 import { TProcess } from "models/process";
 import { TUser } from "models/user";
 
+import { useSnackbar } from "notistack";
+
 import { getExecutionByProcessId } from "services/resources/processes/execution";
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
@@ -53,6 +55,8 @@ import { listByWorkflowId } from "services/resources/processes/list-by-process-i
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const { workflowId } = useParams();
   const { id } = useParams();
 
@@ -81,6 +85,13 @@ export const DiagramRefactored: React.FC<Props> = () => {
   const getAllDiagrams = useCallback(async () => {
     const diagramsId = await listDiagramByWorkflowId(workflowId as string);
     dispatch(setDiagramSelected(diagramsId));
+
+    if (!diagramsId) {
+      return enqueueSnackbar("Erro ao retornar diagrama", {
+        autoHideDuration: 2000,
+        variant: "error",
+      });
+    }
 
     dispatch(
       setShowDiagramInfoDialog({
