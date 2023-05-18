@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
@@ -82,15 +82,14 @@ enum StatusConnection {
 export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   const sidebar = useSidebar();
   const version = useVersion();
-  const [isConnect, setIsConnect] = useState(false);
   const [statusConnection, setStatusConnection] = useState<StatusConnection>(
     StatusConnection.ERROR
   );
 
+  const clientRef = useRef<Client>();
+
   useEffect(() => {
     const connectToMqtt = async () => {
-      // const teste = await healthcheckMqtt();
-      // console.log({ teste });
       const localInstance = LocalStorage.getInstance();
 
       const hostMqtt = localInstance.getValueByKey<string>("MQTT_URL");
@@ -108,13 +107,11 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
         clientId: id,
       };
 
-      const client = new Client(
+      const clientMqtt = new Client(
         mqttConfig.host,
         mqttConfig.port,
         mqttConfig.clientId
       );
-
-      // console.log({ teste });
 
       const usernameMqtt = localInstance.getValueByKey<string>("MQTT_USERNAME");
       const passwordMqtt = localInstance.getValueByKey<string>("MQTT_PASSWORD");
@@ -127,11 +124,11 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
         securityOptions.useSSL = true;
       }
 
-      client.connect({
+      clientMqtt.connect({
         ...securityOptions,
         timeout: 2,
         onSuccess: async () => {
-          setIsConnect(true);
+          clientRef.current = clientMqtt;
           setStatusConnection(StatusConnection.WARNING);
 
           const token =
@@ -147,7 +144,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
             localInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
 
           const topic = `${namespace}/beacon/${decoded.actor_id}`;
-          client.subscribe(topic);
+          clientMqtt.subscribe(topic);
 
           /* TODO: Verificar se existe salvo no local os dados do flowbuild server e do mqtt server */
           /* TODO: Caso tenha as configurações ja definidas, fazer a request para {{REACT_APP_BASE_URL}}/cockpit/connection/beacon */
@@ -159,7 +156,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
         },
       });
 
-      client.onMessageArrived = (message: Message) => {
+      clientMqtt.onMessageArrived = (message: Message) => {
         const token =
           SessionStorage.getInstance().getValueByKey<string>("TOKEN");
 
@@ -171,14 +168,18 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
       };
     };
 
-    if (!isConnect) {
+    if (!clientRef?.current?.isConnected()) {
       connectToMqtt();
     }
+  }, []);
 
-    /* return () => {
-
-    } */
-  }, [isConnect]);
+  useEffect(() => {
+    return () => {
+      if (clientRef.current?.isConnected()) {
+        clientRef.current?.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <>
