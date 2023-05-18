@@ -9,7 +9,6 @@ import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
 
-
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
@@ -25,6 +24,7 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const [payload, setPayload] = useState<IEdit>({
     id,
     name: "",
+    isDefault: false,
     xml: "",
   });
 
@@ -46,11 +46,12 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
 
     const response = await edit({
       name: payload.name,
+      isDefault: payload.isDefault,
       id,
       xml: xml,
     });
 
-    setPayload(response)
+    setPayload(response);
 
     updateDiagramSuccess(diagramName);
 

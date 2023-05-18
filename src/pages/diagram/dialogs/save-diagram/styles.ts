@@ -9,6 +9,7 @@ import { IconButton } from "shared/components/icon-button";
 import { Input } from "shared/components/content-header/styles";
 import Button from "@mui/material/Button";
 import { Divider } from "@mui/material";
+import { CheckBox } from "shared/components/checkbox";
 
 export const DiagramWrapper = styled(Dialog).attrs({
   fullWidth: true,
@@ -47,6 +48,14 @@ export const DiagramInput = styled(Input).attrs({
   },
 })``;
 
+export const CheckboxWrapper = styled.div`
+  margin-top: 2.5rem;
+`;
+
+export const DiagramCheckbox = styled(CheckBox)`
+  padding-left: 2rem;
+`;
+
 export const SaveDiagramButton = styled(Button).attrs({
   title: "salvar",
   variant: "text",
@@ -69,3 +78,4 @@ export const ButtonDivider = styled(Divider).attrs({
   orientation: "vertical",
   flexItem: true,
 })``;
+

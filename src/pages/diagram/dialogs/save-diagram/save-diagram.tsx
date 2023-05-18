@@ -23,6 +23,7 @@ type Props = {
 export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   const { enqueueSnackbar } = useSnackbar();
   const { workflowId } = useParams();
+  const [isDefaultChecked, setIsDefaultChecked] = useState<boolean>(false);
 
   function getUserInfo() {
     const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
@@ -38,6 +39,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
   const [payload, setPayload] = useState<IPayload>({
     name: "",
+    isDefault: false,
   });
 
   const onChangeDiagramName = (valor: string, campo: keyof IPayload) => {
@@ -62,6 +64,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
     await create({
       name: payload.name,
+      isDefault: isDefaultChecked,
       workflowId: workflowId as string,
       userId: info.actor_id,
       xml,
@@ -89,6 +92,13 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
               onChangeDiagramName(event.target.value, "name")
             }
           />
+          <S.CheckboxWrapper>
+            <S.DiagramCheckbox
+              aria-label="Default?"
+              checked={payload?.isDefault}
+              onChange={(event) => setIsDefaultChecked(event.target.checked)}
+            />
+          </S.CheckboxWrapper>
         </S.DiagramContent>
 
         <S.DiagramDivider />

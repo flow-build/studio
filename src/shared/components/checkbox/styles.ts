@@ -1,0 +1,12 @@
+import styled from "styled-components";
+
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+
+export const Wrapper = styled(Checkbox)``;
+
+export const Container = styled(FormGroup)``;
+
+export const Label = styled(FormControlLabel)``;
+
