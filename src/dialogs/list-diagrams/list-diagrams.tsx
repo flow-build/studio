@@ -27,11 +27,11 @@ export const ListDiagrams: React.FC<Props> = ({
     (state: RootState) => state.dialogPage.diagramInfoDialog.data
   );
 
-  const orderData: any[] = [];
+  const orderData: IDiagram[] = [];
   const dataNoDefault =
     data.filter((item: IDiagram) => item.isDefault !== true) ?? [];
   const dataDefault =
-    data.find((item: IDiagram) => item.isDefault === true) ?? [];
+    data.filter((item: IDiagram) => item.isDefault === true) ?? [];
   orderData.push(...dataDefault, ...dataNoDefault);
 
   function onClickListDiagram(diagram: TUser) {
@@ -57,7 +57,7 @@ export const ListDiagrams: React.FC<Props> = ({
   }
 
   function checkIsDefault(diagram: IDiagram) {
-    return `${diagram.name} ${diagram.isDefault ? `- Padrão` : new String()}`;
+    return `${diagram.name} ${diagram.isDefault ? `- Padrão` : String()}`;
   }
 
   return (
@@ -71,7 +71,7 @@ export const ListDiagrams: React.FC<Props> = ({
         <S.ListDiagram>
           {orderData.length > 0 &&
             orderData.map((diagram: any) => (
-              <S.ItemDiagram disablePadding>
+              <S.ItemDiagram key={diagram.id} disablePadding>
                 <S.ItemButton onClick={() => onClickListDiagram(diagram)}>
                   <S.TextDiagram
                     key={diagram.id}
