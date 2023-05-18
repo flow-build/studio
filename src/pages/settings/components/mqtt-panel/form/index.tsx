@@ -20,13 +20,24 @@ export const Form: React.FC<Props> = () => {
     const localUrl = localStorageInstance.getValueByKey<string>("MQTT_URL");
     const localPort = localStorageInstance.getValueByKey<string>("MQTT_PORT");
 
+    const localUsername =
+      localStorageInstance.getValueByKey<string>("MQTT_USERNAME");
+
+    const localPassword =
+      localStorageInstance.getValueByKey<string>("MQTT_PASSWORD");
+
     const envUrl = process.env.REACT_APP_MQTT_HOST ?? "";
     const envPort = process.env.REACT_APP_MQTT_PORT ?? "";
+    const envUsername = process.env.REACT_APP_MQTT_USERNAME ?? "";
+    const envPassword = process.env.REACT_APP_MQTT_PASSWORD ?? "";
 
     return {
       url: localUrl ?? envUrl,
       port: localPort ?? envPort,
-      isConnectionSecurity: false,
+      username: localUsername ?? envUsername,
+      password: localPassword ?? envPassword,
+      isConnectionSecurity:
+        !!(localUsername ?? envUsername) || !!(localPassword ?? envPassword),
     };
   }
 
@@ -52,6 +63,8 @@ export const Form: React.FC<Props> = () => {
         />
 
         <S.RadioButton
+          defaultChecked={initialPayload.isConnectionSecurity}
+          checked={form.payload.isConnectionSecurity}
           onChange={(_, checked) => form.onSwitchSslProtocol(checked)}
           control={<Switch />}
         />
