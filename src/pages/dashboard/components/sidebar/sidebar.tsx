@@ -135,12 +135,12 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
       securityOptions.password = passwordMqtt;
       securityOptions.useSSL = true;
     }
+    clientRef.current = clientMqtt;
 
-    clientMqtt.connect({
+    clientRef.current.connect({
       ...securityOptions,
       timeout: 2,
       onSuccess: async () => {
-        clientRef.current = clientMqtt;
         setStatusConnection(StatusConnection.WARNING);
 
         const token =
@@ -152,11 +152,13 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
 
         const decoded = jwtDecode(token) as TUser;
 
-        const namespace =
-          localInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
+        if (clientRef.current) {
+          const namespace =
+            localInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
 
-        const topic = `${namespace}/beacon/${decoded.actor_id}`;
-        clientMqtt.subscribe(topic);
+          const topic = `${namespace}/beacon/${decoded.actor_id}`;
+          clientRef.current.subscribe(topic);
+        }
 
         /* TODO: Verificar se existe salvo no local os dados do flowbuild server e do mqtt server */
         /* TODO: Caso tenha as configurações ja definidas, fazer a request para {{REACT_APP_BASE_URL}}/cockpit/connection/beacon */
@@ -168,7 +170,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
       },
     });
 
-    clientMqtt.onMessageArrived = (message: Message) => {
+    clientRef.current.onMessageArrived = (message: Message) => {
       const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
 
       const payload = JSON.parse(message.payloadString);
@@ -187,6 +189,21 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
 
   useEffect(() => {
     if (!_isEqual(lastMqttUpdate, lastMqttUpdateRef.current)) {
+      const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
+
+      if (!token) {
+        return;
+      }
+
+      const decoded = jwtDecode(token) as TUser;
+
+      const namespace =
+        LocalStorage.getInstance().getValueByKey<string>("MQTT_NAMESPACE") ??
+        "";
+
+      const topic = `${namespace}/beacon/${decoded.actor_id}`;
+      clientRef.current?.unsubscribe(topic);
+
       clientRef.current?.disconnect();
       connectToMqtt();
       lastMqttUpdateRef.current = lastMqttUpdate;
