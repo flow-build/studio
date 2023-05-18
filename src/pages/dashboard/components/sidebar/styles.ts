@@ -20,7 +20,10 @@ export const Text = styled(DialogContentText)``;
 export const VersionContainer = styled(Box).attrs({
   sx: {
     display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     justifyContent: "center",
+    gap: 2,
     mb: 4,
   },
 })``;
