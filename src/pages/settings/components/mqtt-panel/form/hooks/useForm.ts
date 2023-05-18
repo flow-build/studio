@@ -92,6 +92,19 @@ export function useForm({ initialPayload }: TProps) {
           LocalStorage.getInstance().setValue("MQTT_URL", payload.url);
           LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
 
+          if (payload.username && payload.password) {
+            /* TODO: Fazer hash de usuario e senha */
+            LocalStorage.getInstance().setValue(
+              "MQTT_USERNAME",
+              payload.username
+            );
+
+            LocalStorage.getInstance().setValue(
+              "MQTT_PASSWORD",
+              payload.password
+            );
+          }
+
           snackbar.success("Sucesso ao conectar com o servidor");
         },
       };
