@@ -28,8 +28,12 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     xml: "",
   });
 
-  const onChangeDiagram = async (valor: string, campo: keyof IEdit) => {
-    setPayload((prev) => ({ ...prev, [campo]: valor }));
+  const onChangeDiagramName = async (value: string, field: keyof IEdit) => {
+    setPayload((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const onChangeDiagramIsDefault = (value: boolean, field: keyof IEdit) => {
+    setPayload((prev) => ({ ...prev, [field]: value }));
   };
 
   function updateDiagramSuccess(message: string) {
@@ -71,8 +75,19 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
         <S.DiagramContent>
           <S.DiagramInputName
             value={payload?.name}
-            onChange={(event) => onChangeDiagram(event.target.value, "name")}
+            onChange={(event) =>
+              onChangeDiagramName(event.target.value, "name")
+            }
           />
+          <S.CheckboxWrapper>
+            <S.DiagramCheckbox
+              aria-label="Default?"
+              checked={payload?.isDefault}
+              onChange={(event) =>
+                onChangeDiagramIsDefault(event.target.checked, "isDefault")
+              }
+            />
+          </S.CheckboxWrapper>
         </S.DiagramContent>
 
         <S.DiagramDivider />
