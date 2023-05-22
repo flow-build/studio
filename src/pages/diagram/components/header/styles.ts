@@ -12,7 +12,7 @@ export const Wrapper = styled(Box)<{ hideHeader: boolean }>`
   flex: 0.7;
   padding: 5px;
   border-radius: 15px;
-  background: ${({ theme }) => theme.palette.background.paper};
+  background: ${({ theme }) => theme.palette.success.main};
 
   ${({ hideHeader }) => hideHeader && { padding: 0, flex: "unset" }}
 `;
