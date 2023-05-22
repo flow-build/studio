@@ -52,11 +52,7 @@ export const Header: React.FC<Props> = ({
     requestDiagram();
   }, [workflowId, dialogPageState.diagramSelected]);
 
-  if (!workflow) {
-    return null;
-  }
-
-  if (!diagram) {
+  if (!workflow || !diagram) {
     return null;
   }
 
