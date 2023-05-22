@@ -49,7 +49,7 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     return decoded;
   }
 
-  function treatEditOrCreate(
+  async function treatEditOrCreate(
     name: string,
     isDefault: boolean,
     id: string,
@@ -61,7 +61,7 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     }
 
     if (id !== "undefined") {
-      edit({
+      await edit({
         name: name,
         isDefault: isDefault,
         id,
@@ -70,7 +70,7 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
 
       updateOrCreateDiagramSuccess(name, true);
     } else {
-      create({
+      await create({
         name: name,
         isDefault: isDefault,
         workflowId: workflowId as string,
