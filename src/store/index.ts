@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
-import diagramReducer from "store/slices/diagram";
-import dialogReducer from "store/slices/dialog"
-import filterReducer from "store/slices/filter";
 import comparePageReducer from "store/slices/compare-page";
-import workflowPageReducer from "store/slices/workflow-page";
+import diagramReducer from "store/slices/diagram";
+import dialogReducer from "store/slices/dialog";
+import filterReducer from "store/slices/filter";
 import historyReducer from "store/slices/process-history";
 import processIdReducer from "store/slices/process-id";
+import settingsReducer from "store/slices/settings";
+import workflowPageReducer from "store/slices/workflow-page";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     dialogPage: dialogReducer,
     processHistory: historyReducer,
     processId: processIdReducer,
+    settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

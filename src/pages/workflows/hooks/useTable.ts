@@ -1,7 +1,5 @@
 import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import _isEmpty from "lodash/isEmpty";
+import { useDispatch } from "react-redux";
 
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 
@@ -11,11 +9,7 @@ import { TWorkflow } from "models/workflow";
 
 import { getDateTimeFormatByDate } from "shared/utils/date";
 import { setProcessSelected } from "store/slices/diagram";
-import {
-  setDiagramSelected,
-  setShowDiagramInfoDialog,
-} from "store/slices/dialog";
-import { RootState } from "store";
+import { setDiagramSelected } from "store/slices/dialog";
 
 import {
   AddOutlined,
@@ -26,8 +20,6 @@ import {
 export function useTable(workflows: TWorkflow[]) {
   const dispatch = useDispatch();
   const workflowPage = useWorkflowPage();
-
-  const dialogPageState = useSelector((state: RootState) => state.dialogPage);
 
   const columnData = useMemo(() => {
     return [
