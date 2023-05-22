@@ -2,9 +2,11 @@ import styled from "styled-components";
 
 import Box from "@mui/material/Box";
 import DialogContentText from "@mui/material/DialogContentText";
+import { List } from "@mui/material";
 
 import { MenuItem as CMenuItem } from "pages/dashboard/components/sidebar/components/menu-item";
-import { List } from "@mui/material";
+import { DrawerHeader as BaseDrawerHeader } from "pages/dashboard/components/sidebar/components/drawer-header";
+import { Drawer as BaseDrawer } from "pages/dashboard/components/sidebar/components/drawer";
 
 export const MenuItem = styled(CMenuItem)``;
 
@@ -26,4 +28,10 @@ export const VersionContainer = styled(Box).attrs({
     gap: 2,
     mb: 4,
   },
+})``;
+
+export const DrawerHeader = styled(BaseDrawerHeader)``;
+
+export const Drawer = styled(BaseDrawer).attrs({
+  variant: "permanent",
 })``;
