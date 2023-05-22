@@ -30,5 +30,5 @@ export const StartProcessDialog = styled(StartProcess)``;
 
 export const ListDiagramsDialog = styled(ListDiagrams)``;
 
-export const EditDiagramDialog = styled(FormDiagram)``;
+export const FormDiagramDialog = styled(FormDiagram)``;
 
