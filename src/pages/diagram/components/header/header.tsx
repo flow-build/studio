@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RefreshIcon from "@mui/icons-material/Refresh";
-
-import statusOk from "assets/images/latest-version-button/status-ok.svg";
-import statusWarning from "assets/images/latest-version-button/status-warning.svg";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import SyncProblemIcon from "@mui/icons-material/SyncProblem";
 
 import { TUser } from "models/user";
 import { TWorkflow } from "models/workflow";
@@ -11,9 +11,9 @@ import { TWorkflow } from "models/workflow";
 import { listDiagramByWorkflowId } from "services/resources/diagrams/list-by-workflow-id";
 import { listWorkflowById } from "services/resources/workflows/list-by-id";
 
-import { RootState } from "store";
+import { Button } from "shared/components/button";
 
-import { IconButton } from "shared/components/icon-button";
+import { RootState } from "store";
 
 import * as S from "./styles";
 
@@ -21,12 +21,14 @@ type Props = {
   workflowId: string;
   onRefresh?: () => void;
   hideRefreshButton?: boolean;
+  hideWatchButton?: boolean;
   hideHeader?: boolean;
 };
 
 export const Header: React.FC<Props> = ({
   workflowId,
   hideRefreshButton,
+  hideWatchButton,
   onRefresh,
   hideHeader,
 }) => {
@@ -59,49 +61,51 @@ export const Header: React.FC<Props> = ({
   return (
     <S.Wrapper hideHeader={!!hideHeader}>
       {!hideHeader && (
-        <>
-          <S.TitleContent>
-            <S.Title>Workflow: {workflow?.name}</S.Title>
-            <S.Title>-</S.Title>
-            <S.Title>Version: {workflow?.version}</S.Title>
-          </S.TitleContent>
+        <S.SpacedRow>
+          <S.Row gap={30}>
+            <S.Column>
+              <S.Title>{workflow?.name}</S.Title>
+              <S.Subtitle>Version: {workflow?.version}</S.Subtitle>
+            </S.Column>
 
-          {workflow.isLatest && (
-            <S.Tooltip title="Ultima versão">
-              <S.Status>
-                <img src={statusOk} alt="StatusOk" />
-              </S.Status>
-            </S.Tooltip>
-          )}
+            {workflow.isLatest && (
+              <S.Tooltip title="Ultima versão">
+                <PublishedWithChangesIcon color="warning" />
+              </S.Tooltip>
+            )}
 
-          {!workflow.isLatest && (
-            <S.Tooltip title="Versão desatualizada">
-              <S.Status>
-                <img src={statusWarning} alt="StatusWarning" />
-              </S.Status>
-            </S.Tooltip>
-          )}
+            {!workflow.isLatest && (
+              <S.Tooltip title="Versão desatualizada">
+                <SyncProblemIcon color="warning" />
+              </S.Tooltip>
+            )}
 
-          {diagram?.name && (
-            <S.TitleContent>
-              <S.Title>Diagram: {diagram?.name}</S.Title>
-            </S.TitleContent>
-          )}
+            {diagram?.name && <S.Title>Diagram: {diagram?.name}</S.Title>}
 
-          {!diagram?.name && (
-            <S.TitleContent>
-              <S.Title>Diagram: diagrama não salvo</S.Title>
-            </S.TitleContent>
-          )}
+            {!diagram?.name && <S.Title>Diagram: diagrama não salvo</S.Title>}
+          </S.Row>
 
-          {!hideRefreshButton && (
-            <IconButton
-              onClick={onRefresh}
-              icon={RefreshIcon}
-              tooltip="Refresh"
-            />
-          )}
-        </>
+          <S.Row gap={10}>
+            {!hideRefreshButton && (
+              <Button
+                disableElevation
+                title="Refresh"
+                onClick={onRefresh}
+                endIcon={<RefreshIcon />}
+                size="small"
+              />
+            )}
+
+            {!hideWatchButton && (
+              <Button
+                disableElevation
+                title="Watch"
+                size="small"
+                endIcon={<VisibilityIcon />}
+              />
+            )}
+          </S.Row>
+        </S.SpacedRow>
       )}
     </S.Wrapper>
   );
