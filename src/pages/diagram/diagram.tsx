@@ -247,6 +247,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
         <S.Header
           hideHeader={_isEmpty(diagramPageState.processSelected)}
           hideRefreshButton={isProcessFinished}
+          hideWatchButton={isProcessFinished}
           workflowId={workflowId as string}
           onRefresh={onRefreshDiagram}
         />
