@@ -50,25 +50,19 @@ export function useTable(states: TState[]) {
       const compareLeft = parseJson<TState>(comparePageState.oldJson);
       const compareRight = parseJson<TState>(comparePageState.newJson);
 
-      let isLeftEmpty = _isEmpty(compareLeft);
-      let isRightEmpty = _isEmpty(compareRight);
-
       if (_isEqual(side, SIDE.LEFT)) {
         const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
 
         if (isSavedOnLeft) {
-          isLeftEmpty = true;
           return clearCompare(SIDE.LEFT);
         }
 
         const isSavedOnRight = getIfJsonIsAlreadySaved(state, compareRight);
 
         if (isSavedOnRight) {
-          isRightEmpty = true;
           clearCompare(SIDE.RIGHT);
         }
 
-        isLeftEmpty = false;
         dispatch(setOldJson(JSON.stringify(state)));
       }
 
@@ -76,18 +70,15 @@ export function useTable(states: TState[]) {
         const isSavedOnRight = getIfJsonIsAlreadySaved(state, compareRight);
 
         if (isSavedOnRight) {
-          isRightEmpty = true;
           return clearCompare(SIDE.RIGHT);
         }
 
         const isSavedOnLeft = getIfJsonIsAlreadySaved(state, compareLeft);
 
         if (isSavedOnLeft) {
-          isLeftEmpty = true;
           clearCompare(SIDE.LEFT);
         }
 
-        isRightEmpty = false;
         dispatch(setNewJson(JSON.stringify(state)));
       }
     },
