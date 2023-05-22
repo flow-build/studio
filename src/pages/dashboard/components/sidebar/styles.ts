@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Box from "@mui/material/Box";
 import DialogContentText from "@mui/material/DialogContentText";
 import { List } from "@mui/material";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import BaseDivider from "@mui/material/Divider";
 
 import { MenuItem as CMenuItem } from "pages/dashboard/components/sidebar/components/menu-item";
 import { DrawerHeader as BaseDrawerHeader } from "pages/dashboard/components/sidebar/components/drawer-header";
@@ -35,3 +37,7 @@ export const DrawerHeader = styled(BaseDrawerHeader)``;
 export const Drawer = styled(BaseDrawer).attrs({
   variant: "permanent",
 })``;
+
+export const Divider = styled(BaseDivider)``;
+
+export const ConnectIcon = styled(ConnectWithoutContactIcon)``;

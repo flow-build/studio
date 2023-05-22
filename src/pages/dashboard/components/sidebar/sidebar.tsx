@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Client, Message } from "paho-mqtt";
 import { useSelector } from "react-redux";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import Divider from "@mui/material/Divider";
 
 import { v4 as uuidv4 } from "uuid";
 import cryptoJs from "crypto-js";
@@ -186,7 +184,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
       <S.Drawer open={isOpen}>
         <S.DrawerHeader />
 
-        <Divider />
+        <S.Divider />
 
         <S.CustomList>
           <div>
@@ -214,7 +212,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
           </div>
 
           <S.VersionContainer>
-            <ConnectWithoutContactIcon color={statusConnection} />
+            <S.ConnectIcon color={statusConnection} />
 
             <S.Text>{version}</S.Text>
           </S.VersionContainer>
