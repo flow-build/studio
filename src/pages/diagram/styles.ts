@@ -6,7 +6,6 @@ import { Header as BaseHeader } from "pages/diagram/components/header";
 import { Confirmation } from "pages/diagram/dialogs/confirmation";
 import { ListProcesses } from "pages/diagram/dialogs/list-processes";
 import { ListDiagrams } from "../../dialogs/list-diagrams/list-diagrams";
-import { SaveDiagram } from "pages/diagram/dialogs/save-diagram";
 import { ProcessInfo } from "pages/diagram/dialogs/process-info";
 import { Properties } from "pages/diagram/dialogs/properties";
 import { ShowDataChannel } from "./dialogs/show-data-channel";
@@ -28,8 +27,6 @@ export const ListProcessesDialog = styled(ListProcesses)``;
 
 export const ListDiagramsDialog = styled(ListDiagrams)``;
 
-export const SaveDiagramDialog = styled(SaveDiagram)``;
-
 export const DeleteDiagramDialog = styled(DeleteDiagram)``;
 
 export const DeleteConfirmation = styled(ConfirmationDelete)``;
@@ -44,3 +41,4 @@ export const ShowDataChannelDialog = styled(ShowDataChannel)``;
 export const ConfirmationDialog = styled(Confirmation)``;
 
 export const ProcessInfoDialog = styled(ProcessInfo)``;
+

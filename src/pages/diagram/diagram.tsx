@@ -272,14 +272,6 @@ export const DiagramRefactored: React.FC<Props> = () => {
       )}
 
       {dialogPageState.editDialog.isVisible && (
-        <S.SaveDiagramDialog
-          isOpen={dialogPageState.editDialog.isVisible}
-          onClose={() => dispatch(setEditDialog({ isVisible: false }))}
-          xml={xml}
-        />
-      )}
-
-      {dialogPageState.editDialog.isVisible && (
         <S.EditDiagramDialog
           isOpen={dialogPageState.editDialog.isVisible}
           onClose={() => dispatch(setEditDialog({ isVisible: false }))}
