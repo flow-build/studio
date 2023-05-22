@@ -251,7 +251,7 @@ export const DiagramRefactored: React.FC<Props> = () => {
           onRefresh={onRefreshDiagram}
         />
 
-        <Fab actions={actions} />
+        <Fab top={18} actions={actions} />
       </S.Wrapper>
 
       <S.ListProcessesDialog
