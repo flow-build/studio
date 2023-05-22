@@ -1,27 +1,31 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { Client, Message } from "paho-mqtt";
+import { useSelector } from "react-redux";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import _isEqual from "lodash/isEqual";
-import cryptoJs from "crypto-js";
-
 import Divider from "@mui/material/Divider";
+
+import { v4 as uuidv4 } from "uuid";
+import cryptoJs from "crypto-js";
+import jwtDecode from "jwt-decode";
+import _isEqual from "lodash/isEqual";
 
 import { TypeMenuItem } from "constants/type-menu-item";
 
-import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
-import { useVersion } from "shared/hooks/version/useVersion";
+import { TUser } from "models/user";
+
 import { ProcessIdSearch } from "pages/dashboard/components/sidebar/dialogs/process-id-search";
+import { useSidebar } from "pages/dashboard/components/sidebar/hooks/useSidebar";
+
+import { healthcheckMqtt } from "services/resources/engine-mqtt";
+
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
+import { useVersion } from "shared/hooks/version/useVersion";
+
+import { RootState } from "store";
 
 import * as S from "./styles";
-import { Client, Message } from "paho-mqtt";
-import { SessionStorage } from "shared/utils/base-storage/session-storage";
-import jwtDecode from "jwt-decode";
-import { LocalStorage } from "shared/utils/base-storage/local-storage";
-import { TUser } from "models/user";
-import { healthcheckMqtt } from "services/resources/engine-mqtt";
-import { useSelector } from "react-redux";
-import { RootState } from "store";
 
 type Props = {
   isOpen: boolean;
