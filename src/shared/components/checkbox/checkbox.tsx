@@ -5,9 +5,12 @@ type Props = CheckboxProps;
 
 export const CheckBox: React.FC<Props> = ({ ...props }) => {
   return (
-    <S.Container>
-      <S.Label control={<S.Wrapper {...props} />} label={props["aria-label"]} />
-    </S.Container>
+    <S.Wrapper>
+      <S.Label
+        control={<S.CheckboxControl {...props} />}
+        label={props["aria-label"]}
+      />
+    </S.Wrapper>
   );
 };
 

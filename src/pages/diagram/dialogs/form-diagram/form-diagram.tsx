@@ -20,7 +20,7 @@ type Props = {
   xml: string;
 };
 
-export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
+export const FormDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const diagram = useDiagram();

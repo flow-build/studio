@@ -34,7 +34,7 @@ import { setElement } from "store/slices/diagram";
 
 import { RootState } from "store";
 import { useParams } from "react-router-dom";
-import { IEdit } from "../dialogs/edit-diagram/types/IEdit";
+import { IEdit } from "../dialogs/form-diagram/types/IEdit";
 
 interface IColor {
   backgroundColor?: string;
