@@ -247,11 +247,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
         <S.Header
           hideHeader={_isEmpty(diagramPageState.processSelected)}
           hideRefreshButton={isProcessFinished}
+          hideWatchButton={isProcessFinished}
           workflowId={workflowId as string}
           onRefresh={onRefreshDiagram}
         />
 
-        <Fab actions={actions} />
+        <Fab top={18} actions={actions} />
       </S.Wrapper>
 
       <S.ListProcessesDialog
