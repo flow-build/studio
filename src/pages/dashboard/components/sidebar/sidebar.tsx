@@ -39,7 +39,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
       tryingConnection.current = false;
     };
 
-    connect().finally();
+    connect().then();
   }, [connectToMqtt]);
 
   return (
