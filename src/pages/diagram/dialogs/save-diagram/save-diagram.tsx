@@ -52,7 +52,7 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     const diagramName = diagram.payload.name;
 
     await create({
-      name: diagram.payload.name,
+      name: diagramName,
       isDefault: diagram.payload.isDefault,
       workflowId: workflowId as string,
       userId: info.actor_id,

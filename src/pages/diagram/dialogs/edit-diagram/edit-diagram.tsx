@@ -2,42 +2,88 @@ import { edit } from "services/resources/diagrams/edit";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
+import jwt_decode from "jwt-decode";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
+
 import { useSnackbar } from "notistack";
 
 import * as S from "./styles";
+import { create } from "services/resources/diagrams/create";
+import { useParams } from "react-router-dom";
+import { TUser } from "models/user";
 
 type Props = {
   isOpen: boolean;
   onClose?: () => void;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   id: string;
+  xml: string;
 };
 
 export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const diagram = useDiagram();
+  const { workflowId } = useParams();
 
-  function updateDiagramSuccess(message: string) {
-    enqueueSnackbar(`Diagrama ${message} editado!`, {
+  function updateOrCreateDiagramSuccess(message: string, isEdit: boolean) {
+    const msgSuccess = isEdit
+      ? `Diagrama ${message} editado!`
+      : `Diagrama ${message} criado!`;
+
+    enqueueSnackbar(msgSuccess, {
       autoHideDuration: 2000,
       variant: "success",
     });
   }
 
-  async function handleClickDiagramUpdate() {
-    const diagramName = diagram.payload.name;
+  function getUserInfo() {
+    const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
 
+    if (!token) {
+      return;
+    }
+
+    const decoded = jwt_decode(token) as TUser;
+    SessionStorage.getInstance().setValue("TOKEN", token);
+    return decoded;
+  }
+
+  const treatEditOrCreate = async (
+    name: string,
+    isDefault: boolean,
+    id: string,
+    xml: string
+  ) => {
+    const info = getUserInfo();
+    if (!info) {
+      return;
+    }
+
+    if (id !== "undefined") {
+      await edit({
+        name: name,
+        isDefault: isDefault,
+        id,
+        xml: xml,
+      });
+      updateOrCreateDiagramSuccess(name, true);
+    } else {
+      await create({
+        name: name,
+        isDefault: isDefault,
+        workflowId: workflowId as string,
+        userId: info.actor_id,
+        xml,
+      });
+      updateOrCreateDiagramSuccess(name, false);
+    }
+  };
+
+  async function handleClickDiagramUpdate() {
     const { xml } = await diagram.modeler.saveXML();
 
-    await edit({
-      name: diagram.payload.name,
-      isDefault: diagram.payload.isDefault,
-      id,
-      xml: xml,
-    });
-
-    updateDiagramSuccess(diagramName);
+    treatEditOrCreate(diagram.payload.name, diagram.payload.isDefault, id, xml);
 
     if (onClose) {
       onClose();
