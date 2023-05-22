@@ -1,4 +1,4 @@
-import { Form as BaseForm } from "pages/settings/components/form";
+import { Form as BaseForm } from "pages/settings/components/flowbuild-panel/form";
 import { Grid } from "@mui/material";
 import styled from "styled-components";
 
