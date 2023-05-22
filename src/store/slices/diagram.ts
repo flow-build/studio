@@ -6,7 +6,6 @@ interface IInitialState {
   confirmationDialog: { isVisible: boolean; data?: any };
   saveConfirmationDialog: { isVisible: boolean; data?: any };
   processInfoDialog: { isVisible: boolean; data?: any };
-  showDataChannelDialog: { isVisible: boolean; data?: any };
   deleteDialog: { isVisible: boolean; data?: Record<string, unknown> };
   deleteConfirmationDialog: { isVisible: boolean; data?: any };
   saveDialog: { isVisible: boolean; data?: any };
@@ -32,11 +31,6 @@ const initialState: IInitialState = {
   },
 
   processInfoDialog: {
-    isVisible: false,
-    data: {},
-  },
-
-  showDataChannelDialog: {
     isVisible: false,
     data: {},
   },
@@ -121,16 +115,6 @@ export const diagramSlice = createSlice({
       };
     },
 
-    setShowDataChannelDialog: (
-      state,
-      action: PayloadAction<{ isVisible: boolean; data?: any }>
-    ) => {
-      state.showDataChannelDialog = {
-        isVisible: action.payload.isVisible,
-        data: action.payload.data ?? {},
-      };
-    },
-
     setDeleteDialog: (
       state,
       action: PayloadAction<{ isVisible: boolean; data?: any }>
@@ -173,7 +157,6 @@ export const {
   setSaveConfirmationDialog,
   setShowPropertiesDialog,
   setShowProcessInfoDialog,
-  setShowDataChannelDialog,
   setDeleteDialog,
   setDeleteConfirmationDialog,
   setSaveDialog,

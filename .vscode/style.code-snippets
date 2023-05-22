@@ -1,0 +1,11 @@
+{
+  "Create a styled boilerplate": {
+    "scope": "typescript",
+    "prefix": "fs-create-style",
+    "body": [
+      "import styled from 'styled-components';\n",
+      "export const Wrapper = styled.div``;\n"
+    ],
+    "description": "Create a styled component"
+  }
+}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 
-import { IPayloadForm } from "pages/settings/components/types/IPayloadForm";
+import { IPayloadForm } from "pages/settings/types/IPayloadForm";
 
 import * as S from "./styles";
 

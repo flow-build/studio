@@ -8,12 +8,13 @@ import { setDashboardUrl } from "services/api";
 
 import { LocalStorage } from "shared/utils/base-storage/local-storage";
 
+import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
+
 import * as S from "./styles";
-import { useForm } from "pages/settings/hooks/useForm";
 
 export const DashboardPanel: React.FC = () => {
   const navigate = useNavigate();
-  const { onSetToken, showNotification } = useForm();
+  const snackbar = useSnackbar();
 
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
   const urlMetabase = process.env.REACT_APP_METABASE_SITE_URL as string;
@@ -40,13 +41,12 @@ export const DashboardPanel: React.FC = () => {
         `${payload.metabaseSiteUrl}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`
       );
 
-      await onSetToken();
-
       const message = "Sucesso ao conectar com o servidor";
-      showNotification(message, "success");
+      snackbar.success(message);
+
       navigate("/dashboard");
     } catch (erro: any) {
-      showNotification(erro.message, "error");
+      snackbar.error(erro.message);
     } finally {
       setIsLoadingDashboard(false);
     }
