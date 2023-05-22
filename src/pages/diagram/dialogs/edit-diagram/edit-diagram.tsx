@@ -49,41 +49,48 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
     return decoded;
   }
 
-  const treatEditOrCreate = async (
+  function treatEditOrCreate(
     name: string,
     isDefault: boolean,
     id: string,
     xml: string
-  ) => {
+  ) {
     const info = getUserInfo();
     if (!info) {
       return;
     }
 
     if (id !== "undefined") {
-      await edit({
+      edit({
         name: name,
         isDefault: isDefault,
         id,
         xml: xml,
       });
+
       updateOrCreateDiagramSuccess(name, true);
     } else {
-      await create({
+      create({
         name: name,
         isDefault: isDefault,
         workflowId: workflowId as string,
         userId: info.actor_id,
         xml,
       });
+
       updateOrCreateDiagramSuccess(name, false);
     }
-  };
+  }
 
   async function handleClickDiagramUpdate() {
     const { xml } = await diagram.modeler.saveXML();
 
-    treatEditOrCreate(diagram.payload.name, diagram.payload.isDefault, id, xml);
+    await treatEditOrCreate(
+      diagram.payload.name,
+      diagram.payload.isDefault,
+      id,
+      xml
+    );
 
     if (onClose) {
       onClose();
