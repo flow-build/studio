@@ -97,7 +97,6 @@ export function useForm({ initialPayload }: TProps) {
           LocalStorage.getInstance().setValue("MQTT_PORT", payload.port);
 
           if (payload.username && payload.password) {
-            /* TODO: Fazer hash de usuario e senha */
             const hashPassword = cryptoJs.AES.encrypt(
               payload.password,
               process.env.REACT_APP_CRYPTO_SECRET_KEY ?? ""
