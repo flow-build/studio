@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import jwt_decode from "jwt-decode";
-
-import { IPayload } from "pages/diagram/dialogs/save-diagram/types/IPayload";
 
 import { TUser } from "models/user";
 
@@ -12,6 +9,7 @@ import { create } from "services/resources/diagrams/create";
 import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 import * as S from "./styles";
+import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
 type Props = {
   isOpen: boolean;
@@ -23,6 +21,7 @@ type Props = {
 export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
   const { enqueueSnackbar } = useSnackbar();
   const { workflowId } = useParams();
+  const diagram = useDiagram();
 
   function getUserInfo() {
     const token = SessionStorage.getInstance().getValueByKey<string>("TOKEN");
@@ -35,15 +34,6 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
     SessionStorage.getInstance().setValue("TOKEN", token);
     return decoded;
   }
-
-  const [payload, setPayload] = useState<IPayload>({
-    name: "",
-    isDefault: false,
-  });
-
-  const onChangeDiagram = (value: string | boolean, field: keyof IPayload) => {
-    setPayload((prev) => ({ ...prev, [field]: value }));
-  };
 
   function createDiagramSuccess(message: string) {
     enqueueSnackbar(`Diagrama ${message} criado!`, {
@@ -59,11 +49,11 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
       return;
     }
 
-    const diagramName = payload?.name;
+    const diagramName = diagram.payload.name;
 
     await create({
-      name: payload.name,
-      isDefault: payload.isDefault,
+      name: diagram.payload.name,
+      isDefault: diagram.payload.isDefault,
       workflowId: workflowId as string,
       userId: info.actor_id,
       xml,
@@ -86,15 +76,17 @@ export const SaveDiagram: React.FC<Props> = ({ isOpen, onClose, xml }) => {
 
         <S.DiagramContent>
           <S.DiagramInput
-            value={payload?.name}
-            onChange={(event) => onChangeDiagram(event.target.value, "name")}
+            value={diagram.payload.name}
+            onChange={(event) =>
+              diagram.onChangeDiagram(event.target.value, "name")
+            }
           />
           <S.CheckboxWrapper>
             <S.DiagramCheckbox
               aria-label="Default?"
-              checked={payload?.isDefault}
+              checked={diagram.payload.isDefault}
               onChange={(event) =>
-                onChangeDiagram(event.target.checked, "isDefault")
+                diagram.onChangeDiagram(event.target.checked, "isDefault")
               }
             />
           </S.CheckboxWrapper>

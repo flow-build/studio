@@ -1,7 +1,4 @@
-import { useState } from "react";
-
 import { edit } from "services/resources/diagrams/edit";
-import { IEdit } from "./types/IEdit";
 
 import { useDiagram } from "pages/diagram/hooks/useDiagram";
 
@@ -21,20 +18,6 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
 
   const diagram = useDiagram();
 
-  const [payload, setPayload] = useState<IEdit>({
-    id,
-    name: "",
-    isDefault: false,
-    xml: "",
-  });
-
-  const onChangeDiagram = async (
-    value: string | boolean,
-    field: keyof IEdit
-  ) => {
-    setPayload((prev) => ({ ...prev, [field]: value }));
-  };
-
   function updateDiagramSuccess(message: string) {
     enqueueSnackbar(`Diagrama ${message} editado!`, {
       autoHideDuration: 2000,
@@ -43,18 +26,16 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
   }
 
   async function handleClickDiagramUpdate() {
-    const diagramName = payload?.name;
+    const diagramName = diagram.payload.name;
 
     const { xml } = await diagram.modeler.saveXML();
 
-    const response = await edit({
-      name: payload.name,
-      isDefault: payload.isDefault,
+    await edit({
+      name: diagram.payload.name,
+      isDefault: diagram.payload.isDefault,
       id,
       xml: xml,
     });
-
-    setPayload(response);
 
     updateDiagramSuccess(diagramName);
 
@@ -73,15 +54,17 @@ export const EditDiagram: React.FC<Props> = ({ isOpen, onClose, id }) => {
 
         <S.DiagramContent>
           <S.DiagramInputName
-            value={payload?.name}
-            onChange={(event) => onChangeDiagram(event.target.value, "name")}
+            value={diagram.payload.name}
+            onChange={(event) =>
+              diagram.onChangeDiagram(event.target.value, "name")
+            }
           />
           <S.CheckboxWrapper>
             <S.DiagramCheckbox
               aria-label="Default?"
-              checked={payload?.isDefault}
+              checked={diagram.payload.isDefault}
               onChange={(event) =>
-                onChangeDiagram(event.target.checked, "isDefault")
+                diagram.onChangeDiagram(event.target.checked, "isDefault")
               }
             />
           </S.CheckboxWrapper>

@@ -34,6 +34,7 @@ import { setElement } from "store/slices/diagram";
 
 import { RootState } from "store";
 import { useParams } from "react-router-dom";
+import { IEdit } from "../dialogs/edit-diagram/types/IEdit";
 
 interface IColor {
   backgroundColor?: string;
@@ -60,6 +61,12 @@ export function useDiagram() {
 
   const [initialElements, setInitialElements] = useState<IElement[]>([]);
   const [diagramXML, setDiagramXML] = useState<any>();
+  const [payload, setPayload] = useState<IEdit>({
+    id: "",
+    name: "",
+    isDefault: false,
+    xml: "",
+  });
 
   const { enqueueSnackbar } = useSnackbar();
   const diagramPageState = useSelector((state: RootState) => state.diagramPage);
@@ -101,6 +108,13 @@ export function useDiagram() {
     },
     [id]
   );
+
+  const onChangeDiagram = async (
+    value: string | boolean,
+    field: keyof IEdit
+  ) => {
+    setPayload((prev) => ({ ...prev, [field]: value }));
+  };
 
   const createModeler = useCallback(() => {
     const editIcons = [
@@ -276,6 +290,8 @@ export function useDiagram() {
   return {
     downloadXML,
     loadDiagram,
+    onChangeDiagram,
+    payload,
     bpmn: diagramBPMN,
     modeler: bpmnViewer,
     initialElements,
