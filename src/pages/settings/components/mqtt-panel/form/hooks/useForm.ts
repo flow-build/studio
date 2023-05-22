@@ -2,6 +2,7 @@ import { useState } from "react";
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
 import _cloneDeep from "lodash/cloneDeep";
+import cryptoJs from "crypto-js";
 
 /* Local - Types */
 import { TPayload } from "pages/settings/components/mqtt-panel/form/types/TPayload";
@@ -97,15 +98,17 @@ export function useForm({ initialPayload }: TProps) {
 
           if (payload.username && payload.password) {
             /* TODO: Fazer hash de usuario e senha */
+            const hashPassword = cryptoJs.AES.encrypt(
+              payload.password,
+              process.env.REACT_APP_CRYPTO_SECRET_KEY ?? ""
+            ).toString();
+
             LocalStorage.getInstance().setValue(
               "MQTT_USERNAME",
               payload.username
             );
 
-            LocalStorage.getInstance().setValue(
-              "MQTT_PASSWORD",
-              payload.password
-            );
+            LocalStorage.getInstance().setValue("MQTT_PASSWORD", hashPassword);
           } else {
             LocalStorage.getInstance().removeValueByKey("MQTT_USERNAME");
             LocalStorage.getInstance().removeValueByKey("MQTT_PASSWORD");

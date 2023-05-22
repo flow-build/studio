@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import _isEqual from "lodash/isEqual";
+import cryptoJs from "crypto-js";
 
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
@@ -126,7 +127,13 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
     );
 
     const usernameMqtt = localInstance.getValueByKey<string>("MQTT_USERNAME");
-    const passwordMqtt = localInstance.getValueByKey<string>("MQTT_PASSWORD");
+    const hashedPasswordMqtt =
+      localInstance.getValueByKey<string>("MQTT_PASSWORD") ?? "";
+
+    const passwordMqtt = cryptoJs.AES.decrypt(
+      hashedPasswordMqtt,
+      process.env.REACT_APP_CRYPTO_SECRET_KEY ?? ""
+    ).toString(cryptoJs.enc.Utf8);
 
     const securityOptions: { [key: string]: string | boolean } = {};
 
@@ -182,7 +189,7 @@ export const Sidebar: React.FC<Props> = ({ isOpen }) => {
   }, []);
 
   useEffect(() => {
-    if (!clientRef?.current?.isConnected()) {
+    if (!clientRef?.current && !clientRef.current?.isConnected()) {
       connectToMqtt();
     }
   }, [connectToMqtt]);
