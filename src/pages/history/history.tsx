@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Typography } from "@mui/material";
 
 import _isEmpty from "lodash/isEmpty";
 import _isEqual from "lodash/isEqual";
-import _isNull from "lodash/isNull";
 
 import { TState } from "models/state";
 
@@ -51,10 +49,6 @@ export const History: React.FC<{}> = () => {
       setProcessId(params.process_id);
     }
   }, [params.process_id, processId]);
-
-  if (_isNull(history)) {
-    return <Typography>Loading...</Typography>;
-  }
 
   const buttonBack = {
     title: "Back",
