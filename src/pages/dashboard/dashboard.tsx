@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 
 import { Content } from "shared/components/content";
+import { Footer } from "pages/dashboard/components/footer";
 import { Header } from "pages/dashboard/components/header";
 import { Sidebar } from "pages/dashboard/components/sidebar";
 
@@ -31,6 +32,7 @@ export const Dashboard: React.FC = () => {
       <Content padding={2} pt={0}>
         <DrawerHeader />
         <Outlet />
+        <Footer />
       </Content>
     </S.Wrapper>
   );
