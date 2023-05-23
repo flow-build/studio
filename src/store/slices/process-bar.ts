@@ -19,7 +19,7 @@ export const processBarSlice = createSlice({
   initialState,
   reducers: {
     setProcessBar: (state, action: PayloadAction<SettingsState>) => {
-      state = action.payload;
+      state = { ...state, ...action.payload };
     },
   },
 });
