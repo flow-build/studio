@@ -8,7 +8,7 @@ export const Wrapper = styled(Grid).attrs({
   spacing: 2,
   sx: { marginTop: 0 },
 })`
-  height: calc(100% - 64px);
+  height: calc(100% - 64px - 30px);
 `;
 
 export const HeaderContainer = styled.div`
@@ -40,4 +40,3 @@ export const Items = styled.li`
   justify-content: start;
   flex-wrap: wrap;
 `;
-

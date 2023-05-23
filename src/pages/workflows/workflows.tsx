@@ -58,12 +58,19 @@ export const Workflows: React.FC = () => {
 
     const diagrams = await list();
 
-    const diagramWorkflowId = diagrams.map((diagram: any) => diagram.workflow_id);
+    const diagramWorkflowId = diagrams.map(
+      (diagram: any) => diagram.workflow_id
+    );
 
     const workflowsWithDiagrams = response.map((workflow) => {
-      const filtered = diagramWorkflowId.filter((diagramList: string) => diagramList === workflow.workflow_id)
+      const filtered = diagramWorkflowId.filter(
+        (diagramList: string) => diagramList === workflow.workflow_id
+      );
 
-      if (diagramWorkflowId.includes(workflow.workflow_id) && diagrams.length > 0) {
+      if (
+        diagramWorkflowId.includes(workflow.workflow_id) &&
+        diagrams.length > 0
+      ) {
         return { ...workflow, totalDiagrams: filtered.length };
       }
       return { ...workflow, totalDiagrams: undefined };
@@ -117,11 +124,12 @@ export const Workflows: React.FC = () => {
       {dialogPageState.diagramInfoDialog.isVisible && (
         <S.ListDiagramsDialog
           isOpen={dialogPageState.diagramInfoDialog.isVisible}
-          onClose={() => dispatch(setShowDiagramInfoDialog({ isVisible: false }))}
+          onClose={() =>
+            dispatch(setShowDiagramInfoDialog({ isVisible: false }))
+          }
           onSelectDiagram={onSelectDiagram}
         />
-      )}  
+      )}
     </>
   );
 };
-

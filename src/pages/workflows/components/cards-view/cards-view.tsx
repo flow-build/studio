@@ -39,7 +39,7 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
   };
 
   return (
-    <>
+    <S.Wrapper>
       {workflows.map((workflow) => (
         <S.Cards
           key={workflow.workflow_id}
@@ -51,6 +51,6 @@ export const CardsView: React.FC<Props> = ({ workflows }) => {
           actions={getActions(workflow)}
         />
       ))}
-    </>
+    </S.Wrapper>
   );
 };
