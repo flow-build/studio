@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
-import { setSaveDialog } from "store/slices/diagram";
-import { setEditDialog } from "store/slices/dialog";
+import { setFormDialog } from "store/slices/dialog";
 import * as S from "./styles";
 
 type Props = {
@@ -18,7 +17,7 @@ export const DiagramConfirmation: React.FC<Props> = ({ isOpen, onClose }) => {
 
   function onSaveNewDiagram() {
     if (saveConfirmationDialog.isVisible) {
-      dispatch(setSaveDialog({ isVisible: true }));
+      dispatch(setFormDialog({ isVisible: true }));
     }
 
     if (onClose) {
@@ -28,7 +27,7 @@ export const DiagramConfirmation: React.FC<Props> = ({ isOpen, onClose }) => {
 
   function onSubscribeDiagram() {
     if (saveConfirmationDialog.isVisible) {
-      dispatch(setEditDialog({ isVisible: true }));
+      dispatch(setFormDialog({ isVisible: true }));
     }
 
     if (onClose) {

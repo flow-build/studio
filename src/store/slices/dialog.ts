@@ -81,7 +81,7 @@ export const dialogSlice = createSlice({
       };
     },
 
-    setEditDialog: (
+    setFormDialog: (
       state,
       action: PayloadAction<{ isVisible: boolean; data?: any }>
     ) => {
@@ -97,7 +97,7 @@ export const {
   setShowDiagramInfoDialog,
   setConfirmationDialog,
   setPropertiesDialog,
-  setEditDialog,
+  setFormDialog,
   setDiagramSelected,
   setDiagramElement,
 } = dialogSlice.actions;
