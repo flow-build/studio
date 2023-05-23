@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import SyncProblemIcon from "@mui/icons-material/SyncProblem";
 
@@ -22,6 +23,7 @@ type Props = {
   onRefresh?: () => void;
   hideRefreshButton?: boolean;
   hideWatchButton?: boolean;
+  isWatching?: boolean;
   hideHeader?: boolean;
 };
 
@@ -29,6 +31,7 @@ export const Header: React.FC<Props> = ({
   workflowId,
   hideRefreshButton,
   hideWatchButton,
+  isWatching,
   onRefresh,
   hideHeader,
 }) => {
@@ -37,6 +40,11 @@ export const Header: React.FC<Props> = ({
   const [diagram, setDiagram] = useState<TUser | undefined>();
 
   const dialogPageState = useSelector((state: RootState) => state.dialogPage);
+
+  const buttonWatchIcon = {
+    title: isWatching ? "Unwatch" : "Watch",
+    icon: isWatching ? <VisibilityOffIcon /> : <VisibilityIcon />,
+  };
 
   useEffect(() => {
     const request = async () => {
@@ -70,7 +78,7 @@ export const Header: React.FC<Props> = ({
 
             {workflow.isLatest && (
               <S.Tooltip title="Ultima versão">
-                <PublishedWithChangesIcon color="warning" />
+                <PublishedWithChangesIcon color="secondary" />
               </S.Tooltip>
             )}
 
@@ -86,7 +94,7 @@ export const Header: React.FC<Props> = ({
           </S.Row>
 
           <S.Row gap={10}>
-            {!hideRefreshButton && (
+            {!hideRefreshButton && !isWatching && (
               <Button
                 disableElevation
                 title="Refresh"
@@ -99,9 +107,9 @@ export const Header: React.FC<Props> = ({
             {!hideWatchButton && (
               <Button
                 disableElevation
-                title="Watch"
+                title={buttonWatchIcon.title}
                 size="small"
-                endIcon={<VisibilityIcon />}
+                endIcon={buttonWatchIcon.icon}
               />
             )}
           </S.Row>
