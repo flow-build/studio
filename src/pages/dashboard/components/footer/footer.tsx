@@ -1,13 +1,23 @@
+import { useSelector } from "react-redux";
 import * as S from "./styles";
+import { RootState } from "store";
 
 type Props = {};
 
 export const Footer: React.FC<Props> = () => {
+  const { isWatching, currentNode, processId, status } = useSelector(
+    (state: RootState) => state.processBar
+  );
+
+  if (!isWatching) {
+    return <></>;
+  }
+
   return (
     <S.Wrapper>
-      <S.Text>Process ID: 2d85ff30-ef4d-11ed-b796-79a5d4124e32</S.Text>
-      <S.Text>| Status: Running |</S.Text>
-      <S.Text>Current Node: ABC-DEF</S.Text>
+      <S.Text>Process ID: {processId}</S.Text>
+      <S.Text>| Status: {status} |</S.Text>
+      <S.Text>Current Node: {currentNode}</S.Text>
     </S.Wrapper>
   );
 };
