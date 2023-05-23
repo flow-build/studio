@@ -70,7 +70,7 @@ export const Header: React.FC<Props> = ({
 
             {workflow.isLatest && (
               <S.Tooltip title="Ultima versão">
-                <PublishedWithChangesIcon color="warning" />
+                <PublishedWithChangesIcon color="secondary" />
               </S.Tooltip>
             )}
 
