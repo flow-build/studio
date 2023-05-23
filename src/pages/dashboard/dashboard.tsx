@@ -6,7 +6,6 @@ import { Content } from "shared/components/content";
 import { Header } from "pages/dashboard/components/header";
 import { Sidebar } from "pages/dashboard/components/sidebar";
 
-
 import * as S from "./styles";
 
 const DrawerHeader = styled("div")(({ theme }) => ({

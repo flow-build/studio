@@ -8,8 +8,6 @@ import { Button as SharedButton } from "shared/components/button";
 import { IconButton } from "shared/components/icon-button";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
-import { RightArrow } from "pages/diagram/dialogs/list-processes/styles";
-
 export const Wrapper = styled(Grid).attrs({
   item: true,
   xs: 12,

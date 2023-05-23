@@ -1,15 +1,21 @@
 import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-
-import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { useForm } from "pages/settings/components/flowbuild-panel/form/hooks/useForm";
 
 import { healthcheck } from "services/resources/settings";
 import { setBaseUrl } from "services/api";
 
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+
+import { useSnackbar } from "shared/hooks/snackbar/useSnackbar";
+
 import * as S from "./styles";
-import { useForm } from "pages/settings/hooks/useForm";
+import { useDispatch } from "react-redux";
+import { updateMqtt } from "store/slices/settings";
 
 export const FlowbuildPanel: React.FC = () => {
-  const { onSetToken, showNotification } = useForm();
+  const { onSetToken } = useForm();
+  const snackbar = useSnackbar();
+  const dispatch = useDispatch();
 
   const defaultValue = {
     url:
@@ -42,10 +48,11 @@ export const FlowbuildPanel: React.FC = () => {
       setBaseUrl(url);
       await onSetToken();
 
+      dispatch(updateMqtt());
       const message = "Sucesso ao salvar o servidor";
-      showNotification(message, "success");
+      snackbar.success(message);
     } catch (erro: any) {
-      showNotification(erro.message, "error");
+      snackbar.error(erro.message);
     }
   }
 
