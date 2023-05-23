@@ -13,7 +13,7 @@ export const Wrapper = styled(Grid).attrs({
   spacing: 2,
   sx: { marginTop: 0 },
 })`
-  height: calc(100% - 64px);
+  height: calc(100% - 64px - 30px);
 `;
 
 export const TableContainer = styled(Grid).attrs({
@@ -31,4 +31,3 @@ export const StartProcessDialog = styled(StartProcess)``;
 export const ListDiagramsDialog = styled(ListDiagrams)``;
 
 export const FormDiagramDialog = styled(FormDiagram)``;
-

@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Typography } from "@mui/material";
 
 import _isEqual from "lodash/isEqual";
-import _isNull from "lodash/isNull";
 
 import { ModeView } from "constants/mode-view";
 
@@ -34,6 +32,13 @@ export const Processes: React.FC<{}> = () => {
     workflow: null,
   });
 
+  const header = {
+    title: payload.workflow ? `Workflow - ${payload.workflow.name}` : "",
+    subtitle: payload.workflow
+      ? `Workflow id: ${payload.workflow.workflow_id}`
+      : "",
+  };
+
   const table = useTable(payload.processes ?? []);
 
   const getProcessesInformation = useCallback(async (workflowId: string) => {
@@ -57,23 +62,19 @@ export const Processes: React.FC<{}> = () => {
     request();
   }, [getProcessesInformation, getWorkflowInformation, id]);
 
-  if (_isNull(payload.processes) || _isNull(payload.workflow)) {
-    return <Typography>Loading...</Typography>;
-  }
-
   return (
     <S.Wrapper>
       <ContentHeader
-        title={`Workflow - ${payload.workflow.name}`}
-        subtitle={`Workflow id: ${payload.workflow.workflow_id}`}
+        title={header.title}
+        subtitle={header.subtitle}
         hasInput={false}
-        buttons = {[]}
+        buttons={[]}
         initialModeView={ModeView.LIST}
         onChangeModeView={setModeView}
       />
 
       {_isEqual(modeView, ModeView.CARDS) && (
-        <CardsView processes={payload.processes} />
+        <CardsView processes={payload.processes ?? []} />
       )}
 
       {_isEqual(modeView, ModeView.LIST) && (

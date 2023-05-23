@@ -30,11 +30,13 @@ export const RowButtons = styled(Grid).attrs({
   align-items: center;
   justify-content: right;
   gap: 5px;
+  flex: 1;
 `;
 
 export const InfoContent = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
 `;
 
 export const Title = styled(Typography).attrs({

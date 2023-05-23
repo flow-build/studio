@@ -1,40 +1,39 @@
-import ExtensionOutlined from '@mui/icons-material/ExtensionOutlined'
-import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined'
+import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
+import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
 
-import { TProcess } from 'models/process'
+import { TProcess } from "models/process";
 
-import { useProcessesPage } from 'pages/processes/hooks/useProcessesPage'
+import { useProcessesPage } from "pages/processes/hooks/useProcessesPage";
 
-import { getLongFormatByDate } from 'shared/utils/date'
+import { getLongFormatByDate } from "shared/utils/date";
 
-
-import * as S from './styles'
+import * as S from "./styles";
 
 type Props = {
-  processes: TProcess[]
-}
+  processes: TProcess[];
+};
 
 export const CardsView: React.FC<Props> = ({ processes }) => {
-  const processPage = useProcessesPage()
+  const processPage = useProcessesPage();
 
   const getActions = (process: TProcess) => {
     return [
       {
         icon: VisibilityOutlined,
-        tooltip: 'Ver histórico',
-        onClick: () => processPage.navigateToHistory(process.id)
+        tooltip: "Ver histórico",
+        onClick: () => processPage.navigateToHistory(process.id),
       },
       {
         icon: ExtensionOutlined,
-        tooltip: 'Ver diagrama',
-        onClick: () => processPage.navigateToDiagram(process.id)
+        tooltip: "Ver diagrama",
+        onClick: () => processPage.navigateToDiagram(process.id),
       },
     ];
-  }
+  };
 
   return (
-    <>
-      {processes.map(process => (
+    <S.Wrapper>
+      {processes.map((process) => (
         <S.Cards
           key={process.id}
           title={process.state.node_name}
@@ -44,6 +43,6 @@ export const CardsView: React.FC<Props> = ({ processes }) => {
           actions={getActions(process)}
         />
       ))}
-    </>
-  )
-}
+    </S.Wrapper>
+  );
+};
