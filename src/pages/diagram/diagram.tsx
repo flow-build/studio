@@ -44,7 +44,7 @@ import {
 import {
   setShowDiagramInfoDialog,
   setDiagramSelected,
-  setEditDialog,
+  setFormDialog,
 } from "store/slices/dialog";
 
 import { setHistory } from "store/slices/process-history";
@@ -272,19 +272,12 @@ export const DiagramRefactored: React.FC<Props> = () => {
         />
       )}
 
-      {diagramPageState.saveDialog.isVisible && (
-        <S.SaveDiagramDialog
-          isOpen={diagramPageState.saveDialog.isVisible}
-          onClose={() => dispatch(setSaveDialog({ isVisible: false }))}
-          xml={xml}
-        />
-      )}
-
       {dialogPageState.editDialog.isVisible && (
-        <S.EditDiagramDialog
+        <S.FormDiagramDialog
           isOpen={dialogPageState.editDialog.isVisible}
-          onClose={() => dispatch(setEditDialog({ isVisible: false }))}
+          onClose={() => dispatch(setFormDialog({ isVisible: false }))}
           id={id as string}
+          xml={xml}
         />
       )}
 
