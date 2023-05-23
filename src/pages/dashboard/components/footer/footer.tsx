@@ -10,7 +10,7 @@ export const Footer: React.FC<Props> = () => {
   );
 
   if (!isWatching) {
-    return <></>;
+    return null;
   }
 
   return (
