@@ -24,6 +24,7 @@ type Props = {
   hideRefreshButton?: boolean;
   hideWatchButton?: boolean;
   isWatching?: boolean;
+  onWatchClick?: () => void;
   hideHeader?: boolean;
 };
 
@@ -33,6 +34,7 @@ export const Header: React.FC<Props> = ({
   hideWatchButton,
   isWatching,
   onRefresh,
+  onWatchClick,
   hideHeader,
 }) => {
   const [workflow, setWorkflow] = useState<TWorkflow>();
@@ -107,6 +109,7 @@ export const Header: React.FC<Props> = ({
             {!hideWatchButton && (
               <Button
                 disableElevation
+                onClick={onWatchClick}
                 title={buttonWatchIcon.title}
                 size="small"
                 endIcon={buttonWatchIcon.icon}
