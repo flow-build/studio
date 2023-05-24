@@ -224,8 +224,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
       onSuccess: () => {
         setIsWatching(true);
       },
-      onMessageArrived: _debounce((payload: string) => {
-        onRefreshDiagram();
+      onMessageArrived: _debounce(async (payload: string) => {
+        await onRefreshDiagram();
       }, 1000),
     });
   }
