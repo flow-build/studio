@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import _debounce from "lodash/debounce";
 
 import ListIcon from "@mui/icons-material/ListOutlined";
 import ExtensionOutlined from "@mui/icons-material/ExtensionOutlined";
@@ -48,14 +49,18 @@ import {
 } from "store/slices/dialog";
 
 import { setHistory } from "store/slices/process-history";
+import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { usePahoMqtt } from "shared/hooks/paho-mqtt/usePahoMqtt";
 
 import * as S from "./styles";
-import { listByWorkflowId } from "services/resources/processes/list-by-process-id";
 
 type Props = {};
 
 export const DiagramRefactored: React.FC<Props> = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { connect } = usePahoMqtt();
+  const [isWatching, setIsWatching] = useState(false);
 
   const { workflowId } = useParams();
   const { id } = useParams();
@@ -198,6 +203,33 @@ export const DiagramRefactored: React.FC<Props> = () => {
     }
   }
 
+  function onWatchClick() {
+    const envHost = process.env.REACT_APP_MQTT_HOST ?? "";
+    const envPort = process.env.REACT_APP_MQTT_PORT ?? "";
+
+    const localStorageInstance = LocalStorage.getInstance();
+    const localHost = localStorageInstance.getValueByKey<string>("MQTT_URL");
+    const localPort = localStorageInstance.getValueByKey<string>("MQTT_PORT");
+
+    const hostMqtt = localHost ?? envHost;
+    const portMqtt = localPort ?? envPort;
+
+    const namespace =
+      localStorageInstance.getValueByKey<string>("MQTT_NAMESPACE") ?? "";
+
+    const topic = `${namespace}/process/${diagramPageState.processSelected?.id}/state`;
+
+    connect(hostMqtt, Number(portMqtt), {
+      topics: [topic],
+      onSuccess: () => {
+        setIsWatching(true);
+      },
+      onMessageArrived: _debounce((payload: string) => {
+        onRefreshDiagram();
+      }, 1000),
+    });
+  }
+
   useEffect(() => {
     if (!_isEmpty(workflowId || id)) {
       diagram.loadDiagram((workflowId || id) ?? "");
@@ -250,6 +282,8 @@ export const DiagramRefactored: React.FC<Props> = () => {
           hideWatchButton={isProcessFinished}
           workflowId={workflowId as string}
           onRefresh={onRefreshDiagram}
+          isWatching={isWatching}
+          onWatchClick={onWatchClick}
         />
 
         <Fab top={18} actions={actions} />
