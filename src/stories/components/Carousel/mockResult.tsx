@@ -7,7 +7,7 @@ export const mockCategories: ListIcon[] = [
     label: 'Google',
     icon: <Google />,
     description: 'This property is close to the beach!',
-    pathname: 'http://www.google.com'
+    pathname: 'https://www.google.com'
   },
   {
     label: 'Beach',

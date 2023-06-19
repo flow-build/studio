@@ -17,7 +17,11 @@ export const maskCurrency: MaskFunction = (value: string) => {
 
   // Add thousands separator
   if (reais.length > 3) {
-    reais = reais.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    let separatorIndex = reais.length - 3;
+    while (separatorIndex > 0) {
+      reais = reais.slice(0, separatorIndex) + '.' + reais.slice(separatorIndex);
+      separatorIndex -= 3;
+    }
   }
 
   if (cents === '' || isNaN(Number(cents))) {
