@@ -28,7 +28,7 @@ export const useResetPassword = () => {
     confirmPassword: yup
       .string()
       .required(messages.fieldRequired)
-      .oneOf([yup.ref('newPassword')], messages.passwordNoMatch)
+      .oneOf([yup.ref('newPassword')], messages.valuesNoMatch)
   });
 
   const formik = useFormik({

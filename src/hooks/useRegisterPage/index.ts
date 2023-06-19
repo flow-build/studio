@@ -36,7 +36,7 @@ export const useRegister = () => {
     confirmPassword: yup
       .string()
       .required(messages.fieldRequired)
-      .oneOf([yup.ref('password')], messages.passwordNoMatch)
+      .oneOf([yup.ref('password')], messages.valuesNoMatch)
   };
 
   const validationSchemaRegister = yup.object().shape(validations);
