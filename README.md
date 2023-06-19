@@ -1,23 +1,48 @@
-# Como iniciar a aplicação
+# Studio boilerplate
 
-Faça um clone do repositório e execute o comando `yarn install` para instalar as dependencias do projeto.
+This is a repository that uses NextJS to create a boilerplate pattern with cognito integration and Elastic Search using Search UI.
 
-Com as dependencias instaladas, crie um arquivo `.env` e insira nele as variáveis de ambiente listadas abaixo com seu respectivos valores:
+To execute this project, it is necessary to have Node 16+ installed and create a file named .env with the following setup:
 
-- REACT_APP_BASE_URL
-- REACT_APP_URL_PORT
-- REACT_APP_MQTT_HOST
-- REACT_APP_MQTT_PORT
+```
+AWS_REGION=
+AWS_POOL_ID=
+AWS_CLIENT_ID=
+CRYPTO_SECRET_KEY=
 
-Execute o comando `yarn start` e se tudo estiver correto a aplicação irá iniciar, exibindo a tela de login. Caso não seja configurado um .env, será exibida uma tela de configuração para inserir os dados necessários.
+NEXT_PUBLIC_SEARCHKEY=
+NEXT_PUBLIC_ENGINENAME=
+NEXT_PUBLIC_ENDPOINTBASE=
+```
 
-## Atualização de SSL
+These environments are based on Amazon AWS: `AWS_REGION`, `AWS_POOL_ID` `AWS_CLIENT_ID`, and `CRYPTO_SECRET_KEY` are necessary for Cognito integration. And these variables `NEXT_PUBLIC_SEARCHKEY`, `NEXT_PUBLIC_ENGINENAME`, and `NEXT_PUBLIC_ENDPOINTBASE` are required for Elastic Search Integration.
 
-Em alguns casos, é possível que a seguinte mensagem de erro seja retornada ```ERR_OSSL_EVP_UNSUPPORTED```.
+The setup must be done before running the project
 
-Caso isso ocorra, execute um desses comandos:
+## Project
 
-Linux & Mac OS (windows git bash)-
-```export NODE_OPTIONS=--openssl-legacy-provider```
-Windows command prompt-
-```set NODE_OPTIONS=--openssl-legacy-provider```
+### Development mode
+To to execute this project on development mode follow this step
+
+```
+yarn && yarn dev
+```
+The project will running on port 3000
+
+### Production mode
+
+To to execute this project on production mode follow this step
+
+```
+yarn build && yarn start
+```
+The project will running on port 3000
+
+## Storybook
+
+The storybook is running on port 6006
+
+```
+yarn && yarn storybook
+```
+

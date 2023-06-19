@@ -1,32 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
-
-import comparePageReducer from "store/slices/compare-page";
-import diagramReducer from "store/slices/diagram";
-import dialogReducer from "store/slices/dialog";
-import filterReducer from "store/slices/filter";
-import historyReducer from "store/slices/process-history";
-import processBarReducer from "store/slices/process-bar";
-import processIdReducer from "store/slices/process-id";
-import settingsReducer from "store/slices/settings";
-import workflowPageReducer from "store/slices/workflow-page";
+import { configureStore } from '@reduxjs/toolkit';
+import loadingReducer from 'store/slices/loading';
+import snackbarReducer from 'store/slices/snackbar';
+import userReducer from 'store/slices/user';
 
 export const store = configureStore({
   reducer: {
-    filter: filterReducer,
-    workflowPage: workflowPageReducer,
-    comparePage: comparePageReducer,
-    diagramPage: diagramReducer,
-    dialogPage: dialogReducer,
-    processBar: processBarReducer,
-    processHistory: historyReducer,
-    processId: processIdReducer,
-    settings: settingsReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+    user: userReducer,
+    loading: loadingReducer,
+    snackbar: snackbarReducer
+  }
 });
 
+// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
-
-setupListeners(store.dispatch);
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch;
