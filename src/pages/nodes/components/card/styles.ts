@@ -12,7 +12,7 @@ export const Wrapper = styled(Grid).attrs({
   },
 })`
   margin: 1rem;
-  height: calc(100% - 64px);
+  height: calc(100% - 64px - 30px);
   display: flex;
   flex-direction: column;
 `;
@@ -40,4 +40,3 @@ export const Text = styled.p`
   padding-left: 1rem;
   font-size: large;
 `;
-

@@ -6,13 +6,20 @@ on:
       - release
       - developer
 env:
-  REACT_APP_BASE_URL: ${{secrets.REACT_APP_BASE_URL}}
-  REACT_APP_URL_PORT: ${{secrets.REACT_APP_URL_PORT}}
-  REACT_APP_MQTT_HOST: ${{secrets.REACT_APP_MQTT_HOST}}
-  REACT_APP_MQTT_PORT: ${{secrets.REACT_APP_MQTT_PORT}}
+  REACT_APP_BASE_URL: ${{vars.REACT_APP_BASE_URL}}
+  REACT_APP_MQTT_HOST: ${{vars.REACT_APP_MQTT_HOST}}
+  REACT_APP_MQTT_PORT: ${{vars.REACT_APP_MQTT_PORT}}
+  REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
+  REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
+  REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+  REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+  REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+  REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+  REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
+  REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
 
 jobs:
-  build: 
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Some check on branch
@@ -20,30 +27,30 @@ jobs:
         run: |
           echo "Running on branch ${{ github.ref }}"
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "::set-output name=env_name::production"
+            echo "env_name=production" >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/developer" ]; then
-            echo "::set-output name=env_name::development"
+            echo "env_name=development"  >> $GITHUB_OUTPUT
           elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
-            echo "::set-output name=env_name::production"
+            echo "env_name=release"  >> $GITHUB_OUTPUT
           else
-             echo "::set-output name=env_name::development"
-          fi         
-          
+             echo "env_name=development"  >> $GITHUB_OUTPUT
+          fi
+
       - name: Use variable setup in previous step
         run: echo "Using variable ${{ steps.branch_check.outputs.env_name }}"
-        
+
     outputs:
       env_name: ${{ steps.branch_check.outputs.env_name }}
 
   deployment:
     needs: [build]
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: ${{ needs.build.outputs.env_name }}
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     steps:
       - name: Check Environment Name
@@ -53,30 +60,44 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
       - name: Create .env file
         run: |
           echo REACT_APP_BASE_URL=$REACT_APP_BASE_URL >> .env
       - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_DEBUG: false
-          envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
-          envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
-          envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
-          directory: './'
-          file_name: '.env'
+          envkey_REACT_APP_BASE_URL: ${{ vars.REACT_APP_BASE_URL }}
+          envkey_REACT_APP_MQTT_HOST: ${{ vars.REACT_APP_MQTT_HOST }}
+          envkey_REACT_APP_MQTT_PORT: ${{ vars.REACT_APP_MQTT_PORT }}
+          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
+          envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
+          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
+          envkey_REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
+          directory: "./"
+          file_name: ".env"
       - name: Make envfile prod
-        uses: SpicyPizza/create-envfile@v1
+        uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_DEBUG: false
-          envkey_REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_URL_PORT: ${{ secrets.REACT_APP_URL_PORT }}
-          envkey_REACT_APP_MQTT_HOST: ${{ secrets.REACT_APP_MQTT_HOST }}
-          envkey_REACT_APP_MQTT_PORT: ${{ secrets.REACT_APP_MQTT_PORT }}
-          directory: './'
-          file_name: '.env.production'
+          envkey_REACT_APP_BASE_URL: ${{ vars.REACT_APP_BASE_URL }}
+          envkey_REACT_APP_MQTT_HOST: ${{ vars.REACT_APP_MQTT_HOST }}
+          envkey_REACT_APP_MQTT_PORT: ${{ vars.REACT_APP_MQTT_PORT }}
+          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
+          envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
+          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
+          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
+          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
+          envkey_REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
+          directory: "./"
+          file_name: ".env.production"
       - name: Yarn Install
         run: yarn --prefer-offline
       - name: Staging Build
@@ -86,7 +107,7 @@ jobs:
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_S3_BUCKET: ${{ vars.AWS_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}

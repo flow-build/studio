@@ -3,7 +3,7 @@ import { contrastingColor, STATUS_COLOR } from "shared/utils/color";
 export function usePaint() {
   function paintElementsByStates(props: {
     modeling: any;
-    states: { node_id: string; status: string }[];
+    states: { node_id: string; last_status: string }[];
     elements: any[];
   }) {
     props.states.forEach((state) => {
@@ -13,8 +13,8 @@ export function usePaint() {
 
       if (element) {
         props.modeling.setColor(element, {
-          fill: STATUS_COLOR[state.status],
-          stroke: contrastingColor(STATUS_COLOR[state.status]),
+          fill: STATUS_COLOR[state.last_status],
+          stroke: contrastingColor(STATUS_COLOR[state.last_status]),
         });
       }
     });

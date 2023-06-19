@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
-import MuiAvatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import MuiAvatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import LogoUrl from 'assets/images/flowbuildstudio_bg_dark.png'
 
@@ -23,6 +25,22 @@ export const Logo = styled.img.attrs({
 })`
   width: 180px;
   cursor: pointer;
-`
+`;
 
-export const Avatar = styled(MuiAvatar)``
+export const Avatar = styled(MuiAvatar)`
+cursor: pointer;
+`;
+
+export const MenuList = styled(Menu)``;
+
+export const MenuItemList = styled(MenuItem).attrs({
+  anchorOrigin: {
+    vertical: 'top',
+    horizontal: 'left',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'left',
+  },
+  textOverflow: 'ellipsis'
+})``;

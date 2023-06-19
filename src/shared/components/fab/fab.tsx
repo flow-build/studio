@@ -9,9 +9,10 @@ import * as S from "./styles";
 
 type Props = {
   actions: IAction[];
+  top?: number;
 };
 
-export const Fab: React.FC<Props> = ({ actions }) => {
+export const Fab: React.FC<Props> = ({ actions, top }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   function onFabClick() {
@@ -21,7 +22,7 @@ export const Fab: React.FC<Props> = ({ actions }) => {
   return (
     <S.Wrapper
       ariaLabel="SpeedDial basic example"
-      sx={{ position: "absolute", top: 0, right: 16 }}
+      sx={{ position: "absolute", top, right: 16 }}
       icon={<SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />}
       direction="down"
       open={isOpen}

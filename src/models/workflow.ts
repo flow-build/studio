@@ -4,6 +4,7 @@ export type TWorkflow = {
   description: string;
   hash: string;
   name: string;
+  totalDiagrams: number;
   version: number;
   workflow_id: string;
   isLatest: boolean;

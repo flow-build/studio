@@ -7,6 +7,10 @@ export default createGlobalStyle`
   ${diagramCSS}
   ${bpmnFontCSS}
 
+  .djs-palette {
+    border: unset !important;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -18,6 +22,7 @@ export default createGlobalStyle`
     max-width: 100vw;
     height: 100%;
     width: 100%;
+    background-color: #151521;
 
     overflow: hidden;
   }

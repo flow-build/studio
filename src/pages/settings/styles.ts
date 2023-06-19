@@ -2,29 +2,28 @@ import styled from "styled-components";
 
 import { Button as BaseButton } from "shared/components/button";
 
-import { Form as BaseForm } from "pages/settings/components/form";
+import { DashboardForm as FormDashboard } from "./components/dashboard-form";
 
 import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
-export const Wrapper = styled(Box).attrs({
-  sx: {
-    height: 1000,
-    marginTop: -4,
-    paddingLeft: 2,
-    paddingTop: 2,
-    background: (theme) => theme.palette.background.default,
-  },
-})`
-  width: "100vw";
-  height: "100vh";
+export const Wrapper = styled(Box)`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background: ${({ theme }) => theme.palette.background.default};
 `;
 
-export const Title = styled.h1`
-  color: #fff;
+export const Title = styled(Typography).attrs({
+  variant: "h5",
+})`
   margin: 2rem 1rem;
 `;
 
-export const Form = styled(BaseForm)``;
+export const DashboardForm = styled(FormDashboard)``;
 
 export const Button = styled(BaseButton)`
   width: 6rem;

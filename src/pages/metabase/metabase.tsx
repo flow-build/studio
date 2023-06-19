@@ -1,25 +1,16 @@
-import sign from "jwt-encode";
+import { useMemo } from "react";
+
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
 
 import * as S from "./styles";
 
 export const Metabase: React.FC = () => {
-  const iframeUrl = getIframURL();
+  const iframeUrl = useMemo(() => {
+    const metabaseUrlConfig =
+      LocalStorage.getInstance().getValueByKey<string>("DASHBOARD");
 
-  function getIframURL() {
-    const METABASE_SITE_URL = "http://44.203.2.237:3001";
-    const METABASE_SECRET_KEY =
-      "050d23827a63357696a418d17a58e5445e6aafba57941014677add39107cbbc7";
-
-    const payload = {
-      resource: { dashboard: 3 },
-      params: {},
-      exp: Math.round(Date.now() / 1000) + 10 * 60, // 10 minute expiration
-    };
-
-    const token = sign(payload, METABASE_SECRET_KEY);
-
-    return `${METABASE_SITE_URL}/embed/dashboard/${token}#theme=night&bordered=true&titled=true`;
-  }
+    return `${metabaseUrlConfig}/embed/dashboard/${metabaseUrlConfig}#theme=night&bordered=true&titled=true`;
+  }, []);
 
   return (
     <S.Wrapper>

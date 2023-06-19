@@ -2,6 +2,7 @@ import { api } from "services/api/diagrams";
 
 export interface ICreateDiagram {
   name: string;
+  isDefault: boolean;
   workflowId: string;
   userId: string;
   xml: string;
@@ -9,11 +10,12 @@ export interface ICreateDiagram {
 
 export async function create(createDiagram: ICreateDiagram) {
   try {
-    const { data } = await api.post("/diagrams", {
+    const { data } = await api.post("/diagram", {
       name: createDiagram.name,
-      workflow_id: createDiagram.workflowId,
-      user_id: createDiagram.userId,
-      diagram_xml: createDiagram.xml,
+      isDefault: createDiagram.isDefault,
+      workflowId: createDiagram.workflowId,
+      userId: createDiagram.userId,
+      xml: createDiagram.xml,
     });
     return data;
   } catch (error) {

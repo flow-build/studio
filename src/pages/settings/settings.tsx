@@ -1,117 +1,78 @@
 import { useState } from "react";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 
-import { Client } from "paho-mqtt";
-import { v4 as uuidv4 } from "uuid";
-
-import { IPayloadForm } from "pages/settings/types/IPayloadForm";
-import { setStorageItem } from "shared/utils/storage";
-import { setBaseUrl } from "services/api";
-import { getAnonymousToken } from "services/resources/token";
-import { useSnackbar, VariantType } from "notistack";
-import { healthcheck } from "services/resources/settings";
+import { FlowbuildPanel } from "./components/flowbuild-panel";
+import { MqttPanel } from "./components/mqtt-panel";
+import { DashboardPanel } from "./components/dashboard-panel";
 
 import * as S from "./styles";
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel({ children, value, index, ...props }: TabPanelProps) {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...props}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 export const Settings: React.FC = () => {
-  const [isLoadingMqtt, setIsLoadingMqtt] = useState(false);
-  const [isLoadingServer, setIsLoadingServer] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const [value, setValue] = useState(0);
 
-  const urlServe = process.env.REACT_APP_BASE_URL;
-  const portServer = process.env.REACT_APP_URL_PORT;
-
-  function showNotification(message: string, variant: VariantType) {
-    enqueueSnackbar(message, {
-      autoHideDuration: 4000,
-      variant,
-    });
-  }
-
-  async function onHandleToken() {
-    const token = await getAnonymousToken();
-
-    if (!token) {
-      const message = "Erro no retorno do Token. Por favor tentar novamente!";
-      showNotification(message, "error");
-      return;
-    }
-
-    setStorageItem("TOKEN", token);
-  }
-
-  async function onSubmitServer(payload: IPayloadForm) {
-    try {
-      setIsLoadingServer(true);
-      await healthcheck(payload.url, payload.port);
-
-      setStorageItem("SERVER_URL", `${payload?.url}:${payload.port}`);
-      setBaseUrl(`${payload.url}:${payload.port}`);
-      onHandleToken();
-
-      const message = "Sucesso ao conectar com o servidor";
-      showNotification(message, "success");
-    } catch (erro: any) {
-      showNotification(erro.message, "error");
-    } finally {
-      setIsLoadingServer(false);
-    }
-  }
-
-  function onSubmitMqtt(payload: IPayloadForm) {
-    const id = uuidv4();
-
-    const mqttConfig = {
-      host: payload.url,
-      port: Number(payload?.port),
-      clientId: id,
-    };
-
-    const client = new Client(
-      mqttConfig.host,
-      mqttConfig.port,
-      mqttConfig.clientId
-    );
-
-    setIsLoadingMqtt(true);
-
-    client.connect({
-      onSuccess: () => {
-        setStorageItem("MQTT_URL", `${payload.url}:${payload.port}`);
-        onHandleToken();
-
-        const message = "Sucesso ao conectar com o servidor";
-        showNotification(message, "success");
-        setIsLoadingMqtt(false);
-      },
-      onFailure: () => {
-        const message = "Erro ao conectar com o servidor";
-        showNotification(message, "error");
-        setIsLoadingMqtt(false);
-      },
-    });
-
-    client.disconnect();
-  }
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
     <S.Wrapper>
       <S.Title>Configurações</S.Title>
 
-      <S.Form
-        labelPort="Porta do servidor"
-        labelUrl="URL do servidor do flowbuild"
-        defaultUrl={urlServe}
-        defaultPort={portServer}
-        onSubmit={onSubmitServer}
-        isLoading={isLoadingServer}
-      />
+      <Box sx={{ width: 700, height: 500 }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            textColor="secondary"
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Servidor Flowbuild" {...a11yProps(0)} />
+            <Tab label="Servidor MQTT" {...a11yProps(1)} />
+            <Tab label="Metabase" {...a11yProps(2)} />
+          </Tabs>
+        </Box>
 
-      <S.Form
-        labelPort="Porta do MQTT"
-        labelUrl="URL do servidor de MQTT"
-        onSubmit={onSubmitMqtt}
-        isLoading={isLoadingMqtt}
-      />
+        <TabPanel value={value} index={0}>
+          <FlowbuildPanel />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <MqttPanel />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <DashboardPanel />
+        </TabPanel>
+      </Box>
     </S.Wrapper>
   );
 };

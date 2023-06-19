@@ -4,10 +4,14 @@ import { TProcess } from "models/process";
 interface IInitialState {
   propertiesDialog: { isVisible: boolean; data?: any };
   confirmationDialog: { isVisible: boolean; data?: any };
+  saveConfirmationDialog: { isVisible: boolean; data?: any };
   processInfoDialog: { isVisible: boolean; data?: any };
-  showDataChannelDialog: { isVisible: boolean; data?: any };
+  deleteDialog: { isVisible: boolean; data?: Record<string, unknown> };
+  deleteConfirmationDialog: { isVisible: boolean; data?: any };
+  saveDialog: { isVisible: boolean; data?: any };
   processSelected?: TProcess;
   element?: { category: string; id: string };
+  updatedAt?: Date;
 }
 
 const initialState: IInitialState = {
@@ -21,12 +25,27 @@ const initialState: IInitialState = {
     data: {},
   },
 
+  saveConfirmationDialog: {
+    isVisible: false,
+    data: {},
+  },
+
   processInfoDialog: {
     isVisible: false,
     data: {},
   },
 
-  showDataChannelDialog: {
+  deleteDialog: {
+    isVisible: false,
+    data: {},
+  },
+
+  deleteConfirmationDialog: {
+    isVisible: false,
+    data: {},
+  },
+
+  saveDialog: {
     isVisible: false,
     data: {},
   },
@@ -34,6 +53,8 @@ const initialState: IInitialState = {
   processSelected: undefined,
 
   element: undefined,
+
+  updatedAt: undefined,
 };
 
 export const diagramSlice = createSlice({
@@ -74,6 +95,16 @@ export const diagramSlice = createSlice({
       };
     },
 
+    setSaveConfirmationDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.saveConfirmationDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
+
     setShowPropertiesDialog: (
       state,
       action: PayloadAction<{ isVisible: boolean; data?: any }>
@@ -84,14 +115,38 @@ export const diagramSlice = createSlice({
       };
     },
 
-    setShowDataChannelDialog: (
+    setDeleteDialog: (
       state,
       action: PayloadAction<{ isVisible: boolean; data?: any }>
     ) => {
-      state.showDataChannelDialog = {
+      state.deleteDialog = {
         isVisible: action.payload.isVisible,
         data: action.payload.data ?? {},
       };
+    },
+
+    setDeleteConfirmationDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.deleteConfirmationDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
+
+    setSaveDialog: (
+      state,
+      action: PayloadAction<{ isVisible: boolean; data?: any }>
+    ) => {
+      state.saveDialog = {
+        isVisible: action.payload.isVisible,
+        data: action.payload.data ?? {},
+      };
+    },
+
+    refreshDiagram: (state) => {
+      state.updatedAt = new Date();
     },
   },
 });
@@ -99,10 +154,14 @@ export const diagramSlice = createSlice({
 export const {
   setProcessSelected,
   setShowConfirmationDialog,
+  setSaveConfirmationDialog,
   setShowPropertiesDialog,
   setShowProcessInfoDialog,
-  setShowDataChannelDialog,
+  setDeleteDialog,
+  setDeleteConfirmationDialog,
+  setSaveDialog,
   setElement,
+  refreshDiagram,
 } = diagramSlice.actions;
 
 export default diagramSlice.reducer;

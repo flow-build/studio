@@ -4,7 +4,7 @@ import * as S from "./styles";
 type Props = ButtonProps & {
   title: string;
   fullWidth?: boolean;
-
+  isLoading?: boolean;
   variant?: "contained" | "outlined" | "text";
 
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
@@ -12,12 +12,15 @@ type Props = ButtonProps & {
 
 export const Button: React.FC<Props> = ({
   title,
+  isLoading,
   variant = "contained",
   ...props
 }) => {
   return (
     <S.Wrapper variant={variant} {...props}>
-      {title}
+      {!isLoading && title}
+
+      {isLoading && <S.Loading />}
     </S.Wrapper>
   );
 };

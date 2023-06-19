@@ -1,13 +1,14 @@
 import axios from "axios";
-import { getStorageItem } from "shared/utils/storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
 export const api = axios.create({
-  baseURL: "http://diagrams.flowbuild.com.br:3000",
+  baseURL: process.env.REACT_APP_DIAGRAMS_SERVER_URL,
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = getStorageItem("TOKEN_DIAGRAM");
+    const token =
+      SessionStorage.getInstance().getValueByKey<string>("DIAGRAM_TOKEN");
 
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;

@@ -18,3 +18,13 @@ export function getLongFormatByDate(text: string) {
     throw new Error("Erro ao retornar data formatada");
   }
 }
+
+export function getShortFormatByDate(text: string) {
+  try {
+    const date = new Date(text);
+    const maskDate = format(date, "dd/MMM/yyyy");
+    return maskDate;
+  } catch (error) {
+    throw new Error("Erro ao retornar data formatada");
+  }
+}

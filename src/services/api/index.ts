@@ -1,16 +1,22 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { getAnonymousToken } from "services/resources/token";
+import { createToken } from "services/resources/token";
+import { LocalStorage } from "shared/utils/base-storage/local-storage";
+import { SessionStorage } from "shared/utils/base-storage/session-storage";
 
-import { getStorageItem, setStorageItem } from "shared/utils/storage";
+const localStorageInstance = LocalStorage.getInstance();
+const sessionStorageInstance = SessionStorage.getInstance();
 
-const baseUrl = getStorageItem("SERVER_URL");
-const env = `${process.env.REACT_APP_BASE_URL}${":"}${
-  process.env.REACT_APP_URL_PORT
+const baseUrl = localStorageInstance.getValueByKey<string>("SERVER_URL");
+const env = `${process.env.REACT_APP_BASE_URL}
 }`;
+
+const dashboardUrl = localStorageInstance.getValueByKey<string>("DASHBOARD");
+const envDashboard = `${dashboardUrl}/embed/dashboard/${dashboardUrl}#theme=night&bordered=true&titled=true`;
 
 const api = axios.create({
   baseURL: baseUrl ?? env,
+  url: dashboardUrl ?? envDashboard,
 });
 
 type TToken = {
@@ -26,7 +32,7 @@ function isTokenExpired(token: string) {
 
 api.interceptors.request.use(
   async (config) => {
-    const token = getStorageItem("TOKEN");
+    const token = SessionStorage.getInstance().getValueByKey("TOKEN");
 
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -44,11 +50,12 @@ api.interceptors.response.use(
     return response;
   },
   async (error: any) => {
-    let token = getStorageItem("TOKEN");
+    let token = sessionStorageInstance.getValueByKey<string>("TOKEN");
 
     if (token && isTokenExpired(token)) {
-      token = await getAnonymousToken();
-      setStorageItem("TOKEN", token);
+      const decoded = jwt_decode(token) as string;
+      token = await createToken(decoded);
+      sessionStorageInstance.setValue("TOKEN", token);
 
       error.config.headers["Authorization"] = "Bearer " + token;
       return api.request(error.config);
@@ -62,4 +69,8 @@ function setBaseUrl(url: string) {
   api.defaults.baseURL = url;
 }
 
-export { api, setBaseUrl };
+function setDashboardUrl(url: string) {
+  api.defaults.url = url;
+}
+
+export { api, setBaseUrl, setDashboardUrl };
