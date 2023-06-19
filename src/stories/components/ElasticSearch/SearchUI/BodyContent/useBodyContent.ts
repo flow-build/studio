@@ -10,32 +10,24 @@ import { FieldsItemResult } from '../types';
 import { DynamicObject } from './types';
 
 export const useBodyContent = (fields?: FieldsItemResult[]) => {
-  function transformArrayToNestedObject(
-    daynamicObjects: Array<DynamicObject>
-  ): Record<string, any> {
+  function transformArrayToNestedObject(daynamicObjects: DynamicObject[]): Record<string, any> {
     const nestedObject: Record<string, any> = {};
 
-    const names = daynamicObjects.map((item) => item.name);
-    const values = daynamicObjects.map((item) => item.value);
-
-    names.forEach((str, indexArray) => {
-      const parts = str.split('.');
+    daynamicObjects.forEach((item) => {
+      const { name, value, isPropArrayComponent } = item;
+      const parts = name.split('.');
       let currentObject: Record<string, any> = nestedObject;
 
       parts.forEach((part, index) => {
         if (!currentObject[part]) {
-          if (!daynamicObjects[indexArray].isPropArrayComponent) {
-            currentObject[part] = {};
-          } else {
-            currentObject[part] = [];
-          }
+          currentObject[part] = isPropArrayComponent ? [] : {};
         }
 
         if (index === parts.length - 1) {
-          if (!daynamicObjects[indexArray].isPropArrayComponent) {
-            currentObject[part] = values[indexArray];
+          if (isPropArrayComponent) {
+            currentObject[part].push(value);
           } else {
-            currentObject[part].push(values[indexArray]);
+            currentObject[part] = value;
           }
         }
 
@@ -43,44 +35,25 @@ export const useBodyContent = (fields?: FieldsItemResult[]) => {
       });
     });
 
-    const newObject = Object.keys(nestedObject).reduce((prev, current) => {
-      if (_isArray(nestedObject[current])) {
-        const mapObject = Object.keys(nestedObject[current]).reduce((acc: any, curr: any) => {
-          const arr = nestedObject[current][curr];
-          const result = arr.map((_: any, index: number) => {
-            return {
-              [curr]: arr[index]
-            };
-          });
+    const newObject = createObject(nestedObject);
 
-          if (!acc.length) {
-            return [...result];
-          }
+    return { ...nestedObject, ...newObject };
+  }
 
-          const newAcc = acc.map((item: any, index: number) => {
-            if (item[curr]) {
-              return item;
-            }
+  function createObject(nestedObject: Record<string, any>) {
+    return Object.keys(nestedObject).reduce((prev, current) => {
+      if (Array.isArray(nestedObject[current])) {
+        const mapObject = nestedObject[current].map((arrItem: any) => {
+          const result: Record<string, any> = {};
+          result[current] = arrItem;
+          return result;
+        });
 
-            return {
-              ...item,
-              ...result[index]
-            };
-          });
-
-          return newAcc;
-        }, []);
-
-        return {
-          ...prev,
-          [current]: mapObject
-        };
+        return { ...prev, [current]: mapObject };
       }
 
       return prev;
-    }, nestedObject);
-
-    return { ...nestedObject, ...newObject };
+    }, {});
   }
 
   function getValueElastic(field: FieldsItemResult, searchResult: SearchResult) {

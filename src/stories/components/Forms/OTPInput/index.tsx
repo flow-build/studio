@@ -26,6 +26,17 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     [onChangeToken]
   );
 
+  const getInputValueByIndex = useCallback(
+    (index: number) => {
+      if (otpValues) {
+        return otpValues[index];
+      }
+
+      return undefined;
+    },
+    [otpValues]
+  );
+
   useEffect(() => {
     handleOtpChange(otpValues);
   }, [handleOtpChange, otpValues]);
@@ -40,7 +51,7 @@ export const OTPInput: React.FC<OTPInputProps> = ({
             type="number"
             focus={activeInputIndex === index}
             autoFocus={autoFocus}
-            value={otpValues && otpValues[index]}
+            value={getInputValueByIndex(index)}
             onChange={onChange}
             onFocus={onFocus(index)}
             onKeyDown={onKeyDown}

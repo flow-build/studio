@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import { SortLabel } from 'stories/components/Table/components/SortLabel';
-import { TableProps } from 'stories/components/Table/types';
+import { Data, TableProps } from 'stories/components/Table/types';
 import { usePagination } from 'stories/components/Table/usePagination';
 import { useSort } from 'stories/components/Table/useSort';
 
@@ -48,6 +48,12 @@ export const Table: React.FC<TableProps> = ({
     [rowData]
   );
 
+  const handleRowClick = useCallback((elem: Data) => {
+    if (onRowClick) {
+      onRowClick(elem);
+    }
+  }, []);
+
   return (
     <S.Wrapper {...props}>
       <TableContainer component={Paper}>
@@ -77,7 +83,7 @@ export const Table: React.FC<TableProps> = ({
                 key={index.toString()}
                 hover={!!onRowClick}
                 clickable={!!onRowClick}
-                onClick={() => onRowClick && onRowClick(elem)}
+                onClick={() => handleRowClick(elem)}
               >
                 {column.map((columnElem, columnIndex) => (
                   <TableCell key={columnIndex.toString()} {...columnElem}>
