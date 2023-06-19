@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { SearchResult } from '@elastic/search-ui';
-import _isArray from 'lodash/isArray';
 import _isObject from 'lodash/isObject';
 import Mustache from 'mustache';
 import { Logger } from 'utils';

@@ -48,11 +48,14 @@ export const Table: React.FC<TableProps> = ({
     [rowData]
   );
 
-  const handleRowClick = useCallback((elem: Data) => {
-    if (onRowClick) {
-      onRowClick(elem);
-    }
-  }, []);
+  const handleRowClick = useCallback(
+    (elem: Data) => {
+      if (onRowClick) {
+        onRowClick(elem);
+      }
+    },
+    [onRowClick]
+  );
 
   return (
     <S.Wrapper {...props}>
