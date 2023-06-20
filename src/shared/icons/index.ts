@@ -12,3 +12,4 @@ export { default as Villa } from '@mui/icons-material/Villa';
 export { default as ArrowForward } from '@mui/icons-material/ArrowForwardIos';
 export { default as ArrowBack } from '@mui/icons-material/ArrowBackIos';
 export { default as PersonIcon } from '@mui/icons-material/Person';
+export { default as AddIcon } from '@mui/icons-material/Add';
