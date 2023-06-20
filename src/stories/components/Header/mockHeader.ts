@@ -1,4 +1,4 @@
-import { AccessTime, Announcement, House, Message, TableRows } from '@mui/icons-material';
+import { AccessTime, Announcement, House, Message, TableRows, List } from '@mui/icons-material';
 import { Logger } from 'utils';
 
 export const menuItems = [
@@ -46,6 +46,15 @@ export const menuItems = [
     icon: {
       redirectLink: '/table',
       icon: TableRows
+    }
+  },
+  {
+    id: '6',
+    redirectLink: '/workflows',
+    title: 'Workflows',
+    icon: {
+      redirectLink: '/workflows',
+      icon: List
     }
   }
 ];
