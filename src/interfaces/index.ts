@@ -7,7 +7,7 @@ export type ColumnProps = {
   width?: number;
 };
 
-export interface Props {
+export interface WorkFlowProps {
   createdAt: string;
   description: string;
   name: string;

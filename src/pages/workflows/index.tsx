@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import { ColumnProps, WorkFlowProps } from 'interfaces';
 import { getWorkflows } from 'services/workflows';
 import { VisibilityIcon, AddIcon } from 'shared/icons';
 import { Button, Table } from 'stories/components';
+import * as S from 'styles/workflowPageStyles';
 import { Logger } from 'utils';
-
-import * as S from './styles';
-import { ColumnProps, Props } from './types';
 
 const column: ColumnProps[] = [
   { field: 'name', label: 'Name' },
@@ -23,7 +22,7 @@ export default function Workflows() {
   useEffect(() => {
     getWorkflows().then((res) =>
       setData(
-        res.data.map((elem: Props) => ({
+        res.data.map((elem: WorkFlowProps) => ({
           ...elem,
           action: (
             <div>
