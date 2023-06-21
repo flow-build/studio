@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { ColumnProps, WorkFlowProps } from 'interfaces';
+import { ColumnProps, WorkFlowProps } from 'interfaces/workflowPage';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getWorkflows } from 'services/workflows';
 import { VisibilityIcon, AddIcon } from 'shared/icons';
 import { Button, Table } from 'stories/components';
 import * as S from 'styles/workflowPageStyles';
-import { Logger } from 'utils';
 
 const column: ColumnProps[] = [
   { field: 'name', label: 'Name' },
@@ -16,34 +16,41 @@ const column: ColumnProps[] = [
   { field: 'action', width: 170, align: 'center' }
 ];
 
-export default function Workflows() {
-  const [data, setData] = useState([]);
+export const getServerSideProps: GetServerSideProps = async () => {
+  const res = await getWorkflows();
+  const data = await res.data;
+
+  return { props: { data } };
+};
+
+export default function Workflows({
+  data
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [dataWorkflows, setDataWorkflows] = useState(data);
 
   useEffect(() => {
-    getWorkflows().then((res) =>
-      setData(
-        res.data.map((elem: WorkFlowProps) => ({
-          ...elem,
-          action: (
-            <div>
-              <Button onClick={() => console.log(elem.name)}>
-                <VisibilityIcon />
-              </Button>
-              <Button onClick={() => console.log(elem.name)}>
-                <AddIcon />
-              </Button>
-            </div>
-          )
-        }))
-      )
+    setDataWorkflows(
+      data.map((elem: WorkFlowProps) => ({
+        ...elem,
+        action: (
+          <div>
+            <Button onClick={() => console.log(elem.name)}>
+              <VisibilityIcon />
+            </Button>
+            <Button onClick={() => console.log(elem.name)}>
+              <AddIcon />
+            </Button>
+          </div>
+        )
+      }))
     );
-  }, []);
+  }, [data]);
 
   return (
     <S.Wrapper>
       <h3>Lista de Workflows</h3>
       <br />
-      <Table column={column} rowData={data} onRowClick={Logger.info} paginable />
+      <Table column={column} rowData={dataWorkflows} paginable />
     </S.Wrapper>
   );
 }
