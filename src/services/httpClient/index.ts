@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { apiConfig } from 'services/config';
 import { store } from 'store';
 import { setIsLoading } from 'store/slices/loading';
 
@@ -7,7 +8,7 @@ const initialHeader = {
 } as const;
 
 const api = axios.create({
-  baseURL: '',
+  baseURL: apiConfig.baseUrl,
   headers: initialHeader
 });
 
