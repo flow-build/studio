@@ -40,12 +40,10 @@ export default function Workflows() {
   }, []);
 
   return (
-    <>
-      <S.Wrapper>
-        <h3>Lista de Workflows</h3>
-        <br />
-        <Table column={column} rowData={data} onRowClick={Logger.info} paginable />
-      </S.Wrapper>
-    </>
+    <S.Wrapper>
+      <h3>Lista de Workflows</h3>
+      <br />
+      <Table column={column} rowData={data} onRowClick={Logger.info} paginable />
+    </S.Wrapper>
   );
 }
