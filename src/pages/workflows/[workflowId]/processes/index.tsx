@@ -5,7 +5,7 @@ import { ContentHeader } from 'components/ContentHeader';
 import { MiniCardsGrid } from 'components/MiniCardsGrid';
 import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
 import { useProcessesPage } from 'hooks/pages/processes';
-import flowbuildApi from 'services/flowbuildServer';
+import { flowbuildApi } from 'services/flowbuildServer';
 import { ModeView } from 'shared/enum';
 import { Process } from 'types/entities/process';
 import { ProcessPageProps, ServerSideProcessesPageProps } from 'types/pages/processesPage';

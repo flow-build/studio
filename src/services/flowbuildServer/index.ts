@@ -1,60 +1,8 @@
-import axios from 'axios';
 import { apiConfig } from 'config/api';
-// import { apiConfig } from 'config/api';
-import { store } from 'store';
-import { setIsLoading } from 'store/slices/loading';
+import { default as api } from 'services/httpClient';
 
-const initialHeader = {
-  'Content-Type': 'application/json'
-} as const;
+const flowbuildApi = api();
 
-const api = axios.create({
-  baseURL: apiConfig.baseUrl,
-  headers: initialHeader
-});
+flowbuildApi.setBaseUrl(apiConfig.baseUrl ?? '');
 
-api.interceptors.request.use(
-  (config) => {
-    store.dispatch(setIsLoading(true));
-    console.log({ config });
-    return config;
-  },
-  (error) => {
-    store.dispatch(setIsLoading(false));
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    store.dispatch(setIsLoading(false));
-    return response;
-  },
-  (error) => {
-    store.dispatch(setIsLoading(false));
-
-    return Promise.reject({
-      ...error,
-      message: error?.response?.data?.message ?? error?.message
-    });
-  }
-);
-
-function API() {
-  return {
-    ...api,
-    post: api.post,
-    get: api.get,
-    put: api.put,
-    patch: api.patch,
-    delete: api.delete,
-    setHeader(header: { [key: string]: string }) {
-      api.defaults.headers.common = { ...initialHeader, ...header };
-    },
-    setBaseUrl(baseUrl: string) {
-      api.defaults.baseURL = baseUrl;
-    }
-  };
-}
-
-export default API();
+export { flowbuildApi };

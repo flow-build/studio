@@ -4,13 +4,12 @@ import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import _delay from 'lodash/delay';
 import { useRouter } from 'next/navigation';
+import { localApi } from 'services/localServer';
 import { messages } from 'shared/enum';
 import { showSnackbar } from 'store/slices/snackbar';
 import { setTempEmail } from 'store/slices/user';
 import { validateCPF } from 'utils';
 import * as yup from 'yup';
-
-import api from '../../services/httpClient';
 
 export const useRegister = () => {
   const INITIAL_VALUES = {
@@ -47,7 +46,7 @@ export const useRegister = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const result = await api.post<{ status: number }>('/api/signUp', values);
+        const result = await localApi.post<{ status: number }>('/api/signUp', values);
         if (result?.status === 200) {
           dispatch(setTempEmail(values.email));
           dispatch(showSnackbar({ message: 'Cadastro bem-sucedido!', severity: 'success' }));

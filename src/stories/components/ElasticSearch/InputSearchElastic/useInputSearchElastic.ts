@@ -1,4 +1,5 @@
-import api from '../../../../services/httpClient';
+import { localApi } from 'services/localServer';
+
 import { Suggestions } from '../../Forms/InputSearchSuggestions/types';
 import { ResultSuggestions } from '../types';
 import { UseInputSearchElasticProps } from './types';
@@ -9,7 +10,7 @@ export const useInputSearchElastic = ({
   endpointBase,
   countItemsResult = 3
 }: UseInputSearchElasticProps) => {
-  api.setHeader({
+  localApi.setHeader({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${searchKey}`
   });
@@ -20,7 +21,7 @@ export const useInputSearchElastic = ({
       size: countItemsResult
     };
 
-    const response = await api.post<ResultSuggestions>(
+    const response = await localApi.post<ResultSuggestions>(
       `${endpointBase}/api/as/v1/engines/${engineName}/query_suggestion`,
       body
     );

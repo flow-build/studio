@@ -6,7 +6,7 @@ import cryptoJs from 'crypto-js';
 import { useFormik } from 'formik';
 import _delay from 'lodash/delay';
 import { useRouter } from 'next/navigation';
-import api from 'services/httpClient';
+import { localApi } from 'services/localServer';
 import { messages } from 'shared/enum';
 import { RootState } from 'store';
 import { showSnackbar } from 'store/slices/snackbar';
@@ -41,7 +41,7 @@ export const useResetPassword = () => {
 
   async function onSubmit(values: typeof INITIAL_VALUES) {
     try {
-      const result = await api.post('/api/forgotPassword/sendCode', { email });
+      const result = await localApi.post('/api/forgotPassword/sendCode', { email });
 
       if (result?.status === 200) {
         const hash = cryptoJs.AES.encrypt(

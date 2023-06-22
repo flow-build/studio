@@ -1,5 +1,5 @@
 import type { RequestState, QueryConfig } from '@elastic/search-ui';
-import api from 'services/httpClient';
+import { localApi } from 'services/localServer';
 import { Logger } from 'utils';
 
 class SearchUIConnector {
@@ -13,7 +13,7 @@ class SearchUIConnector {
       queryConfig
     };
 
-    const response = await api.post('/api/searchUI', body);
+    const response = await localApi.post('/api/searchUI', body);
 
     return response.data;
   }

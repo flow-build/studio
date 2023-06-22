@@ -1,7 +1,7 @@
 import { ColumnProps, WorkFlowProps } from 'interfaces/workflowPage';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/navigation';
-import flowbuildApi from 'services/flowbuildServer';
+import { flowbuildApi } from 'services/flowbuildServer';
 import { VisibilityIcon, AddIcon } from 'shared/icons';
 import { Button, Table } from 'stories/components';
 import * as S from 'styles/workflowPageStyles';
