@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux';
 
 import { AxiosError } from 'axios';
+import { setCookie } from 'cookies-next';
 import { useFormik } from 'formik';
 import _delay from 'lodash/delay';
 import _isEqual from 'lodash/isEqual';
 import { useRouter } from 'next/navigation';
-import api from 'services/httpClient';
+import flowbuildApi from 'services/flowbuildServer';
+import localApi from 'services/localServer';
 import { messages } from 'shared/enum';
 import { CognitoSignIn } from 'shared/types/cognito';
 import { showSnackbar } from 'store/slices/snackbar';
@@ -35,11 +37,18 @@ export const useLogin = () => {
 
   async function onSubmit(values: typeof INITIAL_VALUES) {
     try {
-      const result = await api.post<CognitoSignIn>('/api/signIn', values);
-      const hasAttributes = result.data?.attributes;
+      const cognitoResponse = await localApi.post<CognitoSignIn>('/api/signIn', values);
+      const hasAttributes = cognitoResponse.data?.attributes;
+
+      const tokenResponse = await flowbuildApi.post('/token', {
+        user_id: cognitoResponse.data?.username
+      });
+
+      const token = tokenResponse.data.jwtToken;
+      setCookie('token', token);
 
       if (hasAttributes) {
-        const { attributes } = result.data;
+        const { attributes } = cognitoResponse.data;
 
         dispatch(
           setBasicInfosUser({
