@@ -5,17 +5,15 @@ import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { ModeView } from 'shared/enum';
 import { Breadcrumbs } from 'stories/components';
-import { BreadcrumbsProps } from 'stories/components/Breadcrumb/types';
 
 import * as S from './styles';
+import { ContentHeaderProps } from './types';
 
-type Props = {
-  items: BreadcrumbsProps['items'];
-  initialModeView?: ModeView;
-  onChangeModeView?: (modeView: ModeView) => void;
-};
-
-export const ContentHeader: React.FC<Props> = ({ items, initialModeView, onChangeModeView }) => {
+export const ContentHeader: React.FC<ContentHeaderProps> = ({
+  items,
+  initialModeView,
+  onChangeModeView
+}) => {
   const [view, setView] = useState<ModeView>(initialModeView ?? ModeView.TABLE);
 
   const handleChange = (_: unknown, nextView: ModeView) => {
