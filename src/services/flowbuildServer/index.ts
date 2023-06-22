@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { apiConfig } from 'config/api';
 // import { apiConfig } from 'config/api';
 import { store } from 'store';
 import { setIsLoading } from 'store/slices/loading';
@@ -8,13 +9,14 @@ const initialHeader = {
 } as const;
 
 const api = axios.create({
-  baseURL: '',
+  baseURL: apiConfig.baseUrl,
   headers: initialHeader
 });
 
 api.interceptors.request.use(
   (config) => {
     store.dispatch(setIsLoading(true));
+    console.log({ config });
     return config;
   },
   (error) => {
