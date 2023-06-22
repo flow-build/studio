@@ -40,6 +40,6 @@ export const ContentText = styled(Typography)`
 
 export const Menu = styled(PopupMenu)`
   position: absolute;
-  top: 0.5rem;
+  top: ${spacing.S8};
   right: 0;
 `;
