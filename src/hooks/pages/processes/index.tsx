@@ -1,4 +1,7 @@
+import { useCallback } from 'react';
+
 import { GridColDef, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
+import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
 import format from 'date-fns/format';
 import { VisibilityIcon, AccountTreeIcon } from 'shared/icons';
 import { Button } from 'stories/components';
@@ -74,5 +77,25 @@ export function useProcessesPage(processes: Process[]) {
     }));
   }
 
-  return { columns, rowData };
+  const paginateCard = useCallback(
+    (page = 1, itemsPerPage = 9): MiniCardsGridItem[] => {
+      const pageIndex = page - 1;
+
+      if (pageIndex < 0) {
+        return [];
+      }
+
+      return processes
+        .slice(pageIndex * itemsPerPage, pageIndex * itemsPerPage + itemsPerPage)
+        .map((process) => ({
+          id: process.id,
+          name: process.state.node_name,
+          description: process.id,
+          text: `${process.status} | ${format(new Date(process.created_at), 'dd-MM-yyyy')}`
+        }));
+    },
+    [processes]
+  );
+
+  return { columns, rowData, paginateCard };
 }

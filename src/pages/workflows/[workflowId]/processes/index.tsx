@@ -4,7 +4,6 @@ import { DataGrid } from '@mui/x-data-grid';
 import { ContentHeader } from 'components/ContentHeader';
 import { MiniCardsGrid } from 'components/MiniCardsGrid';
 import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
-import format from 'date-fns/format';
 import { useProcessesPage } from 'hooks/pages/processes';
 import flowbuildApi from 'services/flowbuildServer';
 import { ModeView } from 'shared/enum';
@@ -21,7 +20,7 @@ export const getServerSideProps: ServerSideProcessesPageProps = async ({ req, pa
 };
 
 export default function Process({ processes }: ProcessPageProps) {
-  const { columns, rowData } = useProcessesPage(processes);
+  const { columns, rowData, paginateCard } = useProcessesPage(processes);
   const [modeView, setModeView] = useState<ModeView>(ModeView.TABLE);
   const [cards, setCards] = useState<MiniCardsGridItem[]>([]);
   const totalPage = Math.ceil(processes.length / 9);
@@ -30,14 +29,8 @@ export default function Process({ processes }: ProcessPageProps) {
   const isCardModeView = modeView === ModeView.CARDS;
 
   function onChangePage(page: number) {
-    const slicedProcesses = processes.slice((page - 1) * 9, (page - 1) * 9 + 9).map((process) => ({
-      id: process.id,
-      name: process.state.node_name,
-      description: process.id,
-      text: `${process.status} | ${format(new Date(process.created_at), 'dd-MM-yyyy')}`
-    }));
-
-    setCards(slicedProcesses);
+    const paginatedCards = paginateCard(page);
+    setCards(paginatedCards);
   }
 
   useEffect(() => {
@@ -46,15 +39,9 @@ export default function Process({ processes }: ProcessPageProps) {
       return;
     }
 
-    const slicedProcesses = processes.slice(0, 9).map((process) => ({
-      id: process.id,
-      name: process.state.node_name,
-      description: process.id,
-      text: `${process.status} | ${format(new Date(process.created_at), 'dd-MM-yyyy')}`
-    }));
-
-    setCards(slicedProcesses);
-  }, [isCardModeView, processes]);
+    const paginatedCards = paginateCard(1);
+    setCards(paginatedCards);
+  }, [isCardModeView, paginateCard]);
 
   return (
     <>
