@@ -3,6 +3,8 @@ import { ImageComponent } from 'stories/components/Image';
 import { fontSizes } from 'theme/fontSizes.theme';
 import { spacing } from 'theme/spacing';
 
+import { PopupMenu } from '../PopupMenu';
+
 export const Container = styled('div')`
   width: 100%;
 `;
@@ -10,6 +12,7 @@ export const Container = styled('div')`
 export const Wrapper = styled('div')`
   display: flex;
   margin: ${spacing.S10};
+  position: relative;
 `;
 
 export const Img = styled(ImageComponent)`
@@ -33,4 +36,10 @@ export const Description = styled(Typography)`
 export const ContentText = styled(Typography)`
   color: ${({ theme }) => theme.palette.text.secondary};
   font-size: ${fontSizes.F12};
+`;
+
+export const Menu = styled(PopupMenu)`
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
 `;

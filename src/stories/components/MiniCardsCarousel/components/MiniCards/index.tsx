@@ -11,6 +11,7 @@ export function MiniCards({
   description,
   urlImg,
   text,
+  popupMenu,
   ...props
 }: MiniCardsProps) {
   const content = useMemo(
@@ -20,12 +21,13 @@ export function MiniCards({
 
         <S.WrapperContent>
           <S.Name>{name}</S.Name>
+          {popupMenu && <S.Menu items={popupMenu.items} />}
           <S.Description>{description}</S.Description>
           <S.ContentText>{text}</S.ContentText>
         </S.WrapperContent>
       </S.Wrapper>
     ),
-    [description, name, props, text, urlImg]
+    [description, name, props, popupMenu, text, urlImg]
   );
 
   if (urlRedirect) {
