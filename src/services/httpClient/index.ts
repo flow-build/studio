@@ -1,44 +1,43 @@
 import axios from 'axios';
-import { apiConfig } from 'services/config';
 import { store } from 'store';
 import { setIsLoading } from 'store/slices/loading';
 
-const initialHeader = {
-  'Content-Type': 'application/json'
-} as const;
-
-const api = axios.create({
-  baseURL: apiConfig.baseUrl,
-  headers: initialHeader
-});
-
-api.interceptors.request.use(
-  (config) => {
-    store.dispatch(setIsLoading(true));
-    return config;
-  },
-  (error) => {
-    store.dispatch(setIsLoading(false));
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    store.dispatch(setIsLoading(false));
-    return response;
-  },
-  (error) => {
-    store.dispatch(setIsLoading(false));
-
-    return Promise.reject({
-      ...error,
-      message: error?.response?.data?.message ?? error?.message
-    });
-  }
-);
-
 function API() {
+  const initialHeader = {
+    'Content-Type': 'application/json'
+  } as const;
+
+  const api = axios.create({
+    baseURL: '',
+    headers: initialHeader
+  });
+
+  api.interceptors.request.use(
+    (config) => {
+      store.dispatch(setIsLoading(true));
+      return config;
+    },
+    (error) => {
+      store.dispatch(setIsLoading(false));
+      return Promise.reject(error);
+    }
+  );
+
+  api.interceptors.response.use(
+    (response) => {
+      store.dispatch(setIsLoading(false));
+      return response;
+    },
+    (error) => {
+      store.dispatch(setIsLoading(false));
+
+      return Promise.reject({
+        ...error,
+        message: error?.response?.data?.message ?? error?.message
+      });
+    }
+  );
+
   return {
     ...api,
     post: api.post,
@@ -55,4 +54,4 @@ function API() {
   };
 }
 
-export default API();
+export default API;

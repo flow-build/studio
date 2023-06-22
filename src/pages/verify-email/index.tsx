@@ -6,10 +6,11 @@ import { cryptoConfig } from 'config/crypto';
 import cryptoJs from 'crypto-js';
 import _isEqual from 'lodash/isEqual';
 import { useRouter } from 'next/router';
-import api from 'services/httpClient';
+import { localApi } from 'services/localServer';
 import { project } from 'shared/enum';
 import { RootState, store } from 'store';
 import { reset, setNewPassword } from 'store/slices/user';
+import { Loading } from 'stories/components';
 import { Button } from 'stories/components/Forms/Button';
 import { OTPInput } from 'stories/components/Forms/OTPInput';
 import * as S from 'styles/verifyEmailPageStyles';
@@ -22,8 +23,9 @@ export default function VerifyEmail() {
   const dispatch = useDispatch();
 
   const newPassword = useRef(decryptPassword(store.getState().user.newPassword));
-  const email = useSelector((state: RootState) => state.user.tempEmail);
+  const tempEmail = useSelector((state: RootState) => state.user.tempEmail);
   const resettingPassword = useSelector((state: RootState) => state.user.resettingPassword);
+  const email = useRef(tempEmail);
 
   const [token, setToken] = useState('');
   const disableButton = !_isEqual(token.length, TOKEN_LENGTH);
@@ -38,8 +40,8 @@ export default function VerifyEmail() {
   }
 
   async function handleResetPasswordSubmit() {
-    await api.post('/api/forgotPassword/submit', {
-      username: email,
+    await localApi.post('/api/forgotPassword/submit', {
+      username: email.current,
       newPassword: newPassword.current,
       code: token
     });
@@ -49,7 +51,7 @@ export default function VerifyEmail() {
 
   async function handleSignUpSubmit(): Promise<void> {
     try {
-      const result = await api.post('/api/verifyEmail', { email, code: token });
+      const result = await localApi.post('/api/verifyEmail', { email: email.current, code: token });
 
       if (_isEqual(result.status, 200)) {
         router.replace('/login');
@@ -76,26 +78,31 @@ export default function VerifyEmail() {
 
   async function resendCode() {
     if (resettingPassword) {
-      await api.post('/api/forgotPassword/sendCode', { email });
+      await localApi.post('/api/forgotPassword/sendCode', { email: email.current });
       return;
     }
 
-    await api.post('/api/resendCode', { email });
+    await localApi.post('/api/resendCode', { email: email.current });
   }
 
   useEffect(() => {
     dispatch(setNewPassword());
 
     return () => {
+      console.log('aqui');
       dispatch(reset());
     };
   }, [dispatch]);
 
   useEffect(() => {
-    if (!email) {
-      router.push('/login');
+    if (!email.current) {
+      router.replace('/login');
     }
-  }, [email, router]);
+  }, [router]);
+
+  if (!email.current) {
+    return <Loading />;
+  }
 
   return (
     <S.Main>
@@ -107,7 +114,7 @@ export default function VerifyEmail() {
         <S.Form onSubmit={onSubmit}>
           <h3>Validação de e-mail</h3>
           <p>
-            Insira o token enviado para <strong>{email}</strong>
+            Insira o token enviado para <strong>{email.current}</strong>
           </p>
 
           <OTPInput autoFocus length={TOKEN_LENGTH} onChangeToken={setToken} />

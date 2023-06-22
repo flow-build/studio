@@ -8,9 +8,9 @@ export type ColumnProps = {
 };
 
 export interface WorkFlowProps {
-  createdAt: string;
+  created_at: string;
   description: string;
   name: string;
   version: number;
-  workflowId: string;
+  workflow_id: string;
 }
