@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { ContentHeader } from 'components/ContentHeader';
 import { MiniCardsGrid } from 'components/MiniCardsGrid';
+import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
 import format from 'date-fns/format';
 import { useProcessesPage } from 'hooks/pages/processes';
 import flowbuildApi from 'services/flowbuildServer';
@@ -22,7 +23,7 @@ export const getServerSideProps: ServerSideProcessesPageProps = async ({ req, pa
 export default function Process({ processes }: ProcessPageProps) {
   const { columns, rowData } = useProcessesPage(processes);
   const [modeView, setModeView] = useState<ModeView>(ModeView.TABLE);
-  const [cards, setCards] = useState<any[]>([]);
+  const [cards, setCards] = useState<MiniCardsGridItem[]>([]);
   const totalPage = Math.ceil(processes.length / 9);
 
   const isTableModeView = modeView === ModeView.TABLE;
@@ -30,6 +31,7 @@ export default function Process({ processes }: ProcessPageProps) {
 
   function onChangePage(page: number) {
     const slicedProcesses = processes.slice((page - 1) * 9, (page - 1) * 9 + 9).map((process) => ({
+      id: process.id,
       name: process.state.node_name,
       description: process.id,
       text: `${process.status} | ${format(new Date(process.created_at), 'dd-MM-yyyy')}`
@@ -45,6 +47,7 @@ export default function Process({ processes }: ProcessPageProps) {
     }
 
     const slicedProcesses = processes.slice(0, 9).map((process) => ({
+      id: process.id,
       name: process.state.node_name,
       description: process.id,
       text: `${process.status} | ${format(new Date(process.created_at), 'dd-MM-yyyy')}`
