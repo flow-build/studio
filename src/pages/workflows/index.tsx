@@ -1,55 +1,70 @@
-import { ColumnProps, WorkFlowProps } from 'interfaces/workflowPage';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import { DataGrid } from '@mui/x-data-grid';
+import { ContentHeader } from 'components/ContentHeader';
+import { MiniCardsGrid } from 'components/MiniCardsGrid';
+import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
+import { useWorkflowsPage } from 'hooks/pages/workflows';
 import { flowbuildApi } from 'services/flowbuildServer';
-import { VisibilityIcon, AddIcon } from 'shared/icons';
-import { Button, Table } from 'stories/components';
-import * as S from 'styles/workflowPageStyles';
+import { ModeView } from 'shared/enum';
+import { WorkFlow } from 'types/entities/workflow';
+import { WorkflowsPageProps, ServerSideWorkflowsPageProps } from 'types/pages/workflowsPage';
 
-const column: ColumnProps[] = [
-  { field: 'name', label: 'Name' },
-  { field: 'workflow_id', label: 'ID' },
-  { field: 'description', label: 'Description' },
-  { field: 'version', label: 'Version' },
-  { field: 'created_at', label: 'Created At' },
-  { field: 'action', width: 170, align: 'center' }
-];
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: ServerSideWorkflowsPageProps = async ({ req }) => {
   flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
-  const res = await flowbuildApi.get('/workflows');
-  const data = res.data;
 
-  return { props: { data } };
+  const url = `/workflows`;
+  const response = await flowbuildApi.get<WorkFlow[]>(url);
+
+  return { props: { workflows: response.data } };
 };
 
-export default function Workflows({
-  data
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  const list = getList();
+export default function Process({ workflows }: WorkflowsPageProps) {
+  const { columns, rowData, paginateCard } = useWorkflowsPage(workflows);
+  const [modeView, setModeView] = useState<ModeView>(ModeView.TABLE);
+  const [cards, setCards] = useState<MiniCardsGridItem[]>([]);
+  const totalPage = Math.ceil(workflows.length / 9);
 
-  function getList() {
-    return data.map((elem: WorkFlowProps) => ({
-      ...elem,
-      action: (
-        <div>
-          <Button onClick={() => router.push(`/workflows/${elem.workflow_id}/processes`)}>
-            <VisibilityIcon />
-          </Button>
-          <Button onClick={() => console.log(elem.name)}>
-            <AddIcon />
-          </Button>
-        </div>
-      )
-    }));
+  const isTableModeView = modeView === ModeView.TABLE;
+  const isCardModeView = modeView === ModeView.CARDS;
+
+  function onChangePage(page: number) {
+    const paginatedCards = paginateCard(page);
+    setCards(paginatedCards);
   }
 
+  useEffect(() => {
+    if (!isCardModeView) {
+      setCards([]);
+      return;
+    }
+
+    const paginatedCards = paginateCard(1);
+    setCards(paginatedCards);
+  }, [isCardModeView, paginateCard]);
+
   return (
-    <S.Wrapper>
-      <h3>Lista de Workflows</h3>
+    <>
+      <ContentHeader
+        items={[{ text: 'Workflows', redirectLink: '/workflows' }, { text: 'Processes' }]}
+        onChangeModeView={setModeView}
+      />
+
       <br />
-      <Table column={column} rowData={list} paginable />
-    </S.Wrapper>
+
+      {isTableModeView && (
+        <DataGrid
+          rows={rowData}
+          columns={columns}
+          disableColumnMenu
+          disableRowSelectionOnClick
+          autoPageSize
+        />
+      )}
+
+      {isCardModeView && (
+        <MiniCardsGrid items={cards} totalPage={totalPage} onChangePage={onChangePage} />
+      )}
+    </>
   );
 }
