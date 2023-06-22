@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Pagination } from '@mui/material';
 import { MiniCardsGridProps } from 'components/MiniCardsGrid/types';
 
 import * as S from './styles';
@@ -16,11 +15,22 @@ export const MiniCardsGrid: React.FC<MiniCardsGridProps> = ({ items, totalPage, 
     <>
       <S.Wrapper>
         {items.map((item) => (
-          <S.Card key={item.id} name={item.name} description={item.description} text={item.text} />
+          <S.Card
+            key={item.id}
+            name={item.name}
+            description={item.description}
+            text={item.text}
+            popupMenu={{
+              items: [
+                { id: '1', label: 'Ver histórico' },
+                { id: '2', label: 'Ver diagrama' }
+              ]
+            }}
+          />
         ))}
       </S.Wrapper>
 
-      <Pagination style={{ alignSelf: 'center' }} count={totalPage} onChange={onChange} />
+      <S.Pagination count={totalPage} onChange={onChange} />
     </>
   );
 };

@@ -1,3 +1,4 @@
+import MuiPagination from '@mui/material/Pagination';
 import { styled } from '@mui/material/styles';
 import { MiniCards } from 'stories/components/MiniCardsCarousel/components/MiniCards';
 import { spacing } from 'theme/spacing';
@@ -14,4 +15,8 @@ export const Card = styled(MiniCards)`
   width: 20rem;
   padding: ${spacing.S16} ${spacing.S18};
   box-shadow: ${({ theme }) => theme.shadows[1]};
+`;
+
+export const Pagination = styled(MuiPagination)`
+  align-self: center;
 `;
