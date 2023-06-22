@@ -1,5 +1,7 @@
 import { GridColDef, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
 import format from 'date-fns/format';
+import { VisibilityIcon, AccountTreeIcon } from 'shared/icons';
+import { Button } from 'stories/components';
 import { Process } from 'types/entities/process';
 import { ProcessPageRowData } from 'types/pages/processesPage';
 
@@ -25,7 +27,23 @@ export function useProcessesPage(processes: Process[]) {
       headerAlign: 'center',
       flex: 1
     },
-    { field: 'actions', headerName: 'Actions', align: 'center', headerAlign: 'center', flex: 1 }
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1,
+      renderCell: () => (
+        <div>
+          <Button size="small">
+            <VisibilityIcon fontSize="small" />
+          </Button>
+          <Button size="small">
+            <AccountTreeIcon fontSize="small" />
+          </Button>
+        </div>
+      )
+    }
   ];
 
   const rowData = mapProcessesToRowData(processes);
@@ -51,7 +69,8 @@ export function useProcessesPage(processes: Process[]) {
       version: null,
       status: process.status,
       createdAt: process.created_at,
-      updatedAt: null
+      updatedAt: null,
+      actions: null
     }));
   }
 
