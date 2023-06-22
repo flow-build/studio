@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { useMemo } from 'react';
 
 import Link from 'next/link';
 
@@ -13,10 +13,8 @@ export function MiniCards({
   text,
   ...props
 }: MiniCardsProps) {
-  const Container = urlRedirect ? Link : Fragment;
-
-  return (
-    <Container href={urlRedirect ?? ''}>
+  const content = useMemo(
+    () => (
       <S.Wrapper {...props}>
         {urlImg && <S.Img alt={name} src={urlImg ?? ''} width={155} height={100} />}
 
@@ -26,6 +24,13 @@ export function MiniCards({
           <S.ContentText>{text}</S.ContentText>
         </S.WrapperContent>
       </S.Wrapper>
-    </Container>
+    ),
+    [description, name, props, text, urlImg]
   );
+
+  if (urlRedirect) {
+    return <Link href={urlRedirect ?? ''}>{content}</Link>;
+  }
+
+  return content;
 }
