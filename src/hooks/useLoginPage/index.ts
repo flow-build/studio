@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import _delay from 'lodash/delay';
 import _isEqual from 'lodash/isEqual';
 import { useRouter } from 'next/navigation';
-import { flowbuildApi } from 'services/flowbuildServer';
+import { createToken } from 'services/flowbuildServer/createToken';
 import { localApi } from 'services/localServer';
 import { messages } from 'shared/enum';
 import { CognitoSignIn } from 'shared/types/cognito';
@@ -40,9 +40,7 @@ export const useLogin = () => {
       const cognitoResponse = await localApi.post<CognitoSignIn>('/api/signIn', values);
       const hasAttributes = cognitoResponse.data?.attributes;
 
-      const tokenResponse = await flowbuildApi.post('/token', {
-        user_id: cognitoResponse.data?.username
-      });
+      const tokenResponse = await createToken(cognitoResponse.data?.username);
 
       const token = tokenResponse.data.jwtToken;
       setCookie('token', token);
