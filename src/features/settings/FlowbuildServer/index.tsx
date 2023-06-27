@@ -15,8 +15,8 @@ import * as S from './styles';
 export const FlowbuildServer: FC = () => {
   const dispatch = useDispatch();
 
-  const urlRef = useRef<TextFieldProps>(null);
-  const portRef = useRef<TextFieldProps>(null);
+  const urlRef = useRef<TextFieldProps | null>(null);
+  const portRef = useRef<TextFieldProps | null>(null);
 
   const [errors, setErrors] = useState({ url: false, port: false });
 
@@ -29,7 +29,7 @@ export const FlowbuildServer: FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.FLOWBUILD_PORT, port);
   }
 
-  function getUserId() {
+  function getUserId(): string | undefined {
     const token = getCookie('token') as string;
 
     if (!token) {
@@ -42,6 +42,12 @@ export const FlowbuildServer: FC = () => {
 
   async function onSetNewToken() {
     const userId = getUserId();
+
+    if (!userId) {
+      dispatch(showSnackbar({ message: 'Erro ao buscar user id', severity: 'error' }));
+      return;
+    }
+
     const tokenResponse = await createToken(userId);
     const token = tokenResponse.data.jwtToken || tokenResponse.data.token;
 
