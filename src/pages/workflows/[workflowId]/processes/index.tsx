@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { DataGrid } from '@mui/x-data-grid';
-import { ContentHeader } from 'components/ContentHeader';
-import { MiniCardsGrid } from 'components/MiniCardsGrid';
+import { BaseGrid } from 'components/BaseGrid';
 import { MiniCardsGridItem } from 'components/MiniCardsGrid/types';
 import { useProcessesPage } from 'hooks/pages/processes';
 import { flowbuildApi } from 'services/flowbuildServer';
@@ -21,19 +19,16 @@ export const getServerSideProps: ServerSideProcessesPageProps = async ({ req, pa
 
 export default function Process({ processes }: ProcessPageProps) {
   const { columns, rowData, paginateCard } = useProcessesPage(processes);
-  const [modeView, setModeView] = useState<ModeView>(ModeView.TABLE);
   const [cards, setCards] = useState<MiniCardsGridItem[]>([]);
-  const totalPage = Math.ceil(processes.length / 9);
-
-  const isTableModeView = modeView === ModeView.TABLE;
-  const isCardModeView = modeView === ModeView.CARDS;
 
   function onChangePage(page: number) {
     const paginatedCards = paginateCard(page);
     setCards(paginatedCards);
   }
 
-  useEffect(() => {
+  function onChangeModeView(modeView: ModeView) {
+    const isCardModeView = modeView === ModeView.CARDS;
+
     if (!isCardModeView) {
       setCards([]);
       return;
@@ -41,30 +36,14 @@ export default function Process({ processes }: ProcessPageProps) {
 
     const paginatedCards = paginateCard(1);
     setCards(paginatedCards);
-  }, [isCardModeView, paginateCard]);
+  }
 
   return (
-    <>
-      <ContentHeader
-        items={[{ text: 'Workflows', redirectLink: '/workflows' }, { text: 'Processes' }]}
-        onChangeModeView={setModeView}
-      />
-
-      <br />
-
-      {isTableModeView && (
-        <DataGrid
-          rows={rowData}
-          columns={columns}
-          disableColumnMenu
-          disableRowSelectionOnClick
-          autoPageSize
-        />
-      )}
-
-      {isCardModeView && (
-        <MiniCardsGrid items={cards} totalPage={totalPage} onChangePage={onChangePage} />
-      )}
-    </>
+    <BaseGrid
+      breadcrumb={[{ text: 'Workflows', redirectLink: '/workflows' }, { text: 'Processes' }]}
+      cards={{ items: cards, onChangePage }}
+      table={{ columns, rowData }}
+      onChangeModeView={onChangeModeView}
+    />
   );
 }
