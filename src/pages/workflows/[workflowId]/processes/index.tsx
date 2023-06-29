@@ -9,12 +9,15 @@ import { Process } from 'types/entities/process';
 import { ProcessPageProps, ServerSideProcessesPageProps } from 'types/pages/processesPage';
 
 export const getServerSideProps: ServerSideProcessesPageProps = async ({ req, params }) => {
-  flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+  try {
+    flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+    const url = `/workflows/${params?.workflowId}/processes`;
+    const response = await flowbuildApi.get<Process[]>(url);
 
-  const url = `/workflows/${params?.workflowId}/processes`;
-  const response = await flowbuildApi.get<Process[]>(url);
-
-  return { props: { processes: response.data } };
+    return { props: { processes: response.data } };
+  } catch (error) {
+    return { redirect: { permanent: false, destination: '/login' } };
+  }
 };
 
 export default function Process({ processes }: ProcessPageProps) {

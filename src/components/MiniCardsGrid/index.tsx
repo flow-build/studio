@@ -5,6 +5,8 @@ import { MiniCardsGridProps } from 'components/MiniCardsGrid/types';
 import * as S from './styles';
 
 export const MiniCardsGrid: React.FC<MiniCardsGridProps> = ({ items, totalPage, onChangePage }) => {
+  const hasItems = totalPage > 0;
+
   function onChange(_: unknown, value: number) {
     if (onChangePage) {
       onChangePage(value);
@@ -30,7 +32,7 @@ export const MiniCardsGrid: React.FC<MiniCardsGridProps> = ({ items, totalPage, 
         ))}
       </S.Wrapper>
 
-      <S.Pagination count={totalPage} onChange={onChange} />
+      {hasItems && <S.Pagination count={totalPage} onChange={onChange} />}
     </>
   );
 };
