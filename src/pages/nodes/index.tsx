@@ -3,12 +3,15 @@ import { NodePageProps, ServerSideNodePageProps, Node } from 'features/nodes/typ
 import { flowbuildApi } from 'services/flowbuildServer';
 
 export const getServerSideProps: ServerSideNodePageProps = async ({ req }) => {
-  flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+  try {
+    flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+    const url = `/cockpit/nodes`;
+    const response = await flowbuildApi.get<Node>(url);
 
-  const url = `/cockpit/nodes`;
-  const response = await flowbuildApi.get<Node>(url);
-
-  return { props: { nodes: response.data } };
+    return { props: { nodes: response.data } };
+  } catch (error) {
+    return { redirect: { permanent: false, destination: '/login' } };
+  }
 };
 
 export default function NodesPage({ nodes }: NodePageProps) {
