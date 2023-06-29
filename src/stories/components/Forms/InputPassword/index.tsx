@@ -20,17 +20,17 @@ export const InputPassword: FC<TextFieldProps> = (props) => {
   const IconEye = useMemo(() => {
     if (type === 'text') {
       return (
-        <IconButton onClick={tooggleIcon}>
+        <IconButton disabled={props.disabled} onClick={tooggleIcon}>
           <VisibilityIcon />
         </IconButton>
       );
     }
     return (
-      <IconButton onClick={tooggleIcon}>
+      <IconButton disabled={props.disabled} onClick={tooggleIcon}>
         <VisibilityOffIcon />
       </IconButton>
     );
-  }, [type, tooggleIcon]);
+  }, [type, props.disabled, tooggleIcon]);
 
   return <InputText {...props} type={type} rightIcon={IconEye} />;
 };
