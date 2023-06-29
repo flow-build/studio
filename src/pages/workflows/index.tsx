@@ -9,12 +9,15 @@ import { WorkFlow } from 'types/entities/workflow';
 import { WorkflowsPageProps, ServerSideWorkflowsPageProps } from 'types/pages/workflowsPage';
 
 export const getServerSideProps: ServerSideWorkflowsPageProps = async ({ req }) => {
-  flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+  try {
+    flowbuildApi.setHeader({ Authorization: req.headers.authorization ?? '' });
+    const url = `/workflows`;
+    const response = await flowbuildApi.get<WorkFlow[]>(url);
 
-  const url = `/workflows`;
-  const response = await flowbuildApi.get<WorkFlow[]>(url);
-
-  return { props: { workflows: response.data } };
+    return { props: { workflows: response.data } };
+  } catch (error) {
+    return { redirect: { permanent: false, destination: '/login' } };
+  }
 };
 
 export default function WorkflowsPage({ workflows }: WorkflowsPageProps) {
