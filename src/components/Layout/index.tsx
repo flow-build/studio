@@ -8,9 +8,11 @@ import { RootState } from 'store';
 import { Header, Footer, MainContent } from 'stories/components';
 import { InputSearchElasticProps } from 'stories/components/ElasticSearch/InputSearchElastic/types';
 import { navLinks, socialMedias } from 'stories/components/Footer/mockFooter';
-import { links, menuItems } from 'stories/components/Header/mockHeader';
 import { MenuProps } from 'stories/components/Menu/types';
 import { MenuAnchor } from 'stories/components/Menu/utils';
+
+import { links } from './links';
+import { menuItems } from './menuItems';
 
 export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
