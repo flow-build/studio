@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Switch from '@mui/material/Switch';
+import { cryptoConfig } from 'config/crypto';
+import cryptoJs from 'crypto-js';
 import { useFormik } from 'formik';
 import { messages } from 'shared/enum';
 import { usePahoMqtt } from 'shared/hooks/usePahoMqtt';
@@ -37,7 +39,10 @@ export const MqttServer: FC = () => {
     const url = localStorage.getItem(LOCAL_STORAGE_KEYS.MQTT_SERVER);
     const port = localStorage.getItem(LOCAL_STORAGE_KEYS.MQTT_PORT);
     const username = localStorage.getItem(LOCAL_STORAGE_KEYS.MQTT_USERNAME);
-    const password = localStorage.getItem(LOCAL_STORAGE_KEYS.MQTT_PASSWORD);
+    const hashedPassword = localStorage.getItem(LOCAL_STORAGE_KEYS.MQTT_PASSWORD) ?? '';
+
+    const passwordBytes = cryptoJs.AES.decrypt(hashedPassword, cryptoConfig.secretKey ?? '');
+    const password = passwordBytes.toString(cryptoJs.enc.Utf8);
 
     return {
       namespace: namespace ?? '',
@@ -71,8 +76,15 @@ export const MqttServer: FC = () => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_NAMESPACE, namespace);
     localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_SERVER, url);
     localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_PORT, port);
+
+    let hashPassword = '';
+
+    if (password) {
+      hashPassword = cryptoJs.AES.encrypt(password, cryptoConfig.secretKey ?? '').toString();
+    }
+
     localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_USERNAME, username);
-    localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_PASSWORD, password);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.MQTT_PASSWORD, hashPassword);
 
     dispatch(showSnackbar({ message: 'Conexão com MQTT salva com sucesso', severity: 'success' }));
   }
