@@ -14,3 +14,5 @@ export { default as ArrowBack } from '@mui/icons-material/ArrowBackIos';
 export { default as PersonIcon } from '@mui/icons-material/Person';
 export { default as AddIcon } from '@mui/icons-material/Add';
 export { default as AccountTreeIcon } from '@mui/icons-material/AccountTree';
+export { default as SchemaIcon } from '@mui/icons-material/Schema';
+export { default as SettingsIcon } from '@mui/icons-material/Settings';
