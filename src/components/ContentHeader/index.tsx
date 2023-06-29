@@ -16,7 +16,11 @@ export const ContentHeader: React.FC<ContentHeaderProps> = ({
 }) => {
   const [view, setView] = useState<ModeView>(initialModeView ?? ModeView.TABLE);
 
-  const handleChange = (_: unknown, nextView: ModeView) => {
+  const handleChange = (_: unknown, nextView: ModeView | null) => {
+    if (!nextView) {
+      return;
+    }
+
     setView(nextView);
 
     if (onChangeModeView) {
