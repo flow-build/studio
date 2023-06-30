@@ -2,6 +2,7 @@ import { maskCNPJ } from 'utils/masks/cnpj';
 import { maskCPF } from 'utils/masks/cpf';
 import { maskCreditCardNumber } from 'utils/masks/credit-card';
 import { maskCurrency } from 'utils/masks/currency';
+import { maskOnlyNumbers } from 'utils/masks/only-numbers';
 import { maskPhoneNumber } from 'utils/masks/phone';
 import { MaskFunction, MaskName } from 'utils/masks/types';
 
@@ -11,7 +12,8 @@ export const getMaskByName = (maskName: MaskName): MaskFunction => {
     cnpj: maskCNPJ,
     cpf: maskCPF,
     currency: maskCurrency,
-    phone: maskPhoneNumber
+    phone: maskPhoneNumber,
+    'only-numbers': maskOnlyNumbers
   };
 
   const defaultMask: MaskFunction = (value: string) => value;

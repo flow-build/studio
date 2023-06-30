@@ -4,3 +4,4 @@ export * from './phone';
 export * from './currency';
 export * from './credit-card';
 export * from './utilities';
+export * from './only-numbers';
