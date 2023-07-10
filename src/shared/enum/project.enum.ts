@@ -1,3 +1,3 @@
 export const project = {
-  urlImgLogo: 'https://img.logoipsum.com/263.svg'
+  urlImgLogo: 'https://flowbuild-assets.s3.amazonaws.com/horizontal-cor-padrao.svg'
 };
