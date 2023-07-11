@@ -1,3 +1,10 @@
+## [1.0.0-developer.3](https://github.com/flow-build/studio/compare/v1.0.0-developer.2...v1.0.0-developer.3) (2023-07-11)
+
+
+### Features
+
+* add menu items ([199a89e](https://github.com/flow-build/studio/commit/199a89ec83af3002c963b0959545cba9fba4d3b5))
+
 ## [1.0.0-developer.2](https://github.com/flow-build/studio/compare/v1.0.0-developer.1...v1.0.0-developer.2) (2023-07-11)
 
 
