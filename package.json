@@ -10,9 +10,9 @@
     "lint": "next lint",
     "lint:check": "eslint './src/**/*.{ts,tsx}' --fix && prettier './src/**/*.{ts,tsx}' --check",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix && prettier './src/**/*.{ts,tsx}' --write",
-    "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "release": "semantic-release"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -58,6 +58,8 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@storybook/addon-essentials": "^7.0.18",
     "@storybook/addon-interactions": "^7.0.18",
     "@storybook/addon-links": "^7.0.18",
@@ -76,6 +78,7 @@
     "@types/react-jsonschema-form": "^1.7.8",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "conventional-changelog-conventionalcommits": "^6.1.0",
     "eslint": "^8.41.0",
     "eslint-config-next": "^13.4.4",
     "eslint-config-prettier": "^8.8.0",
@@ -88,9 +91,9 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-perf": "^3.3.1",
-    "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
+    "semantic-release": "21.0.7",
     "storybook": "^7.0.18",
     "typescript": "^5.0.4"
   }

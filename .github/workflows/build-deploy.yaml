@@ -6,61 +6,69 @@ on:
       - release
       - developer
 env:
-  REACT_APP_BASE_URL: ${{vars.REACT_APP_BASE_URL}}
-  REACT_APP_MQTT_HOST: ${{vars.REACT_APP_MQTT_HOST}}
-  REACT_APP_MQTT_PORT: ${{vars.REACT_APP_MQTT_PORT}}
-  REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
-  REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
-  REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
-  REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
-  REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
-  REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
-  REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
-  REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
+  AWS_REGION: ${{vars.AWS_REGION}}
+  AWS_POOL_ID: ${{vars.AWS_POOL_ID}}
+  AWS_CLIENT_ID: ${{vars.AWS_CLIENT_ID}}
+  CRYPTO_SECRET_KEY: ${{ vars.CRYPTO_SECRET_KEY }}
+  NEXT_PUBLIC_SEARCHKEY: ${{ vars.NEXT_PUBLIC_SEARCHKEY }}
+  NEXT_PUBLIC_ENGINENAME: ${{ secrets.NEXT_PUBLIC_ENGINENAME }}
+  NEXT_PUBLIC_ENDPOINTBASE: ${{ vars.NEXT_PUBLIC_ENDPOINTBASE }}
 
 jobs:
-  build:
+  set-version:
+    name: 'Release NPM, GitHub'
     runs-on: ubuntu-latest
     steps:
-      - name: Some check on branch
-        id: branch_check
-        run: |
-          echo "Running on branch ${{ github.ref }}"
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "env_name=production" >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/developer" ]; then
-            echo "env_name=development"  >> $GITHUB_OUTPUT
-          elif [ "${{ github.ref }}" = "refs/heads/release" ]; then
-            echo "env_name=release"  >> $GITHUB_OUTPUT
-          else
-             echo "env_name=development"  >> $GITHUB_OUTPUT
-          fi
-
-      - name: Use variable setup in previous step
-        run: echo "Using variable ${{ steps.branch_check.outputs.env_name }}"
-
-    outputs:
-      env_name: ${{ steps.branch_check.outputs.env_name }}
-
-  deployment:
-    needs: [build]
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ needs.build.outputs.env_name }}
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-
-    steps:
-      - name: Check Environment Name
-        run: echo "Using environment ${{ needs.build.outputs.env_name }}"
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          node-version: 18.12
+      - name: Install dependencies
+        run: npm ci
+      - name: Get version from package.json before release step
+        id: initversion
+        run: echo "version=$(npm run get-version --silent)" >> $GITHUB_OUTPUT
+      - name: Release to NPM and GitHub
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GIT_AUTHOR_NAME: bot-flowbuilld
+          GIT_AUTHOR_EMAIL: bot.flowbuild@gmail.com
+          GIT_COMMITTER_NAME: bot-flowbuilld
+          GIT_COMMITTER_EMAIL: bot.flowbuild@gmail.com
+        run: npm run release
+      - name: Get version from package.json after release step
+        id: extractver
+        run: echo "version=$(npm run get-version --silent)" >> $GITHUB_OUTPUT
+      - name: Create Pull Request with updated package files
+        if: steps.initversion.outputs.version != steps.extractver.outputs.version
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: 'chore(release): ${{ steps.extractver.outputs.version }}'
+          committer: bot-flowbuilld <bot.flowbuild@gmail.com>
+          author: bot-flowbuilld <bot.flowbuild@gmail.com>
+          title: 'chore(release): ${{ steps.extractver.outputs.version }}'
+          body: 'Version bump in package.json and package-lock.json for release [${{ steps.extractver.outputs.version }}](https://github.com/${{github.repository}}/releases/tag/v${{ steps.extractver.outputs.version }})'
+          branch: version-bump/${{ steps.extractver.outputs.version }}
+          labels: 'automerge'
+    outputs:
+      version: ${{ steps.extractver.outputs.version }}
+
+  build1:
+    name: 'Build image on DockerHub'
+    needs:
+      - set-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Version
+        run: echo "Using version ${{ needs.set-version.outputs.version }}"
+      - uses: actions/checkout@v3
       - name: Create .env file
         run: |
           echo REACT_APP_BASE_URL=$REACT_APP_BASE_URL >> .env
@@ -68,47 +76,35 @@ jobs:
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_DEBUG: false
-          envkey_REACT_APP_BASE_URL: ${{ vars.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_MQTT_HOST: ${{ vars.REACT_APP_MQTT_HOST }}
-          envkey_REACT_APP_MQTT_PORT: ${{ vars.REACT_APP_MQTT_PORT }}
-          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
-          envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
-          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
-          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
-          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
-          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
-          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
-          envkey_REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
+          envkey_NEXT_PUBLIC_BASE_URL: ${{ vars.REACT_APP_BASE_URL }}
+          envkey_NEXT_PUBLIC_SEARCHKEY: ${{ vars.SEARCH_API_KEY }}
+          envkey_NEXT_PUBLIC_ENGINENAME: ${{ vars.SEARCH_ENGINE_NAME }}
+          envkey_NEXT_PUBLIC_ENDPOINTBASE: ${{ vars.SEARCH_ENDPOINT }}
+          envkey_AWS_REGION: ${{ secrets.AWS_REGION }}
+          envkey_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
+          envkey_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
+          envkey_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}         
           directory: "./"
           file_name: ".env"
-      - name: Make envfile prod
-        uses: SpicyPizza/create-envfile@v1.3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          envkey_DEBUG: false
-          envkey_REACT_APP_BASE_URL: ${{ vars.REACT_APP_BASE_URL }}
-          envkey_REACT_APP_MQTT_HOST: ${{ vars.REACT_APP_MQTT_HOST }}
-          envkey_REACT_APP_MQTT_PORT: ${{ vars.REACT_APP_MQTT_PORT }}
-          envkey_REACT_APP_DIAGRAMS_SERVER_URL: ${{ vars.REACT_APP_DIAGRAMS_SERVER_URL }}
-          envkey_REACT_APP_METABASE_SITE_URL: ${{ vars.REACT_APP_METABASE_SITE_URL }}
-          envkey_REACT_APP_METABASE_SECRET_KEY: ${{ secrets.REACT_APP_METABASE_SECRET_KEY }}
-          envkey_REACT_APP_METABASE_DASHBOARD_NUMBER: ${{ vars.REACT_APP_METABASE_DASHBOARD_NUMBER }}
-          envkey_REACT_APP_AWS_REGION: ${{ secrets.AWS_REGION }}
-          envkey_REACT_APP_AWS_POOL_ID: ${{ vars.REACT_APP_AWS_POOL_ID }}
-          envkey_REACT_APP_AWS_CLIENT_ID: ${{ secrets.REACT_APP_AWS_CLIENT_ID }}
-          envkey_REACT_APP_CRYPTO_SECRET_KEY: ${{ secrets.CRYPTO_SECRET_KEY }}
-          directory: "./"
-          file_name: ".env.production"
-      - name: Yarn Install
-        run: yarn --prefer-offline
-      - name: Staging Build
-        run: yarn build
-        env:
-          CI: false
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        env:
-          AWS_S3_BUCKET: ${{ vars.AWS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: "build"
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push latest
+        if: ${{ github.ref_name == 'main' }}
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: flowbuild/studio:latest
+      - name: Build and push version
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: 'flowbuild/studio:${{ needs.set-version.outputs.version }}'

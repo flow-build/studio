@@ -7,7 +7,7 @@ import { project } from 'shared/enum';
 import { RootState } from 'store';
 import { Header, Footer, MainContent } from 'stories/components';
 import { InputSearchElasticProps } from 'stories/components/ElasticSearch/InputSearchElastic/types';
-import { navLinks, socialMedias } from 'stories/components/Footer/mockFooter';
+import { navLinks } from 'stories/components/Footer/mockFooter';
 import { MenuProps } from 'stories/components/Menu/types';
 import { MenuAnchor } from 'stories/components/Menu/utils';
 
@@ -53,7 +53,7 @@ export const Layout: React.FC<PropsWithChildren> = ({ children }) => {
         search={propsInputSearch}
       />
       <MainContent>{children}</MainContent>
-      <Footer navLinks={navLinks} socialMedia={socialMedias} disclaimer="[Lorem Ipsum text]" />
+      <Footer navLinks={navLinks} disclaimer="Copyright © 2023 FDTE." />
     </>
   );
 };
