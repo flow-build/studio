@@ -1,4 +1,4 @@
-import { AccountTreeIcon, SchemaIcon, SettingsIcon } from 'shared/icons';
+import { AccountTreeIcon, SchemaIcon, SettingsIcon, RecentActorsIcon, CompareArrowsIcon, IntegrationInstructionsIcon } from 'shared/icons';
 import { MenuItemProps } from 'stories/components/Menu/types';
 
 export const menuItems: MenuItemProps[] = [
@@ -13,6 +13,24 @@ export const menuItems: MenuItemProps[] = [
   },
   {
     id: '2',
+    redirectLink: '/processes',
+    title: 'Processes',
+    icon: {
+      redirectLink: '/processes',
+      icon: RecentActorsIcon
+    }
+  },
+  {
+    id: '3',
+    redirectLink: '/compare',
+    title: 'Compare States',
+    icon: {
+      redirectLink: '/compare',
+      icon: CompareArrowsIcon
+    }
+  },
+  {
+    id: '4',
     redirectLink: '/nodes',
     title: 'Nodes',
     icon: {
@@ -21,7 +39,16 @@ export const menuItems: MenuItemProps[] = [
     }
   },
   {
-    id: '3',
+    id: '5',
+    redirectLink: '/specs',
+    title: 'Specs',
+    icon: {
+      redirectLink: '/specs',
+      icon: IntegrationInstructionsIcon
+    }
+  },
+  {
+    id: '6',
     redirectLink: '/settings',
     title: 'Settings',
     icon: {

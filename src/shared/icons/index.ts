@@ -16,3 +16,6 @@ export { default as AddIcon } from '@mui/icons-material/Add';
 export { default as AccountTreeIcon } from '@mui/icons-material/AccountTree';
 export { default as SchemaIcon } from '@mui/icons-material/Schema';
 export { default as SettingsIcon } from '@mui/icons-material/Settings';
+export { default as IntegrationInstructionsIcon } from '@mui/icons-material/IntegrationInstructions';
+export { default as RecentActorsIcon } from '@mui/icons-material/RecentActors';
+export { default as CompareArrowsIcon } from '@mui/icons-material/CompareArrows';
