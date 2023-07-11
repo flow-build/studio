@@ -1,3 +1,10 @@
+## [1.0.0-developer.2](https://github.com/flow-build/studio/compare/v1.0.0-developer.1...v1.0.0-developer.2) (2023-07-11)
+
+
+### Bug Fixes
+
+* remove missing dependencies ([0c6579e](https://github.com/flow-build/studio/commit/0c6579e9ccddcca0e1024771169204fd85cb81c3))
+
 ## 1.0.0-developer.1 (2023-07-11)
 
 
