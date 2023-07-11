@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 
 import { Footer } from '../Footer';
-import { navLinks, socialMedias } from '../Footer/mockFooter';
+import { navLinks } from '../Footer/mockFooter';
 import { Header } from '../Header';
 import { MainContent } from '../MainContent';
 import { Markdown } from './';
@@ -37,7 +37,6 @@ export const Demo: StoryFn<typeof Markdown> = () => {
       <MainContent>
         <Markdown children={mdx} />;
       </MainContent>
-      <Footer socialMedia={socialMedias} disclaimer="Text here" navLinks={navLinks} />
     </div>
   );
 };
